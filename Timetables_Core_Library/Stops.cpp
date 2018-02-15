@@ -80,6 +80,18 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 		it->second.AddStop(stop.first, stop.second);
 		stop.second.SetParentStation(it->second);
 	}
+
+	// Let's add some footpaths.
+	// Some GTFS feeds includes these footpaths, PID feed unfortunately does not. 
+	// So we have to compute it manually, at least approximately.
+
+	for (auto&& A : stopsList)
+		for (auto&& B : stopsList) {
+			if (&A.second == &B.second) continue;
+			int time = GpsCoords::GetWalkingTime(A.second.GetLocation(), B.second.GetLocation());
+			if (time < 1200) // Heuristic: Walking time between two stops should be 20 minutes at max. Saves a lot of memory.
+				A.second.AddFootpath(B.second, time);
+		}
 }
 
 const Station& Timetables::Structures::Stops::GetStation(const std::wstring& name) const {

@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="Footpaths.hpp" />
     <ClInclude Include="GtfsFeed.hpp" />
     <ClInclude Include="Routes.hpp" />
     <ClInclude Include="Services.hpp" />
@@ -30,7 +29,6 @@
     <ClInclude Include="Utilities.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Footpaths.cpp" />
     <ClCompile Include="Routes.cpp" />
     <ClCompile Include="Services.cpp" />
     <ClCompile Include="Shapes.cpp" />

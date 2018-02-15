@@ -55,6 +55,7 @@ namespace Timetables {
 			const GpsCoords coords;
 			Station* parentStation;
 			std::multimap<Time, StopTimePtrObserver> departures; // Sorted by departure times.
+			std::multimap<int, StopPtrObserver> footpaths; // Stops reachable in walking-distance (< 15 min.) from this stop.
 		public:
 			using PtrObserver = const Stop*;
 			Stop(const std::wstring& name, double latitude, double longitude) :
@@ -69,7 +70,8 @@ namespace Timetables {
 
 			inline void SetParentStation(Station& parent) { parentStation = &parent; }
 			inline void AddDeparture(const Time& time, const StopTime& stopTime) { departures.insert(std::make_pair(time, &stopTime)); }
-			
+			inline void AddFootpath(const Stop& stop, int time) { footpaths.insert(std::make_pair(time, &stop)); }
+
 			inline bool operator==(const Stop& other) const { return coords == other.coords; }
 		};
 

@@ -6,7 +6,6 @@
 #include "Routes.hpp"
 #include "Stops.hpp"
 #include "Trips.hpp"
-#include "Footpaths.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -19,15 +18,13 @@ namespace Timetables {
 			Routes routes;
 			Stops stops;
 			Trips trips;
-			Footpaths footpaths;
 		public:
 			GtfsFeed(const std::string& path) :
 				services(std::ifstream(path + "calendar.txt"), std::ifstream(path + "calendar_dates.txt")),
 				shapes(std::ifstream(path + "shapes.txt")),
 				routes(std::wifstream(path + "routes.txt", std::ios::binary)),
 				stops(std::wifstream(path + "stops.txt", std::ios::binary)),
-				trips(std::wifstream(path + "trips.txt", std::ios::binary), routes, services, shapes),
-				footpaths(stops) {
+				trips(std::wifstream(path + "trips.txt", std::ios::binary), routes, services, shapes) {
 				trips.SetTimetables(std::ifstream(path + "stop_times.txt"), stops);
 			}
 			GtfsFeed() : GtfsFeed("") {}
