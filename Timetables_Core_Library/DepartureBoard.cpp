@@ -34,7 +34,7 @@ namespace Timetables {
 				auto preventInfiniteCycle = --stopDep.upper_bound(departureTime);
 				Date departureDate = datetime.GetDate(); // A need for operating days checking.
 
-				int i = 0;
+				size_t i = 0;
 				while (i < count) {
 					if (firstRelevant == preventInfiniteCycle) break;
 
@@ -63,7 +63,7 @@ namespace Timetables {
 
 			vector<Departure> foundDepartures;
 
-			int i = 0;
+			size_t i = 0;
 			while (i < count) {
 				if (firstRelevant == preventInfiniteCycle) break;
 

@@ -23,6 +23,7 @@ bool Timetables::Structures::Service::IsAddedInDate(const Date& Date) const {
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
 	else if (entry->second == true) // Found. Service IS operating in this Date. Returns true.
 		return true;
+	return false;
 }
 
 bool Timetables::Structures::Service::IsRemovedInDate(const Date& Date) const {
@@ -31,6 +32,7 @@ bool Timetables::Structures::Service::IsRemovedInDate(const Date& Date) const {
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
 	else if (entry->second == false) // Found. Service IS NOT operating in this Date. Returns true.
 		return true;
+	return false;
 }
 
 bool Timetables::Structures::Service::IsOperatingInDate(const Date& Date) const {
@@ -65,8 +67,6 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 		* tokens[8] = start Date
 		* tokens[9] = end Date
 		*/
-
-		size_t id(stoi(tokens[0]));
 
 		Service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
 			tokens[4] == "1" ? true : false, tokens[5] == "1" ? true : false, tokens[6] == "1" ? true : false,

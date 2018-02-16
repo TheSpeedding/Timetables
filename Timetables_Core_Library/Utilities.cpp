@@ -98,7 +98,8 @@ bool Timetables::Structures::Date::operator>(const Date& other) const {
 
 Timetables::Structures::Date& Timetables::Structures::Date::operator++() {
 	day++;
-	auto days_in_month = GetDaysInMonth(month, year);
+	int days_in_month = 0;
+	days_in_month = GetDaysInMonth(month, year);
 	if (day > days_in_month) {
 		day -= days_in_month;
 		month++;
@@ -130,6 +131,7 @@ int Timetables::Structures::Date::GetDaysInMonth(int month, int year) {
 		else
 			return 28;
 	}
+	return -1;
 }
 
 int Timetables::Structures::GpsCoords::GetWalkingTime(const GpsCoords& A, const GpsCoords& B) {
