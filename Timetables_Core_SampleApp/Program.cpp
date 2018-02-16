@@ -11,7 +11,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
-using namespace Timetables::Algorithms;
+using namespace Timetables::SampleApp;
 
 int main(int argc, char** argv) {
 	
@@ -26,12 +26,12 @@ int main(int argc, char** argv) {
 	setlocale(LC_ALL, "");
 
 	// Stanice nenalezena.
-	Timetables::SampleApp::GetDepartureBoardReport(feed, L"Zvonaøka", Datetime::Now(), 100000);
+	GetDepartureBoardReport(feed, L"Zvonaøka", Datetime::Now(), 100000);
 
 	// Žádné odjezdy.
-	Timetables::SampleApp::GetDepartureBoardReport(feed, L"Hellichova", Datetime::Now(), 100000);
+	GetDepartureBoardReport(feed, L"Hellichova", Datetime::Now(), 100000);
 
-	Timetables::SampleApp::GetDepartureBoardReport(feed, L"Malostranské námìstí", Datetime::Now(), 3);
+	GetDepartureBoardReport(feed, L"Malostranské námìstí", Datetime::Now(), 3);
 
-	Timetables::SampleApp::GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);
+	GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);
 }

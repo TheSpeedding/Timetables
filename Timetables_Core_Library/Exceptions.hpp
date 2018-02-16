@@ -13,26 +13,21 @@ namespace Timetables {
 
 		class StopNotFoundException : public std::exception {
 		private:
-			std::string stopName;
+			std::wstring stopName;
 		public:
-			StopNotFoundException(const std::wstring& stopName) : stopName(std::string(stopName.cbegin(), stopName.cend())) {}
-			StopNotFoundException(const std::string& stopId) : stopName(stopId) {}
+			StopNotFoundException(const std::wstring& stopName) : stopName(stopName) {}
+			StopNotFoundException(const std::string& stopId) : stopName(std::wstring(stopName.cbegin(), stopName.cend())) {}
 
-			inline virtual const char* what() const override {
-				return std::string("Stop " + std::string(stopName.cbegin(), stopName.cend()) + " not found.").c_str();
-			}
+			inline const std::wstring& GetStopName() const { return stopName; }
 		};
 
 		class NoDeparturesFoundException : public std::exception {
 		private:
-			std::string stopName;
+			std::wstring stopName;
 		public:
-			NoDeparturesFoundException(const std::wstring& stopName) : stopName(std::string(stopName.cbegin(), stopName.cend())) {}
-			NoDeparturesFoundException(const std::string& stopId) : stopName(stopId) {}
+			NoDeparturesFoundException(const std::wstring& stopName) : stopName(stopName) {}
 
-			inline virtual const char* what() const override {
-				return std::string("No departures for stop " + std::string(stopName.cbegin(), stopName.cend()) + " found.").c_str();
-			}
+			inline const std::wstring& GetStopName() const { return stopName; }
 		};
 
 		class ServiceNotFoundException : public std::exception {
@@ -41,9 +36,7 @@ namespace Timetables {
 		public:
 			ServiceNotFoundException(const std::size_t id) : serviceId(id) {}
 
-			inline virtual const char* what() const override {
-				return std::string("Service with ID " + std::to_string(serviceId) + " not found.").c_str();
-			}
+			inline const std::size_t GetServiceId() const { return serviceId; }
 		};
 
 		class TripNotFoundException : public std::exception {
@@ -52,9 +45,7 @@ namespace Timetables {
 		public:
 			TripNotFoundException(const std::size_t id) : tripId(id) {}
 
-			inline virtual const char* what() const override {
-				return std::string("Service with ID " + std::to_string(tripId) + " not found.").c_str();
-			}
+			inline const std::size_t GetTripId() const { return tripId; }
 		};
 
 		class RouteNotFoundException : public std::exception {
@@ -63,9 +54,7 @@ namespace Timetables {
 		public:
 			RouteNotFoundException(const std::string& id) : routeId(id) {}
 
-			inline virtual const char* what() const override {
-				return std::string("Route with ID " + routeId + " not found.").c_str();
-			}
+			inline const std::string& GetRouteId() const { return routeId; }
 		};
 
 		class ShapesSequenceNotFoundException : public std::exception {
@@ -74,9 +63,7 @@ namespace Timetables {
 		public:
 			ShapesSequenceNotFoundException(const std::size_t id) : shapeId(id) {}
 
-			inline virtual const char* what() const override {
-				return std::string("Shape with ID " + std::to_string(shapeId) + " not found.").c_str();
-			}
+			inline const std::size_t GetShapeId() const { return shapeId; }
 		};
 
 		class InvalidDataFormatException : public std::invalid_argument {
@@ -91,9 +78,7 @@ namespace Timetables {
 		public:
 			JourneyNotFoundException(const std::wstring& A, const std::wstring& B) : A(A), B(B) {}
 
-			inline virtual const char* what() const override {
-				std::string("No route between " + std::string(A.cbegin(), A.cend()) + " and " + std::string(B.cbegin(), B.cend()) + " found.").c_str();
-			}
+			inline const std::pair<std::wstring, std::wstring> GetStations() const { return std::make_pair(A, B); }
 		};
 
 	}

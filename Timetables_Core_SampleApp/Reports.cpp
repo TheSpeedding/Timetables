@@ -22,11 +22,11 @@ void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures
 	try {		
 		departures = GetDepartureBoard(feed, stationName, datetime, count); 	}
 	catch (StopNotFoundException ex) {
-		cout << ex.what() << endl;
+		cout << "Stop "; wcout << ex.GetStopName(); cout << " not found." << endl;
 		return;
 	}
 	catch (NoDeparturesFoundException ex) {
-		cout << ex.what() << endl;
+		cout << "No departures for stop "; wcout << ex.GetStopName(); cout << " found." << endl;
 	}
 
 	cout << Time::Now().ToString() << " : Ending departure board finding for "; wcout << stationName; cout << " station." << endl << endl;
