@@ -12,9 +12,9 @@ int main(int argc, char** argv) {
 	
 	cout << Time::Now().ToString() << " : Application has started." << endl;
 
-	cout << Time::Now().ToString() << " : Starting data init." << endl;
+	cout << Time::Now().ToString() << " : Starting Structures init." << endl;
 
 	GtfsFeed feed("GTFS/");
 
-	cout << Time::Now().ToString() << " : Ending data init." << endl << endl;
+	cout << Time::Now().ToString() << " : Ending Structures init." << endl << endl;
 }

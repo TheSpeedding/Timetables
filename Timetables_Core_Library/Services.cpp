@@ -17,27 +17,27 @@ Timetables::Structures::Service::Service(bool mon, bool tue, bool wed, bool thu,
 	operatingDays[6] = sun;
 }
 
-bool Timetables::Structures::Service::IsAddedInDate(const Date& date) const {
-	auto entry = exceptions.find(date);
+bool Timetables::Structures::Service::IsAddedInDate(const Date& Date) const {
+	auto entry = exceptions.find(Date);
 	if (entry == exceptions.cend())
-		return false; // Not found. It means that the serivce has any extraordinary event in this date.
-	else if (entry->second == true) // Found. Service IS operating in this date. Returns true.
+		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
+	else if (entry->second == true) // Found. Service IS operating in this Date. Returns true.
 		return true;
 }
 
-bool Timetables::Structures::Service::IsRemovedInDate(const Date& date) const {
-	auto entry = exceptions.find(date);
+bool Timetables::Structures::Service::IsRemovedInDate(const Date& Date) const {
+	auto entry = exceptions.find(Date);
 	if (entry == exceptions.cend())
-		return false; // Not found. It means that the serivce has any extraordinary event in this date.
-	else if (entry->second == false) // Found. Service IS NOT operating in this date. Returns true.
+		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
+	else if (entry->second == false) // Found. Service IS NOT operating in this Date. Returns true.
 		return true;
 }
 
-bool Timetables::Structures::Service::IsOperatingInDate(const Date& date) const {
-	if (date < validSince || date > validUntil) return false;
-	if (IsAddedInDate(date)) return true;
-	if (IsRemovedInDate(date)) return false;
-	auto day_in_week = date.GetDayInWeek();
+bool Timetables::Structures::Service::IsOperatingInDate(const Date& Date) const {
+	if (Date < validSince || Date > validUntil) return false;
+	if (IsAddedInDate(Date)) return true;
+	if (IsRemovedInDate(Date)) return false;
+	auto day_in_week = Date.GetDayInWeek();
 	return operatingDays[day_in_week];
 }
 
@@ -62,8 +62,8 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 		* tokens[5] = bool value, operating on Friday
 		* tokens[6] = bool value, operating on Saturday
 		* tokens[7] = bool value, operating on Sunday
-		* tokens[8] = start date
-		* tokens[9] = end date
+		* tokens[8] = start Date
+		* tokens[9] = end Date
 		*/
 
 		size_t id(stoi(tokens[0]));
@@ -90,7 +90,7 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 
 		/*
 		* tokens[0] = service id
-		* tokens[1] = exception date
+		* tokens[1] = exception Date
 		* tokens[2] = exception type - 1 means added, 2 means removed.
 		*/
 

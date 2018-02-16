@@ -66,7 +66,7 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 		}
 
 		else if (locationType == "2")
-			throw invalid_argument("TO-DO: Support for station entrances/exits."); // Not relevant for PID timetables.
+			throw invalid_argument("TO-DO: Support for station entrances/exits."); // Not relevant for PID Timetables.
 	}
 
 	// Let's create stations for the stops.
@@ -88,9 +88,9 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 	for (auto&& A : stopsList)
 		for (auto&& B : stopsList) {
 			if (&A.second == &B.second) continue;
-			int time = GpsCoords::GetWalkingTime(A.second.GetLocation(), B.second.GetLocation());
-			if (time < 1200) // Heuristic: Walking time between two stops should be 20 minutes at max. Saves a lot of memory.
-				A.second.AddFootpath(B.second, time);
+			int Time = GpsCoords::GetWalkingTime(A.second.GetLocation(), B.second.GetLocation());
+			if (Time < 1200) // Heuristic: Walking Time between two stops should be 20 minutes at max. Saves a lot of memory.
+				A.second.AddFootpath(B.second, Time);
 		}
 }
 

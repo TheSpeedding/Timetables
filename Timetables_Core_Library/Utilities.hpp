@@ -9,13 +9,13 @@ namespace Timetables {
 	namespace Structures {
 		class Time {
 		private:
-			// We will store time as seconds from midnight. 
-			// Easier comparison (operators implementation), saves memory and afterall even time.
+			// We will store Time as seconds from midnight. 
+			// Easier comparison (operators implementation), saves memory and afterall even Time.
 			int seconds;
 		public:
 			Time(const std::string& time);
 			Time(int h, int m, int s) : seconds(s + m * 60 + h * 3600) { 
-				if (s > 60 || m > 60) throw Timetables::Exceptions::InvalidDataFormatException("Invalid time format."); 
+				if (s > 60 || m > 60) throw Timetables::Exceptions::InvalidDataFormatException("Invalid Time format."); 
 			}
 			Time(int s) : seconds(s) {};
 				
@@ -39,9 +39,9 @@ namespace Timetables {
 			static int GetDaysInMonth(int month, int year);
 			int day, month, year;
 		public:
-			Date(const std::string& date);
+			Date(const std::string& Date);
 			Date(int day, int month, int year) : day(day), month(month), year(year) {
-				if (month > 12 || day > 31) throw Timetables::Exceptions::InvalidDataFormatException("Invalid date format.");
+				if (month > 12 || day > 31) throw Timetables::Exceptions::InvalidDataFormatException("Invalid Date format.");
 			}
 
 			static Date Now();
@@ -85,7 +85,7 @@ namespace Timetables {
 		public:
 			GpsCoords(double latitude, double longitude) : latitude(latitude), longitude(longitude) {}
 
-			// Returns walking time in seconds between two points. Assuming average walking speed 0.5 m/s.
+			// Returns walking Time in seconds between two points. Assuming average walking speed 0.5 m/s.
 			static int GetWalkingTime(const GpsCoords& A, const GpsCoords& B);
 
 			inline double GetLatitude() const { return latitude; }

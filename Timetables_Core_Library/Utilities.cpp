@@ -11,28 +11,28 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::Time::Time(const std::string& time) {
+Timetables::Structures::Time::Time(const std::string& Time) {
 
 	vector<uint8_t> tokens;
 	int hours, minutes;
 
-	if (time.size() != 8 && time.size() != 7) throw InvalidDataFormatException("Invalid time format.");
+	if (Time.size() != 8 && Time.size() != 7) throw InvalidDataFormatException("Invalid Time format.");
 
 	// Wrote this style in order to get maximal performance.
 
-	if (time[1] == ':') hours = time[0] - '0';
-	else if (time[2] == ':') hours = (time[0] - '0') * 10 + time[1] - '0';
-	else throw InvalidDataFormatException("Invalid time format.");
+	if (Time[1] == ':') hours = Time[0] - '0';
+	else if (Time[2] == ':') hours = (Time[0] - '0') * 10 + Time[1] - '0';
+	else throw InvalidDataFormatException("Invalid Time format.");
 
-	if (time[4] == ':') { // x:xx:xx
-		minutes = (time[2] - '0') * 10 + time[3] - '0';
-		seconds = (time[5] - '0') * 10 + time[6] - '0';
+	if (Time[4] == ':') { // x:xx:xx
+		minutes = (Time[2] - '0') * 10 + Time[3] - '0';
+		seconds = (Time[5] - '0') * 10 + Time[6] - '0';
 	}
-	else if (time[5] == ':') { // xx:xx:xx
-		minutes = (time[3] - '0') * 10 + time[4] - '0';
-		seconds = (time[6] - '0') * 10 + time[7] - '0';
+	else if (Time[5] == ':') { // xx:xx:xx
+		minutes = (Time[3] - '0') * 10 + Time[4] - '0';
+		seconds = (Time[6] - '0') * 10 + Time[7] - '0';
 	}
-	else throw InvalidDataFormatException("Invalid time format.");
+	else throw InvalidDataFormatException("Invalid Time format.");
 
 	seconds += minutes * 60;
 	seconds += hours * 3600;
@@ -50,12 +50,12 @@ Timetables::Structures::Time Timetables::Structures::Time::Now() {
 	return Time(now.tm_hour, now.tm_min, now.tm_sec);
 }
 
-Timetables::Structures::Date::Date(const std::string& date) {
-	if (date.size() != 8) throw InvalidDataFormatException("Invalid date format.");
-	year = (date[0] - '0') * 1000 + (date[1] - '0') * 100 + (date[2] - '0') * 10 + (date[3] - '0');
-	month = (date[4] - '0') * 10 + (date[5] - '0');
-	day = (date[6] - '0') * 10 + (date[7] - '0');
-	if (day > 31 || month > 12) throw InvalidDataFormatException("Invalid date format.");
+Timetables::Structures::Date::Date(const std::string& Date) {
+	if (Date.size() != 8) throw InvalidDataFormatException("Invalid Date format.");
+	year = (Date[0] - '0') * 1000 + (Date[1] - '0') * 100 + (Date[2] - '0') * 10 + (Date[3] - '0');
+	month = (Date[4] - '0') * 10 + (Date[5] - '0');
+	day = (Date[6] - '0') * 10 + (Date[7] - '0');
+	if (day > 31 || month > 12) throw InvalidDataFormatException("Invalid Date format.");
 }
 
 Timetables::Structures::Date Timetables::Structures::Date::Now() {
