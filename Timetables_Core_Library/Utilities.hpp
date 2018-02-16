@@ -21,9 +21,11 @@ namespace Timetables {
 				
 			static Time Now();
 
-			inline int GetHours() const { return seconds / 3600; }
-			inline int GetMinutes() const { return (seconds % 3600) / 60; }
-			inline int GetSeconds() const { return (seconds % 3600) % 60; }
+			inline Time GetNormalized() const { return Time(seconds % 86400); }
+
+			inline int GetHours() const { return (seconds % 86400) / 3600; }
+			inline int GetMinutes() const { return ((seconds % 86400) % 3600) / 60; }
+			inline int GetSeconds() const { return ((seconds % 86400) % 3600) % 60; }
 
 			inline std::string ToString() const { return std::to_string(GetHours()) + ':' + (GetMinutes() < 10 ? "0" : "") + std::to_string(GetMinutes()) + ':' + (GetSeconds() < 10 ? "0" : "") + std::to_string(GetSeconds()); }
 

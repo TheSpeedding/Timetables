@@ -11,6 +11,10 @@
 
 namespace Timetables {
 	namespace Structures {
+
+		// After initialization strictly immutable. Because of all the observers pointing into the vectors. 
+		// Pushing back new items into the vectors may lead to memory leaks.
+
 		class GtfsFeed {
 		private:
 			Services services;
@@ -29,9 +33,11 @@ namespace Timetables {
 			}
 			GtfsFeed() : GtfsFeed("") {}
 
-			inline const Stops& GetStops() const { return stops; }
+			inline const std::map<std::string, Stop>& GetStops() const { return stops.GetStops(); }
+			inline const std::map<std::wstring, Station>& GetStations() const { return stops.GetStations(); }
 			inline const Routes& GetRoutes() const { return routes; }
 			inline const Trips& GetTrips() const { return trips; }
+			inline const Services& GetServices() const { return services; }
 		};
 	}
 }

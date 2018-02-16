@@ -43,7 +43,7 @@ namespace Timetables {
 
 			inline void AddStop(const std::string& id, const Stop& stop) { childStops.insert(std::make_pair(id, &stop)); }
 
-			inline const std::map<std::string, StopPtrObserver>& GetStops() const { return childStops; }
+			inline const std::map<std::string, StopPtrObserver>& GetChildStops() const { return childStops; }
 			inline const std::wstring& GetName() const { return name; }
 			inline const GpsCoords& GetLocation() const { return coords; }
 		};
@@ -89,6 +89,7 @@ namespace Timetables {
 			}
 			const Station& GetStation(const std::wstring& name) const;
 			const std::map<std::string, Stop>& GetStops() const { return stopsList; }
+			const std::map<std::wstring, Station>& GetStations() const { return stationsList; }
 		};
 
 	}

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DepartureBoard.hpp" />
     <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="GtfsFeed.hpp" />
     <ClInclude Include="Routes.hpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="Utilities.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DepartureBoard.cpp" />
     <ClCompile Include="Routes.cpp" />
     <ClCompile Include="Services.cpp" />
     <ClCompile Include="Shapes.cpp" />

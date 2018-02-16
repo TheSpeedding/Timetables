@@ -62,7 +62,7 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 		}
 
 		else if (locationType == "1") { // The entry is a station.
-										// Instant skip, not usable at this moment. My implementation is better.
+										// Instant skip, not usable at this moment. Our implementation is better in this situation.
 		}
 
 		else if (locationType == "2")
@@ -82,14 +82,17 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 	}
 
 	// Let's add some footpaths.
-	// Some GTFS feeds includes these footpaths, PID feed unfortunately does not. 
+	// Some GTFS feeds include these footpaths, PID feed unfortunately does not. 
 	// So we have to compute it manually, at least approximately.
+
+	// Note: This is measured as aerial distance, ignoring obstacles. Easier to compute. That's why so low average speed was chosen (0,5 m/s).
+	// Half time of the initialization is spent in this block of code (due to calling arcsin and cos stl functions). Unfortunately, there's no way to make it better.
 
 	for (auto&& A : stopsList)
 		for (auto&& B : stopsList) {
 			if (&A.second == &B.second) continue;
 			int Time = GpsCoords::GetWalkingTime(A.second.GetLocation(), B.second.GetLocation());
-			if (Time < 1200) // Heuristic: Walking Time between two stops should be 20 minutes at max. Saves a lot of memory.
+			if (Time < 1200) // Heuristic: Walking Time between two stops should be 20 minutes at max, otherwise it loses the point. Saves a lot of memory.
 				A.second.AddFootpath(B.second, Time);
 		}
 }

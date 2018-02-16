@@ -13,51 +13,75 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Structures">
+      <UniqueIdentifier>{1ba67125-888b-4185-a159-038cc1577e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Structures">
+      <UniqueIdentifier>{ecd82502-4ee5-46f0-b4ce-69caad611cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Algorithms">
+      <UniqueIdentifier>{e7a44677-8cee-42e8-b641-97228adb49b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms">
+      <UniqueIdentifier>{bd7fbbd7-90c3-4451-a471-4703b1dfee35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{f4174d94-280a-4072-bf2c-0547a4601664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{08783fb2-1fb6-4d01-a44b-f07d2d81815e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exceptions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GtfsFeed.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Routes.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Services.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Shapes.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Stops.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Trips.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="DepartureBoard.hpp">
+      <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Routes.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Services.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Shapes.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Stops.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Trips.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="DepartureBoard.cpp">
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
     <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

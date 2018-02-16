@@ -23,6 +23,18 @@ namespace Timetables {
 			}
 		};
 
+		class NoDeparturesFoundException : public std::exception {
+		private:
+			std::string stopName;
+		public:
+			NoDeparturesFoundException(const std::wstring& stopName) : stopName(std::string(stopName.cbegin(), stopName.cend())) {}
+			NoDeparturesFoundException(const std::string& stopId) : stopName(stopId) {}
+
+			inline virtual const char* what() const override {
+				return std::string("No departures for stop " + std::string(stopName.cbegin(), stopName.cend()) + " found.").c_str();
+			}
+		};
+
 		class ServiceNotFoundException : public std::exception {
 		private:
 			std::size_t serviceId;
