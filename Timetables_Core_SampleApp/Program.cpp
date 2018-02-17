@@ -4,6 +4,7 @@
 #include "../Timetables_Core_Library/GtfsFeed.hpp"
 #include "../Timetables_Core_Library/Utilities.hpp"
 #include "../Timetables_Core_Library/Exceptions.hpp"
+#include "../Timetables_Core_Library/Router.hpp"
 #include "../Timetables_Core_Library/DepartureBoard.hpp"
 #include "Reports.hpp"
 #include <sstream>
@@ -34,4 +35,6 @@ int main(int argc, char** argv) {
 	GetDepartureBoardReport(feed, L"Malostranské námìstí", Datetime::Now(), 3);
 
 	GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);
+
+	FindRoutes(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 1);
 }

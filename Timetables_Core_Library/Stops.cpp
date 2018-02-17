@@ -77,7 +77,7 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 			stationsList.insert(make_pair(stop.second.GetName(), Station(stop.second.GetName(), stop.second.GetLocation())));
 			it = stationsList.find(stop.second.GetName());
 		}
-		it->second.AddStop(stop.first, stop.second);
+		it->second.AddStop(stop.second);
 		stop.second.SetParentStation(it->second);
 	}
 

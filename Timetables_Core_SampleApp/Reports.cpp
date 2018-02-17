@@ -20,16 +20,17 @@ void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures
 	cout << endl << Time::Now().ToString() << " : Starting departure board finding for "; wcout << stationName; cout << " station." << endl;
 
 	try {		
-		departures = GetDepartureBoard(feed, stationName, datetime, count); 	}
+		departures = GetDepartureBoard(feed, stationName, datetime, count); 	
+	}
 	catch (StopNotFoundException ex) {
-		cout << "Stop "; wcout << ex.GetStopName(); cout << " not found." << endl;
+		wcout << L"Stop " << ex.GetStopName() << L" not found." << endl;
 		return;
 	}
 	catch (NoDeparturesFoundException ex) {
-		cout << "No departures for stop "; wcout << ex.GetStopName(); cout << " found." << endl;
+		wcout << L"No departures for stop " << ex.GetStopName() << L" found." << endl;
 	}
 
-	cout << Time::Now().ToString() << " : Ending departure board finding for "; wcout << stationName; cout << " station." << endl << endl;
+	cout << Time::Now().ToString() << " : Ending departure board finding for "; wcout << stationName << L" station." << endl << endl;
 
 	
 	for (auto&& dep : departures) {

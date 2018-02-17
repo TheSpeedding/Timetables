@@ -22,6 +22,7 @@
     <ClInclude Include="DepartureBoard.hpp" />
     <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="GtfsFeed.hpp" />
+    <ClInclude Include="Router.hpp" />
     <ClInclude Include="Routes.hpp" />
     <ClInclude Include="Services.hpp" />
     <ClInclude Include="Shapes.hpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DepartureBoard.cpp" />
+    <ClCompile Include="Router.cpp" />
     <ClCompile Include="Routes.cpp" />
     <ClCompile Include="Services.cpp" />
     <ClCompile Include="Shapes.cpp" />

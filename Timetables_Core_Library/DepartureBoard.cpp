@@ -29,7 +29,7 @@ namespace Timetables {
 			multimap<Time, StopTimePtrObserver> departures;
 
 			for (auto&& child_stop : station.GetChildStops()) {
-				const multimap<Time, StopTimePtrObserver>& stopDep = child_stop.second->GetDepartures();
+				const multimap<Time, StopTimePtrObserver>& stopDep = child_stop->GetDepartures();
 				auto firstRelevant = stopDep.upper_bound(departureTime);
 				auto preventInfiniteCycle = --stopDep.upper_bound(departureTime);
 				Date departureDate = datetime.GetDate(); // A need for operating days checking.

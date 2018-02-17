@@ -4,6 +4,7 @@
 #include "Utilities.hpp"
 #include "Exceptions.hpp"
 #include "Trips.hpp"
+#include <exception>
 #include <string>
 #include <vector>
 #include <map>
@@ -34,16 +35,16 @@ namespace Timetables {
 		private:
 			const std::wstring name;
 			const GpsCoords coords;
-			std::map<std::string, StopPtrObserver> childStops; // If the station is itself a stop, then the map contains only one item.
+			std::vector<StopPtrObserver> childStops; // If the station is itself a stop, then the vector contains only one item.
 		public:
 			Station(const std::wstring& name, double latitude, double longitude) :
 				name(name), coords(GpsCoords(latitude, longitude)) {}
 			Station(const std::wstring& name, const GpsCoords& coords) :
 				name(name), coords(coords) {}
 
-			inline void AddStop(const std::string& id, const Stop& stop) { childStops.insert(std::make_pair(id, &stop)); }
+			inline void AddStop(const Stop& stop) { childStops.push_back(&stop); }
 
-			inline const std::map<std::string, StopPtrObserver>& GetChildStops() const { return childStops; }
+			inline const std::vector<StopPtrObserver>& GetChildStops() const { return childStops; }
 			inline const std::wstring& GetName() const { return name; }
 			inline const GpsCoords& GetLocation() const { return coords; }
 		};
@@ -57,7 +58,6 @@ namespace Timetables {
 			std::multimap<Time, StopTimePtrObserver> departures; // Sorted by departure times.
 			std::multimap<int, StopPtrObserver> footpaths; // Stops reachable in walking-distance (< 15 min.) from this stop.
 		public:
-			using PtrObserver = const Stop*;
 			Stop(const std::wstring& name, double latitude, double longitude) :
 				name(name), coords(GpsCoords(latitude, longitude)), parentStation(nullptr) {}
 			Stop(const std::wstring& name, double latitude, double longitude, Station* parentStation) :
@@ -68,7 +68,10 @@ namespace Timetables {
 			inline const std::wstring& GetName() const { return name; }
 			inline const std::multimap<Time, StopTimePtrObserver>& GetDepartures() const { return departures; }
 
-			inline void SetParentStation(Station& parent) { parentStation = &parent; }
+			inline void SetParentStation(Station& parent) {
+				if (parentStation != nullptr) throw std::runtime_error("Parent station already set.");
+				parentStation = &parent;
+			}
 			inline void AddDeparture(const Time& time, const StopTime& stopTime) { departures.insert(std::make_pair(time, &stopTime)); }
 			inline void AddFootpath(const Stop& stop, int time) { footpaths.insert(std::make_pair(time, &stop)); }
 
