@@ -9,7 +9,7 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::Trips::Trips(std::wistream&& trips, const Routes& routes, const Services& services, const Shapes& shapes) {
+Timetables::Structures::Trips::Trips(std::wistream&& trips, Routes& routes, const Services& services, const Shapes& shapes) {
 
 	trips.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
@@ -39,7 +39,7 @@ Timetables::Structures::Trips::Trips(std::wistream&& trips, const Routes& routes
 		* tokens[5] = wheelchair // Currently unused.
 		*/
 
-		const Route& route = routes.GetRoute(string(tokens[0].begin(), tokens[0].end()));
+		Route& route = routes.GetRoute(string(tokens[0].begin(), tokens[0].end()));
 
 		const Service& service = services.GetService(stoi(tokens[1]));
 
@@ -47,6 +47,9 @@ Timetables::Structures::Trips::Trips(std::wistream&& trips, const Routes& routes
 
 		list.push_back(Trip(route, service, shape, tokens[3]));
 	}
+
+	for (auto&& trip : list)
+		trip.GetRoute().AddTrip(trip);
 }
 
 void Timetables::Structures::Trips::SetTimetables(std::istream&& stop_times, Stops& stops) {

@@ -30,6 +30,7 @@ namespace Timetables {
 				stops(std::wifstream(path + "stops.txt", std::ios::binary)),
 				trips(std::wifstream(path + "trips.txt", std::ios::binary), routes, services, shapes) {
 				trips.SetTimetables(std::ifstream(path + "stop_times.txt"), stops);
+				stops.SetThroughgoingRoutesForStops();
 			}
 			GtfsFeed() : GtfsFeed("") {}
 

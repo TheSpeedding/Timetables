@@ -26,12 +26,6 @@ int main(int argc, char** argv) {
 
 	setlocale(LC_ALL, "");
 
-	// Stanice nenalezena.
-	GetDepartureBoardReport(feed, L"Zvonaøka", Datetime::Now(), 100000);
-
-	// Žádné odjezdy.
-	GetDepartureBoardReport(feed, L"Hellichova", Datetime::Now(), 100000);
-
 	GetDepartureBoardReport(feed, L"Malostranské námìstí", Datetime::Now(), 3);
 
 	GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);

@@ -8,7 +8,7 @@
 
 namespace Timetables {
 	namespace Algorithms {
-		void FindRoutes(const Timetables::Structures::GtfsFeed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::Datetime& datetime, const size_t count);
+		void FindRoutes(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& datetime, const std::size_t count, const std::size_t transfers = 10);
 	}
 }
 

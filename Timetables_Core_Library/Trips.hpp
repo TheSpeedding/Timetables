@@ -21,15 +21,16 @@ namespace Timetables {
 		class Trip {
 		private:
 			std::wstring headsign;
-			const Route& route;
+			Route& route;
 			const Service& service;
 			const ShapesSequence& shapes;
 			std::vector<std::unique_ptr<StopTime>> stopTimes;
 		public:
-			Trip(const Route& route, const Service& service, const ShapesSequence& shapes, const std::wstring& headsign) :
+			Trip(Route& route, const Service& service, const ShapesSequence& shapes, const std::wstring& headsign) :
 				route(route), service(service), shapes(shapes), headsign(headsign) {}
 
 			inline const std::vector<std::unique_ptr<StopTime>>& GetStopTimes() const { return stopTimes; }
+			inline Route& GetRoute() { return route; }
 			inline const Route& GetRoute() const { return route; }
 			inline const std::wstring& GetHeadsign() const { return headsign; }
 			inline const Service& GetService() const { return service; }
@@ -42,7 +43,7 @@ namespace Timetables {
 		private:
 			std::vector<Trip> list;
 		public:
-			Trips(std::wistream&& trips, const Routes& routes, const Services& services, const Shapes& shapes);
+			Trips(std::wistream&& trips, Routes& routes, const Services& services, const Shapes& shapes);
 
 			inline Trip& GetTrip(std::size_t id) {
 				if (id > list.size()) throw Timetables::Exceptions::TripNotFoundException(id);

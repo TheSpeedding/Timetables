@@ -67,7 +67,7 @@ Timetables::Structures::Date Timetables::Structures::Date::Now() {
 int Timetables::Structures::Date::GetDayInWeek() const {
 	// Using methods described here : https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
 	auto y = year, d = day, m = month;
-	return (d += m < 3 ? y-- : y - 2, 23 * m / 9 + d + 4 + y / 4 - y / 100 + y / 400) % 7 - 1;
+	return (d += m < 3 ? y-- : y - 2, 23 * m / 9 + d + 4 + y / 4 - y / 100 + y / 400) % 7;
 }
 
 bool Timetables::Structures::Date::operator<(const Date& other) const {

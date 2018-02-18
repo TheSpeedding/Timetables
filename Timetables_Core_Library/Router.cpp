@@ -9,33 +9,44 @@ using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 using namespace Timetables::Algorithms;
 
-void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed & feed, const std::wstring & A, const std::wstring & B, const Timetables::Structures::Datetime & datetime, const size_t count) {
+void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& datetime, const std::size_t count, const std::size_t transfers) {
 
-	auto it = feed.GetStations().find(A);
-	if (it == feed.GetStations().cend()) throw StopNotFoundException(A);
+	auto it = feed.GetStations().find(s);
+	if (it == feed.GetStations().cend()) throw StopNotFoundException(s);
 
 	const Station& source = it->second;
 
-	it = feed.GetStations().find(B);
-	if (it == feed.GetStations().cend()) throw StopNotFoundException(B);
+	it = feed.GetStations().find(t);
+	if (it == feed.GetStations().cend()) throw StopNotFoundException(t);
 
 	const Station& target = it->second;
 
 	// The i-th position of the vector says in which time we are capable to reach given stop in the map from the source station.
-	// Default state is infinity (represented by not found state)
+	// Default state is infinity (represented by not found state).
 
-	vector<unordered_map<StopPtrObserver, Datetime>> continuousDepartureTime;
+	vector<unordered_map<StopPtrObserver, Datetime>> tempDepartureTime;
 
 	queue<StopPtrObserver> markedStops;
 
 	// Initialization of the algorithm.
 
-	continuousDepartureTime.push_back(unordered_map<StopPtrObserver, Datetime>());
+	tempDepartureTime.push_back(unordered_map<StopPtrObserver, Datetime>());
 
 	// Using 0 trips we are capable to reach all the stops in the station in departure time (meaning 0 seconds).
 
 	for (auto&& stop : source.GetChildStops()) {
-		continuousDepartureTime[0].insert(make_pair(stop, datetime));
+		tempDepartureTime[0].insert(make_pair(stop, datetime));
 		markedStops.push(stop);
+	}
+
+	for (int k = 1; k <= transfers; k++) {
+
+		// First stage. 
+		// Upper bound for earliest arrival time using k trips.
+		tempDepartureTime.push_back(*(tempDepartureTime.cend() - 1));
+		
+		// Second stage.
+		// We will process each route exactly once.
+
 	}
 }

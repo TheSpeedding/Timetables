@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include <map>
 #include <array>
 #include <fstream>
@@ -103,4 +104,12 @@ const Station& Timetables::Structures::Stops::GetStation(const std::wstring& nam
 		throw StopNotFoundException(name);
 	else
 		return stat->second;
+}
+
+void Timetables::Structures::Stop::SetThroughgoingRoutes() {
+	for (auto&& stopTime : departures) {
+		const Route& route = stopTime.second->GetTrip().GetRoute();
+		if (find(throughgoingRoutes.cbegin(), throughgoingRoutes.cend(), &route) == throughgoingRoutes.cend())
+			throughgoingRoutes.push_back(&route);
+	}
 }
