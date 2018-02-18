@@ -4,7 +4,7 @@
 #include "Stops.hpp"
 #include "Exceptions.hpp"
 #include "Utilities.hpp"
-#include "Routes.hpp"
+#include "RoutesInfo.hpp"
 #include "Services.hpp"
 #include "Shapes.hpp"
 #include <string>
@@ -14,24 +14,23 @@ namespace Timetables {
 	namespace Structures {
 		class StopTime;
 		class Stops;
-		class Route;
-		class Routes;
+		class RouteInfo;
+		class RoutesInfo;
 		class Shapes;
 
 		class Trip {
 		private:
 			std::wstring headsign;
-			Route& route;
+			const RouteInfo& routeInfo;
 			const Service& service;
 			const ShapesSequence& shapes;
 			std::vector<std::unique_ptr<StopTime>> stopTimes;
 		public:
-			Trip(Route& route, const Service& service, const ShapesSequence& shapes, const std::wstring& headsign) :
-				route(route), service(service), shapes(shapes), headsign(headsign) {}
+			Trip(const RouteInfo& route, const Service& service, const ShapesSequence& shapes, const std::wstring& headsign) :
+				routeInfo(route), service(service), shapes(shapes), headsign(headsign) {}
 
 			inline const std::vector<std::unique_ptr<StopTime>>& GetStopTimes() const { return stopTimes; }
-			inline Route& GetRoute() { return route; }
-			inline const Route& GetRoute() const { return route; }
+			inline const RouteInfo& GetRouteInfo() const { return routeInfo; }
 			inline const std::wstring& GetHeadsign() const { return headsign; }
 			inline const Service& GetService() const { return service; }
 			inline const ShapesSequence& GetShapesSequence() const { return shapes; }
@@ -43,12 +42,13 @@ namespace Timetables {
 		private:
 			std::vector<Trip> list;
 		public:
-			Trips(std::wistream&& trips, Routes& routes, const Services& services, const Shapes& shapes);
+			Trips(std::wistream&& trips, const RoutesInfo& routes, const Services& services, const Shapes& shapes);
 
 			inline Trip& GetTrip(std::size_t id) {
 				if (id > list.size()) throw Timetables::Exceptions::TripNotFoundException(id);
 				else return list[id - 1];
 			}
+			inline const std::vector<Trip>& GetTrips() const { return list; }
 
 			void SetTimetables(std::istream&& stop_times, Stops& stops);
 		};

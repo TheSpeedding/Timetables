@@ -3,7 +3,7 @@
 
 #include "Utilities.hpp"
 #include "Exceptions.hpp"
-#include "Routes.hpp"
+#include "RoutesInfo.hpp"
 #include "Trips.hpp"
 #include <exception>
 #include <string>
@@ -15,7 +15,7 @@ namespace Timetables {
 		class Trip;
 		class StopTime; using StopTimePtrObserver = const StopTime*;
 		class Stop; using StopPtrObserver = const Stop*;
-		class Route; using RoutePtrObserver = const Route*;
+		// class Route; using RoutePtrObserver = const Route*;
 
 		class StopTime {
 		private:
@@ -59,7 +59,7 @@ namespace Timetables {
 			Station* parentStation;
 			std::multimap<Time, StopTimePtrObserver> departures; // Sorted by departure times.
 			std::multimap<int, StopPtrObserver> footpaths; // Stops reachable in walking-distance (< 15 min.) from this stop.
-			std::vector<RoutePtrObserver> throughgoingRoutes; // Routes that goes through this stop.
+			// std::vector<RoutePtrObserver> throughgoingRoutes; // Routes that goes through this stop.
 		public:
 			Stop(const std::wstring& name, double latitude, double longitude) :
 				name(name), coords(GpsCoords(latitude, longitude)), parentStation(nullptr) {}
@@ -75,7 +75,7 @@ namespace Timetables {
 				if (parentStation != nullptr) throw std::runtime_error("Parent station already set.");
 				parentStation = &parent;
 			}
-			void SetThroughgoingRoutes();
+			// void SetThroughgoingRoutes();
 			inline void AddDeparture(const Time& time, const StopTime& stopTime) { departures.insert(std::make_pair(time, &stopTime)); }
 			inline void AddFootpath(const Stop& stop, int time) { footpaths.insert(std::make_pair(time, &stop)); }
 
@@ -98,7 +98,7 @@ namespace Timetables {
 			const std::map<std::string, Stop>& GetStops() const { return stopsList; }
 			const std::map<std::wstring, Station>& GetStations() const { return stationsList; }
 
-			inline void SetThroughgoingRoutesForStops() { for (auto&& stop : stopsList) stop.second.SetThroughgoingRoutes(); }
+			// inline void SetThroughgoingRoutesForStops() { for (auto&& stop : stopsList) stop.second.SetThroughgoingRoutes(); }
 
 		};
 

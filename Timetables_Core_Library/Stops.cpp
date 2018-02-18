@@ -105,11 +105,3 @@ const Station& Timetables::Structures::Stops::GetStation(const std::wstring& nam
 	else
 		return stat->second;
 }
-
-void Timetables::Structures::Stop::SetThroughgoingRoutes() {
-	for (auto&& stopTime : departures) {
-		const Route& route = stopTime.second->GetTrip().GetRoute();
-		if (find(throughgoingRoutes.cbegin(), throughgoingRoutes.cend(), &route) == throughgoingRoutes.cend())
-			throughgoingRoutes.push_back(&route);
-	}
-}

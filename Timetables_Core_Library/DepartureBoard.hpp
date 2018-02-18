@@ -10,9 +10,8 @@
 #include "Stops.hpp"
 
 namespace Timetables {
-	namespace Algorithms {
-
-		// We could use StopTime class, but we will define this one instead to have it more user friendly (and usable for some mobile app).
+	namespace Structures {
+		// We could use StopTime class, but we will define this one instead to have it more user friendly (and usable for some bigger app).
 		class Departure {
 		private:
 			std::vector<std::unique_ptr<Timetables::Structures::StopTime>>::const_iterator tripBegin; // Start of the trip from departure stop.
@@ -23,7 +22,7 @@ namespace Timetables {
 			inline const Timetables::Structures::Time& GetArrival() const { return tripBegin->get()->GetArrival(); }
 			inline const Timetables::Structures::Time& GetDeparture() const { return tripBegin->get()->GetDeparture(); }
 			inline const std::wstring& GetHeadsign() const { return tripBegin->get()->GetTrip().GetHeadsign(); }
-			inline const std::string& GetLine() const { return tripBegin->get()->GetTrip().GetRoute().GetShortName(); }
+			inline const std::string& GetLine() const { return tripBegin->get()->GetTrip().GetRouteInfo().GetShortName(); }
 			inline const Timetables::Structures::Stop& GetStop() const { return tripBegin->get()->GetStop(); }
 			const std::vector<Departure> GetFollowingStops() const;
 
@@ -31,8 +30,10 @@ namespace Timetables {
 			inline bool operator> (const Departure& other) const { return (**tripBegin).GetDeparture() > (**other.tripBegin).GetDeparture(); }
 			inline bool operator==(const Departure& other) const { return (**tripBegin).GetDeparture() == (**other.tripBegin).GetDeparture(); }
 		};
+	}
 
-		std::vector<Departure> GetDepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& datetime, const size_t count);
+	namespace Algorithms {	
+		std::vector<Timetables::Structures::Departure> GetDepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& datetime, const size_t count);
 	}
 }
 
