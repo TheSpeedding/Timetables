@@ -87,7 +87,7 @@ namespace Timetables {
 			inline bool operator>= (const Datetime& other) const { if (infinity) return true; if (other.infinity) return false; return other.date == date ? time >= other.time : date >= other.date; }
 			inline bool operator== (const Datetime& other) const { return infinity == other.infinity && other.date == date && other.time == time; }
 		
-			inline Datetime operator+ (int seconds) const { return Datetime(date, time + seconds); }
+			inline Datetime operator+ (int seconds) const { return Datetime(date, time + Time(seconds)); }
 		};
 
 		class GpsCoords {

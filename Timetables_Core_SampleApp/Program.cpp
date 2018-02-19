@@ -31,4 +31,5 @@ int main(int argc, char** argv) {
 	GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);
 
 	FindRoutes(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 1);
+
 }

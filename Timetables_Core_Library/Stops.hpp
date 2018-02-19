@@ -9,6 +9,7 @@
 #include <exception>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <map>
 
 namespace Timetables {
@@ -51,6 +52,8 @@ namespace Timetables {
 			inline const std::vector<StopPtrObserver>& GetChildStops() const { return childStops; }
 			inline const std::wstring& GetName() const { return name; }
 			inline const GpsCoords& GetLocation() const { return coords; }
+
+			inline const bool ContainsStop(const Stop& stop) const { return std::find(childStops.cbegin(), childStops.cend(), &stop) != childStops.cend(); }
 		};
 
 

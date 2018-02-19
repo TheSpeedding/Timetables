@@ -68,7 +68,7 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 
 						Q.erase(route);
 
-						Q.insert(make_pair(route, &p));// 11th row of pseudocode.
+						Q.insert(make_pair(route, &p)); // 11th row of pseudocode.
 
 					}
 
@@ -137,14 +137,22 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 					}
 
 					sort(targetStops.begin(), targetStops.end());
+
+					auto pt = targetStops.size() == 0 ? Datetime() : targetStops.at(0);
 					
-					Datetime min = targetStops.size() == 0 ? pi : (pi < targetStops.at(0) ? pi : targetStops.at(0));
+					Datetime min = pi < pt ? pi : pt;
 
 					if (st != nullptr && (min.Infinity() || st->GetArrival() < min.GetTime())) { // 18th row of code.
 
 						arrivalTimes.at(k).insert(make_pair(&s, Datetime(min.GetDate(), st->GetArrival()))); // 19th row of pseudocode.
 						
 						tempTimes.insert(make_pair(&s, Datetime(min.GetDate(), st->GetArrival()))); // 20th row of pseudocode.
+
+						// This is the point where we finish our journey if we have reached the required station.
+
+						if (target.ContainsStop(s)) {
+							throw 1;
+						}
 
 						markedStops.push(&s); // 21st row of pseudocode.
 
@@ -158,7 +166,7 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 
 					if (arrivalTime != arrivalTimes.at(k - 1).cend() && arrivalTime->second.GetTime() <= st->GetDeparture()) { // 22nd row of pseudocode.
 
-						trip = GetEarliestTrip(arrivalTime->second, *route.first, s);
+						trip = GetEarliestTrip(arrivalTime->second, *route.first, s); // 23rd row of pseudocode.
 
 					}
 
@@ -170,7 +178,7 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 					
 					if (arrivalTime != arrivalTimes.at(k - 1).cend()) { // 22nd row of pseudocode.
 
-						trip = GetEarliestTrip(arrivalTime->second, *route.first, s);
+						trip = GetEarliestTrip(arrivalTime->second, *route.first, s); // 23rd row of pseudocode.
 
 					}
 
@@ -180,13 +188,15 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 
 		}
 
-		queue<StopPtrObserver> setAsMarked;
+		queue<StopPtrObserver> setAsMarked; // I have to do that because of cycle and queue properties.
 
-		for (size_t i = 0; i < markedStops.size(); i++) {
+		// Look at foot-paths.
 
-			const Stop& A = *markedStops.front(); markedStops.pop();
+		for (size_t i = 0; i < markedStops.size(); i++) { // 24th row of pseudocode.
 
-			for (auto&& footpath : A.GetFootpaths()) {
+			const Stop& A = *markedStops.front(); markedStops.pop(); markedStops.push(&A);
+
+			for (auto&& footpath : A.GetFootpaths()) { // 25th row of pseudocode.
 
 				const Stop& B = *footpath.second;
 
@@ -201,25 +211,25 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 
 				arrivalTimes.at(k).erase(&B);
 
-				arrivalTimes.at(k).insert(make_pair(&B, min));
+				arrivalTimes.at(k).insert(make_pair(&B, min)); // 26th row of pseudocode.
 
-				setAsMarked.push(&B);
+				setAsMarked.push(&B); // 27th row of pseudocode.
 
-			}
-
-			markedStops.push(&A);
+			}			
 
 		}
 
-		while (setAsMarked.size() > 0) {
+		while (setAsMarked.size() > 0) { 
 
 			markedStops.push(setAsMarked.front()); setAsMarked.pop();
 
 		}
 
-		if (markedStops.size() == 0)
+		// Stopping criterion.
 
-			break;
+		if (markedStops.size() == 0) // 28th row of pseudocode.
+
+			break; // 29th row of pseudocode.
 
 	}	
 
@@ -247,7 +257,7 @@ TripPtrObserver Timetables::Algorithms::GetEarliestTrip(const Timetables::Struct
 	
 	for (auto it = route.GetTrips().cbegin(); it != route.GetTrips().cend(); ++it) {
 
-		if (!it->second->GetService().IsOperatingInDate(arrival.GetDate())) continue; // The trip is not operating in this date.
+		// if (!it->second->GetService().IsOperatingInDate(arrival.GetDate())) continue; // The trip is not operating in this date.
 
 		auto departureFromRequiredStopUsingThisTrip = (it->second->GetStopTimes().cbegin() + i)->get()->GetDeparture();
 		
