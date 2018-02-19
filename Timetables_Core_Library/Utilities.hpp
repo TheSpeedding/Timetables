@@ -8,6 +8,7 @@
 namespace Timetables {
 	namespace Structures {
 		class Time {
+			friend class Datetime;
 		private:
 			// We will store Time as seconds from midnight. 
 			// Easier comparison (operators implementation), saves memory and afterall even Time.
@@ -20,23 +21,24 @@ namespace Timetables {
 			Time(int s) : seconds(s) {};
 				
 			static Time Now();
-
-			inline Time GetNormalized() const { return Time(seconds % 86400); }
-
+			
 			inline int GetHours() const { return (seconds % 86400) / 3600; }
 			inline int GetMinutes() const { return ((seconds % 86400) % 3600) / 60; }
 			inline int GetSeconds() const { return ((seconds % 86400) % 3600) % 60; }
 
 			inline std::string ToString() const { return std::to_string(GetHours()) + ':' + (GetMinutes() < 10 ? "0" : "") + std::to_string(GetMinutes()) + ':' + (GetSeconds() < 10 ? "0" : "") + std::to_string(GetSeconds()); }
 
-			inline bool operator< (const Time& other) const { return seconds < other.seconds; }
-			inline bool operator> (const Time& other) const { return seconds > other.seconds; }
-			inline bool operator==(const Time& other) const { return seconds == other.seconds; }
+			inline bool operator< (const Time& other) const { return seconds % 86400 < other.seconds % 86400; }
+			inline bool operator> (const Time& other) const { return seconds % 86400 > other.seconds % 86400; }
+			inline bool operator<= (const Time& other) const { return seconds % 86400 <= other.seconds % 86400; }
+			inline bool operator>= (const Time& other) const { return seconds % 86400 >= other.seconds % 86400; }
+			inline bool operator==(const Time& other) const { return seconds % 86400 == other.seconds % 86400; }
 			inline Time operator- (const Time& other) const { return Time(seconds - other.seconds); }
 			inline Time operator+ (const Time& other) const { return Time(seconds + other.seconds); }
 		};
 
 		class Date {
+			friend class Datetime;
 		private:
 			static int GetDaysInMonth(int month, int year);
 			int day, month, year;
@@ -57,27 +59,35 @@ namespace Timetables {
 
 			bool operator< (const Date& other) const;
 			bool operator> (const Date& other) const;
+			bool operator<= (const Date& other) const;
+			bool operator>= (const Date& other) const;
 			inline bool operator== (const Date& other) const { return day == other.day && month == other.month && year == other.year; }
 			Date& operator++(); // Adds one day.
 		};
 
 		class Datetime {
 		private:
+			bool infinity;
 			Date date;
 			Time time;
 		public:
-			Datetime(const Date& date, const Time& time) : date(date), time(time) {}
-			Datetime(int day, int month, int year, int h, int m, int s) :
-				date(day, month, year), time(h, m, s) {}
-
+			Datetime(const Date& d, const Time& t);
+			Datetime(int day, int month, int year, int h, int m, int s);
+			Datetime() : infinity(true), date(Date(0, 0, 0)), time(Time(0, 0, 0)) {} // Default constructor = invalid datetime.
+			
 			static Datetime Now() { return Datetime(Date::Now(), Time::Now()); }
 
 			inline const Time& GetTime() const { return time; }
 			inline const Date& GetDate() const { return date; }
+			inline const bool Infinity() const { return infinity; }
 
-			inline bool operator< (const Datetime& other) const { return other.date == date ? time < other.time : date < other.date; }
-			inline bool operator> (const Datetime& other) const { return other.date == date ? time > other.time : date > other.date; }
-			inline bool operator== (const Datetime& other) const { return other.date == date && other.time == time; }
+			inline bool operator< (const Datetime& other) const { if (infinity) return false; if (other.infinity) return true; return other.date == date ? time < other.time : date < other.date; }
+			inline bool operator> (const Datetime& other) const { if (infinity) return true; if (other.infinity) return false; return other.date == date ? time > other.time : date > other.date; }
+			inline bool operator<= (const Datetime& other) const { if (infinity) return false; if (other.infinity) return true; return other.date == date ? time <= other.time : date <= other.date; }
+			inline bool operator>= (const Datetime& other) const { if (infinity) return true; if (other.infinity) return false; return other.date == date ? time >= other.time : date >= other.date; }
+			inline bool operator== (const Datetime& other) const { return infinity == other.infinity && other.date == date && other.time == time; }
+		
+			inline Datetime operator+ (int seconds) const { return Datetime(date, time + seconds); }
 		};
 
 		class GpsCoords {

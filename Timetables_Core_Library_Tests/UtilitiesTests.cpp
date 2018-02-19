@@ -184,7 +184,7 @@ public:
 		struct tm now; localtime_s(&now, &t);
 		auto date = Timetables::Structures::Date::Now();
 		Assert::IsTrue(date.GetDay() == now.tm_mday);
-		Assert::IsTrue(date.GetDayInWeek() + 1 == now.tm_wday);
+		Assert::IsTrue(date.GetDayInWeek() == now.tm_wday);
 		Assert::IsTrue(date.GetMonth() == now.tm_mon + 1);
 		Assert::IsTrue(date.GetYear() == now.tm_year + 1900);
 	}
@@ -195,14 +195,14 @@ public:
 	TEST_METHOD(DateParseTest1) {
 		auto date = Timetables::Structures::Date("19960729");
 		Assert::IsTrue(date.GetDay() == 29);
-		Assert::IsTrue(date.GetDayInWeek() == 0);
+		Assert::IsTrue(date.GetDayInWeek() == 1);
 		Assert::IsTrue(date.GetMonth() == 7);
 		Assert::IsTrue(date.GetYear() == 1996);
 	}
 	TEST_METHOD(DateParseTest2) {
 		auto date = Timetables::Structures::Date("19970108");
 		Assert::IsTrue(date.GetDay() == 8);
-		Assert::IsTrue(date.GetDayInWeek() == 2);
+		Assert::IsTrue(date.GetDayInWeek() == 3);
 		Assert::IsTrue(date.GetMonth() == 1);
 		Assert::IsTrue(date.GetYear() == 1997);
 	}

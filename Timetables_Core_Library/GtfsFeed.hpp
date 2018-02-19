@@ -33,8 +33,8 @@ namespace Timetables {
 				stops(std::wifstream(path + "stops.txt", std::ios::binary)),
 				trips(std::wifstream(path + "trips.txt", std::ios::binary), routesInfo, services, shapes) {
 				trips.SetTimetables(std::ifstream(path + "stop_times.txt"), stops);
-				routes = std::make_unique<Routes>(routesInfo, trips); // I need to initialize it at this moment and no default constructor is given.
-				// stops.SetThroughgoingRoutesForStops();
+				routes = std::make_unique<Routes>(routesInfo, trips); // We need to initialize it at this moment and no default constructor is given.
+				stops.SetThroughgoingRoutesForStops(*routes);
 			}
 			GtfsFeed() : GtfsFeed("") {}
 

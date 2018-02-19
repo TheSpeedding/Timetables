@@ -96,6 +96,32 @@ bool Timetables::Structures::Date::operator>(const Date& other) const {
 	return false;
 }
 
+bool Timetables::Structures::Date::operator<=(const Date& other) const {
+	if (year <= other.year)
+		return true;
+	else if (year == other.year) {
+		if (month <= other.month)
+			return true;
+		else if (month == other.month)
+			if (day <= other.day)
+				return true;
+	}
+	return false;
+}
+
+bool Timetables::Structures::Date::operator>=(const Date& other) const {
+	if (year >= other.year)
+		return true;
+	else if (year == other.year) {
+		if (month >= other.month)
+			return true;
+		else if (month == other.month)
+			if (day >= other.day)
+				return true;
+	}
+	return false;
+}
+
 Timetables::Structures::Date& Timetables::Structures::Date::operator++() {
 	day++;
 	int days_in_month = 0;
@@ -143,4 +169,18 @@ int Timetables::Structures::GpsCoords::GetWalkingTime(const GpsCoords& A, const 
 	double u = sin((BlatR - AlatR) / 2);
 	double v = sin((BlonR - AlonR) / 2);
 	return int(2.0 * 6371.0 * asin(sqrt(u * u + cos(AlatR) * cos(BlatR) * v * v)) * 1000 * 2);
+}
+
+Timetables::Structures::Datetime::Datetime(const Date& d, const Time& t) : date(d), time(t), infinity(false) {
+	if (time.seconds >= 86400) {
+		time.seconds %= 86400;
+		++date;
+	}
+}
+
+Timetables::Structures::Datetime::Datetime(int day, int month, int year, int h, int m, int s) : date(day, month, year), time(h, m, s), infinity(false) {
+	if (time.seconds >= 86400) {
+		time.seconds %= 86400;
+		++date;
+	}
 }

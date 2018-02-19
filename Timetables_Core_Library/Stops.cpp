@@ -105,3 +105,15 @@ const Station& Timetables::Structures::Stops::GetStation(const std::wstring& nam
 	else
 		return stat->second;
 }
+
+void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(const Routes & routes) {
+	for (auto&& route : routes.GetRoutes()) {
+		const vector<StopPtrObserver>& stops = route.GetStops();
+		for (auto&& s : stops) {
+			Stop& stop = GetStop(*s); // Variable s is const reference (pointer respectively) to required stop. We need the non-const one.
+			auto it = find(stop.GetRoutes().cbegin(), stop.GetRoutes().cend(), &route);
+			if (it == stop.GetRoutes().cend())
+				stop.AddRoute(route);
+		}
+	}
+}

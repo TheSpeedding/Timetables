@@ -16,7 +16,7 @@ Timetables::Structures::Routes::Routes(const RoutesInfo& info, const Trips& trip
 		Route r(trip.GetRouteInfo(), move(stopsSequence));
 		auto it = find(list.begin(), list.end(), r);
 
-		if (list.size() == 0 || it == list.cend()) {
+		if (it == list.cend()) {
 			list.push_back(r);
 			it = find(list.begin(), list.end(), r); // We have to look for it once again due to possible vector reallocation.
 		}

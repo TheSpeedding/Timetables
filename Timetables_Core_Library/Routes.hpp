@@ -3,14 +3,17 @@
 
 #include "Stops.hpp"
 #include "Utilities.hpp"
+#include "RoutesInfo.hpp"
 #include "Trips.hpp"
 #include <vector>
+#include <algorithm>
 #include <map>
 
 namespace Timetables {
 	namespace Structures {
 		class Stop; using StopPtrObserver = const Stop*;
 		class Trip; using TripPtrObserver = const Trip*;
+		class Trips;
 
 		class Route {
 		private:
@@ -26,6 +29,11 @@ namespace Timetables {
 
 			inline void AddTrip(const Time& time, const Trip& trip) { trips.insert(std::make_pair(time, &trip)); }
 			inline void AddStop(const Stop& stop) { stopsSequence.push_back(&stop); }
+
+			inline bool StopComesBefore(const Stop& A, const Stop& B) const {
+				// We can use properties of vector and just comapare the addresses.
+				return std::find(stopsSequence.cbegin(), stopsSequence.cend(), &A) < std::find(stopsSequence.cbegin(), stopsSequence.cend(), &B);
+			}
 			
 			inline bool operator== (const Route& other) {
 				if (stopsSequence.size() != other.stopsSequence.size()) return false;
