@@ -233,25 +233,27 @@ TripPtrObserver Timetables::Algorithms::GetEarliestTrip(const Timetables::Struct
 
 	if (arrival.Infinity()) return nullptr;
 
-	auto upperBound = route.GetTrips().upper_bound(arrival.GetTime()); // Procházení tripu od zaèátku. TO-DO: Špatnì, problém 01:xx vs 25:xx
+	// Now we will find index of required stop in trip stops sequence to have a constant access via pointer arithmetics.
 
-	for (auto it = upperBound; it != route.GetTrips().cend(); ++it) { // Všechny tripy od dolní hranice.
+	size_t i = 0;
 
-		for (auto it1 = it->second->GetStopTimes().cbegin(); it1 != it->second->GetStopTimes().cend(); ++it1) { // Pøes všechny stoptimes v tripu.
+	for (auto it = route.GetTrips().cbegin()->second->GetStopTimes().cbegin(); it != route.GetTrips().cbegin()->second->GetStopTimes().cend(); ++it, ++i)
+		if (&it->get()->GetStop() == &stop)
+			break;
 
-			if (&it1->get()->GetStop() == &stop) { // Dokud nenarazíme na požadovanou zastávku.
+	// Now let's find the closest trip that we can use. That means the earliest departure after the arrival time.
 
-				if (it1->get()->GetDeparture() >= arrival.GetTime()) { // TO-DO: Opìt špatnì, pùlnoc...					
-					// To je nejspíš špatnì, chtìlo by to reverse iterator
-					return it->second;
+	// TO-DO: Some heuristic may decrease time consumption. E.g. reverse iterator from upperbound of departure from the first stop in the trip.
+	
+	for (auto it = route.GetTrips().cbegin(); it != route.GetTrips().cend(); ++it) {
 
-				}
+		if (!it->second->GetService().IsOperatingInDate(arrival.GetDate())) continue; // The trip is not operating in this date.
 
-				break;
+		auto departureFromRequiredStopUsingThisTrip = (it->second->GetStopTimes().cbegin() + i)->get()->GetDeparture();
+		
+		if (departureFromRequiredStopUsingThisTrip > arrival.GetTime()) // Then return this trip.
 
-			}
-
-		}
+			return it->second;
 
 	}
 
