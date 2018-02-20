@@ -70,7 +70,7 @@ namespace Timetables {
 		public:
 			InvalidDataFormatException(const std::string& message) : std::invalid_argument(message) {};
 		};
-		
+
 		class JourneyNotFoundException : public std::exception {
 		private:
 			const std::wstring& A;
@@ -79,6 +79,16 @@ namespace Timetables {
 			JourneyNotFoundException(const std::wstring& A, const std::wstring& B) : A(A), B(B) {}
 
 			inline const std::pair<std::wstring, std::wstring> GetStations() const { return std::make_pair(A, B); }
+		};
+
+		class FootpathNotFoundException : public std::exception {
+		private:
+			const std::wstring& A;
+			const std::wstring& B;
+		public:
+			FootpathNotFoundException(const std::wstring& A, const std::wstring& B) : A(A), B(B) {}
+
+			inline const std::pair<std::wstring, std::wstring> GetStops() const { return std::make_pair(A, B); }
 		};
 
 	}

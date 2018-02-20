@@ -77,6 +77,12 @@ namespace Timetables {
 			inline const std::multimap<Time, StopTimePtrObserver>& GetDepartures() const { return departures; }
 			inline const std::vector<RoutePtrObserver>& GetRoutes() const { return throughgoingRoutes; }
 			inline const std::multimap<int, StopPtrObserver>& GetFootpaths() const { return footpaths; }
+			inline const int GetFootpathTo(const Stop& stop) const {
+				for (auto&& footpath : footpaths)
+					if (footpath.second == &stop)
+						return footpath.first;
+				throw Timetables::Exceptions::FootpathNotFoundException(name, stop.GetName());
+			}
 
 			inline void SetParentStation(Station& parent) {
 				if (parentStation != nullptr) throw std::runtime_error("Parent station already set.");

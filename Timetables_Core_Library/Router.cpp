@@ -147,13 +147,7 @@ void Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& 
 						arrivalTimes.at(k).insert(make_pair(&s, Datetime(min.GetDate(), st->GetArrival()))); // 19th row of pseudocode.
 						
 						tempTimes.insert(make_pair(&s, Datetime(min.GetDate(), st->GetArrival()))); // 20th row of pseudocode.
-
-						// This is the point where we finish our journey if we have reached the required station.
-
-						if (target.ContainsStop(s)) {
-							throw 1;
-						}
-
+						
 						markedStops.push(&s); // 21st row of pseudocode.
 
 					}
@@ -269,4 +263,11 @@ TripPtrObserver Timetables::Algorithms::GetEarliestTrip(const Timetables::Struct
 
 	return nullptr;
 
+}
+
+const std::vector<StopTimePtrObserver> Timetables::Structures::TripSegment::GetStopTimes() const {
+	vector<StopTimePtrObserver> stopTimes; // We need a vector of observers, unique_ptrs are uncopyable.
+	for (auto it = begin; it != end; ++it)
+		stopTimes.push_back(it->get());
+	return move(stopTimes);
 }
