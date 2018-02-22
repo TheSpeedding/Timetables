@@ -11,13 +11,11 @@ namespace Timetables {
 			friend class Datetime;
 		private:
 			// We will store Time as seconds from midnight. 
-			// Easier comparison (operators implementation), saves memory and afterall even Time.
+			// Easier comparison (operators implementation), saves memory and afterall even time.
 			int seconds;
 		public:
 			Time(const std::string& time);
-			Time(int h, int m, int s) : seconds(s + m * 60 + h * 3600) { 
-				if (s > 60 || m > 60) throw Timetables::Exceptions::InvalidDataFormatException("Invalid Time format."); 
-			}
+			Time(int h, int m, int s) : seconds(s + m * 60 + h * 3600) {}
 			Time(int s) : seconds(s) {};
 				
 			static Time Now();
@@ -25,6 +23,8 @@ namespace Timetables {
 			inline int GetHours() const { return (seconds % 86400) / 3600; }
 			inline int GetMinutes() const { return ((seconds % 86400) % 3600) / 60; }
 			inline int GetSeconds() const { return ((seconds % 86400) % 3600) % 60; }
+
+			inline bool ExceedsDay() const { return seconds >= 86400; }
 
 			inline std::string ToString() const { return std::to_string(GetHours()) + ':' + (GetMinutes() < 10 ? "0" : "") + std::to_string(GetMinutes()) + ':' + (GetSeconds() < 10 ? "0" : "") + std::to_string(GetSeconds()); }
 
@@ -63,6 +63,9 @@ namespace Timetables {
 			bool operator>= (const Date& other) const;
 			inline bool operator== (const Date& other) const { return day == other.day && month == other.month && year == other.year; }
 			Date& operator++(); // Adds one day.
+			Date& operator--(); // Removes one day.
+			Date operator+ (std::size_t days) const { Date newDate(*this); for (std::size_t i = 0; i < days; i++) ++newDate; return std::move(newDate); } // TO-DO: Not effective.
+			Date operator- (std::size_t days) const { Date newDate(*this); for (std::size_t i = 0; i < days; i++) --newDate; return std::move(newDate); } // TO-DO: Not effective.
 		};
 
 		class Datetime {
@@ -74,6 +77,7 @@ namespace Timetables {
 			Datetime(const Date& d, const Time& t);
 			Datetime(int day, int month, int year, int h, int m, int s);
 			Datetime() : infinity(true), date(Date(0, 0, 0)), time(Time(0, 0, 0)) {} // Default constructor = invalid datetime.
+			Datetime(const Date& d) : infinity(true), date(d), time(Time(0, 0, 0)) {} // No time constructor = invalid datetime.
 			
 			static Datetime Now() { return Datetime(Date::Now(), Time::Now()); }
 

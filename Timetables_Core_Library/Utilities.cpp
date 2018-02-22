@@ -124,15 +124,27 @@ bool Timetables::Structures::Date::operator>=(const Date& other) const {
 
 Timetables::Structures::Date& Timetables::Structures::Date::operator++() {
 	day++;
-	int days_in_month = 0;
-	days_in_month = GetDaysInMonth(month, year);
-	if (day > days_in_month) {
-		day -= days_in_month;
+	int daysInMonth = GetDaysInMonth(month, year);
+	if (day > daysInMonth) {
+		day -= daysInMonth;
 		month++;
 	}
 	if (month > 12) {
 		month -= 12;
 		year++;
+	}
+	return *this;
+}
+
+Timetables::Structures::Date & Timetables::Structures::Date::operator--() {
+	day--;
+	if (day == 0) {
+		month--;
+		if (month == 0) {
+			month = 12;
+			year--;
+		}
+		day = GetDaysInMonth(month, year);
 	}
 	return *this;
 }

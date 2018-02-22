@@ -71,7 +71,7 @@ namespace Timetables {
 			Stop(const std::wstring& name, double latitude, double longitude, Station* parentStation) :
 				name(name), coords(GpsCoords(latitude, longitude)), parentStation(parentStation) {}
 
-			inline Station& GetParentStation() { return *parentStation; }
+			inline const Station& GetParentStation() const { return *parentStation; }
 			inline const GpsCoords& GetLocation() const { return coords; }
 			inline const std::wstring& GetName() const { return name; }
 			inline const std::multimap<Time, StopTimePtrObserver>& GetDepartures() const { return departures; }

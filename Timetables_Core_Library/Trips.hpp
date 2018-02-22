@@ -35,6 +35,10 @@ namespace Timetables {
 			inline const Service& GetService() const { return service; }
 			inline const ShapesSequence& GetShapesSequence() const { return shapes; }
 
+			inline bool IsOperatingInDatetime(const Datetime& datetime) const {
+				return datetime.GetTime().ExceedsDay() ? service.IsOperatingInDate(datetime.GetDate() - 1) : service.IsOperatingInDate(datetime.GetDate());
+			}
+
 			inline void AddToTrip(std::unique_ptr<StopTime> stopTime) { stopTimes.push_back(move(stopTime)); }
 		};
 

@@ -93,7 +93,7 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops) {
 		for (auto&& B : stopsList) {
 			if (&A.second == &B.second) continue;
 			int Time = GpsCoords::GetWalkingTime(A.second.GetLocation(), B.second.GetLocation());
-			if (Time < 1200) // Heuristic: Walking Time between two stops should be 20 minutes at max, otherwise it loses the point. Saves a lot of memory.
+			if (Time < 600) // Heuristic: Walking Time between two stops should be 10 minutes at max, otherwise it loses the point. Saves a lot of memory.
 				A.second.AddFootpath(B.second, Time);
 		}
 }
