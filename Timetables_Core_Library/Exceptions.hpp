@@ -16,7 +16,7 @@ namespace Timetables {
 			std::wstring stopName;
 		public:
 			StopNotFoundException(const std::wstring& stopName) : stopName(stopName) {}
-			StopNotFoundException(const std::string& stopId) : stopName(std::wstring(stopName.cbegin(), stopName.cend())) {}
+			StopNotFoundException(const std::string& stopId) : stopName(std::wstring(stopId.cbegin(), stopId.cend())) {}
 
 			inline const std::wstring& GetStopName() const { return stopName; }
 		};

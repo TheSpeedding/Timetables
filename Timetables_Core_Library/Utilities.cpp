@@ -11,6 +11,8 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
+Datetime Datetime::invalid;
+
 Timetables::Structures::Time::Time(const std::string& Time) {
 
 	vector<uint8_t> tokens;

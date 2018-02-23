@@ -1,340 +1,227 @@
 #include "Router.hpp"
-#include "Routes.hpp"
 #include <vector>
-#include <unordered_map>
 #include "Utilities.hpp"
-#include <queue>
-#include <memory>
 
 using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 using namespace Timetables::Algorithms;
 
-Timetables::Structures::Journey Timetables::Algorithms::FindRoute(const Timetables::Structures::GtfsFeed & feed, const Timetables::Structures::Station & source, const Timetables::Structures::Station & target, const Timetables::Structures::Datetime & datetime, const std::size_t transfers) {
-	
-	// The i-th position of the vector says in which time we are capable to reach given stop in the map from the source station.
-	// Default state is infinity (represented by not found state).
+void Timetables::Algorithms::Router::AccumulateRoutes() {
 
-	vector<unordered_map<StopPtrObserver, Datetime>> labels;
+	// Accumulate routes serving marked stops from previous round.
 
-	vector<unordered_map<StopPtrObserver, Journey>> journeys;
+	activeRoutes.clear(); // 7th row of pseudocode.
 
-	unordered_map<StopPtrObserver, Datetime> tempLabels;
+	for (auto&& stop : markedStops) { // 8th row of pseudocode.
 
-	queue<StopPtrObserver> markedStops;
+		for (auto&& route : stop->GetRoutes()) { // 9th row of pseudocode.
 
-	// Initialization of the algorithm.
+			auto someStop = activeRoutes.find(route);
 
-	labels.push_back(unordered_map<StopPtrObserver, Datetime>());
+			if (someStop != activeRoutes.cend()) { // 10th row of pseudocode.
 
-	journeys.push_back(unordered_map<StopPtrObserver, Journey>());
+				if (route->StopComesBefore(*stop, *someStop->second)) { // 11th row of pseudocode.
 
-	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
+					activeRoutes.erase(route);
 
-	for (auto&& stop : source.GetChildStops()) {
-		labels[0].insert(make_pair(stop, datetime));
-		markedStops.push(stop);
-	}
-
-	using RoutePtrObserver = const Route*;
-
-	for (size_t k = 1; k <= transfers; k++) {
-
-		labels.push_back(unordered_map<StopPtrObserver, Datetime>());
-
-		journeys.push_back(unordered_map<StopPtrObserver, Journey>());
-
-		// Accumulate routes serving marked stops from previous round.
-
-		unordered_map<RoutePtrObserver, StopPtrObserver> Q; // 7th row of pseudocode.
-
-		while (markedStops.size() > 0) { // 8th row of pseudocode.
-
-			const Stop& stop = *markedStops.front();
-
-			for (auto&& route : stop.GetRoutes()) { // 9th row of pseudocode.
-
-				auto it = Q.find(route);
-
-				if (it != Q.cend()) { // 10th row of pseudocode.
-
-					if (route->StopComesBefore(stop, *it->second)) { // 11th row of pseudocode.
-
-						Q.erase(route);
-
-						Q.insert(make_pair(route, &stop)); // 11th row of pseudocode.
-
-					}
+					activeRoutes.insert(make_pair(route, stop)); // 11th row of pseudocode.
 
 				}
 
-				else
-
-					Q.insert(make_pair(route, &stop)); // 13th row of pseudocode.
-
 			}
 
-			markedStops.pop(); // 14th row of pseudocode.
+			else // 12th row of pseudocode.
 
-		}
-
-		// Traverse each route.
-
-		for (auto&& route : Q) { // 15th row of pseudocode.
-
-			TripPtrObserver trip = nullptr; // 16th row of pseudocode.
-
-			auto beginning = find(route.first->GetStops().cbegin(), route.first->GetStops().cend(), route.second); // 17th row of pseudocode.
-
-			for (auto it = beginning; it != route.first->GetStops().cend(); ++it) { // 17th row of pseudocode.
-
-																					// Can the label be improved in this round? Includes local and target pruning.
-
-				const Stop& s = **it;
-
-				if (trip != nullptr) { // 18th row of code.
-
-									   // We need arrival for given stop using trip "trip".
-
-					vector<unique_ptr<StopTime>>::const_iterator st;
-
-					for (st = trip->GetStopTimes().cbegin(); st != trip->GetStopTimes().cend(); ++st)
-						if (&st->get()->GetStop() == &s)
-							break;
-
-					// The best time we can get to stop "s" (meaning **it).
-
-					auto tempTimeStop = tempLabels.find(&s);
-
-					const Datetime& pi = tempTimeStop == tempLabels.cend() ? Datetime(datetime.GetDate()) : tempTimeStop->second;
-
-					// Now we have to look for the best arrival time to target station. We need to iterate over all the stops under the station.
-
-					vector<Datetime> targetStops;
-
-					for (auto&& childStop : target.GetChildStops()) {
-
-						auto it = tempLabels.find(childStop);
-
-						if (it != tempLabels.cend())
-
-							targetStops.push_back(it->second);
-
-					}
-
-					sort(targetStops.begin(), targetStops.end()); // TO-DO: Change sort n log n to linear approach of finding a minimum.
-
-					auto pt = targetStops.size() == 0 ? Datetime(datetime.GetDate()) : targetStops.at(0);
-
-					Datetime min = pi < pt ? pi : pt;
-
-					if (st._Ptr != nullptr && (min.Infinity() || st->get()->GetArrival() < min.GetTime())) { // 18th row of code.
-
-						labels.at(k).erase(&s);
-
-						labels.at(k).insert(make_pair(&s, Datetime(min.GetDate(), st->get()->GetArrival()))); // 19th row of pseudocode.
-
-						auto start = find_if(trip->GetStopTimes().cbegin(), trip->GetStopTimes().cend(),
-							[=](const unique_ptr<StopTime>& val) { return &val->GetStop() == *beginning; });
-
-						if (k == 1) {
-
-							TripSegment segment(**start, min.GetDate(), min.GetDate()); // TO-DO: Dates fix.
-
-							for (auto next = start + 1; next != st + 1; ++next)
-
-								segment.AddToTripSegment(**next, min.GetDate(), min.GetDate());
-
-							journeys.at(k).insert(make_pair(&s, Journey(move(segment))));
-
-						}
-
-
-						else {
-
-							Journey currentJourney(journeys.at(k - 1).find(route.second)->second);
-
-							TripSegment segment(**start, min.GetDate(), min.GetDate()); // TO-DO: Dates fix.
-
-							for (auto next = start + 1; next != st + 1; ++next)
-
-								segment.AddToTripSegment(**next, min.GetDate(), min.GetDate());
-
-							currentJourney.AddToJourney(move(segment));
-
-							journeys.at(k).erase(&s);
-
-							journeys.at(k).insert(make_pair(&s, move(currentJourney)));
-
-						}
-
-						tempLabels.erase(&s);
-
-						tempLabels.insert(make_pair(&s, Datetime(min.GetDate(), st->get()->GetArrival()))); // 20th row of pseudocode.
-
-						markedStops.push(&s); // 21st row of pseudocode.
-
-					}
-
-					// Can we catch an earlier trip at stop "s"? 
-
-					// If trip is set, we can go for departure time from "s" using that trip. Otherwise we have to set it.
-
-					auto arrivalTime = labels.at(k - 1).find(&s);
-
-					if (arrivalTime != labels.at(k - 1).cend() && arrivalTime->second.GetTime() <= st->get()->GetDeparture()) { // 22nd row of pseudocode.
-
-						trip = GetEarliestTrip(arrivalTime->second, *route.first, s); // 23rd row of pseudocode.
-
-					}
-
-				}
-
-				if (trip == nullptr) { // Infinity.
-
-					auto arrivalTime = labels.at(k - 1).find(&s);
-
-					if (arrivalTime != labels.at(k - 1).cend()) { // 22nd row of pseudocode.
-
-						trip = GetEarliestTrip(arrivalTime->second, *route.first, s); // 23rd row of pseudocode.
-
-					}
-
-				}
-
-			}
-
-		}
-
-		queue<StopPtrObserver> setAsMarked; // I have to do that because of cycle and queue properties.
-
-											// Look at foot-paths.
-
-		for (size_t i = 0; i < markedStops.size(); i++) { // 24th row of pseudocode.
-
-			const Stop& A = *markedStops.front(); markedStops.pop(); markedStops.push(&A);
-
-			for (auto&& footpath : A.GetFootpaths()) { // 25th row of pseudocode.
-
-				const Stop& B = *footpath.second;
-
-				auto arrivalTimeA = labels.at(k).find(&A);
-
-				auto arrivalTimeB = labels.at(k).find(&B);
-
-				Datetime first = arrivalTimeB == labels.at(k).cend() ? Datetime(datetime.GetDate()) : arrivalTimeB->second;
-
-				Datetime second = arrivalTimeA == labels.at(k).cend() ? Datetime(datetime.GetDate()) : arrivalTimeA->second + footpath.first;
-
-				Datetime min = first < second ? first : second;
-
-				labels.at(k).erase(&B);
-
-				labels.at(k).insert(make_pair(&B, min)); // 26th row of pseudocode.
-
-				journeys.at(k).insert(make_pair(&B, journeys.at(k).find(&A)->second)); // The same journey, added just some footpath.
-
-				setAsMarked.push(&B); // 27th row of pseudocode.
-
-			}
-
-		}
-
-		while (setAsMarked.size() > 0) {
-
-			markedStops.push(setAsMarked.front()); setAsMarked.pop();
-
-		}
-
-		// Stopping criterion.
-
-		if (markedStops.size() == 0) // 28th row of pseudocode.
-
-			break; // 29th row of pseudocode.
-
-	}
-	
-	const Journey* bestJourney = nullptr;
-
-	for (auto it = journeys.cbegin() + 1; it != journeys.end(); ++it) {
-
-		for (auto&& journey : *it) {
-
-			if (&journey.first->GetParentStation() == &target) {
-
-				if (bestJourney == nullptr || journey.second.GetArrival() < bestJourney->GetArrival())
-
-					bestJourney = &journey.second;
-
-			}
+				activeRoutes.insert(make_pair(route, stop)); // 13th row of pseudocode.
 
 		}
 
 	}
 
-	if (bestJourney == nullptr)
-
-		throw JourneyNotFoundException(source.GetName(), target.GetName());
-
-	return *bestJourney;
+	markedStops.clear(); // 14th row of pseudocode.
 
 }
 
-std::vector<Timetables::Structures::Journey> Timetables::Algorithms::FindRoutes(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& datetime, const std::size_t count, const std::size_t transfers) {
+void Timetables::Algorithms::Router::TraverseEachRoute() {
 
-	auto it = feed.GetStations().find(s);
-	if (it == feed.GetStations().cend()) throw StopNotFoundException(s);
+	// TEMPORARY, REMOVE AND FIX DATETIMES.
 
-	const Station& source = it->second;
+	Date temp = labels.cbegin()->cbegin()->second.GetDate();
 
-	it = feed.GetStations().find(t);
-	if (it == feed.GetStations().cend()) throw StopNotFoundException(t);
+	for (auto&& item : activeRoutes) { // 15th row of pseudocode.
 
-	const Station& target = it->second;
+		TripPtrObserver currentTrip = nullptr; // 16th row of pseudocode.
+		const Stop& startingStop = *item.second;
+		const Route& route = *item.first;
 
-	vector<Journey> journeys;
+		// Find the current stop in route.
 
-	journeys.push_back(FindRoute(feed, source, target, datetime, transfers));
+		vector<StopPtrObserver>::const_iterator nextStop;
 
-	for (size_t i = 1; i < count; i++)
-		journeys.push_back(FindRoute(feed, source, target, journeys.at(i - 1).GetDeparture() + 1, transfers));
+		for (nextStop = route.GetStops().cbegin(); nextStop != route.GetStops().cend(); ++nextStop)
+			if (*nextStop == &startingStop)
+				break;
 
-	return move(journeys);
+		// Traverse the route from current stop.
+
+		for (; nextStop != route.GetStops().cend(); ++nextStop) { // 17th row of pseudocode.
+
+			// Can the label be improved in this round? Includes local and target pruning.
+
+			const Stop& currentStop = **nextStop;
+
+			if (currentTrip != nullptr) { // 18th row of pseudocode.
+
+				const StopTime& st = **(currentTrip->GetStopTimes().cbegin() + (nextStop - route.GetStops().cbegin()));
+
+				const Datetime& newArrival = Datetime(temp, st.GetArrival()); // 18th row of pseudocode.
+
+				Datetime earliestCurrentStopArrival = tempLabels.find(&currentStop) == tempLabels.cend() ? Datetime::GetInvalid() : tempLabels.find(&currentStop)->second; // 18th row of pseudocode.
+
+				Datetime earliestTargetStopArrival = Datetime::GetInvalid();
+
+				for (auto&& stop : target->GetChildStops())
+					if (tempLabels.find(stop) != tempLabels.cend() && tempLabels.find(stop)->second < earliestTargetStopArrival)
+						earliestTargetStopArrival = tempLabels.find(stop)->second; // 18th row of pseudocode.
+
+				if (newArrival < (earliestCurrentStopArrival < earliestTargetStopArrival ? earliestCurrentStopArrival : earliestTargetStopArrival)) { // 18th row of pseudocode.
+
+					(labels.end() - 1)->erase(&currentStop);
+					tempLabels.erase(&currentStop);
+
+					(labels.end() - 1)->insert(make_pair(&currentStop, newArrival)); // 19th row of pseudocode.
+										
+					tempLabels.insert(make_pair(&currentStop, newArrival)); // 20th row of pseudocode.
+
+					markedStops.insert(&currentStop); // 21st row of pseudocode.
+				}
+
+
+				// Can we catch an earlier trip?
+
+				auto previousArrival = (labels.end() - 2)->find(&currentStop);
+
+				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= Datetime(temp, st.GetDeparture())) // 22nd row of pseudocode.
+
+					currentTrip = FindEarliestTrip(route, previousArrival->second, currentStop); // 23rd row of pseudocode.
+			}
+
+			// Can we catch an earlier trip?
+
+			if (currentTrip == nullptr) { // 22nd row of pseudocode.
+
+				auto previousArrival = (labels.end() - 2)->find(&currentStop);
+
+				if (previousArrival != (labels.end() - 2)->cend())
+				
+					currentTrip = FindEarliestTrip(route, previousArrival->second, currentStop); // 23rd row of pseudocode.
+
+			}
+
+		}
+
+	}
+
 }
 
-TripPtrObserver Timetables::Algorithms::GetEarliestTrip(const Timetables::Structures::Datetime& arrival, const Timetables::Structures::Route& route, const Timetables::Structures::Stop& stop) {
+void Timetables::Algorithms::Router::LookAtFootpaths() {
 
-	// Look for earliest trip that we can catch using route "route" at stop "s".
+	for (auto&& stopA : markedStops) { // 24th row of pseudocode.
 
-	// We have to recall arrival time to "s" using k - 1 trips (variable tempTime).
+		for (auto&& footpath : stopA->GetFootpaths()) { // 25th row of pseudocode.
 
-	if (arrival.Infinity()) return nullptr;
+			const int duration = footpath.first;
 
-	// Now we will find index of required stop in trip stops sequence to have a constant access using pointer arithmetics.
+			StopPtrObserver stopB = footpath.second;
 
-	size_t i = 0;
+			auto arrivalTimeA = (labels.cend() - 1)->find(stopA);
 
-	for (auto it = route.GetTrips().cbegin()->second->GetStopTimes().cbegin(); it != route.GetTrips().cbegin()->second->GetStopTimes().cend(); ++it, ++i)
-		if (&it->get()->GetStop() == &stop)
+			auto arrivalTimeB = (labels.cend() - 1)->find(stopB);
+
+			if (arrivalTimeA == (labels.cend() - 1)->cend() && arrivalTimeB == (labels.cend() - 1)->cend())
+
+				continue;
+
+			else {
+
+				Datetime min = arrivalTimeB->second < arrivalTimeA->second.AddSeconds(duration) ? arrivalTimeB->second : arrivalTimeA->second.AddSeconds(duration);
+
+				(labels.end() - 1)->erase(stopB);
+
+				(labels.end() - 1)->insert(make_pair(stopB, min)); // 26th row of pseudocode.
+
+				(journeys.end() - 1)->insert(make_pair(stopB, (journeys.cend() - 1)->find(stopA)->second)); // The same journey, added just some footpath.
+
+			}
+
+			markedStops.insert(stopB); // 27th row of pseudocode.
+
+		}
+
+	}
+
+}
+
+TripPtrObserver Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::Datetime& arrival, const Timetables::Structures::Stop& stop) {
+
+	// At first we have to precompute index for given stop in route to have a constant access to that via trips. TO-DO: Keep indices in memory.
+
+	size_t index = 0;
+
+	for (auto it = route.GetStops().cbegin(); it != route.GetStops().cend(); ++it, index++)
+		if (*it == &stop)
 			break;
 
-	// Now let's find the closest trip that we can use. That means the earliest departure after the arrival time.
+	// TO-DO: Binary search.
 
-	// TO-DO: Some heuristic may decrease time consumption. E.g. reverse iterator from upperbound of departure from the first stop in the trip.
-	
 	for (auto it = route.GetTrips().cbegin(); it != route.GetTrips().cend(); ++it) {
 
-		if (!it->second->IsOperatingInDatetime(arrival)) continue; // The trip is not operating in this date.
+		auto st = (it->second->GetStopTimes().cbegin() + index)->get();
 
-		auto departureFromRequiredStopUsingThisTrip = (it->second->GetStopTimes().cbegin() + i)->get()->GetDeparture();
-		
-		if (departureFromRequiredStopUsingThisTrip > arrival.GetTime()) // Then return this trip.
+		if (it->second->IsOperatingInDatetime(arrival) && (st->GetDeparture() > arrival.GetTime()) || st->GetDeparture().ExceedsDay())
 
 			return it->second;
 
 	}
 
 	return nullptr;
+}
 
+Timetables::Algorithms::Router::Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& earliestDeparture, const std::size_t count, const std::size_t transfers) : transfers(transfers), count(count), earliestDeparture(earliestDeparture) {
+	auto it = feed.GetStations().find(s);
+	if (it == feed.GetStations().cend()) throw StopNotFoundException(s);
+
+	source = &it->second;
+
+	it = feed.GetStations().find(t);
+	if (it == feed.GetStations().cend()) throw StopNotFoundException(t);
+
+	target = &it->second;
+}
+
+void Timetables::Algorithms::Router::FindJourney() {
+	
+	labels.push_back(unordered_map<StopPtrObserver, Datetime>());
+
+	journeys.push_back(unordered_map<StopPtrObserver, Journey>());
+
+	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
+
+	for (auto&& stop : source->GetChildStops()) {
+		labels.at(0).insert(make_pair(stop, earliestDeparture)); // 4th row of pseudocode.
+		markedStops.insert(stop); // 5th row of pseudocode.
+	}
+
+	for (size_t k = 1; markedStops.size() > 0 && k <= transfers; k++) { // 6th && 28th && 29th row of pseudocode.
+
+		labels.push_back(unordered_map<StopPtrObserver, Datetime>());
+
+		journeys.push_back(unordered_map<StopPtrObserver, Journey>());
+
+		AccumulateRoutes();
+		TraverseEachRoute();
+		LookAtFootpaths();
+
+	}
 }

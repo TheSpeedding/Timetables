@@ -4,6 +4,7 @@
 #include "Exceptions.hpp"
 #include <vector>
 #include <string>
+#include <exception>
 
 namespace Timetables {
 	namespace Structures {
@@ -25,6 +26,7 @@ namespace Timetables {
 			inline int GetSeconds() const { return ((seconds % 86400) % 3600) % 60; }
 
 			inline bool ExceedsDay() const { return seconds >= 86400; }
+			inline Time Normalized() { return Time(seconds % 86400); }
 
 			inline std::string ToString() const { return std::to_string(GetHours()) + ':' + (GetMinutes() < 10 ? "0" : "") + std::to_string(GetMinutes()) + ':' + (GetSeconds() < 10 ? "0" : "") + std::to_string(GetSeconds()); }
 
@@ -35,6 +37,8 @@ namespace Timetables {
 			inline bool operator==(const Time& other) const { return seconds % 86400 == other.seconds % 86400; }
 			inline Time operator- (const Time& other) const { return Time(seconds - other.seconds); }
 			inline Time operator+ (const Time& other) const { return Time(seconds + other.seconds); }
+			inline Time operator- (const std::size_t s) const { return Time(seconds - s); }
+			inline Time operator+ (const std::size_t s) const { return Time(seconds + s); }
 		};
 
 		class Date {
@@ -73,16 +77,20 @@ namespace Timetables {
 			bool infinity;
 			Date date;
 			Time time;
+
+			Datetime() : infinity(true), date(Date(0, 0, 0)), time(Time(0, 0, 0)) {} // Default constructor = invalid datetime.
+			static Datetime invalid;
 		public:
 			Datetime(const Date& d, const Time& t);
 			Datetime(int day, int month, int year, int h, int m, int s);
-			Datetime() : infinity(true), date(Date(0, 0, 0)), time(Time(0, 0, 0)) {} // Default constructor = invalid datetime.
-			Datetime(const Date& d) : infinity(true), date(d), time(Time(0, 0, 0)) {} // No time constructor = invalid datetime.
+			// Datetime(const Date& d) : infinity(true), date(d), time(Time(0, 0, 0)) {} // No time constructor = invalid datetime.
+
+			static const Datetime& GetInvalid() { return invalid; }
 			
 			static Datetime Now() { return Datetime(Date::Now(), Time::Now()); }
 
-			inline const Time& GetTime() const { return time; }
-			inline const Date& GetDate() const { return date; }
+			inline const Time& GetTime() const { if (infinity) throw std::runtime_error("Invalid datetime."); return time; }
+			inline const Date& GetDate() const { if (infinity) throw std::runtime_error("Invalid datetime."); return date; }
 			inline const bool Infinity() const { return infinity; }
 
 			inline bool operator< (const Datetime& other) const { if (infinity) return false; if (other.infinity) return true; return other.date == date ? time < other.time : date < other.date; }
@@ -91,7 +99,7 @@ namespace Timetables {
 			inline bool operator>= (const Datetime& other) const { if (infinity) return true; if (other.infinity) return false; return other.date == date ? time >= other.time : date >= other.date; }
 			inline bool operator== (const Datetime& other) const { return infinity == other.infinity && other.date == date && other.time == time; }
 		
-			inline Datetime operator+ (int seconds) const { return Datetime(date, time + Time(seconds)); }
+			inline Datetime AddSeconds(int seconds) const { return Datetime((time + seconds).ExceedsDay() ? date + 1 : date, (time + seconds).Normalized()); }
 		};
 
 		class GpsCoords {
@@ -101,7 +109,7 @@ namespace Timetables {
 		public:
 			GpsCoords(double latitude, double longitude) : latitude(latitude), longitude(longitude) {}
 
-			// Returns walking Time in seconds between two points. Assuming average walking speed 0.5 m/s.
+			// Returns walking time in seconds between two points. Assuming average walking speed 0.5 m/s.
 			static int GetWalkingTime(const GpsCoords& A, const GpsCoords& B);
 
 			inline double GetLatitude() const { return latitude; }

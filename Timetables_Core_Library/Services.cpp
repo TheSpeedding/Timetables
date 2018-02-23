@@ -40,7 +40,7 @@ bool Timetables::Structures::Service::IsOperatingInDate(const Date& Date) const 
 	if (IsAddedInDate(Date)) return true;
 	if (IsRemovedInDate(Date)) return false;
 	auto day_in_week = Date.GetDayInWeek();
-	return operatingDays[day_in_week];
+	return operatingDays[day_in_week - 1];
 }
 
 Timetables::Structures::Services::Services(std::istream&& calendar, std::istream&& calendar_dates) {
