@@ -32,6 +32,8 @@ int main(int argc, char** argv) {
 
 	Router r(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 5, 5);
 
-	r.FindJourney();
+	r.ObtainJourney();
+
+	r.GetJourneys();
 
 }

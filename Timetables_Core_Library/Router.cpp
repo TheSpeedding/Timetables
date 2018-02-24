@@ -200,7 +200,7 @@ Timetables::Algorithms::Router::Router(const Timetables::Structures::GtfsFeed& f
 	target = &it->second;
 }
 
-void Timetables::Algorithms::Router::FindJourney() {
+void Timetables::Algorithms::Router::ObtainJourney() {
 	
 	labels.push_back(unordered_map<StopPtrObserver, Datetime>());
 

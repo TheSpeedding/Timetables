@@ -18,7 +18,7 @@ namespace Timetables {
 		class Trip;
 		class StopTime; using StopTimePtrObserver = const StopTime*;
 		
-		/*
+		
 		class Journey {
 		private:
 			std::vector<std::pair<TripPtrObserver, StopPtrObserver>> journeySegments;
@@ -36,7 +36,7 @@ namespace Timetables {
 
 			inline void AddToJourney(const Timetables::Structures::Trip& trip, const Timetables::Structures::Stop& stop) { journeySegments.push_back(std::make_pair(&trip, &stop)); }
 		};
-		*/
+		
 	}
 
 	namespace Algorithms {
@@ -67,7 +67,7 @@ namespace Timetables {
 		public:
 			Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& earliestDeparture, const std::size_t count, const std::size_t transfers);
 			
-			void FindJourney();
+			void ObtainJourney();
 
 			const std::vector<Timetables::Structures::Journey>& GetJourneys() const { return fastestJourneys; }
 		};

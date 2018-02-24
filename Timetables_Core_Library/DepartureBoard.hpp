@@ -33,7 +33,21 @@ namespace Timetables {
 	}
 
 	namespace Algorithms {	
-		std::vector<Timetables::Structures::Departure> GetDepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& datetime, const size_t count);
+		using StationPtrObserver = const Timetables::Structures::Station*;
+
+		class DepartureBoard {
+		private:
+			std::vector<Timetables::Structures::Departure> foundDepartures;
+			StationPtrObserver station;
+			const Timetables::Structures::Datetime& earliestDeparture;
+			const std::size_t count;
+		public:
+			DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& earliestDeparture, const size_t count);
+
+			void ObtainDepartureBoard();
+
+			inline const std::vector<Timetables::Structures::Departure>& GetDepartureBoard() { return foundDepartures; }
+		};
 	}
 }
 
