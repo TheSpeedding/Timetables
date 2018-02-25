@@ -5,8 +5,17 @@ class Program
 {
     static void Main(string[] args)
     {
-        Downloader.GetDataFeed();
+        string pathToGtfs = "gtfs_data";
+        string pathToData = "data";
 
-        Downloader.DeleteTrash();
+        // DataFeed.GetAndTransformDataFeed<GtfsDataFeed>();
+
+        // Downloader.GetDataFeed(pathToGtfs);
+
+        IDataFeed data = new GtfsDataFeed(pathToGtfs);
+
+        data.CreateDataFeed(pathToData);
+
+        // Downloader.DeleteTrash(pathToGtfs);
     }
 }
