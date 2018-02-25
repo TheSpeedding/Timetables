@@ -37,7 +37,7 @@ namespace Timetables.Preprocessor
         {
             var flags = new Dictionary<string, Station>();
 
-            foreach (var stop in stops.list)
+            foreach (var stop in stops)
             {
                 if (!flags.ContainsKey(stop.Value.Name))
                 {

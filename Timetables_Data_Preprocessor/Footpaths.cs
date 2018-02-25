@@ -63,8 +63,8 @@ namespace Timetables.Preprocessor
         public int Count => list.Count;
         public Footpaths(Stops stops)
         {
-            foreach (var A in stops.list)
-                foreach (var B in stops.list)
+            foreach (var A in stops)
+                foreach (var B in stops)
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
                     if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.

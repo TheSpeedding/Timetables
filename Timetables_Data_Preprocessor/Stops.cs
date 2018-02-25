@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Timetables.Preprocessor
 {
-    public class Stops
+    public class Stops : IEnumerable<KeyValuePair<string, Stops.Stop>>
     {
         public class Stop
         {
@@ -35,7 +33,7 @@ namespace Timetables.Preprocessor
                 Location = new Tuple<double, double>(latitude, longitude);
             }
         }
-        internal Dictionary<string, Stop> list = new Dictionary<string, Stop>(); // TO-DO: Change public to private somehow. Dependency from Stations.
+        private Dictionary<string, Stop> list = new Dictionary<string, Stop>();
         /// <summary>
         /// Gets required stop.
         /// </summary>
@@ -104,5 +102,7 @@ namespace Timetables.Preprocessor
                 stops.Write(item.Value);
             stops.Close();
         }
+        public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
