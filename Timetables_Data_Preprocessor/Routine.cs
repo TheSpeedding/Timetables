@@ -21,22 +21,32 @@ namespace Timetables.Preprocessor
             else // Expires in more than 3 days? Refresh in 3 days sometime at night.
                 return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 3, 0, 0).AddDays(3);
         }
+        private static DateTime GetExpirationDateTime()
+        {
+            DateTime expiration;
+            using (var sr = new StreamReader("data/expires.txt"))
+            {
+                string validUntil = sr.ReadLine();
+
+                int year = int.Parse(validUntil.Substring(0, 4));
+                int month = int.Parse(validUntil.Substring(4, 2));
+                int day = int.Parse(validUntil.Substring(6, 2));
+
+                expiration = new DateTime(year, month, day, 23, 59, 59);
+            }
+            return expiration;
+        }
         public static void PerformRoutine()
         {
             // First run of the application or loss of data. Data does not exist or they are in the invalid state, we have to download and transform them.
 
             if (!DataFeed.AreDataPresent)
                  DataFeed.GetAndTransformDataFeed<GtfsDataFeed>();
-            
-            string validUntil = new StreamReader("data/expires.txt").ReadLine();
 
-            int year = int.Parse(validUntil.Substring(0, 4));
-            int month = int.Parse(validUntil.Substring(4, 2));
-            int day = int.Parse(validUntil.Substring(6, 2));
-
-            DateTime expiration = new DateTime(year, month, day, 23, 59, 59);
 
             // Data may become outdated soon. Redownload them.
+
+            DateTime expiration = GetExpirationDateTime();
 
             if (expiration.Date == DateTime.Today.Date)
                 DataFeed.GetAndTransformDataFeed<GtfsDataFeed>();
@@ -45,7 +55,7 @@ namespace Timetables.Preprocessor
             {
                 // Download data only when they are about to become outdated.
 
-                expiration = GetDateTimeOfNextRun(expiration);
+                expiration = GetDateTimeOfNextRun(GetExpirationDateTime());
 
                 int secondsToSleep = (int)(expiration - DateTime.Now).TotalSeconds;
 

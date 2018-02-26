@@ -103,9 +103,12 @@ namespace Timetables.Preprocessor
 
                 if (name[name.Length - 1] == '"') name = name.Substring(0, name.Length - 1);
 
-                Stop stop = new Stop(Count, name, double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
+                if (tokens[dic["location_type"]] == "0")
+                {
+                    Stop stop = new Stop(Count, name, double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 
-                list.Add(tokens[dic["stop_id"]], stop);
+                    list.Add(tokens[dic["stop_id"]], stop);
+                }
             }
             stops.Dispose();
         }
