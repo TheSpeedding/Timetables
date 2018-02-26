@@ -31,6 +31,9 @@ namespace Timetables.Preprocessor
                 client.DownloadFile(url, "data.zip");
             }
 
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+
             Directory.CreateDirectory(path);
             
             System.IO.Compression.ZipFile.ExtractToDirectory("data.zip", path);
@@ -38,7 +41,11 @@ namespace Timetables.Preprocessor
             File.Delete("data.zip");
         }
 
-        public static void DeleteTrash(string path) => Directory.Delete(path);
+        public static void DeleteTrash(string path)
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+        }
 
     }
 }

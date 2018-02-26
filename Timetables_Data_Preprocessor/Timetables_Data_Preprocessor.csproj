@@ -43,15 +43,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed.cs" />
-    <Compile Include="Downloader.cs" />
-    <Compile Include="Footpaths.cs" />
-    <Compile Include="GtfsDataFeed.cs" />
+    <Compile Include="GtfsParser\Downloader.cs" />
+    <Compile Include="GtfsParser\Footpaths.cs" />
+    <Compile Include="GtfsParser\GtfsDataFeed.cs" />
+    <Compile Include="GtfsParser\Routes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoutesInfo.cs" />
-    <Compile Include="Services.cs" />
-    <Compile Include="Stations.cs" />
-    <Compile Include="Stops.cs" />
-    <Compile Include="Trips.cs" />
+    <Compile Include="GtfsParser\RoutesInfo.cs" />
+    <Compile Include="GtfsParser\Services.cs" />
+    <Compile Include="GtfsParser\Stations.cs" />
+    <Compile Include="GtfsParser\Stops.cs" />
+    <Compile Include="GtfsParser\StopTimes.cs" />
+    <Compile Include="GtfsParser\Trips.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

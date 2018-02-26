@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Timetables.Preprocessor
 {
@@ -18,6 +14,9 @@ namespace Timetables.Preprocessor
         Stations Stations { get; }
         Footpaths Footpaths { get; }
         Trips Trips { get; }
+        StopTimes StopTimes { get; }
+        Routes Routes { get; }
+        string ExpirationDate { get; }
         void CreateDataFeed(string path);
     }
 

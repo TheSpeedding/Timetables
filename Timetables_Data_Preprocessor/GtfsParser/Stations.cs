@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public class Stations
+    public abstract class Stations
     {
         public class Station
         {
@@ -22,7 +22,7 @@ namespace Timetables.Preprocessor
                 Name = name;
             }
         }
-        private List<Station> list = new List<Station>();
+        protected List<Station> list = new List<Station>();
         /// <summary>
         /// Gets required station.
         /// </summary>
@@ -33,7 +33,18 @@ namespace Timetables.Preprocessor
         /// Gets the total number of station.
         /// </summary>
         public int Count => list.Count;
-        public Stations(Stops stops)
+        public void Write(System.IO.StreamWriter stations)
+        {
+            stations.WriteLine(Count);
+            foreach (var item in list)
+                stations.Write(item);
+            stations.Close();
+            stations.Dispose();
+        }
+    }
+    public sealed class GtfsStations : Stations
+    {
+        public GtfsStations(Stops stops)
         {
             var flags = new Dictionary<string, Station>();
 
@@ -47,13 +58,6 @@ namespace Timetables.Preprocessor
                 }
                 stop.Value.ParentStation = flags[stop.Value.Name];
             }
-        }
-        public void Write(System.IO.StreamWriter stations)
-        {
-            stations.WriteLine(Count);
-            foreach (var item in list)
-                stations.Write(item);
-            stations.Close();
         }
     }
 }

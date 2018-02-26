@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Timetables.Preprocessor
 {
-    public class Trips
+    public abstract class Trips : IEnumerable<KeyValuePair<string, Trips.Trip>>
     {
         public class Trip
         {
@@ -26,27 +24,49 @@ namespace Timetables.Preprocessor
             /// Service for the trip.
             /// </summary>
             public Calendar.Service Service { get; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Headsign + ";";
+            /// <summary>
+            /// List of the stop times belonging to this trip.
+            /// </summary>
+            public List<StopTimes.StopTime> StopTimes { get; }
+            /// <summary>
+            /// Route for the trip.
+            /// </summary>
+            public Routes.Route Route { get; internal set; }
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";";
             public Trip(int id, string headsign, RoutesInfo.RouteInfo routeInfo, Calendar.Service service)
             {
+                StopTimes = new List<StopTimes.StopTime>();
                 ID = id;
                 Headsign = headsign;
                 RouteInfo = routeInfo;
                 Service = service;
             }
         }
-        private Dictionary<int, Trip> list = new Dictionary<int, Trip>();
+        protected Dictionary<string, Trip> list = new Dictionary<string, Trip>();
         /// <summary>
         /// Gets required trip.
         /// </summary>
         /// <param name="index">Identificator of the trip.</param>
         /// <returns>Obtained trip.</returns>
-        public Trip this[int index] => list[index];
+        public Trip this[string index] => list[index];
         /// <summary>
         /// Gets the total number of trip.
         /// </summary>
         public int Count => list.Count;
-        public Trips(System.IO.StreamReader trips, Calendar services, RoutesInfo routesInfo)
+        public void Write(System.IO.StreamWriter trips)
+        {
+            trips.WriteLine(Count);
+            foreach (var item in list)
+                trips.Write(item.Value);
+            trips.Close();
+            trips.Dispose();
+        }
+        public IEnumerator<KeyValuePair<string, Trip>> GetEnumerator() => list.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+    public sealed class GtfsTrips : Trips
+    {
+        public GtfsTrips(System.IO.StreamReader trips, Calendar services, RoutesInfo routesInfo)
         {
 
             // Get order of field names.
@@ -91,17 +111,11 @@ namespace Timetables.Preprocessor
 
                 if (headsign[headsign.Length - 1] == '"') headsign = headsign.Substring(0, headsign.Length - 1);
 
-                Trip trip = new Trip(int.Parse(tokens[dic["trip_id"]]), headsign, routesInfo[tokens[dic["route_id"]]], services[int.Parse(tokens[dic["service_id"]])]);
-                
-                list.Add(int.Parse(tokens[dic["trip_id"]]), trip);
+                Trip trip = new Trip(Count, headsign, routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
+
+                list.Add(tokens[dic["trip_id"]], trip);
             }
-        }
-        public void Write(System.IO.StreamWriter trips)
-        {
-            trips.WriteLine(Count);
-            foreach (var item in list)
-                trips.Write(item.Value);
-            trips.Close();
+            trips.Dispose();
         }
     }
 }

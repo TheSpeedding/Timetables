@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public class Calendar
+    public abstract class Calendar
     {
         public class Service
         {
@@ -14,11 +14,11 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// The date in string format that the data are valid since.
             /// </summary>
-            public string ValidSince { get; }
+            public int ValidSince { get; }
             /// <summary>
             /// The date in string format that the data are valid until.
             /// </summary>
-            public string ValidUntil { get; }
+            public int ValidUntil { get; }
             /// <summary>
             /// Value at i-th position represents operating state on this weekday.
             /// </summary>
@@ -43,22 +43,45 @@ namespace Timetables.Preprocessor
             {
                 ID = id;
                 OperatingDays = new bool[] { mon, tue, wed, thu, fri, sat, sun };
-                ValidSince = start;
-                ValidUntil = end;
+                ValidSince = int.Parse(start);
+                ValidUntil = int.Parse(end);
             }
         }
-        private Dictionary<int, Service> list = new Dictionary<int, Service>();
+        protected Dictionary<string, Service> list = new Dictionary<string, Service>();
         /// <summary>
         /// Gets required service.
         /// </summary>
         /// <param name="index">Identificator of the service.</param>
         /// <returns>Obtained service.</returns>
-        public Service this[int index] => list[index];
+        public Service this[string index] => list[index];
         /// <summary>
         /// Gets the total number of services.
         /// </summary>
         public int Count => list.Count;
-        public Calendar(System.IO.StreamReader calendar)
+        public void Write(System.IO.StreamWriter calendar)
+        {
+            calendar.WriteLine(Count);
+            foreach (var item in list)
+                calendar.Write(item.Value);
+            calendar.Close();
+            calendar.Dispose();
+        }
+        /// <summary>
+        /// Gets the date that the timetables expires in.
+        /// </summary>
+        /// <returns>Expiration date of the timetables.</returns>
+        public int GetExpirationDate()
+        {
+            int min = int.MaxValue;
+            foreach (var item in list)
+                if (item.Value.ValidUntil < min)
+                    min = item.Value.ValidUntil;
+            return min;                        
+        }
+    }
+    public sealed class GtfsCalendar : Calendar
+    {
+        public GtfsCalendar(System.IO.StreamReader calendar)
         {
             // Get order of field names.
             string[] fieldNames = calendar.ReadLine().Split(',');
@@ -90,20 +113,14 @@ namespace Timetables.Preprocessor
                 bool sat = tokens[dic["saturday"]] == "1" ? true : false;
                 bool sun = tokens[dic["sunday"]] == "1" ? true : false;
 
-                Service service = new Service(int.Parse(tokens[dic["service_id"]]) - 1, mon, tue, wed, thu, fri, sat, sun, tokens[dic["start_date"]], tokens[dic["end_date"]]);
-                
-                list.Add(int.Parse(tokens[dic["service_id"]]), service);
+                Service service = new Service(Count, mon, tue, wed, thu, fri, sat, sun, tokens[dic["start_date"]], tokens[dic["end_date"]]);
+
+                list.Add(tokens[dic["service_id"]], service);
             }
-        }
-        public void Write(System.IO.StreamWriter calendar)
-        {
-            calendar.WriteLine(Count);
-            foreach (var item in list)
-                calendar.Write(item.Value);
-            calendar.Close();
+            calendar.Dispose();
         }
     }
-    public class CalendarDates
+    public abstract class CalendarDates
     {
         public class ExtraordinaryEvent
         {
@@ -127,12 +144,23 @@ namespace Timetables.Preprocessor
                 Type = type;
             }
         }
-        private List<ExtraordinaryEvent> list = new List<ExtraordinaryEvent>();
+        protected List<ExtraordinaryEvent> list = new List<ExtraordinaryEvent>();
         /// <summary>
         /// Gets the total number of extraordinary events.
         /// </summary>
         public int Count => list.Count;
-        public CalendarDates(System.IO.StreamReader calendarDates, Calendar calendar)
+        public void Write(System.IO.StreamWriter calendarDates)
+        {
+            calendarDates.WriteLine(Count);
+            foreach (var item in list)
+                calendarDates.Write(item);
+            calendarDates.Close();
+            calendarDates.Dispose();
+        }
+    }
+    public sealed class GtfsCalendarDates : CalendarDates
+    {
+        public GtfsCalendarDates(System.IO.StreamReader calendarDates, Calendar calendar)
         {
             // Get order of field names.
             string[] fieldNames = calendarDates.ReadLine().Split(',');
@@ -153,7 +181,7 @@ namespace Timetables.Preprocessor
 
                 try
                 {
-                    service = calendar[int.Parse(tokens[dic["service_id"]]) - 1];
+                    service = calendar[tokens[dic["service_id"]]];
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -166,13 +194,7 @@ namespace Timetables.Preprocessor
 
                 list.Add(ev);
             }
-        }
-        public void Write(System.IO.StreamWriter calendarDates)
-        {
-            calendarDates.WriteLine(Count);
-            foreach (var item in list)
-                calendarDates.Write(item);
-            calendarDates.Close();
+            calendarDates.Dispose();
         }
     }
 }

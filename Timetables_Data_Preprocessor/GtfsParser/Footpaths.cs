@@ -32,7 +32,7 @@ namespace Timetables.Preprocessor
             return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 2);
         }
     }
-    public class Footpaths
+    public abstract class Footpaths
     {
         public class Footpath
         {
@@ -56,12 +56,23 @@ namespace Timetables.Preprocessor
                 Second = second;
             }
         }
-        private List<Footpath> list = new List<Footpath>();
+        protected List<Footpath> list = new List<Footpath>();
         /// <summary>
         /// Gets the total number of footpaths.
         /// </summary>
         public int Count => list.Count;
-        public Footpaths(Stops stops)
+        public void Write(System.IO.StreamWriter footpaths)
+        {
+            footpaths.WriteLine(Count);
+            foreach (var item in list)
+                footpaths.Write(item);
+            footpaths.Close();
+            footpaths.Dispose();
+        }
+    }
+    public sealed class GtfsFootpaths : Footpaths
+    {
+        public GtfsFootpaths(Stops stops)
         {
             foreach (var A in stops)
                 foreach (var B in stops)
@@ -70,13 +81,6 @@ namespace Timetables.Preprocessor
                     if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
                         list.Add(new Footpath(walkingTime, A.Value, B.Value));
                 }
-        }
-        public void Write(System.IO.StreamWriter footpaths)
-        {
-            footpaths.WriteLine(Count);
-            foreach (var item in list)
-                footpaths.Write(item);
-            footpaths.Close();
         }
     }
 }

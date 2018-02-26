@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {    
-    public class RoutesInfo
+    public abstract class RoutesInfo
     {
         public class RouteInfo
         {
@@ -65,7 +65,7 @@ namespace Timetables.Preprocessor
                     Color = color;
             }
         }
-        private Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
+        protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
         /// <summary>
         /// Gets required route info.
         /// </summary>
@@ -76,7 +76,18 @@ namespace Timetables.Preprocessor
         /// Gets the total number of routes info.
         /// </summary>
         public int Count => list.Count;
-        public RoutesInfo(System.IO.StreamReader routesInfo)
+        public void Write(System.IO.StreamWriter routesInfo)
+        {
+            routesInfo.WriteLine(Count);
+            foreach (var item in list)
+                routesInfo.Write(item.Value);
+            routesInfo.Close();
+            routesInfo.Dispose();
+        }
+    }
+    public sealed class GtfsRoutesInfo : RoutesInfo
+    {
+        public GtfsRoutesInfo(System.IO.StreamReader routesInfo)
         {
             // Get order of field names.
             string[] fieldNames = routesInfo.ReadLine().Split(',');
@@ -133,13 +144,7 @@ namespace Timetables.Preprocessor
 
                 list.Add(tokens[dic["route_id"]], routeInfo);
             }
-        }
-        public void Write(System.IO.StreamWriter routesInfo)
-        {
-            routesInfo.WriteLine(Count);
-            foreach (var item in list)
-                routesInfo.Write(item.Value);
-            routesInfo.Close();
+            routesInfo.Dispose();
         }
     }
 }

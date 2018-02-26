@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace Timetables.Preprocessor
 {
-    public class Stops : IEnumerable<KeyValuePair<string, Stops.Stop>>
+    public abstract class Stops : IEnumerable<KeyValuePair<string, Stops.Stop>>
     {
         public class Stop
         {
@@ -24,7 +24,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// Reference to the parent station.
             /// </summary>
-            public Stations.Station ParentStation { get; internal set; } // TO-DO: Change public to private somehow. Dependency from Stations.
+            public Stations.Station ParentStation { get; internal set; } 
             public override string ToString() => ID + ";" + Name + ";" + Location.Item1.ToString(CultureInfo.InvariantCulture) + ";" + Location.Item2.ToString(CultureInfo.InvariantCulture) + ";" + ParentStation.ID + ";";
             public Stop(int id, string name, double latitude, double longitude)
             {
@@ -33,7 +33,7 @@ namespace Timetables.Preprocessor
                 Location = new Tuple<double, double>(latitude, longitude);
             }
         }
-        private Dictionary<string, Stop> list = new Dictionary<string, Stop>();
+        protected Dictionary<string, Stop> list = new Dictionary<string, Stop>();
         /// <summary>
         /// Gets required stop.
         /// </summary>
@@ -44,7 +44,20 @@ namespace Timetables.Preprocessor
         /// Gets the total number of stops.
         /// </summary>
         public int Count => list.Count;
-        public Stops(System.IO.StreamReader stops)
+        public void Write(System.IO.StreamWriter stops)
+        {
+            stops.WriteLine(Count);
+            foreach (var item in list)
+                stops.Write(item.Value);
+            stops.Close();
+            stops.Dispose();
+        }
+        public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+    public sealed class GtfsStops : Stops
+    {
+        public GtfsStops(System.IO.StreamReader stops)
         {
 
             // Get order of field names.
@@ -94,15 +107,7 @@ namespace Timetables.Preprocessor
 
                 list.Add(tokens[dic["stop_id"]], stop);
             }
+            stops.Dispose();
         }
-        public void Write(System.IO.StreamWriter stops)
-        {
-            stops.WriteLine(Count);
-            foreach (var item in list)
-                stops.Write(item.Value);
-            stops.Close();
-        }
-        public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
