@@ -54,6 +54,7 @@
     <Compile Include="GtfsParser\Stops.cs" />
     <Compile Include="GtfsParser\StopTimes.cs" />
     <Compile Include="GtfsParser\Trips.cs" />
+    <Compile Include="Routine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

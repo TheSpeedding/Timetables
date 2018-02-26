@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Timetables.Preprocessor
 {
@@ -32,5 +33,10 @@ namespace Timetables.Preprocessor
 
             Downloader.DeleteTrash("gtfs_data/");
         }
+        public static bool AreDataPresent => Directory.Exists("data") &&
+            File.Exists("data/calendar.txt") && File.Exists("data/calendar_dates.txt") && File.Exists("data/expires.txt") &&
+            File.Exists("data/footpaths.txt") && File.Exists("data/routes.txt") && File.Exists("data/routes_info.txt") &&
+            File.Exists("data/stations.txt") && File.Exists("data/stop_times.txt") && File.Exists("data/stops.txt") &&
+            File.Exists("data/trips.txt");
     }
 }
