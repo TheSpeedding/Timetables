@@ -32,7 +32,7 @@ namespace Timetables.Preprocessor
             /// Route for the trip.
             /// </summary>
             public Routes.Route Route { get; internal set; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";";
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";" + StopTimes.Count + ";";
             public Trip(int id, string headsign, RoutesInfo.RouteInfo routeInfo, Calendar.Service service)
             {
                 StopTimes = new List<StopTimes.StopTime>();

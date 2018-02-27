@@ -1,7 +1,7 @@
-#include "Stops.hpp"
+/*#include "Stops.hpp"
 #include "Trips.hpp"
 #include "Exceptions.hpp"
-#include "GtfsFeed.hpp"
+#include "DataFeed.hpp"
 #include <vector>
 #include <string>
 #include <map>
@@ -28,7 +28,7 @@ const std::vector<Departure> Departure::GetFollowingStops() const {
 	return move(stops);
 }
 
-Timetables::Algorithms::DepartureBoard::DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& earliestDeparture, const size_t count) : count(count), earliestDeparture(earliestDeparture) {
+Timetables::Algorithms::DepartureBoard::DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& earliestDeparture, const size_t count) : count(count), earliestDeparture(earliestDeparture) {
 
 	auto it = feed.GetStations().find(stationName);
 	if (it == feed.GetStations().cend()) throw StopNotFoundException(stationName);
@@ -97,4 +97,4 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 		throw NoDeparturesFoundException(station->GetName());
 
 
-}
+}*/

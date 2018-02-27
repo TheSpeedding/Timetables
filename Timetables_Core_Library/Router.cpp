@@ -1,4 +1,4 @@
-#include "Router.hpp"
+/*#include "Router.hpp"
 #include <vector>
 #include "Utilities.hpp"
 
@@ -75,11 +75,11 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				const StopTime& st = **(currentTrip->GetStopTimes().cbegin() + (nextStop - route.GetStops().cbegin()));
 
-				const Datetime& newArrival = Datetime(temp, st.GetArrival()); // 18th row of pseudocode.
+				const DateTime& newArrival = DateTime(temp, st.GetArrival()); // 18th row of pseudocode.
 
-				Datetime earliestCurrentStopArrival = tempLabels.find(&currentStop) == tempLabels.cend() ? Datetime::GetInvalid() : tempLabels.find(&currentStop)->second; // 18th row of pseudocode.
+				DateTime earliestCurrentStopArrival = tempLabels.find(&currentStop) == tempLabels.cend() ? DateTime::GetInvalid() : tempLabels.find(&currentStop)->second; // 18th row of pseudocode.
 
-				Datetime earliestTargetStopArrival = Datetime::GetInvalid();
+				DateTime earliestTargetStopArrival = DateTime::GetInvalid();
 
 				for (auto&& stop : target->GetChildStops())
 					if (tempLabels.find(stop) != tempLabels.cend() && tempLabels.find(stop)->second < earliestTargetStopArrival)
@@ -102,7 +102,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				auto previousArrival = (labels.end() - 2)->find(&currentStop);
 
-				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= Datetime(temp, st.GetDeparture())) // 22nd row of pseudocode.
+				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= DateTime(temp, st.GetDeparture())) // 22nd row of pseudocode.
 
 					currentTrip = FindEarliestTrip(route, previousArrival->second, currentStop); // 23rd row of pseudocode.
 			}
@@ -145,7 +145,7 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 			else {
 
-				Datetime min = arrivalTimeB->second < arrivalTimeA->second.AddSeconds(duration) ? arrivalTimeB->second : arrivalTimeA->second.AddSeconds(duration);
+				DateTime min = arrivalTimeB->second < arrivalTimeA->second.AddSeconds(duration) ? arrivalTimeB->second : arrivalTimeA->second.AddSeconds(duration);
 
 				(labels.end() - 1)->erase(stopB);
 
@@ -163,7 +163,7 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 }
 
-TripPtrObserver Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::Datetime& arrival, const Timetables::Structures::Stop& stop) {
+TripPtrObserver Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, const Timetables::Structures::Stop& stop) {
 
 	// At first we have to precompute index for given stop in route to have a constant access to that via trips. TO-DO: Keep indices in memory.
 
@@ -179,7 +179,7 @@ TripPtrObserver Timetables::Algorithms::Router::FindEarliestTrip(const Timetable
 
 		auto st = (it->second->GetStopTimes().cbegin() + index)->get();
 
-		if (it->second->IsOperatingInDatetime(arrival) && (st->GetDeparture() > arrival.GetTime()) || st->GetDeparture().ExceedsDay())
+		if (it->second->IsOperatingInDateTime(arrival) && (st->GetDeparture() > arrival.GetTime()) || st->GetDeparture().ExceedsDay())
 
 			return it->second;
 
@@ -188,7 +188,7 @@ TripPtrObserver Timetables::Algorithms::Router::FindEarliestTrip(const Timetable
 	return nullptr;
 }
 
-Timetables::Algorithms::Router::Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& earliestDeparture, const std::size_t count, const std::size_t transfers) : transfers(transfers), count(count), earliestDeparture(earliestDeparture) {
+Timetables::Algorithms::Router::Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::DateTime& earliestDeparture, const std::size_t count, const std::size_t transfers) : transfers(transfers), count(count), earliestDeparture(earliestDeparture) {
 	auto it = feed.GetStations().find(s);
 	if (it == feed.GetStations().cend()) throw StopNotFoundException(s);
 
@@ -202,7 +202,7 @@ Timetables::Algorithms::Router::Router(const Timetables::Structures::GtfsFeed& f
 
 void Timetables::Algorithms::Router::ObtainJourney() {
 	
-	labels.push_back(unordered_map<StopPtrObserver, Datetime>());
+	labels.push_back(unordered_map<StopPtrObserver, DateTime>());
 
 	journeys.push_back(unordered_map<StopPtrObserver, Journey>());
 
@@ -215,7 +215,7 @@ void Timetables::Algorithms::Router::ObtainJourney() {
 
 	for (size_t k = 1; markedStops.size() > 0 && k <= transfers; k++) { // 6th && 28th && 29th row of pseudocode.
 
-		labels.push_back(unordered_map<StopPtrObserver, Datetime>());
+		labels.push_back(unordered_map<StopPtrObserver, DateTime>());
 
 		journeys.push_back(unordered_map<StopPtrObserver, Journey>());
 
@@ -225,3 +225,4 @@ void Timetables::Algorithms::Router::ObtainJourney() {
 
 	}
 }
+*/

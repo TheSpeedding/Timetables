@@ -11,23 +11,20 @@
 
 namespace Timetables {
 	namespace Structures {
-		class Stop; using StopPtrObserver = const Stop*;
-		class Trip; using TripPtrObserver = const Trip*;
-		class Trips;
-
+		class Trip;
 		class Route {
 		private:
 			const RouteInfo& info;
-			std::vector<StopPtrObserver> stopsSequence;
-			std::map<Time, TripPtrObserver> trips; // Departure from this first stop in the list.
+			std::vector<const Stop*> stopsSequence;
+			std::vector<const Trip*> trips; // Departure from this first stop in the list. Sorted. TO-DO: SORTING
 		public:
-			Route(const RouteInfo& info, const std::vector<StopPtrObserver>& stops) : info(info), stopsSequence(stops) {}
+			Route(const RouteInfo& info) : info(info) {}
 
-			inline const RouteInfo& GetInfo() const { return info; }
-			inline const std::vector<StopPtrObserver>& GetStops() const { return stopsSequence; }
-			inline const std::map<Time, TripPtrObserver>& GetTrips() const { return trips; }
+			inline const RouteInfo& Info() const { return info; }
+			inline const std::vector<const Stop*>& Stops() const { return stopsSequence; }
+			inline const std::vector<const Trip*>& Trips() const { return trips; }
 
-			inline void AddTrip(const Time& time, const Trip& trip) { trips.insert(std::make_pair(time, &trip)); }
+			inline void AddTrip(const Trip& trip) { trips.push_back(&trip); }
 			inline void AddStop(const Stop& stop) { stopsSequence.push_back(&stop); }
 
 			inline bool StopComesBefore(const Stop& A, const Stop& B) const {
@@ -35,20 +32,17 @@ namespace Timetables {
 				return std::find(stopsSequence.cbegin(), stopsSequence.cend(), &A) < std::find(stopsSequence.cbegin(), stopsSequence.cend(), &B);
 			}
 			
-			inline bool operator== (const Route& other) {
-				if (stopsSequence.size() != other.stopsSequence.size()) return false;
-				for (std::size_t i = 0; i < stopsSequence.size(); i++) if (stopsSequence.at(i) != other.stopsSequence.at(i)) return false;
-				return true;
-			}
 		};
 
 		class Routes {
 		private:
 			std::vector<Route> list;
 		public:
-			Routes(const RoutesInfo& info, const Trips& trips);
+			Routes(std::istream&& routes, RoutesInfo& routesInfo);
 
-			inline const std::vector<Route>& GetRoutes() const { return list; }
+			inline Route& Get(std::size_t id) { return list.at(id); }
+			inline const std::size_t Count() const { return list.size(); }
+			inline Route& operator[](std::size_t id) { return list[id]; }
 		};
 
 	}

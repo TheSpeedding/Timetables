@@ -9,79 +9,68 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::Trips::Trips(std::wistream&& trips, const RoutesInfo& routes, const Services& services, const Shapes& shapes) {
+Timetables::Structures::Trips::Trips(std::wistream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services) {
 
 	trips.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
-	wstring line;
-	getline(trips, line); // The first line is an invalid entry.
+	wstring token;
+	std::getline(trips, token); // Number of entries.
 
-	while (trips.good()) {
-		array<wstring, 6> tokens;
-		for (int i = 0; i < 3; i++)
-			getline(trips, tokens[i], wchar_t(','));
+	size_t size = stoi(token);
 
-		trips.get(); // '"' char
-		getline(trips, tokens[3], wchar_t('"'));
-		trips.get(); // ',' char
+	list.reserve(size);
 
-		getline(trips, tokens[4], wchar_t(','));
-		getline(trips, tokens[5], wchar_t('\n'));
+	array<wstring, 6> tokens;
 
-		if (tokens[0] == wstring()) continue; // Empty line.
+	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		/*
-		* tokens[0] = route id
-		* tokens[1] = service id
-		* tokens[2] = trip id
-		* tokens[3] = trip headsign
-		* tokens[4] = shape id
-		* tokens[5] = wheelchair // Currently unused.
-		*/
+		// Entry format: TripID, RouteInfoID, ServiceID, RouteID, Headsign, NumberOfStopTimes
 
-		const RouteInfo& route = routes.GetRouteInfo(string(tokens[0].begin(), tokens[0].end()));
+		for (size_t i = 0; i < 6; i++)
+			std::getline(trips, tokens[i], wchar_t(';'));
 
-		const Service& service = services.GetService(stoi(tokens[1]));
+		RouteInfo& routeInfo = routesInfo[stoi(tokens[1])];
 
-		const ShapesSequence& shape = shapes.GetShapesSequence(stoi(tokens[4]));
+		Service& service = services[stoi(tokens[2])];
 
-		list.push_back(Trip(route, service, shape, tokens[3]));
+		Route& route = routes[stoi(tokens[3])];
+
+		Trip t(routeInfo, service, tokens[4], stoi(tokens[5]));
+
+		list.push_back(move(t));
+
+		route.AddTrip(*(list.cend() - 1));
 	}
+
 }
 
-void Timetables::Structures::Trips::SetTimetables(std::istream&& stop_times, Stops& stops) {
+void Timetables::Structures::Trips::SetTimetables(std::istream&& stopTimes, Stops& stops) {
 
-	string line;
-	getline(stop_times, line); // The first line is an invalid entry.
+	string token;
+	std::getline(stopTimes, token); // Number of entries.
 
-	while (stop_times.good()) {
+	size_t size = stoi(token);
+	
+	array<string, 4> tokens;
 
-		array<string, 7> tokens;
-		for (int i = 0; i < 6; i++)
-			getline(stop_times, tokens[i], ',');
-		getline(stop_times, tokens[6], '\n');
+	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		if (tokens[0] == "") continue; // Empty line.
+		// Entry format: TripID, StopID, ArrivalTime, DepartureTime
 
-		/*
-		* tokens[0] = trip id
-		* tokens[1] = arrival
-		* tokens[2] = departure
-		* tokens[3] = stop id
-		* tokens[4] = stop sequence
-		* tokens[5] = pickup type // Currently unused.
-		* tokens[6] = drop off type // Currently unused.
-		*/
+		for (size_t i = 0; i < 4; i++)
+			std::getline(stopTimes, tokens[i], ';');
 
-		Time arrival(tokens[1]);
-		Time departure(tokens[2]);
-		Trip& trip = GetTrip(stoi(tokens[0]));
-		Stop& stop = stops.GetStop(tokens[3]);
+		Trip& trip = list[stoi(tokens[0])];
 
-		// Shared pointers might be better but they have big memory overhead.
+		Stop& stop = stops[stoi(tokens[1])];
 
-		trip.AddToTrip(make_unique<StopTime>(stop, trip, arrival, departure));
+		StopTime st(trip, stop, DateTime(tokens[2]), DateTime(tokens[3]));
 
-		stop.AddDeparture(departure, *(--trip.GetStopTimes().cend())->get());
+		trip.AddToTrip(move(st));
+
+		stop.AddDeparture(*(trip.StopTimes().cend() - 1));
+
+
 	}
+
 }

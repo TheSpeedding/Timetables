@@ -1,4 +1,4 @@
-#ifndef ROUTER_HPP
+/*#ifndef ROUTER_HPP
 #define ROUTER_HPP
 
 #include <string>
@@ -48,24 +48,24 @@ namespace Timetables {
 		private:
 			StationPtrObserver source;
 			StationPtrObserver target;
-			const Timetables::Structures::Datetime& earliestDeparture;
+			const Timetables::Structures::DateTime& earliestDeparture;
 			const std::size_t transfers;
 			const std::size_t count;
 
 			std::vector<Timetables::Structures::Journey> fastestJourneys;
 
-			std::vector<std::unordered_map<Timetables::Structures::StopPtrObserver, Timetables::Structures::Datetime>> labels;
+			std::vector<std::unordered_map<Timetables::Structures::StopPtrObserver, Timetables::Structures::DateTime>> labels;
 			std::vector<std::unordered_map<Timetables::Structures::StopPtrObserver, Timetables::Structures::Journey>> journeys;
-			std::unordered_map<Timetables::Structures::StopPtrObserver, Timetables::Structures::Datetime> tempLabels;
+			std::unordered_map<Timetables::Structures::StopPtrObserver, Timetables::Structures::DateTime> tempLabels;
 			std::unordered_set<Timetables::Structures::StopPtrObserver> markedStops;
 			std::unordered_map<Timetables::Structures::RoutePtrObserver, Timetables::Structures::StopPtrObserver> activeRoutes;
 
 			void AccumulateRoutes();
 			void TraverseEachRoute();
 			void LookAtFootpaths();
-			TripPtrObserver FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::Datetime& arrival, const Timetables::Structures::Stop& stop);
+			TripPtrObserver FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, const Timetables::Structures::Stop& stop);
 		public:
-			Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::Datetime& earliestDeparture, const std::size_t count, const std::size_t transfers);
+			Router(const Timetables::Structures::GtfsFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::DateTime& earliestDeparture, const std::size_t count, const std::size_t transfers);
 			
 			void ObtainJourney();
 
@@ -75,3 +75,4 @@ namespace Timetables {
 }
 
 #endif // !ROUTER_HPP
+*/

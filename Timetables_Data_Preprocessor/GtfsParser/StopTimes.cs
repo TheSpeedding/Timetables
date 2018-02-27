@@ -50,7 +50,6 @@ namespace Timetables.Preprocessor
     {
         public GtfsStopTimes(System.IO.StreamReader stopTimes, Trips trips, Stops stops)
         {
-
             // Get order of field names.
             string[] fieldNames = stopTimes.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
@@ -73,6 +72,7 @@ namespace Timetables.Preprocessor
 
                 bool quotes = false;
 
+                
                 while (q.Count > 0)
                 {
                     string entry = q.Dequeue();

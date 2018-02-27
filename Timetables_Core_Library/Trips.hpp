@@ -2,59 +2,49 @@
 #define TRIP_HPP
 
 #include "Stops.hpp"
-#include "Exceptions.hpp"
 #include "Utilities.hpp"
 #include "RoutesInfo.hpp"
 #include "Services.hpp"
-#include "Shapes.hpp"
+#include "StopTime.hpp"
 #include <string>
 #include <memory>
 
 namespace Timetables {
 	namespace Structures {
-		class StopTime;
+		class Routes;
 		class Stops;
-		class RouteInfo;
-		class RoutesInfo;
-		class Shapes;
-
+		class StopTime;
 		class Trip {
 		private:
 			std::wstring headsign;
 			const RouteInfo& routeInfo;
 			const Service& service;
-			const ShapesSequence& shapes;
-			std::vector<std::unique_ptr<StopTime>> stopTimes;
+			std::vector<StopTime> stopTimes;
 		public:
-			Trip(const RouteInfo& route, const Service& service, const ShapesSequence& shapes, const std::wstring& headsign) :
-				routeInfo(route), service(service), shapes(shapes), headsign(headsign) {}
+			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, size_t numberOfStopTimes) :
+				routeInfo(routeInfo), service(service), headsign(headsign) { stopTimes.reserve(numberOfStopTimes); }
 
-			inline const std::vector<std::unique_ptr<StopTime>>& GetStopTimes() const { return stopTimes; }
-			inline const RouteInfo& GetRouteInfo() const { return routeInfo; }
-			inline const std::wstring& GetHeadsign() const { return headsign; }
-			inline const Service& GetService() const { return service; }
-			inline const ShapesSequence& GetShapesSequence() const { return shapes; }
+			inline const std::vector<StopTime>& StopTimes() const { return stopTimes; }
+			inline const RouteInfo& RouteInfo() const { return routeInfo; }
+			inline const std::wstring& Headsign() const { return headsign; }
+			inline const Service& Service() const { return service; }
 
-			inline bool IsOperatingInDatetime(const Datetime& datetime) const {
-				return datetime.GetTime().ExceedsDay() ? service.IsOperatingInDate(datetime.GetDate() - 1) : service.IsOperatingInDate(datetime.GetDate());
-			}
+			inline bool IsOperatingInDateTime(const DateTime& datetime) const {}
 
-			inline void AddToTrip(std::unique_ptr<StopTime> stopTime) { stopTimes.push_back(move(stopTime)); }
+			inline void AddToTrip(const StopTime& stopTime) { stopTimes.push_back(stopTime); }
 		};
 
 		class Trips {
 		private:
 			std::vector<Trip> list;
 		public:
-			Trips(std::wistream&& trips, const RoutesInfo& routes, const Services& services, const Shapes& shapes);
+			Trips(std::wistream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services);
 
-			inline Trip& GetTrip(std::size_t id) {
-				if (id > list.size()) throw Timetables::Exceptions::TripNotFoundException(id);
-				else return list[id - 1];
-			}
-			inline const std::vector<Trip>& GetTrips() const { return list; }
+			inline Trip& Get(std::size_t id) { return list.at(id); }
+			inline const std::size_t Count() const { return list.size(); }
+			inline Trip& operator[](std::size_t id) { return list[id]; }
 
-			void SetTimetables(std::istream&& stop_times, Stops& stops);
+			void SetTimetables(std::istream&& stopTimes, Stops& stops);
 		};
 	}
 }

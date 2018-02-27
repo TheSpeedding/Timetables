@@ -4,42 +4,31 @@
 
 using namespace std;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 
-Timetables::Structures::RoutesInfo::RoutesInfo(std::wistream&& routes) {
+Timetables::Structures::RoutesInfo::RoutesInfo(std::wistream&& routesInfo) {
 
-	routes.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+	routesInfo.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
-	wstring line;
-	getline(routes, line); // The first line is an invalid entry.
+	wstring token;
+	std::getline(routesInfo, token); // Number of entries.
 
-	while (routes.good()) {
+	size_t size = stoi(token);
 
-		array<wstring, 6> tokens;
-		getline(routes, tokens[0], wchar_t(','));
-		getline(routes, tokens[1], wchar_t(','));
-		getline(routes, tokens[2], wchar_t(','));
+	list.reserve(size);
 
-		routes.get(); // '"' char
-		getline(routes, tokens[3], wchar_t('"'));
-		routes.get(); // ',' char
+	array<wstring, 4> tokens;
 
-		getline(routes, tokens[4], wchar_t(','));
-		getline(routes, tokens[5], wchar_t('\n'));
+	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		if (tokens[0] == wstring()) continue; // Empty line.
+		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport
 
-		/*
-		* tokens[0] = route id
-		* tokens[1] = agency id // Currently unused.
-		* tokens[2] = short name
-		* tokens[3] = long name
-		* tokens[4] = type // 0 tram, 1 metro, 2 train, 3 bus, 4 ship, 5 cable car
-		* tokens[5] = color // Currently unused.
-		*/
+		for (size_t i = 0; i < 4; i++)
+			std::getline(routesInfo, tokens[i], wchar_t(';'));
+		
+		RouteInfo r(string(tokens[1].begin(), tokens[1].end()), tokens[2], RouteType(stoi(tokens[3])));
+		
+		list.push_back(move(r));
 
-		RouteInfo r(string(tokens[2].begin(), tokens[2].end()), tokens[3], RouteType(stoi(tokens[4])));
-
-		list.insert(make_pair(string(tokens[0].begin(), tokens[0].end()), move(r)));
 	}
+
 }

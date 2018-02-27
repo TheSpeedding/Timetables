@@ -1,10 +1,10 @@
-#ifndef REPORTS_HPP
+/*#ifndef REPORTS_HPP
 #define REPORTS_HPP
 
 #include <exception>
 #include <iostream>
 #include <string>
-#include "../Timetables_Core_Library/GtfsFeed.hpp"
+#include "../Timetables_Core_Library/DataFeed.hpp"
 #include "../Timetables_Core_Library/Utilities.hpp"
 #include "../Timetables_Core_Library/Exceptions.hpp"
 #include "../Timetables_Core_Library/DepartureBoard.hpp"
@@ -16,3 +16,4 @@ namespace Timetables {
 }
 
 #endif // !REPORTS_HPP
+*/

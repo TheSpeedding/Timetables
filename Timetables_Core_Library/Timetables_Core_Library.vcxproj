@@ -21,13 +21,14 @@
   <ItemGroup>
     <ClInclude Include="DepartureBoard.hpp" />
     <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="GtfsFeed.hpp" />
+    <ClInclude Include="DataFeed.hpp" />
     <ClInclude Include="Router.hpp" />
     <ClInclude Include="Routes.hpp" />
     <ClInclude Include="RoutesInfo.hpp" />
     <ClInclude Include="Services.hpp" />
-    <ClInclude Include="Shapes.hpp" />
+    <ClInclude Include="Stations.hpp" />
     <ClInclude Include="Stops.hpp" />
+    <ClInclude Include="StopTime.hpp" />
     <ClInclude Include="Trips.hpp" />
     <ClInclude Include="Utilities.hpp" />
   </ItemGroup>
@@ -37,7 +38,7 @@
     <ClCompile Include="Routes.cpp" />
     <ClCompile Include="RoutesInfo.cpp" />
     <ClCompile Include="Services.cpp" />
-    <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="Stations.cpp" />
     <ClCompile Include="Stops.cpp" />
     <ClCompile Include="Trips.cpp" />
     <ClCompile Include="Utilities.cpp" />

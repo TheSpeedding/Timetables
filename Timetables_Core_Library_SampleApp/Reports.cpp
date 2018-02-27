@@ -1,4 +1,4 @@
-#include <exception>
+/*#include <exception>
 #include <iostream>
 #include <string>
 #include "../Timetables_Core_Library/GtfsFeed.hpp"
@@ -44,3 +44,4 @@ void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures
 		cout << endl;
 	}
 }
+*/

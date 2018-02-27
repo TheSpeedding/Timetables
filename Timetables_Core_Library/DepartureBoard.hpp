@@ -1,4 +1,4 @@
-#ifndef DEPARTURE_BOARD_HPP
+/*#ifndef DEPARTURE_BOARD_HPP
 #define DEPARTURE_BOARD_HPP
 
 #include <vector>
@@ -39,10 +39,10 @@ namespace Timetables {
 		private:
 			std::vector<Timetables::Structures::Departure> foundDepartures;
 			StationPtrObserver station;
-			const Timetables::Structures::Datetime& earliestDeparture;
+			const Timetables::Structures::DateTime& earliestDeparture;
 			const std::size_t count;
 		public:
-			DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& earliestDeparture, const size_t count);
+			DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& earliestDeparture, const size_t count);
 
 			void ObtainDepartureBoard();
 
@@ -52,3 +52,4 @@ namespace Timetables {
 }
 
 #endif // !DEPARTURE_BOARD_HPP
+*/

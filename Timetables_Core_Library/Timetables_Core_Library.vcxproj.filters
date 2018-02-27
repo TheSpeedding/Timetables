@@ -33,13 +33,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GtfsFeed.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
     <ClInclude Include="Services.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Shapes.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Stops.hpp">
@@ -66,12 +60,18 @@
     <ClInclude Include="Routes.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="DataFeed.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Stations.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="StopTime.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Services.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Shapes.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Stops.cpp">
@@ -93,6 +93,9 @@
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Routes.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Stations.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
   </ItemGroup>

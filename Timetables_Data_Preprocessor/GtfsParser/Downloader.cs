@@ -36,8 +36,7 @@ namespace Timetables.Preprocessor
                 }
                 finally
                 {
-                    sr.Close();
-                    sr.Dispose();
+                    if (sr != null) sr.Dispose();
                 }
 
 

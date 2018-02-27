@@ -2,7 +2,6 @@
 #define SERVICES_HPP
 
 #include "Utilities.hpp"
-#include "Exceptions.hpp"
 #include <map>
 #include <string>
 #include <vector>
@@ -12,30 +11,29 @@ namespace Timetables {
 	namespace Structures {
 		class Service {
 		private:
-			bool IsAddedInDate(const Date& date) const;
-			bool IsRemovedInDate(const Date& date) const;
-			Date validSince;
-			Date validUntil;
+			bool IsAddedInDate(const DateTime& dateTime) const;
+			bool IsRemovedInDate(const DateTime& dateTime) const;
+			DateTime validSince;
+			DateTime validUntil;
 			std::array<bool, 7> operatingDays; // True at i-th position = the service is operating on this weekday.
-			std::map<Date, bool> exceptions; // True = service added in this date. False = service removed in this date.
+			std::map<DateTime, bool> exceptions; // True = service added in this date. False = service removed in this date.
 		public:
-			Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const Date& start, const Date& end);
+			Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const DateTime& start, const DateTime& end);
 
-			inline bool IsOperatingOnDay(int day) const { return operatingDays.at(day - 1); }
-			inline void AddExtraordinaryEvent(const Date& date, bool type) { exceptions.insert(std::make_pair(date, type)); }
-			bool IsOperatingInDate(const Date& date) const;
+			inline bool IsOperatingOnDay(std::size_t day) const { return operatingDays.at(day - 1); }
+			inline void AddExtraordinaryEvent(const DateTime& dateTime, bool type) { exceptions.insert(std::make_pair(dateTime, type)); }
+			bool IsOperatingInDate(const DateTime& dateTime) const;
 		};
 
 		class Services {
 		private:
 			std::vector<Service> list;
 		public:
-			Services(std::istream&& calendar, std::istream&& calendar_dates);
+			Services(std::istream&& calendar, std::istream&& calendarDates);
 
-			inline const Service& GetService(std::size_t id) const {
-				if (id > list.size()) throw Timetables::Exceptions::ServiceNotFoundException(id);
-				else return list[id - 1];
-			}
+			inline Service& Get(std::size_t id) { return list.at(id); }
+			inline const std::size_t Count() const { return list.size(); }
+			inline Service& operator[](std::size_t id) { return list[id]; }
 		};
 	}
 }
