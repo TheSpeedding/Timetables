@@ -10,15 +10,16 @@ namespace Timetables {
 	namespace Structures {
 		class DateTime {
 		private:
+			const std::string& time;
 		public:
-			DateTime(const std::string& input);
-			DateTime(int day, int month, int year, int h, int m, int s);
+			DateTime(const std::string& input) : time(input) {}
+			// DateTime(int day, int month, int year, int h, int m, int s);
 
 			std::size_t DayInWeek() const;
 			
-			inline bool operator< (const DateTime& other) const { return true; }
-			inline bool operator> (const DateTime& other) const { return true; }
-			inline bool operator== (const DateTime& other) const { return true; }
+			inline bool operator< (const DateTime& other) const { return time < other.time; }
+			inline bool operator> (const DateTime& other) const { return time > other.time;; }
+			inline bool operator== (const DateTime& other) const { return time == other.time;; }
 
 		};
 

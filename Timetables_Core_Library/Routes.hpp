@@ -43,6 +43,8 @@ namespace Timetables {
 			inline Route& Get(std::size_t id) { return list.at(id); }
 			inline const std::size_t Count() const { return list.size(); }
 			inline Route& operator[](std::size_t id) { return list[id]; }
+
+			void SetStopsForRoutes();
 		};
 
 	}

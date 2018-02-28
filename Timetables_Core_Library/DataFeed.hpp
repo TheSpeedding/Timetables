@@ -20,9 +20,9 @@ namespace Timetables {
 		private:
 			Services services;
 			RoutesInfo routesInfo;
-			Routes routes;
-			Stops stops;
 			Stations stations;
+			Stops stops;
+			Routes routes;
 			Trips trips;
 		public:
 			DataFeed(const std::string& path) :
@@ -33,7 +33,8 @@ namespace Timetables {
 				routes(std::ifstream(path + "/routes.txt"), routesInfo),
 				trips(std::wifstream(path + "/trips.txt", std::ios::binary), routesInfo, routes, services) {
 				stops.SetFootpaths(std::ifstream(path + "/footpaths.txt"));
-				trips.SetTimetables(std::ifstream(path + "/stop_times.txt"), stops);				
+				trips.SetTimetables(std::ifstream(path + "/stop_times.txt"), stops);
+				routes.SetStopsForRoutes();
 				stops.SetThroughgoingRoutesForStops(routes);
 			}
 			DataFeed() : DataFeed("data") {}

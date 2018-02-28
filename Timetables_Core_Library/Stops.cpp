@@ -60,13 +60,16 @@ void Timetables::Structures::Stops::SetFootpaths(std::istream&& footpaths) {
 
 void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes) {
 
-	for (size_t i = 0; i < routes.Count; i++) {
+	for (size_t i = 0; i < routes.Count(); i++) {
 
 		const vector<const Stop*>& stops = routes[i].Stops();
 
 		for (auto&& s : stops) {
 
-			Stop& stop = Stop(*s); // Variable s is const reference (pointer respectively) to required stop. We need the non-const one.
+			size_t index = s - list.data(); // Variable s is a const observer pointer to the stop. We have to modify it. We need non-const reference.
+											// So we will use contiguousnity of vector elements and compute index in the vector (of that stop) using difference of two addresses.
+
+			Stop& stop = list[index]; 
 
 			auto it = find(stop.ThroughgoingRoutes().cbegin(), stop.ThroughgoingRoutes().cend(), &routes[i]);
 

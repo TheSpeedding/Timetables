@@ -46,3 +46,16 @@ Timetables::Structures::Routes::Routes(std::istream&& routes, RoutesInfo& routes
 
 	}
 }
+
+void Timetables::Structures::Routes::SetStopsForRoutes() {
+
+	for (auto&& route : list) {
+
+		// We will reconstruct stops from any of the trip using stop times -> stop time has reference to the stop.
+
+		for (auto&& stopTime : route.Trips()[0]->StopTimes())
+			route.AddStop(stopTime.Stop());
+
+	}
+
+}

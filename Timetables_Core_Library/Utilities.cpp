@@ -62,9 +62,6 @@ int Timetables::Structures::GpsCoords::GetWalkingTime(const GpsCoords& A, const 
 	return int(2.0 * 6371.0 * asin(sqrt(u * u + cos(AlatR) * cos(BlatR) * v * v)) * 1000 * 2);
 }
 
-Timetables::Structures::DateTime::DateTime(const std::string& input) {
-}
-
 std::size_t Timetables::Structures::DateTime::DayInWeek() const {
 	return 0;
 }

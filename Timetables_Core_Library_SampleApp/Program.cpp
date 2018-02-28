@@ -3,7 +3,6 @@
 #include <string>
 #include "../Timetables_Core_Library/DataFeed.hpp"
 #include "../Timetables_Core_Library/Utilities.hpp"
-#include "../Timetables_Core_Library/Exceptions.hpp"
 #include "../Timetables_Core_Library/Router.hpp"
 #include "../Timetables_Core_Library/DepartureBoard.hpp"
 #include "Reports.hpp"

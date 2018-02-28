@@ -16,13 +16,13 @@ Timetables::Structures::RoutesInfo::RoutesInfo(std::wistream&& routesInfo) {
 
 	list.reserve(size);
 
-	array<wstring, 4> tokens;
+	array<wstring, 5> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport
+		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport, Color
 
-		for (size_t i = 0; i < 4; i++)
+		for (size_t i = 0; i < 5; i++)
 			std::getline(routesInfo, tokens[i], wchar_t(';'));
 		
 		RouteInfo r(string(tokens[1].begin(), tokens[1].end()), tokens[2], RouteType(stoi(tokens[3])));
