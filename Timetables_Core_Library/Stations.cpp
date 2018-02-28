@@ -3,7 +3,6 @@
 
 using namespace std;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 
 Timetables::Structures::Stations::Stations(std::wistream&& stations) {
 	stations.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
@@ -19,7 +18,7 @@ Timetables::Structures::Stations::Stations(std::wistream&& stations) {
 
 		// Entry format: StationID, Name
 
-		for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
 			std::getline(stations, token, wchar_t(';'));
 		
 		list.push_back(Station(token));

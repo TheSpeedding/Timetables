@@ -28,7 +28,7 @@ namespace Timetables {
 			inline void AddStop(const Stop& stop) { stopsSequence.push_back(&stop); }
 
 			inline bool StopComesBefore(const Stop& A, const Stop& B) const {
-				// We can use properties of vector and just comapare the addresses.
+				// We can use properties of vector and just comapare the addresses. There is some space to improve time complexity.
 				return std::find(stopsSequence.cbegin(), stopsSequence.cend(), &A) < std::find(stopsSequence.cbegin(), stopsSequence.cend(), &B);
 			}
 			

@@ -26,8 +26,8 @@ Timetables::Structures::Trips::Trips(std::wistream&& trips, RoutesInfo& routesIn
 
 		// Entry format: TripID, RouteInfoID, ServiceID, RouteID, Headsign, NumberOfStopTimes
 
-		for (size_t i = 0; i < 6; i++)
-			std::getline(trips, tokens[i], wchar_t(';'));
+		for (size_t j = 0; j < 6; j++)
+			std::getline(trips, tokens[j], wchar_t(';'));
 
 		RouteInfo& routeInfo = routesInfo[stoi(tokens[1])];
 
@@ -57,8 +57,8 @@ void Timetables::Structures::Trips::SetTimetables(std::istream&& stopTimes, Stop
 
 		// Entry format: TripID, StopID, ArrivalTime, DepartureTime
 
-		for (size_t i = 0; i < 4; i++)
-			std::getline(stopTimes, tokens[i], ';');
+		for (size_t j = 0; j < 4; j++)
+			std::getline(stopTimes, tokens[j], ';');
 
 		Trip& trip = list[stoi(tokens[0])];
 

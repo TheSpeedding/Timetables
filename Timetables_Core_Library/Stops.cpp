@@ -22,9 +22,11 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops, Stations& stations) 
 	array<wstring, 5> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
-		// Entry format: StopID, Name, Latitude, Longitude, ParentStationID
-		for (size_t i = 0; i < 5; i++)
-			std::getline(stops, tokens[i], wchar_t(';'));
+
+		// Entry format: StopID, Name, Latitude, Longitude, ParentStationID
+
+		for (size_t j = 0; j < 5; j++)
+			std::getline(stops, tokens[j], wchar_t(';'));
 
 		Station& station = stations[stoi(tokens[4])];
 
@@ -46,9 +48,11 @@ void Timetables::Structures::Stops::SetFootpaths(std::istream&& footpaths) {
 	array<string, 3> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
-		// Entry format: Duration, FirstStop, SecondStop
-		for (size_t i = 0; i < 3; i++)
-			std::getline(footpaths, tokens[i], ';');
+
+		// Entry format: Duration, FirstStop, SecondStop
+
+		for (size_t j = 0; j < 3; j++)
+			std::getline(footpaths, tokens[j], ';');
 
 		Stop& stopA = list[stoi(tokens[1])];
 

@@ -51,17 +51,6 @@ int Timetables::Structures::Date::GetDaysInMonth(int month, int year) {
 	return -1;
 }*/
 
-int Timetables::Structures::GpsCoords::GetWalkingTime(const GpsCoords& A, const GpsCoords& B) {
-	// Using Haversine formula. 
-	double AlatR = Deg2Rad(A.latitude);
-	double AlonR = Deg2Rad(A.longitude);
-	double BlatR = Deg2Rad(B.latitude);
-	double BlonR = Deg2Rad(B.longitude);
-	double u = sin((BlatR - AlatR) / 2);
-	double v = sin((BlonR - AlonR) / 2);
-	return int(2.0 * 6371.0 * asin(sqrt(u * u + cos(AlatR) * cos(BlatR) * v * v)) * 1000 * 2);
-}
-
 std::size_t Timetables::Structures::DateTime::DayInWeek() const {
 	return 0;
 }

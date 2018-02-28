@@ -39,6 +39,12 @@ namespace Timetables {
 			}
 			DataFeed() : DataFeed("data") {}
 
+			inline const Services& Services() const { return services; }
+			inline const RoutesInfo& RoutesInfo() const { return routesInfo; }
+			inline const Stations& Stations() const { return stations; }
+			inline const Stops& Stops() const { return stops; }
+			inline const Routes& Routes() const { return routes; }
+			inline const Trips& Trips() const { return trips; }
 		};
 	}
 }

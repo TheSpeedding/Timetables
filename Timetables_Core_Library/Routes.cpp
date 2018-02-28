@@ -3,7 +3,6 @@
 
 using namespace std;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 
 /*
 Timetables::Structures::Routes::Routes(const RoutesInfo& info, const Trips& trips) {
@@ -39,7 +38,7 @@ Timetables::Structures::Routes::Routes(std::istream&& routes, RoutesInfo& routes
 
 		// Entry format: RouteID, RouteInfoID
 
-		for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
 			std::getline(routes, token, ';');
 		
 		list.push_back(Route(routesInfo[size_t(stoi(token))]));

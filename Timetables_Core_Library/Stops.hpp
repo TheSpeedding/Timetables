@@ -14,6 +14,7 @@ namespace Timetables {
 	namespace Structures {
 		class Route;
 		class Routes;
+		class Station;
 		class Stations;
 		class Stop {
 		private:
