@@ -4,21 +4,23 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <ctime>
+#include <chrono>
 
 namespace Timetables {
 	namespace Structures {
 		class DateTime {
 		private:
-			const std::string& time;
+			struct tm dateTime;
 		public:
-			DateTime(const std::string& input) : time(input) {}
+			DateTime(const std::string& input);
 			// DateTime(int day, int month, int year, int h, int m, int s);
 
-			std::size_t DayInWeek() const;
+			inline std::size_t DayInWeek() const { return dateTime.tm_wday; }
 			
-			inline bool operator< (const DateTime& other) const { return time < other.time; }
-			inline bool operator> (const DateTime& other) const { return time > other.time;; }
-			inline bool operator== (const DateTime& other) const { return time == other.time;; }
+			inline bool operator< (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) < 0; }
+			inline bool operator> (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) > 0; }
+			inline bool operator== (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) == 0; }
 
 		};
 

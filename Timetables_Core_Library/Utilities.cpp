@@ -4,8 +4,6 @@
 #include <string>
 #include <ctime>
 #include <sstream>
-#include <cmath>
-#include <math.h>
 
 using namespace std;
 using namespace Timetables::Structures;
@@ -51,6 +49,30 @@ int Timetables::Structures::Date::GetDaysInMonth(int month, int year) {
 	return -1;
 }*/
 
-std::size_t Timetables::Structures::DateTime::DayInWeek() const {
-	return 0;
+Timetables::Structures::DateTime::DateTime(const std::string& input) {
+
+	// Accepts date format in YYYYMMDD and time format in HH:MM:SS.
+	// For maximal performance, no format validity checks. Just ensure no memory leaks can occur.
+
+	if (input.size() != 8) throw invalid_argument("Not a valid datetime.");
+
+	if (input[2] == ':' && input[5] == ':') {
+
+		// Time parsing.
+
+		dateTime.tm_hour = stoi(input.substr(0, 2));
+		dateTime.tm_min = stoi(input.substr(3, 2));
+		dateTime.tm_sec = stoi(input.substr(6, 2));
+
+	}
+
+	else {
+
+		// Date parsing.
+
+		dateTime.tm_year = stoi(input.substr(0, 4));
+		dateTime.tm_mon = stoi(input.substr(4, 2)) - 1;
+		dateTime.tm_mday = stoi(input.substr(6, 2)) - 1;
+
+	}
 }

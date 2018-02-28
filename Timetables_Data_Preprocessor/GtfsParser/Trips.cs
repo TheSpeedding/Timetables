@@ -6,7 +6,7 @@ namespace Timetables.Preprocessor
 {
     public abstract class Trips : IEnumerable<KeyValuePair<string, Trips.Trip>>
     {
-        public class Trip
+        public class Trip : IComparable<Trip>
         {
             /// <summary>
             /// ID of the trip.
@@ -33,6 +33,9 @@ namespace Timetables.Preprocessor
             /// </summary>
             public Routes.Route Route { get; internal set; }
             public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";" + StopTimes.Count + ";";
+
+            public int CompareTo(Trip other) => StopTimes[0].DepartureTime.CompareTo(other.StopTimes[0].DepartureTime);
+
             public Trip(int id, string headsign, RoutesInfo.RouteInfo routeInfo, Calendar.Service service)
             {
                 StopTimes = new List<StopTimes.StopTime>();
@@ -55,9 +58,13 @@ namespace Timetables.Preprocessor
         public int Count => list.Count;
         public void Write(System.IO.StreamWriter trips)
         {
+
+            List<Trip> sortedList = new List<Trip>(list.Values);
+            sortedList.Sort();
+
             trips.WriteLine(Count);
-            foreach (var item in list)
-                trips.Write(item.Value);
+            foreach (var item in sortedList)
+                trips.Write(item);
             trips.Close();
             trips.Dispose();
         }
