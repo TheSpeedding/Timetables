@@ -19,7 +19,7 @@ namespace Timetables.Preprocessor
             /// Stops for the route in-order.
             /// </summary>
             public List<Stops.Stop> Stops { get; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";";
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Stops.Count + ";";
             public bool Equals(Route other)
             {
                 if (RouteInfo.ID != other.RouteInfo.ID) return false;

@@ -27,8 +27,8 @@ namespace Timetables.Preprocessor
             public StopTime(Trips.Trip trip, string arrival, string departure, Stops.Stop stop)
             {
                 Trip = trip;
-                ArrivalTime = arrival;
-                DepartureTime = departure;
+                ArrivalTime = arrival.Length == 7 ? "0" + arrival : arrival;
+                DepartureTime = departure.Length == 7 ? "0" + departure : departure;
                 Stop = stop;
             }
         }

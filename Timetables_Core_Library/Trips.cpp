@@ -24,18 +24,18 @@ Timetables::Structures::Trips::Trips(std::wistream&& trips, RoutesInfo& routesIn
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: TripID, RouteInfoID, ServiceID, RouteID, Headsign, NumberOfStopTimes
+		// Entry format: TripID, RouteInfoID, ServiceID, RouteID, Headsign
 
-		for (size_t j = 0; j < 6; j++)
+		for (size_t j = 0; j < 5; j++)
 			std::getline(trips, tokens[j], wchar_t(';'));
 
 		RouteInfo& routeInfo = routesInfo[stoi(tokens[1])];
-
+		
 		Service& service = services[stoi(tokens[2])];
 
 		Route& route = routes[stoi(tokens[3])];
 
-		Trip t(routeInfo, service, tokens[4], stoi(tokens[5]));
+		Trip t(routeInfo, service, tokens[4], route.Stops().capacity());
 
 		list.push_back(move(t));
 

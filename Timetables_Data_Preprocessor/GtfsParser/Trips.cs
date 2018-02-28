@@ -11,7 +11,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// ID of the trip.
             /// </summary>
-            public int ID { get; }
+            public int ID { get; internal set; }
             /// <summary>
             /// Headsign of the trip.
             /// </summary>
@@ -32,7 +32,7 @@ namespace Timetables.Preprocessor
             /// Route for the trip.
             /// </summary>
             public Routes.Route Route { get; internal set; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";" + StopTimes.Count + ";";
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";";
 
             public int CompareTo(Trip other) => StopTimes[0].DepartureTime.CompareTo(other.StopTimes[0].DepartureTime);
 
@@ -58,9 +58,11 @@ namespace Timetables.Preprocessor
         public int Count => list.Count;
         public void Write(System.IO.StreamWriter trips)
         {
-
             List<Trip> sortedList = new List<Trip>(list.Values);
             sortedList.Sort();
+
+            for (int i = 0; i < sortedList.Count; i++) // Change indices after sorting to load the data easily.
+                sortedList[i].ID = i;
 
             trips.WriteLine(Count);
             foreach (var item in sortedList)

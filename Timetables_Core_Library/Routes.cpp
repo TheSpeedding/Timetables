@@ -4,27 +4,6 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-/*
-Timetables::Structures::Routes::Routes(const RoutesInfo& info, const Trips& trips) {
-
-	for (auto&& trip : trips.GetTrips()) {
-		vector<StopPtrObserver> stopsSequence;
-
-		for (auto&& stopTime : trip.GetStopTimes())
-			stopsSequence.push_back(&stopTime->GetStop());
-
-		Route r(trip.GetRouteInfo(), move(stopsSequence));
-		auto it = find(list.begin(), list.end(), r);
-
-		if (it == list.cend()) {
-			list.push_back(r);
-			it = find(list.begin(), list.end(), r); // We have to look for it once again due to possible vector reallocation.
-		}
-
-		it->AddTrip(trip.GetStopTimes().cbegin()->get()->GetDeparture(), trip);
-	}
-}*/
-
 Timetables::Structures::Routes::Routes(std::istream&& routes, RoutesInfo& routesInfo) {
 	
 	string token;
@@ -34,14 +13,16 @@ Timetables::Structures::Routes::Routes(std::istream&& routes, RoutesInfo& routes
 
 	list.reserve(size);
 
+	array<string, 3> tokens;
+
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: RouteID, RouteInfoID
+		// Entry format: RouteID, RouteInfoID, NumberOfStopTimes
 
-		for (size_t j = 0; j < 2; j++)
-			std::getline(routes, token, ';');
+		for (size_t j = 0; j < 3; j++)
+			std::getline(routes, tokens[j], ';');
 		
-		list.push_back(Route(routesInfo[size_t(stoi(token))]));
+		list.push_back(Route(routesInfo[size_t(stoi(tokens[1]))], stoi(tokens[2])));
 
 	}
 }

@@ -21,7 +21,7 @@ namespace Timetables {
 			const Service& service;
 			std::vector<StopTime> stopTimes;
 		public:
-			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, size_t numberOfStopTimes) :
+			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, std::size_t numberOfStopTimes) :
 				routeInfo(routeInfo), service(service), headsign(headsign) { stopTimes.reserve(numberOfStopTimes); }
 
 			inline const std::vector<StopTime>& StopTimes() const { return stopTimes; }

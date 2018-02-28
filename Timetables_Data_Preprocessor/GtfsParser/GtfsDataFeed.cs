@@ -71,14 +71,17 @@ namespace Timetables.Preprocessor
         /// <param name="path">Path to the folder that will be the feed saved to.</param>
         public void CreateDataFeed(string path)
         {
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
             Directory.CreateDirectory(path);
+
+            Trips.Write(new StreamWriter(path + "/trips.txt")); // This MUST come first, because of trip ID's reindexation.
             Calendar.Write(new StreamWriter(path + "/calendar.txt"));
             CalendarDates.Write(new StreamWriter(path + "/calendar_dates.txt"));
             RoutesInfo.Write(new StreamWriter(path + "/routes_info.txt"));
             Stops.Write(new StreamWriter(path + "/stops.txt"));
             Stations.Write(new StreamWriter(path + "/stations.txt"));
             Footpaths.Write(new StreamWriter(path + "/footpaths.txt"));
-            Trips.Write(new StreamWriter(path + "/trips.txt"));
             StopTimes.Write(new StreamWriter(path + "/stop_times.txt"));
             Routes.Write(new StreamWriter(path + "/routes.txt"));
             using (var expiration = new StreamWriter(path + "/expires.txt"))

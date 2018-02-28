@@ -18,9 +18,9 @@ namespace Timetables {
 
 			inline std::size_t DayInWeek() const { return dateTime.tm_wday; }
 			
-			inline bool operator< (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) < 0; }
-			inline bool operator> (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) > 0; }
-			inline bool operator== (DateTime& other) { return std::difftime(mktime(&dateTime), mktime(&other.dateTime)) == 0; }
+			inline bool operator< (const DateTime& other) const { return dateTime.tm_hour < other.dateTime.tm_hour; }
+			inline bool operator> (const DateTime& other) const { return dateTime.tm_hour > other.dateTime.tm_hour; }
+			inline bool operator== (const DateTime& other) const { return dateTime.tm_hour == other.dateTime.tm_hour; }
 
 		};
 
