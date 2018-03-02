@@ -30,7 +30,7 @@ namespace Timetables.Xml
         {
             StringBuilder result = new StringBuilder();
 
-            result.Append($@"		<route routeId=""r{ route.ID }"" routeInfoId=""ri{ route.RouteInfo.ID }""> <!-- Basic information about route. Routes can share some basic information. -->
+            result.Append($@"		<route routeId=""r{ route.ID }"" routeInfoId=""ri{ route.RouteInfo.ID }""> <!-- Information about route. -->
 			<stops-ref> <!-- List of the references to stops contained in-order in this route. -->");
 
             foreach (var stop in route.Stops)
@@ -149,7 +149,7 @@ namespace Timetables.Xml
 		{
 			StringBuilder result = new StringBuilder();
 
-			result.Append($@"		<route-info routeInfoId=""ri{ routeInfo.ID }""> <!-- Information about route. -->
+			result.Append($@"		<route-info routeInfoId=""ri{ routeInfo.ID }""> <!-- Basic information about route. Routes can share some basic information. -->
 			{ routeInfo.LongName } <!-- The most important stops in the route. -->
 			<label>{ routeInfo.ShortName }</label> <!-- Label of the route. -->
 			<mean-of-transport type=""");
@@ -186,10 +186,11 @@ namespace Timetables.Xml
 			<color hex-code=""");
 
 			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Tram) result.Append("&tram-color;");
-			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Bus) result.Append("&bus-color;");
-			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.CableCar || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Gondola || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Funicular) result.Append("&cablecar-color;");
-			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Rail) result.Append("&rail-color;");
-			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Ship) result.Append("&ship-color;");
+			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Bus) result.Append("&bus-color;");
+			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.CableCar || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Gondola || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Funicular) result.Append("&cablecar-color;");
+			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Rail) result.Append("&rail-color;");
+			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Ship) result.Append("&ship-color;");
+			else result.Append(routeInfo.Color);
 
 			result.Append($@"""/> <!-- Color of the route used in graphics. -->
 		</route-info>");
@@ -212,7 +213,7 @@ namespace Timetables.Xml
 		{
 			StringBuilder result = new StringBuilder();
 
-			result.Append($@"		<trip tripId=""t{ trip.ID }"" routeInfoId = ""ri{ trip.RouteInfo.ID }"" routeId=""r{ trip.Route.ID }"" serviceId=""se{ trip.Service.ID }""> <!-- Information about trip. -->
+			result.Append($@"		<trip tripId=""t{ trip.ID }"" routeInfoId=""ri{ trip.RouteInfo.ID }"" routeId=""r{ trip.Route.ID }"" serviceId=""se{ trip.Service.ID }""> <!-- Information about trip. -->
 			<headsign>{ trip.Headsign }</headsign> <!-- Headsign of the trip. The stop that the trip goes in. -->
 			<stop-times> <!-- List of stop times included in the trip. -->");
 
