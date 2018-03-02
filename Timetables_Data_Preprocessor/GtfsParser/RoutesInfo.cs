@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {    
-    public abstract class RoutesInfo
+    public abstract class RoutesInfo : IEnumerable<KeyValuePair<string, RoutesInfo.RouteInfo>>
     {
         public class RouteInfo
         {
@@ -84,7 +85,9 @@ namespace Timetables.Preprocessor
             routesInfo.Close();
             routesInfo.Dispose();
         }
-    }
+		public IEnumerator<KeyValuePair<string, RouteInfo>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
+	}
     public sealed class GtfsRoutesInfo : RoutesInfo
     {
         public GtfsRoutesInfo(System.IO.StreamReader routesInfo)

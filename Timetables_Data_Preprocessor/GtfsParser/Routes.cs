@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Routes
+    public abstract class Routes : IEnumerable<Routes.Route>
     {
         public class Route : IEquatable<Route>
         {
@@ -53,6 +54,8 @@ namespace Timetables.Preprocessor
             routes.Close();
             routes.Dispose();
         }
+        public IEnumerator<Route> GetEnumerator() => ((IEnumerable<Route>)list).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Route>)list).GetEnumerator();
     }
     public sealed class GtfsRoutes : Routes
     {

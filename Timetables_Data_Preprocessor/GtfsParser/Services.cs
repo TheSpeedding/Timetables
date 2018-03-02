@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Calendar
+    public abstract class Calendar : IEnumerable<KeyValuePair<string, Calendar.Service>>
     {
         public class Service
         {
@@ -23,6 +24,10 @@ namespace Timetables.Preprocessor
             /// Value at i-th position represents operating state on this weekday.
             /// </summary>
             public bool[] OperatingDays { get; }
+			/// <summary>
+			/// List of extraordinary events.
+			/// </summary>
+			public List<Tuple<string, bool>> ExtraordinaryEvents { get; }
             public override string ToString()
             {
                 System.Text.StringBuilder result = new System.Text.StringBuilder();
@@ -41,6 +46,7 @@ namespace Timetables.Preprocessor
             }
             public Service(int id, bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, string start, string end)
             {
+				ExtraordinaryEvents = new List<Tuple<string, bool>>();
                 ID = id;
                 OperatingDays = new bool[] { mon, tue, wed, thu, fri, sat, sun };
                 ValidSince = int.Parse(start);
@@ -78,7 +84,9 @@ namespace Timetables.Preprocessor
                     min = item.Value.ValidUntil;
             return min;                        
         }
-    }
+		public IEnumerator<KeyValuePair<string, Service>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
+	}
     public sealed class GtfsCalendar : Calendar
     {
         public GtfsCalendar(System.IO.StreamReader calendar)
@@ -189,6 +197,8 @@ namespace Timetables.Preprocessor
                 }
 
                 bool type = tokens[dic["exception_type"]] == "1" ? true : false;
+
+				service.ExtraordinaryEvents.Add(new Tuple<string, bool>(tokens[dic["date"]], type));
 
                 ExtraordinaryEvent ev = new ExtraordinaryEvent(service, tokens[dic["date"]], type);
 

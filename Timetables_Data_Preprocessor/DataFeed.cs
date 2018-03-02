@@ -25,13 +25,13 @@ namespace Timetables.Preprocessor
     {
         public static void GetAndTransformDataFeed<T>() where T : IDataFeed
         {
-            Downloader.GetDataFeed("gtfs_data/");
+            Downloader.GetDataFeed("temp_data/");
 
-            IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)"gtfs_data/");
+            IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)"temp_data/");
 
             data.CreateDataFeed("data/");
 
-            Downloader.DeleteTrash("gtfs_data/");
+            Downloader.DeleteTrash("temp_data/");
         }
         public static bool AreDataPresent => Directory.Exists("data") &&
             File.Exists("data/calendar.txt") && File.Exists("data/calendar_dates.txt") && File.Exists("data/expires.txt") &&

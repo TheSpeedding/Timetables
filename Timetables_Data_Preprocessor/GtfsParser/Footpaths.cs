@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,7 @@ namespace Timetables.Preprocessor
             return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 2);
         }
     }
-    public abstract class Footpaths
+    public abstract class Footpaths : IEnumerable<Footpaths.Footpath>
     {
         public class Footpath
         {
@@ -69,6 +70,8 @@ namespace Timetables.Preprocessor
             footpaths.Close();
             footpaths.Dispose();
         }
+        public IEnumerator<Footpath> GetEnumerator() => ((IEnumerable<Footpath>)list).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Footpath>)list).GetEnumerator();
     }
     public sealed class GtfsFootpaths : Footpaths
     {

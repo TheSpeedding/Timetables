@@ -1,0 +1,109 @@
+<!ELEMENT timetables (today, expires, services, stops, footpaths, routes-info, routes, trips)>
+
+<!ELEMENT today (#PCDATA)>
+<!ELEMENT expires (#PCDATA)>
+
+<!ENTITY tram-color "CC0000">
+<!ENTITY bus-color "00FFFF">
+<!ENTITY cablecar-color "FFFFFF">
+<!ENTITY rail-color "006600">
+<!ENTITY ship-color "0033CC">
+
+<!ELEMENT services (service*)>
+
+<!ELEMENT service (valid-since, valid-until, operating-days, extraordinary-events)>
+<!ATTLIST service
+		serviceId ID #REQUIRED>
+
+<!ELEMENT valid-since (#PCDATA)>
+<!ELEMENT valid-until (#PCDATA)>
+<!ELEMENT operating-days (monday?, tuesday?, wednesday?, thursday?, friday?, saturday?, sunday?)>
+
+<!ELEMENT monday EMPTY>
+<!ELEMENT tuesday EMPTY>
+<!ELEMENT wednesday EMPTY>
+<!ELEMENT thursday EMPTY>
+<!ELEMENT friday EMPTY>
+<!ELEMENT saturday EMPTY>
+<!ELEMENT sunday EMPTY>
+
+<!ELEMENT extraordinary-events (extraordinary-event*)>
+
+<!ELEMENT extraordinary-event (date)>
+<!ATTLIST extraordinary-event
+		type (added|removed) #REQUIRED>
+
+<!ELEMENT date (#PCDATA)>
+
+<!ELEMENT routes-info (route-info*)>
+
+<!ELEMENT route-info (#PCDATA|label|mean-of-transport|color)*> <!-- Just to fulfill the task, otherwise I would create new tag "description" instead of using #PCDATA. I think it would be more usable in some database then. -->
+<!ATTLIST route-info
+		routeInfoId ID #REQUIRED>
+
+<!ELEMENT label (#PCDATA)>
+
+<!ELEMENT mean-of-transport EMPTY>
+<!ATTLIST mean-of-transport
+		type (tram|subway|rail|bus|ship|cablecar|gondola|funicular) #REQUIRED>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color
+		hex-code CDATA #REQUIRED>
+
+<!ELEMENT stops (stop*)>
+
+<!ELEMENT stop (name, location)>
+<!ATTLIST stop
+		stopId ID #REQUIRED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT location (latitude, longitude)>
+
+<!ELEMENT latitude (#PCDATA)>
+<!ELEMENT longitude (#PCDATA)>
+
+<!ELEMENT footpaths (footpath*)>
+
+<!ELEMENT footpath (source, target, duration)>
+
+<!ELEMENT source (#PCDATA)>
+<!ATTLIST source 
+		stopId IDREF #REQUIRED>
+
+<!ELEMENT target (#PCDATA)>
+<!ATTLIST target 
+		stopId IDREF #REQUIRED>
+
+<!ELEMENT duration (#PCDATA)>
+
+<!ELEMENT trips (trip*)>
+
+<!ELEMENT trip (headsign, stop-times)>
+<!ATTLIST trip
+		tripId ID #REQUIRED
+		routeInfoId IDREF #REQUIRED
+		routeId IDREF #REQUIRED
+		serviceId IDREF #REQUIRED>
+
+<!ELEMENT headsign (#PCDATA)>
+
+<!ELEMENT stop-times (stop-time*)>
+
+<!ELEMENT stop-time (stop-ref, arrival, departure)>
+
+<!ELEMENT stop-ref (#PCDATA)>
+<!ATTLIST stop-ref
+		stopId IDREF #REQUIRED>
+
+<!ELEMENT arrival (#PCDATA)>
+<!ELEMENT departure (#PCDATA)>
+
+<!ELEMENT routes (route*)>
+
+<!ELEMENT route (stops-ref)>
+<!ATTLIST route
+		routeId ID #REQUIRED
+		routeInfoId IDREF #REQUIRED>
+
+<!ELEMENT stops-ref (stop-ref*)>
