@@ -38,7 +38,7 @@ namespace Timetables.Xml
         public static void GetAndTransformDataFeedToXml<T>() where T : IDataFeed
         {
             Downloader.GetDataFeed("temp_data/");
-
+			
             IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)"temp_data/");
 
             data.CreateXml("Data.xml");

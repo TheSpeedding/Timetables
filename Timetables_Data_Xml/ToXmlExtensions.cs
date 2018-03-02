@@ -185,11 +185,11 @@ namespace Timetables.Xml
 			result.Append($@"""/> <!-- Mean of the transport. -->
 			<color hex-code=""");
 
-			if (routeInfo.Color == "CC0000") result.Append("&tram-color;");
-			if (routeInfo.Color == "00FFFF") result.Append("&bus-color;");
-			if (routeInfo.Color == "FFFFFF") result.Append("&cablecar-color;");
-			if (routeInfo.Color == "006600") result.Append("&rail-color;");
-			if (routeInfo.Color == "0033CC") result.Append("&ship-color;");
+			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Tram) result.Append("&tram-color;");
+			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Bus) result.Append("&bus-color;");
+			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.CableCar || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Gondola || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Funicular) result.Append("&cablecar-color;");
+			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Rail) result.Append("&rail-color;");
+			if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Ship) result.Append("&ship-color;");
 
 			result.Append($@"""/> <!-- Color of the route used in graphics. -->
 		</route-info>");
