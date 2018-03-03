@@ -18,6 +18,7 @@ namespace Timetables {
 		public:
 			DateTime(const std::string& input);
 			DateTime(std::size_t time, std::time_t date) : date(date), time(time) {}
+			DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year);
 
 			static DateTime Now();
 
@@ -82,7 +83,6 @@ namespace Timetables {
 
 			inline DateTime AddDays(int days) const { DateTime newDate(*this); newDate.date += days * 86400; return newDate; }
 
-			DateTime SetDate(const DateTime& dateTime) const;
 
 		};
 

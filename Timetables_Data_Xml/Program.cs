@@ -1,6 +1,7 @@
 ﻿using Timetables.Preprocessor;
+using Timetables.Xml;
 
-namespace Timetables.Xml
+namespace Timetables.SampleApp
 {
     class Program
     {

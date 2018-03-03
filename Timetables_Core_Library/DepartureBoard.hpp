@@ -20,7 +20,7 @@ namespace Timetables {
 		public:
 			Departure(const StopTime& stopTime, const DateTime& departure);
 
-			inline const DateTime& ArrivalTime() const { return departure.AddSeconds(DateTime::Difference(tripBegin->Arrival(), tripBegin->Departure())); }
+			inline const DateTime ArrivalTime() const { return departure.AddSeconds(DateTime::Difference(tripBegin->Arrival(), tripBegin->Departure())); }
 			inline const DateTime& DepartureTime() const { return departure; }
 			inline const std::wstring& Headsign() const { return tripBegin->Trip().Headsign(); }
 			inline const RouteInfo& Line() const { return tripBegin->Trip().RouteInfo(); }

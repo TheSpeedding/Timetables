@@ -47,6 +47,17 @@ Timetables::Structures::DateTime::DateTime(const std::string& input) {
 
 }
 
+Timetables::Structures::DateTime::DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) {
+	time = hours * 3600 + mins * 60 + secs;
+	struct tm d;
+	d.tm_mon = month - 1;
+	d.tm_mday = day;
+	d.tm_year = year - 1900;
+	d.tm_hour = 0; d.tm_min = 0; d.tm_sec = 0;
+
+	date = mktime(&d);
+}
+
 DateTime Timetables::Structures::DateTime::Now() {
 	time_t date = std::time(0);
 	struct tm now; localtime_s(&now, &date);
@@ -59,32 +70,25 @@ long int Timetables::Structures::DateTime::Difference(const DateTime& first, con
 	DateTime newDate(first);
 	newDate.time -= second.time;
 	newDate.date -= second.date;
+#pragma warning( push )
+#pragma warning( disable : 4244) // Signed/unsigned mismatch. In this case, default type time_t cannot overflow long int in normal situation. Plus we need to represent negative time somehow.
 	return newDate.time + newDate.date;
+#pragma warning( pop ) 
 }
 
 std::size_t Timetables::Structures::DateTime::Day() const {
-	return localtime(&date)->tm_mday;
+	return gmtime(&date)->tm_mday;
 }
 
 std::size_t Timetables::Structures::DateTime::Month() const {
-	return 1 + localtime(&date)->tm_mon;
+	return 1 + gmtime(&date)->tm_mon;
 }
 
 std::size_t Timetables::Structures::DateTime::Year() const {
-	return 1900 + localtime(&date)->tm_year;
+	return 1900 + gmtime(&date)->tm_year;
 }
 
 std::size_t Timetables::Structures::DateTime::DayInWeek() const {
-	auto day = (localtime(&date)->tm_wday - 1);
+	auto day = (gmtime(&date)->tm_wday - 1);
 	return day == -1 ? 6 : day;
-}
-
-DateTime Timetables::Structures::DateTime::SetDate(const DateTime& dateTime) const {
-	DateTime newDate(*this);
-	newDate.date = dateTime.date;
-	if (time >= 86400) {				
-		newDate.date += 86400 * (time / 86400);
-		newDate.time %= 86400;
-	}
-	return newDate;
 }

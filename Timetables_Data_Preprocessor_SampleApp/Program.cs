@@ -1,6 +1,9 @@
 ﻿using Timetables.Preprocessor;
 
-class Program
+namespace Timetables.SampleApp
 {
-    static void Main(string[] args) => DataFeed.GetAndTransformDataFeed<GtfsDataFeed>();
+	class Program
+	{
+		static void Main(string[] args) => DataFeed.GetAndTransformDataFeed<GtfsDataFeed>();
+	}
 }

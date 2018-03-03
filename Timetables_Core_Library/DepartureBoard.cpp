@@ -70,10 +70,8 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 		}
 	}
 
-	auto end = departures.cbegin(); // TO-DO: Make it easier.
-	for (int i = 0; i < count; i++, end++);
-
-	for (auto it = departures.cbegin(); it != end && it != departures.cend(); ++it)
+	size_t i = 0;
+	for (auto it = departures.cbegin(); i < count && it != departures.cend(); ++it, i++)
 		foundDepartures.push_back(Departure(*it->second, it->first));
 
 	if (foundDepartures.size() == 0)

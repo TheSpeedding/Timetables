@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 
 	//GetDepartureBoardReport(feed, L"Klobouènická", DateTime::Now(), 2);
 
-	GetDepartureBoardReport(feed, L"Malostranská", DateTime(86000, DateTime::Now().TotalSecondsSinceEpochUntilMidnight() - 3 * 86400), 6);
+	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 55, 00, 28, 02, 2018), 6);
 
 	/*
 	Router r(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 5, 5);
