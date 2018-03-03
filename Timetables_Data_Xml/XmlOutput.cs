@@ -15,7 +15,7 @@ namespace Timetables.Xml
 <!DOCTYPE timetables SYSTEM ""Data.dtd"">
 
 <timetables>
-<today><?php echo date('Ymd') ?></today>
+<today><?php echo date('Ymd'); ?></today>
 <expires>{ data.ExpirationDate }</expires>");
 
 			data.Calendar.ToXml(sw);

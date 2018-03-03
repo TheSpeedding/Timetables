@@ -10,25 +10,28 @@
 
 using namespace std;
 using namespace Timetables::Structures;
-// using namespace Timetables::Algorithms;
-// using namespace Timetables::SampleApp;
+using namespace Timetables::Algorithms;
+using namespace Timetables::SampleApp;
 
 int main(int argc, char** argv) {
 	
-	// cout << Time::Now().ToString() << " : Application has started." << endl;
+	cout << DateTime::Now() << " : Application has started." << endl;
 
-	// cout << Time::Now().ToString() << " : Starting data init." << endl;
+	cout << DateTime::Now() << " : Starting data init." << endl;
+	
+	DataFeed feed;
 
-	Timetables::Structures::DataFeed feed;
-
-	// cout << Time::Now().ToString() << " : Ending data init." << endl;
+	cout << DateTime::Now() << " : Ending data init." << endl;
 
 	setlocale(LC_ALL, "");
+	
+	//GetDepartureBoardReport(feed, L"Malostranské námìstí", DateTime::Now(), 3);
+
+	//GetDepartureBoardReport(feed, L"Klobouènická", DateTime::Now(), 2);
+
+	GetDepartureBoardReport(feed, L"Malostranská", DateTime(86000, DateTime::Now().TotalSecondsSinceEpochUntilMidnight() - 3 * 86400), 6);
+
 	/*
-	GetDepartureBoardReport(feed, L"Malostranské námìstí", Datetime::Now(), 3);
-
-	GetDepartureBoardReport(feed, L"Malostranská", Datetime::Now(), 5);
-
 	Router r(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 5, 5);
 
 	r.ObtainJourney();

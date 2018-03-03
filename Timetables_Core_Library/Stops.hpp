@@ -14,6 +14,7 @@ namespace Timetables {
 	namespace Structures {
 		class Route;
 		class Routes;
+		class StopTime;
 		class Station;
 		class Stations;
 		class Stop {
@@ -36,8 +37,8 @@ namespace Timetables {
 			inline const std::multimap<std::size_t, const Stop*>& Footpaths() const { return footpaths; }
 
 			inline void AddThroughgoingRoute(const Route& route) { throughgoingRoutes.push_back(&route); }
-			inline void AddDeparture(const StopTime& stopTime) { departures.insert(std::make_pair(stopTime.Departure(), &stopTime)); }
 			inline void AddFootpath(const Stop& stop, std::size_t time) { footpaths.insert(std::make_pair(time, &stop)); }
+			void AddDeparture(const StopTime& stopTime);
 
 			inline bool operator==(const Stop& other) const { return coords == other.coords; }
 		};

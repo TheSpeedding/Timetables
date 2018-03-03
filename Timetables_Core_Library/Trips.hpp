@@ -29,8 +29,6 @@ namespace Timetables {
 			inline const std::wstring& Headsign() const { return headsign; }
 			inline const Service& Service() const { return service; }
 
-			inline bool IsOperatingInDateTime(const DateTime& dateTime) const {}
-
 			inline void AddToTrip(const StopTime& stopTime) { stopTimes.push_back(stopTime); }
 		};
 

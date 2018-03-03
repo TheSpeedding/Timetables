@@ -1,4 +1,4 @@
-/*#ifndef REPORTS_HPP
+#ifndef REPORTS_HPP
 #define REPORTS_HPP
 
 #include <exception>
@@ -11,9 +11,8 @@
 
 namespace Timetables {
 	namespace SampleApp {
-		void GetDepartureBoardReport(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::Datetime& datetime, const size_t count);
+		void GetDepartureBoardReport(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& dateTime, const size_t count);
 	}
 }
 
 #endif // !REPORTS_HPP
-*/

@@ -40,6 +40,7 @@
     <ClCompile Include="Services.cpp" />
     <ClCompile Include="Stations.cpp" />
     <ClCompile Include="Stops.cpp" />
+    <ClCompile Include="StopTime.cpp" />
     <ClCompile Include="Trips.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>

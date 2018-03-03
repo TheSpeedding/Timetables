@@ -20,7 +20,7 @@ namespace Timetables {
 		public:
 			Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const DateTime& start, const DateTime& end);
 
-			inline bool IsOperatingOnDay(std::size_t day) const { return operatingDays.at(day - 1); }
+			inline bool IsOperatingOnDay(std::size_t day) const { return operatingDays.at(day); }
 			inline void AddExtraordinaryEvent(const DateTime& dateTime, bool type) { exceptions.insert(std::make_pair(dateTime, type)); }
 			bool IsOperatingInDate(const DateTime& dateTime) const;
 		};

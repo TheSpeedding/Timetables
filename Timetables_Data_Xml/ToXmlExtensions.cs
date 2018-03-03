@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Timetables.Preprocessor;
 
@@ -119,20 +117,13 @@ namespace Timetables.Xml
 		#endregion
 
 		#region Stops
-		public static string ToXml(this Stops.Stop stop)
-		{
-			StringBuilder result = new StringBuilder();
-
-			result.Append($@"		<stop stopId=""st{ stop.ID }""> <!-- Information about stop. -->
+		public static string ToXml(this Stops.Stop stop) => $@"		<stop stopId=""st{ stop.ID }""> <!-- Information about stop. -->
 			<name>{ stop.Name }</name> <!-- Name of the stop. -->
 			<location> <!-- GPS coordinates of the stop. -->
 				<latitude>{ stop.Location.Item1 }</latitude>
 				<longitude>{ stop.Location.Item2 }</longitude>
 			</location>			
-		</stop>");
-
-			return result.ToString();
-		}
+		</stop>";
 		public static void ToXml(this Stops stops, StreamWriter sw)
 		{
 			sw.WriteLine(@"	<stops>");

@@ -13,13 +13,15 @@ namespace Timetables {
 			const std::string shortName;
 			const std::wstring longName;
 			const RouteType type;
+			std::size_t color;
 		public:
-			RouteInfo(const std::string& shortName, const std::wstring& longName, RouteType type) :
-				shortName(shortName), longName(longName), type(type) {}
+			RouteInfo(const std::string& shortName, const std::wstring& longName, RouteType type, std::size_t color) :
+				shortName(shortName), longName(longName), type(type), color(color) {}
 
 			inline const std::string& ShortName() const { return shortName; }
 			inline const std::wstring& LongName() const { return longName; }
 			inline const RouteType Type() const { return type; }
+			inline const std::size_t Color() const { return color; }
 		};
 
 		class RoutesInfo {

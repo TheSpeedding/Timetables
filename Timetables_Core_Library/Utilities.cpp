@@ -11,18 +11,11 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::DateTime::Date::Date(std::size_t day, std::size_t month, std::size_t year) {
-	struct tm date;
-	date.tm_mday = day;
-	date.tm_mon = month;
-	date.tm_year = year;
-	seconds = mktime(&date);
-}
-
 Timetables::Structures::DateTime::DateTime(const std::string& input) {
 
 	// Accepts date format in YYYYMMDD and time format in HH:MM:SS.
-	// For maximal performance, no format validity check.
+	// For maximal performance, no format validity check. 
+	// This library operates with data that should be correct, because they were produced by preprocessor (containing format checking).
 
 
 	if (input[2] == ':' && input[5] == ':') {
@@ -57,10 +50,16 @@ Timetables::Structures::DateTime::DateTime(const std::string& input) {
 DateTime Timetables::Structures::DateTime::Now() {
 	time_t date = std::time(0);
 	struct tm now; localtime_s(&now, &date);
-	size_t hours = now.tm_hour;
-	size_t minutes = now.tm_min;
-	size_t seconds = now.tm_sec;
+	size_t time = now.tm_hour * 3600 + now.tm_min * 60 + now.tm_sec;
+	date -= time;
+	return DateTime(time, date);
+}
 
+long int Timetables::Structures::DateTime::Difference(const DateTime& first, const DateTime& second) {
+	DateTime newDate(first);
+	newDate.time -= second.time;
+	newDate.date -= second.date;
+	return newDate.time + newDate.date;
 }
 
 std::size_t Timetables::Structures::DateTime::Day() const {
@@ -68,13 +67,24 @@ std::size_t Timetables::Structures::DateTime::Day() const {
 }
 
 std::size_t Timetables::Structures::DateTime::Month() const {
-	return localtime(&date)->tm_mon;
+	return 1 + localtime(&date)->tm_mon;
 }
 
 std::size_t Timetables::Structures::DateTime::Year() const {
-	return localtime(&date)->tm_year;
+	return 1900 + localtime(&date)->tm_year;
 }
 
 std::size_t Timetables::Structures::DateTime::DayInWeek() const {
-	return localtime(&date)->tm_wday;
+	auto day = (localtime(&date)->tm_wday - 1);
+	return day == -1 ? 6 : day;
+}
+
+DateTime Timetables::Structures::DateTime::SetDate(const DateTime& dateTime) const {
+	DateTime newDate(*this);
+	newDate.date = dateTime.date;
+	if (time >= 86400) {				
+		newDate.date += 86400 * (time / 86400);
+		newDate.time %= 86400;
+	}
+	return newDate;
 }

@@ -85,3 +85,7 @@ void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes
 	}
 
 }
+
+void Timetables::Structures::Stop::AddDeparture(const StopTime & stopTime) { 
+	departures.insert(std::make_pair(stopTime.Departure(), &stopTime)); 
+}

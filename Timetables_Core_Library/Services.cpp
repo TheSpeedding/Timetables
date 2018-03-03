@@ -57,8 +57,8 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 
 		// Entry format: ServiceID, Monday ... Sunday, ValidSince, ValidUntil
 
-		for (size_t i = 0; i < 10; i++)
-			std::getline(calendar, tokens[i], ';');
+		for (size_t j = 0; j < 10; j++)
+			std::getline(calendar, tokens[j], ';');
 
 		Service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
 			tokens[4] == "1" ? true : false, tokens[5] == "1" ? true : false, tokens[6] == "1" ? true : false,
@@ -78,8 +78,8 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 
 		// Entry format: ServiceID, Date, TypeOfExtraordinaryEvent
 
-		for (size_t i = 0; i < 3; i++)
-			std::getline(calendarDates, tokens[i], ';');
+		for (size_t j = 0; j < 3; j++)
+			std::getline(calendarDates, tokens[j], ';');
 
 		size_t id(stoi(tokens[0]));
 

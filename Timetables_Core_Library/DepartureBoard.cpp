@@ -1,7 +1,7 @@
-/*#include "Stops.hpp"
+#include "Stops.hpp"
 #include "Trips.hpp"
-#include "Exceptions.hpp"
 #include "DataFeed.hpp"
+#include "Exceptions.hpp"
 #include <vector>
 #include <string>
 #include <map>
@@ -11,90 +11,73 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Departure::Departure(const Timetables::Structures::StopTime& stopTime) {
-	const vector<unique_ptr<StopTime>>& stopTimes = stopTime.GetTrip().GetStopTimes();
+Departure::Departure(const Timetables::Structures::StopTime& stopTime, const DateTime& dep) : departure(dep) {
+	
+	const vector<StopTime>& stopTimes = stopTime.Trip().StopTimes();
 
-	for (vector<unique_ptr<StopTime>>::const_iterator it = stopTimes.cbegin(); it != stopTimes.cend(); ++it)
-		if (it->get() == &stopTime)
+	for (vector<StopTime>::const_iterator it = stopTimes.cbegin(); it != stopTimes.cend(); ++it)
+		if (&*it == &stopTime)
 			tripBegin = it;
 
 	tripEnd = stopTimes.cend();
 }
 
-const std::vector<Departure> Departure::GetFollowingStops() const {
+const std::vector<Departure> Departure::FollowingStops() const {
 	vector<Departure> stops;
+	DateTime defaultDateTime = departure.AddSeconds((-1) * tripBegin->Departure().TotalSecondsSinceMidnight());
 	for (auto it = tripBegin; it != tripEnd; ++it)
-		stops.push_back(Departure(*it->get()));
+		stops.push_back(Departure(*it, defaultDateTime.AddSeconds(it->Departure().TotalSecondsSinceMidnight())));
 	return move(stops);
 }
 
-Timetables::Algorithms::DepartureBoard::DepartureBoard(const Timetables::Structures::GtfsFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& earliestDeparture, const size_t count) : count(count), earliestDeparture(earliestDeparture) {
-
-	auto it = feed.GetStations().find(stationName);
-	if (it == feed.GetStations().cend()) throw StopNotFoundException(stationName);
-
-	// At this point we have the station for which we want to list all the departures.
-	station = &it->second;
-
-}
-
 void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
-
-	Time departureTime = earliestDeparture.GetTime(); // Lower bound for departures.
-
+	
 	// In this structure we will store "count" departures from each child stop (meaning count * childStops.size()).
 	// Then we will return first "count" departures sorted by time.
 
-	multimap<Time, StopTimePtrObserver> departures;
+	multimap<DateTime, const StopTime*> departures;
 
-	for (auto&& child_stop : station->GetChildStops()) {
-		const multimap<Time, StopTimePtrObserver>& stopDep = child_stop->GetDepartures();
+	DateTime departureTime = DateTime(earliestDeparture.TotalSecondsSinceMidnight(), 0); // Lower bound for departures
 
-		auto firstRelevant = stopDep.upper_bound(departureTime);
-		auto preventInfiniteCycle = --stopDep.upper_bound(departureTime);
+	for (auto&& childStop : station.ChildStops()) {
+		const multimap<DateTime, const StopTime*>& stopDepartures = childStop->Departures();
 
-		Date departureDate = earliestDeparture.GetDate(); // A need for operating days checking.
+		auto firstRelevant = stopDepartures.upper_bound(departureTime);
 
-		size_t i = 0;
-		while (i < count) {
-			if (firstRelevant == preventInfiniteCycle) break;
+		DateTime departureDate = DateTime(0, earliestDeparture.TotalSecondsSinceEpochUntilMidnight()); // A need for operating days checking.
 
-			if (firstRelevant == stopDep.cend()) {
-				firstRelevant = stopDep.cbegin(); // Midnight reached.
-				++departureDate;
+		size_t foundDeparturesCount = 0, days = 0;
+		while (foundDeparturesCount < count && days < 7) {
+
+			if (firstRelevant == stopDepartures.cend()) {
+				firstRelevant = stopDepartures.cbegin(); // Midnight reached.
+				departureDate = departureDate.AddDays(1);
+				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
 				continue;
 			}
 
-			// Check if the trip is operating in required date.
-			if (firstRelevant->second->GetTrip().GetService().IsOperatingInDate(departureDate)) {
+			// Check if the stop-time (trip respectively) is operating in required date.
+			if (firstRelevant->second->IsOperatingInDate(departureDate)) {
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
-				if (&firstRelevant->second->GetStop() != &(firstRelevant->second->GetTrip().GetStopTimes().cend() - 1)->get()->GetStop()) {
-					departures.insert(*firstRelevant);
-					i++;
+				if (&firstRelevant->second->Stop() != &(firstRelevant->second->Trip().StopTimes().cend() - 1)->Stop()) {
+					departures.insert(make_pair(DateTime(firstRelevant->first.TotalSecondsSinceMidnight() % 86400, // We will create an object with normalized time and correct departure date.
+						departureDate.TotalSecondsSinceEpochUntilMidnight()), firstRelevant->second));
+					foundDeparturesCount++;
 				}
-
 			}
 
 			firstRelevant++;
 		}
 	}
 
-	auto firstRelevant = departures.upper_bound(departureTime); 
-	auto preventInfiniteCycle = --departures.upper_bound(departureTime);
-	
-	size_t i = 0;
-	while (i < count) {
-		if (firstRelevant == preventInfiniteCycle) break;
+	auto end = departures.cbegin(); // TO-DO: Make it easier.
+	for (int i = 0; i < count; i++, end++);
 
-		if (firstRelevant == departures.end()) firstRelevant = departures.begin(); // Midnight reached.
-		foundDepartures.push_back(Departure(*firstRelevant->second));
-
-		firstRelevant++;
-		i++;
-	}
+	for (auto it = departures.cbegin(); it != end && it != departures.cend(); ++it)
+		foundDepartures.push_back(Departure(*it->second, it->first));
 
 	if (foundDepartures.size() == 0)
-		throw NoDeparturesFoundException(station->GetName());
+		throw NoDeparturesFoundException(station.Name());
 
 
-}*/
+}

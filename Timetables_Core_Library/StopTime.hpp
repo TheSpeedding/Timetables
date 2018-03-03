@@ -24,7 +24,7 @@ namespace Timetables {
 			inline const DateTime& Arrival() const { return arrival; }
 			inline const DateTime& Departure() const { return departure; }
 
-			inline bool IsOperatingInDate(const DateTime& dateTime) const { return trip.Service().IsOperatingInDate(dateTime.Date().AddDays((-1) * (departure.Time().TotalSeconds() / 86400))); }
+			bool IsOperatingInDate(const DateTime& dateTime) const;
 		};
 	}
 }

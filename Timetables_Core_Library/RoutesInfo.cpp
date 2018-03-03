@@ -25,7 +25,7 @@ Timetables::Structures::RoutesInfo::RoutesInfo(std::wistream&& routesInfo) {
 		for (size_t i = 0; i < 5; i++)
 			std::getline(routesInfo, tokens[i], wchar_t(';'));
 		
-		RouteInfo r(string(tokens[1].begin(), tokens[1].end()), tokens[2], RouteType(stoi(tokens[3])));
+		RouteInfo r(string(tokens[1].begin(), tokens[1].end()), tokens[2], RouteType(stoi(tokens[3])), stoul(tokens[4], nullptr, 16));
 		
 		list.push_back(move(r));
 
