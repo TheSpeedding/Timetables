@@ -25,6 +25,9 @@ namespace Timetables {
 			inline const DateTime& Departure() const { return departure; }
 
 			bool IsOperatingInDate(const DateTime& dateTime) const;
+			DateTime AbsoluteDepartureTime(const DateTime& dateTime) const;
+			DateTime AbsoluteArrivalTime(const DateTime& dateTime) const;
+			DateTime StartingDateForTrip(const DateTime& dateTime) const;
 		};
 	}
 }

@@ -12,12 +12,13 @@ namespace Timetables {
 
 		class DateTime {
 
-		private:
+		public:
 			std::time_t date;
 			long int time;
 		public:
 			DateTime(const std::string& input);
-			DateTime(std::size_t time, std::time_t date) : date(date), time(time) {}
+			DateTime(std::time_t totalSecs);
+			DateTime(std::size_t time, std::time_t date) : date(date + 86400 * (time / 86400)), time(time % 86400) {}
 			DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year);
 
 			static DateTime Now();
@@ -46,6 +47,8 @@ namespace Timetables {
 
 			inline bool operator< (const DateTime& other) const { return date == other.date ? (date == 0 ? time % 86400 < other.time % 86400 : time < other.time) : date < other.date; }
 			inline bool operator> (const DateTime& other) const { return date == other.date ? (date == 0 ? time % 86400 > other.time % 86400 : time > other.time) : date > other.date; }
+			inline bool operator<= (const DateTime& other) const { return date == other.date ? (date == 0 ? time % 86400 <= other.time % 86400 : time <= other.time) : date <= other.date; }
+			inline bool operator>= (const DateTime& other) const { return date == other.date ? (date == 0 ? time % 86400 >= other.time % 86400 : time >= other.time) : date >= other.date; }
 			inline bool operator== (const DateTime& other) const { return date == other.date && time == other.time; }
 
 			inline DateTime AddSeconds(int seconds) const {

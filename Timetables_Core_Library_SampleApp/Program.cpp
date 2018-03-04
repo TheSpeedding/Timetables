@@ -29,14 +29,13 @@ int main(int argc, char** argv) {
 
 	//GetDepartureBoardReport(feed, L"Klobouènická", DateTime::Now(), 2);
 
-	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 55, 00, 28, 02, 2018), 6);
-
-	/*
-	Router r(feed, L"Klobouènická", L"Roztyly", Datetime::Now(), 5, 5);
+	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 6);
+		
+	// Router r(feed, L"Klobouènická", L"Roztyly", DateTime::Now(), 5, 5);
+	Router r(feed, L"Klobouènická", L"Dejvická", DateTime::Now(), 5, 5);
 
 	r.ObtainJourney();
 
-	r.GetJourneys();
-	*/
+	r.ShowJourneys();	
 
 }

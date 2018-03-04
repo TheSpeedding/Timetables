@@ -47,6 +47,13 @@ Timetables::Structures::DateTime::DateTime(const std::string& input) {
 
 }
 
+Timetables::Structures::DateTime::DateTime(std::time_t totalSecs) {
+	struct tm* t = localtime(&totalSecs);
+	time = t->tm_hour * 3600 + t->tm_min * 60 + t->tm_sec;
+	t->tm_hour = 0; t->tm_min = 0; t->tm_sec = 0;
+	date = mktime(t);
+}
+
 Timetables::Structures::DateTime::DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) {
 	time = hours * 3600 + mins * 60 + secs;
 	struct tm d;
@@ -56,6 +63,9 @@ Timetables::Structures::DateTime::DateTime(std::size_t hours, std::size_t mins, 
 	d.tm_hour = 0; d.tm_min = 0; d.tm_sec = 0;
 
 	date = mktime(&d);
+
+	AddDays((-1) * time / 86400);
+	time %= 86400;
 }
 
 DateTime Timetables::Structures::DateTime::Now() {
@@ -77,18 +87,18 @@ long int Timetables::Structures::DateTime::Difference(const DateTime& first, con
 }
 
 std::size_t Timetables::Structures::DateTime::Day() const {
-	return gmtime(&date)->tm_mday;
+	return localtime(&date)->tm_mday;
 }
 
 std::size_t Timetables::Structures::DateTime::Month() const {
-	return 1 + gmtime(&date)->tm_mon;
+	return 1 + localtime(&date)->tm_mon;
 }
 
 std::size_t Timetables::Structures::DateTime::Year() const {
-	return 1900 + gmtime(&date)->tm_year;
+	return 1900 + localtime(&date)->tm_year;
 }
 
 std::size_t Timetables::Structures::DateTime::DayInWeek() const {
-	auto day = (gmtime(&date)->tm_wday - 1);
+	auto day = (localtime(&date)->tm_wday - 1);
 	return day == -1 ? 6 : day;
 }

@@ -16,7 +16,7 @@ namespace Timetables {
 		private:
 			const RouteInfo& info;
 			std::vector<const Stop*> stopsSequence;
-			std::vector<const Trip*> trips; // Departure from this first stop in the list. Sorted. TO-DO: SORTING
+			std::vector<const Trip*> trips; // Departure from this first stop in the list. Sorted.
 		public:
 			Route(const RouteInfo& info, std::size_t numberOfStops) : info(info) { stopsSequence.reserve(numberOfStops); }
 
