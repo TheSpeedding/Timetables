@@ -22,11 +22,11 @@ Departure::Departure(const Timetables::Structures::StopTime& stopTime, const Dat
 	tripEnd = stopTimes.cend();
 }
 
-const std::vector<Departure> Departure::FollowingStops() const {
-	vector<Departure> stops;
-	DateTime defaultDateTime = departure.AddSeconds((-1) * tripBegin->Departure().TotalSecondsSinceMidnight());
+const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> Departure::FollowingStops() const {
+	vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> stops;
+	size_t base = tripBegin->Departure();
 	for (auto it = tripBegin; it != tripEnd; ++it)
-		stops.push_back(Departure(*it, defaultDateTime.AddSeconds(it->Departure().TotalSecondsSinceMidnight())));
+		stops.push_back(make_pair(it->Arrival() - base, &it->Stop()));
 	return move(stops);
 }
 
@@ -37,14 +37,14 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 
 	multimap<DateTime, const StopTime*> departures;
 
-	DateTime departureTime = DateTime(earliestDeparture.TotalSecondsSinceMidnight(), 0); // Lower bound for departures
+	DateTime departureTime = earliestDeparture.Time(); // Lower bound for departures
 
 	for (auto&& childStop : station.ChildStops()) {
 		const multimap<DateTime, const StopTime*>& stopDepartures = childStop->Departures();
 
 		auto firstRelevant = stopDepartures.upper_bound(departureTime);
 
-		DateTime departureDate = DateTime(0, earliestDeparture.TotalSecondsSinceEpochUntilMidnight()); // A need for operating days checking.
+		DateTime departureDate = earliestDeparture.Date(); // A need for operating days checking.
 
 		size_t foundDeparturesCount = 0, days = 0;
 		while (foundDeparturesCount < count && days < 7) {
@@ -60,8 +60,10 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 			if (firstRelevant->second->IsOperatingInDate(departureDate)) {
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
 				if (&firstRelevant->second->Stop() != &(firstRelevant->second->Trip().StopTimes().cend() - 1)->Stop()) {
-					departures.insert(make_pair(DateTime(firstRelevant->first.TotalSecondsSinceMidnight() % 86400, // We will create an object with normalized time and correct departure date.
-						departureDate.TotalSecondsSinceEpochUntilMidnight()), firstRelevant->second));
+					departures.insert(make_pair(
+					DateTime((firstRelevant->second->Trip().Departure() + firstRelevant->second->Departure()) % 86400) // Time of the departure.
+						+ departureDate.Date() // Date of the departure.
+					, firstRelevant->second));
 					foundDeparturesCount++;
 				}
 			}
@@ -76,6 +78,5 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 
 	if (foundDepartures.size() == 0)
 		throw NoDeparturesFoundException(station.Name());
-
 
 }

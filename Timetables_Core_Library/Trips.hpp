@@ -19,15 +19,17 @@ namespace Timetables {
 			std::wstring headsign;
 			const RouteInfo& routeInfo;
 			const Service& service;
+			std::size_t departureTime;
 			std::vector<StopTime> stopTimes;
 		public:
-			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, std::size_t numberOfStopTimes) :
-				routeInfo(routeInfo), service(service), headsign(headsign) { stopTimes.reserve(numberOfStopTimes); }
+			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, std::size_t numberOfStopTimes, std::size_t departure) :
+				routeInfo(routeInfo), service(service), headsign(headsign), departureTime(departure) { stopTimes.reserve(numberOfStopTimes); }
 
 			inline const std::vector<StopTime>& StopTimes() const { return stopTimes; }
 			inline const RouteInfo& RouteInfo() const { return routeInfo; }
 			inline const std::wstring& Headsign() const { return headsign; }
 			inline const Service& Service() const { return service; }
+			inline const std::size_t Departure() const { return departureTime; }
 
 			inline void AddToTrip(const StopTime& stopTime) { stopTimes.push_back(stopTime); }
 		};

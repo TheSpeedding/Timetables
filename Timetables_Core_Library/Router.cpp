@@ -71,8 +71,8 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				const StopTime& st = *(currentTrip->StopTimes().cbegin() + (nextStop - route.Stops().cbegin()));
 
-				const DateTime& newArrival = DateTime(st.Arrival().TotalSecondsSinceMidnight(), currentDateForTrip.TotalSecondsSinceEpochUntilMidnight()); // 18th row of pseudocode.
-
+				const DateTime& newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceTripBeginning()); // 18th row of pseudocode.
+					
 				auto currentStopBestArrival = tempLabels.find(&currentStop);
 				
 				auto targetStopBestArrival = tempLabels.cend();
@@ -124,7 +124,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				auto previousArrival = (labels.end() - 2)->find(&currentStop);
 
-				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= DateTime(st.Departure().TotalSecondsSinceMidnight(), currentDateForTrip.TotalSecondsSinceEpochUntilMidnight())) { // 22nd row of pseudocode.
+				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= currentDateForTrip.AddSeconds(st.DepartureSinceTripBeginning())) { // 22nd row of pseudocode.
 
 					auto res = FindEarliestTrip(route, previousArrival->second, currentStop);
 					currentTrip = res.first; // 23rd row of pseudocode.
@@ -186,15 +186,14 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 				throw runtime_error("Undefined state.");
 				
-			if ((arrivalTimeB == (labels.cend() - 1)->cend()) || !(min == arrivalTimeB->second)) {
+			if ((arrivalTimeB == (labels.cend() - 1)->cend()) || min != arrivalTimeB->second) {
 				
 				(labels.end() - 1)->erase(stopB);
 
 				(labels.end() - 1)->insert(make_pair(stopB, min)); // 26th row of pseudocode.
 
 				Journey newJourney((journeys.cend() - 1)->find(stopA)->second); // The same journey, added just some footpath -> arrival time increased.
-				newJourney.SetNewArrivalAtTarget(min);
-
+				
 				(journeys.end() - 1)->insert(make_pair(stopB, newJourney)); 
 
 			}
@@ -234,9 +233,11 @@ std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
 
 		const StopTime& st = *((**it).StopTimes().cbegin() + index);
 
-		if (st.AbsoluteDepartureTime(newArrival) > arrival && st.IsOperatingInDate(newArrival))
+		DateTime startingDateForTrip = st.StartingDateForTrip(newArrival);
 
-			return make_pair(*it, st.StartingDateForTrip(newArrival));
+		if (startingDateForTrip.AddSeconds(st.DepartureSinceTripBeginning()) > arrival && st.IsOperatingInDate(newArrival))
+
+			return make_pair(*it, startingDateForTrip);
 
 	}
 
@@ -320,4 +321,12 @@ Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structu
 
 	}
 
+}
+
+const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> Timetables::Structures::JourneySegment::IntermediateStops() const {
+	vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> stops;
+	size_t base = sourceStop->Departure();
+	for (auto it = sourceStop; it != targetStop + 1; ++it)
+		stops.push_back(make_pair(it->Arrival() - base, &it->Stop()));
+	return move(stops);
 }

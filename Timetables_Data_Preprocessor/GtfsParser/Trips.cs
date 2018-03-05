@@ -36,7 +36,7 @@ namespace Timetables.Preprocessor
 			/// Relative departure time from the first stop. Seconds since midnight.
 			/// </summary>
 			public int DepartureTime { get; internal set; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";";
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";" + DepartureTime + ";";
 
 			public int CompareTo(Trip other) => DepartureTime.CompareTo(other.DepartureTime);
 

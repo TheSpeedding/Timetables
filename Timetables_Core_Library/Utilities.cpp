@@ -22,9 +22,7 @@ Timetables::Structures::DateTime::DateTime(const std::string& input) {
 
 		// Time parsing.
 
-		time = stoi(input.substr(0, 2)) * 3600 + stoi(input.substr(3, 2)) * 60 + stoi(input.substr(6, 2));
-
-		date = 0;
+		dateTime = stoi(input.substr(0, 2)) * 3600 + stoi(input.substr(3, 2)) * 60 + stoi(input.substr(6, 2));
 
 	}
 
@@ -40,65 +38,38 @@ Timetables::Structures::DateTime::DateTime(const std::string& input) {
 		d.tm_year = stoi(input.substr(0, 4)) - 1900;
 		d.tm_hour = 0; d.tm_min = 0; d.tm_sec = 0;
 
-		date = mktime(&d);
+		dateTime = _mkgmtime(&d);
 
-		time = 0;
 	}
 
 }
 
-Timetables::Structures::DateTime::DateTime(std::time_t totalSecs) {
-	struct tm* t = localtime(&totalSecs);
-	time = t->tm_hour * 3600 + t->tm_min * 60 + t->tm_sec;
-	t->tm_hour = 0; t->tm_min = 0; t->tm_sec = 0;
-	date = mktime(t);
-}
-
 Timetables::Structures::DateTime::DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) {
-	time = hours * 3600 + mins * 60 + secs;
 	struct tm d;
 	d.tm_mon = month - 1;
 	d.tm_mday = day;
 	d.tm_year = year - 1900;
-	d.tm_hour = 0; d.tm_min = 0; d.tm_sec = 0;
+	d.tm_hour = hours;
+	d.tm_min = mins; 
+	d.tm_sec = secs;
 
-	date = mktime(&d);
-
-	AddDays((-1) * time / 86400);
-	time %= 86400;
+	dateTime = _mkgmtime(&d);
 }
 
 DateTime Timetables::Structures::DateTime::Now() {
-	time_t date = std::time(0);
-	struct tm now; localtime_s(&now, &date);
-	size_t time = now.tm_hour * 3600 + now.tm_min * 60 + now.tm_sec;
-	date -= time;
-	return DateTime(time, date);
-}
-
-long int Timetables::Structures::DateTime::Difference(const DateTime& first, const DateTime& second) {
-	DateTime newDate(first);
-	newDate.time -= second.time;
-	newDate.date -= second.date;
-#pragma warning( push )
-#pragma warning( disable : 4244) // Signed/unsigned mismatch. In this case, default type time_t cannot overflow long int in normal situation. Plus we need to represent negative time somehow.
-	return newDate.time + newDate.date;
-#pragma warning( pop ) 
+	time_t dateTime = std::time(0);
+	struct tm now; gmtime_s(&now, &dateTime);
+	return DateTime(dateTime);
 }
 
 std::size_t Timetables::Structures::DateTime::Day() const {
-	return localtime(&date)->tm_mday;
+	return gmtime(&dateTime)->tm_mday;
 }
 
 std::size_t Timetables::Structures::DateTime::Month() const {
-	return 1 + localtime(&date)->tm_mon;
+	return 1 + gmtime(&dateTime)->tm_mon;
 }
 
 std::size_t Timetables::Structures::DateTime::Year() const {
-	return 1900 + localtime(&date)->tm_year;
-}
-
-std::size_t Timetables::Structures::DateTime::DayInWeek() const {
-	auto day = (localtime(&date)->tm_wday - 1);
-	return day == -1 ? 6 : day;
+	return 1900 + gmtime(&dateTime)->tm_year;
 }

@@ -13,20 +13,21 @@ namespace Timetables {
 		private:
 			const Trip& trip;
 			const Stop& stop;
-			DateTime arrival;
-			DateTime departure;
+			int arrival;
+			int departure;
 		public:
-			StopTime(const Trip& trip, const Stop& stop, const DateTime& arrival, const DateTime& departure) :
+			StopTime(const Trip& trip, const Stop& stop, int arrival, int departure) :
 				trip(trip), stop(stop), arrival(arrival), departure(departure) {}
 
 			inline const Trip& Trip() const { return trip; }
 			inline const Stop& Stop() const { return stop; }
-			inline const DateTime& Arrival() const { return arrival; }
-			inline const DateTime& Departure() const { return departure; }
+			inline const int Arrival() const { return arrival; }
+			inline const int Departure() const { return departure; }
+
+			const int ArrivalSinceTripBeginning() const;
+			const int DepartureSinceTripBeginning() const;
 
 			bool IsOperatingInDate(const DateTime& dateTime) const;
-			DateTime AbsoluteDepartureTime(const DateTime& dateTime) const;
-			DateTime AbsoluteArrivalTime(const DateTime& dateTime) const;
 			DateTime StartingDateForTrip(const DateTime& dateTime) const;
 		};
 	}

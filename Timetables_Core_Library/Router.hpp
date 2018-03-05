@@ -31,8 +31,7 @@ namespace Timetables {
 			inline const Stop& TargetStop() const { return targetStop->Stop(); }
 			inline const DateTime DepartureFromSource() const { return arrival.AddSeconds((-1) * DateTime::Difference(targetStop->Arrival(), sourceStop->Departure())); }
 			inline const DateTime& ArrivalAtTarget() const { return arrival; }
-
-			inline void SetNewArrivalAtTarget(const DateTime& newArrival) { arrival = newArrival; }
+			const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> IntermediateStops() const;
 		};
 
 		class Journey {
@@ -42,12 +41,13 @@ namespace Timetables {
 			// TO-DO: ReconstructJourney, DepartureTime, ArrivalTime, TotalDuration
 			Journey(const JourneySegment& js) { AddToJourney(js); }
 
-			inline const DateTime& DepartureTime() const { return journeySegments.cbegin()->DepartureFromSource(); }
+			inline const DateTime DepartureTime() const { return journeySegments.cbegin()->DepartureFromSource(); }
 			inline const DateTime& ArrivalTime() const { return (journeySegments.cend() - 1)->ArrivalAtTarget(); }
-			inline const DateTime TotalDuration() const { return DateTime(DateTime::Difference(ArrivalTime(), DepartureTime())); }
+			inline const int TotalDuration() const { return DateTime::Difference(ArrivalTime(), DepartureTime()); }
+
+			inline const std::vector<JourneySegment>& JourneySegments() const { return journeySegments; }
 
 			inline void AddToJourney(const JourneySegment& js) { journeySegments.push_back(js); }
-			inline void SetNewArrivalAtTarget(const DateTime& newArrival) { (journeySegments.end() - 1)->SetNewArrivalAtTarget(newArrival); }
 		};
 	}
 

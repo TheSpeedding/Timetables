@@ -36,8 +36,8 @@ bool Timetables::Structures::Service::IsRemovedInDate(const DateTime& dateTime) 
 
 bool Timetables::Structures::Service::IsOperatingInDate(const DateTime& dateTime) const {
 	if (dateTime < validSince || dateTime > validUntil) return false;
-	if (IsAddedInDate(dateTime)) return true;
-	if (IsRemovedInDate(dateTime)) return false;
+	if (IsAddedInDate(dateTime.Date())) return true;
+	if (IsRemovedInDate(dateTime.Date())) return false;
 	size_t dayInWeek = dateTime.DayInWeek();
 	return IsOperatingOnDay(dayInWeek);
 }

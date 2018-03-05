@@ -20,17 +20,15 @@ namespace Timetables {
 		class Stop {
 		private:
 			const std::wstring name;
-			const GpsCoords coords;
 			const Station& parentStation;
 			std::multimap<DateTime, const StopTime*> departures; // Sorted by departure times.
 			std::multimap<std::size_t, const Stop*> footpaths; // Stops reachable in walking-distance (< 15 min.) from this stop.
 			std::vector<const Route*> throughgoingRoutes; // Routes that goes through this stop.
 		public:
-			Stop(const std::wstring& name, double latitude, double longitude, const Station& parentStation) :
-				name(name), coords(GpsCoords(latitude, longitude)), parentStation(parentStation) {}
+			Stop(const std::wstring& name, const Station& parentStation) :
+				name(name), parentStation(parentStation) {}
 
 			inline const Station& ParentStation() const { return parentStation; }
-			inline const GpsCoords& Location() const { return coords; }
 			inline const std::wstring& Name() const { return name; }
 			inline const std::multimap<DateTime, const StopTime*>& Departures() const { return departures; }
 			inline const std::vector<const Route*>& ThroughgoingRoutes() const { return throughgoingRoutes; }
@@ -39,8 +37,6 @@ namespace Timetables {
 			inline void AddThroughgoingRoute(const Route& route) { throughgoingRoutes.push_back(&route); }
 			inline void AddFootpath(const Stop& stop, std::size_t time) { footpaths.insert(std::make_pair(time, &stop)); }
 			void AddDeparture(const StopTime& stopTime);
-
-			inline bool operator==(const Stop& other) const { return coords == other.coords; }
 		};
 
 		class Stops {

@@ -19,18 +19,18 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops, Stations& stations) 
 
 	list.reserve(size);
 
-	array<wstring, 5> tokens;
+	array<wstring, 3> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: StopID, Name, Latitude, Longitude, ParentStationID
+		// Entry format: StopID, Name, ParentStationID
 
-		for (size_t j = 0; j < 5; j++)
+		for (size_t j = 0; j < 3; j++)
 			std::getline(stops, tokens[j], wchar_t(';'));
 
-		Station& station = stations[stoi(tokens[4])];
+		Station& station = stations[stoi(tokens[2])];
 
-		Stop s(tokens[1], stod(tokens[2]), stod(tokens[3]), station);
+		Stop s(tokens[1], station);
 		
 		list.push_back(move(s));
 
@@ -86,6 +86,9 @@ void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes
 
 }
 
-void Timetables::Structures::Stop::AddDeparture(const StopTime & stopTime) { 
-	departures.insert(std::make_pair(stopTime.Departure(), &stopTime)); 
+void Timetables::Structures::Stop::AddDeparture(const StopTime& stopTime) {
+	// We have to set new time because of the time relativity. That means departure of the trip + departure from given stoptime. 
+	// Plus we will normalize it. This serves only for departure boards.
+	DateTime dep = DateTime((stopTime.Trip().Departure() + stopTime.Departure()) % 86400);
+	departures.insert(std::make_pair(dep, &stopTime)); 
 }

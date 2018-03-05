@@ -25,16 +25,12 @@ int main(int argc, char** argv) {
 
 	setlocale(LC_ALL, "");
 	
-	//GetDepartureBoardReport(feed, L"Malostranské námìstí", DateTime::Now(), 3);
+	GetDepartureBoardReport(feed, L"Klobouènická", DateTime::Now(), 2);
 
-	//GetDepartureBoardReport(feed, L"Klobouènická", DateTime::Now(), 2);
+	GetDepartureBoardReport(feed, L"Malostranská", DateTime::Now(), 2);
 
-	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 6);
-		
-	Router r(feed, L"Klobouènická", L"Roztyly", DateTime::Now(), 5, 5);
+	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 3);
 
-	r.ObtainJourneys();
-
-	r.ShowJourneys();	
-
+	GetJourneysReport(feed, L"Roztyly", L"Dejvická", DateTime(10, 15, 00, 6, 3, 2018), 1, 5);
+	
 }

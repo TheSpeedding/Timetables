@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <memory>
 #include "Trips.hpp"
 #include "DataFeed.hpp"
 #include "Utilities.hpp"
@@ -20,16 +19,15 @@ namespace Timetables {
 		public:
 			Departure(const StopTime& stopTime, const DateTime& departure);
 
-			inline const DateTime ArrivalTime() const { return departure.AddSeconds(DateTime::Difference(tripBegin->Arrival(), tripBegin->Departure())); }
 			inline const DateTime& DepartureTime() const { return departure; }
 			inline const std::wstring& Headsign() const { return tripBegin->Trip().Headsign(); }
 			inline const RouteInfo& Line() const { return tripBegin->Trip().RouteInfo(); }
 			inline const Stop& Stop() const { return tripBegin->Stop(); }
-			const std::vector<Departure> FollowingStops() const;
+			const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> FollowingStops() const;
 
-			inline bool operator< (const Departure& other) const { return tripBegin->Departure() < other.tripBegin->Departure(); }
-			inline bool operator> (const Departure& other) const { return tripBegin->Departure() > other.tripBegin->Departure(); }
-			inline bool operator==(const Departure& other) const { return tripBegin->Departure() == other.tripBegin->Departure(); }
+			inline bool operator< (const Departure& other) const { return departure < other.departure; }
+			inline bool operator> (const Departure& other) const { return departure > other.departure; }
+			inline bool operator==(const Departure& other) const { return departure == other.departure; }
 		};
 	}
 

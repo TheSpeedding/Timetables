@@ -30,7 +30,7 @@ namespace Timetables.Preprocessor
             double BlonR = B.Location.Item2.DegreesToRadians();
             double u = Math.Sin((BlatR - AlatR) / 2);
             double v = Math.Sin((BlonR - AlonR) / 2);
-            return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 2);
+            return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000);
         }
     }
     public abstract class Footpaths : IEnumerable<Footpaths.Footpath>
