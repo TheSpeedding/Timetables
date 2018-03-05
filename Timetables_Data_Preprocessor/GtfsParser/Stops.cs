@@ -25,7 +25,7 @@ namespace Timetables.Preprocessor
             /// Reference to the parent station.
             /// </summary>
             public Stations.Station ParentStation { get; internal set; } 
-            public override string ToString() => ID + ";" + Name + ";" + Location.Item1.ToString(CultureInfo.InvariantCulture) + ";" + Location.Item2.ToString(CultureInfo.InvariantCulture) + ";" + ParentStation.ID + ";";
+            public override string ToString() => ID + ";" + Name + ";" + ParentStation.ID + ";";
             public Stop(int id, string name, double latitude, double longitude)
             {
                 ID = id;
