@@ -31,10 +31,9 @@ int main(int argc, char** argv) {
 
 	GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 6);
 		
-	// Router r(feed, L"Klobouènická", L"Roztyly", DateTime::Now(), 5, 5);
-	Router r(feed, L"Klobouènická", L"Dejvická", DateTime::Now(), 5, 5);
+	Router r(feed, L"Klobouènická", L"Roztyly", DateTime::Now(), 5, 5);
 
-	r.ObtainJourney();
+	r.ObtainJourneys();
 
 	r.ShowJourneys();	
 

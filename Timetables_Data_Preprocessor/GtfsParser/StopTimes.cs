@@ -12,23 +12,23 @@ namespace Timetables.Preprocessor
             /// </summary>
             public Trips.Trip Trip { get; }
             /// <summary>
-            /// Arrival time to given stop represented as string.
+            /// Arrival time to given stop. Seconds since departure time of the trip.
             /// </summary>
-            public string ArrivalTime { get; }
-            /// <summary>
-            /// Departure time to given stop represented as string.
-            /// </summary>
-            public string DepartureTime { get; }
+            public int ArrivalTime { get; }
+			/// <summary>
+			/// Departure time to given stop. Seconds since departure time of the trip.
+			/// </summary>
+			public int DepartureTime { get; }
             /// <summary>
             /// Stop that belong to the stop time.
             /// </summary>
             public Stops.Stop Stop { get; }
             public override string ToString() => Trip.ID + ";" + Stop.ID + ";" + ArrivalTime + ";" + DepartureTime + ";";
-            public StopTime(Trips.Trip trip, string arrival, string departure, Stops.Stop stop)
+            public StopTime(Trips.Trip trip, int arrival, int departure, Stops.Stop stop)
             {
                 Trip = trip;
-                ArrivalTime = arrival.Length == 7 ? "0" + arrival : arrival;
-                DepartureTime = departure.Length == 7 ? "0" + departure : departure;
+				ArrivalTime = arrival;
+				DepartureTime = departure;
                 Stop = stop;
             }
         }
@@ -45,6 +45,19 @@ namespace Timetables.Preprocessor
             stopTimes.Close();
             stopTimes.Dispose();
         }
+		protected int ConvertTimeToSecondsSinceMidnight(string time)
+		{
+			// Default format: HH:MM:SS or H:MM:SS
+
+			if (time.Length != 7 && time.Length != 8)
+				throw new FormatException("Invalid time format.");
+
+			int hours = int.Parse(time.Length == 7 ? time.Substring(0, 1) : time.Substring(0, 2));
+			int minutes = int.Parse(time.Length == 7 ? time.Substring(2, 2) : time.Substring(3, 2));
+			int seconds = int.Parse(time.Length == 7 ? time.Substring(5, 2) : time.Substring(6, 2));
+
+			return hours * 3600 + minutes * 60 + seconds;
+		}
     }
     public sealed class GtfsStopTimes : StopTimes
     {
@@ -85,12 +98,18 @@ namespace Timetables.Preprocessor
                     if (entry.Length > 0 && entry[0] == '"') quotes = true; // Start of the quotes.
                     if (entry.Length > 0 && entry[entry.Length - 1] == '"') quotes = false; // End of the quotes.
                 }
+                
+				Trips.Trip trip = trips[tokens[dic["trip_id"]]];
 
-                StopTime st = new StopTime(trips[tokens[dic["trip_id"]]], tokens[dic["arrival_time"]], tokens[dic["departure_time"]], stops[tokens[dic["stop_id"]]]);
+				if (trip.StopTimes.Count == 0) // Set departure time of the trip.
+					trip.DepartureTime = ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]);
 
-                st.Trip.StopTimes.Add(st);
+				StopTime st = new StopTime(trip, ConvertTimeToSecondsSinceMidnight(tokens[dic["arrival_time"]]) - trip.DepartureTime,
+					ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]) - trip.DepartureTime, stops[tokens[dic["stop_id"]]]);
+				
+				st.Trip.StopTimes.Add(st);
 
-                list.Add(st);
+				list.Add(st);
             }
             stopTimes.Dispose();
         }

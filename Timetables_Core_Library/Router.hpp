@@ -15,8 +15,8 @@
 namespace Timetables {
 	namespace Structures {
 		class Trip;
-		class StopTime; 		
-		
+		class StopTime;
+
 		class JourneySegment {
 		private:
 			const Trip& trip;
@@ -48,7 +48,7 @@ namespace Timetables {
 
 			inline void AddToJourney(const JourneySegment& js) { journeySegments.push_back(js); }
 			inline void SetNewArrivalAtTarget(const DateTime& newArrival) { (journeySegments.end() - 1)->SetNewArrivalAtTarget(newArrival); }
-		};		
+		};
 	}
 
 	namespace Algorithms {
@@ -57,7 +57,7 @@ namespace Timetables {
 			const Timetables::Structures::Station& source;
 			const Timetables::Structures::Station& target;
 			const Timetables::Structures::DateTime& earliestDeparture;
-			const std::size_t transfers;
+			const std::size_t maxTransfers;
 			const std::size_t count;
 
 			std::vector<Timetables::Structures::Journey> fastestJourneys;
@@ -71,13 +71,15 @@ namespace Timetables {
 			void AccumulateRoutes();
 			void TraverseEachRoute();
 			void LookAtFootpaths();
-			std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime> 
+			void ObtainJourney(const Timetables::Structures::DateTime& departure);
+
+			std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
 				FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, const Timetables::Structures::Stop& stop);
 		public:
-			Router(const Timetables::Structures::DataFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::DateTime& earliestDeparture, const std::size_t count, const std::size_t transfers) : 
-				transfers(transfers), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}
-			
-			void ObtainJourney();
+			Router(const Timetables::Structures::DataFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::DateTime& earliestDeparture, const std::size_t count, const std::size_t transfers) :
+				maxTransfers(transfers), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}
+
+			void ObtainJourneys();
 
 			const std::vector<Timetables::Structures::Journey>& ShowJourneys() const { return fastestJourneys; }
 		};

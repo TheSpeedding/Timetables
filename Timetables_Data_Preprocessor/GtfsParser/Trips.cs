@@ -32,9 +32,13 @@ namespace Timetables.Preprocessor
             /// Route for the trip.
             /// </summary>
             public Routes.Route Route { get; internal set; }
+			/// <summary>
+			/// Relative departure time from the first stop. Seconds since midnight.
+			/// </summary>
+			public int DepartureTime { get; internal set; }
             public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";";
 
-            public int CompareTo(Trip other) => StopTimes[0].DepartureTime.CompareTo(other.StopTimes[0].DepartureTime);
+			public int CompareTo(Trip other) => DepartureTime.CompareTo(other.DepartureTime);
 
             public Trip(int id, string headsign, RoutesInfo.RouteInfo routeInfo, Calendar.Service service)
             {

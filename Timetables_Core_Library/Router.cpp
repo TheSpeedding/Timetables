@@ -243,8 +243,29 @@ std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
 	return make_pair(nullptr, DateTime(0));
 }
 
-void Timetables::Algorithms::Router::ObtainJourney() {
-	
+void Timetables::Algorithms::Router::ObtainJourneys() {
+
+	if (fastestJourneys.size() == 0)
+		ObtainJourney(earliestDeparture);
+
+	// We tried to search a journey but no journey found.
+
+	if (fastestJourneys.size() == 0)
+		throw JourneyNotFoundException(source.Name(), target.Name());
+
+	for (int i = 1; i < count; i++)
+		ObtainJourney((fastestJourneys.cend() - 1)->ArrivalTime().AddSeconds(1));
+
+}
+
+void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures::DateTime& departure) {
+
+	labels.clear();
+	tempLabels.clear();
+	markedStops.clear();
+	activeRoutes.clear();
+	journeys.clear();
+
 	labels.push_back(unordered_map<const Stop*, DateTime>());
 
 	journeys.push_back(unordered_map<const Stop*, Journey>());
@@ -252,11 +273,11 @@ void Timetables::Algorithms::Router::ObtainJourney() {
 	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
 
 	for (auto&& stop : source.ChildStops()) {
-		labels.at(0).insert(make_pair(stop, earliestDeparture)); // 4th row of pseudocode.
+		labels.at(0).insert(make_pair(stop, departure)); // 4th row of pseudocode.
 		markedStops.insert(stop); // 5th row of pseudocode.
 	}
 
-	for (size_t k = 1; markedStops.size() > 0 && k <= transfers; k++) { // 6th && 28th && 29th row of pseudocode.
+	for (size_t k = 1; markedStops.size() > 0 && k <= maxTransfers; k++) { // 6th && 28th && 29th row of pseudocode.
 
 		labels.push_back(unordered_map<const Stop*, DateTime>());
 
@@ -268,6 +289,25 @@ void Timetables::Algorithms::Router::ObtainJourney() {
 
 	}
 
+	vector<Journey> tempJourneys;
+
+	for (size_t i = 0; i < maxTransfers && i < journeys.size(); i++)
+		for (auto&& stop : target.ChildStops()) {
+			
+			auto res = journeys[i].find(stop);
+
+			if (res != journeys[i].cend())
+				tempJourneys.push_back(res->second);
+
+		}
+
+	const Journey* fastestJourney = nullptr;
+
+	for (auto&& journey : tempJourneys)
+		if (fastestJourney == nullptr || fastestJourney->ArrivalTime() > journey.ArrivalTime())
+			fastestJourney = &journey;
+
+	fastestJourneys.push_back(move(*fastestJourney));
 }
 
 Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, const DateTime& arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {
