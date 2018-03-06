@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Trips : IEnumerable<KeyValuePair<string, Trips.Trip>>
+	/// <summary>
+	/// Abstract class for trips collecting information about trips.
+	/// </summary>
+	public abstract class Trips : IEnumerable<KeyValuePair<string, Trips.Trip>>
     {
         public class Trip : IComparable<Trip>
         {
@@ -36,10 +39,22 @@ namespace Timetables.Preprocessor
 			/// Relative departure time from the first stop. Seconds since midnight.
 			/// </summary>
 			public int DepartureTime { get; internal set; }
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Service.ID + ";" + Route.ID + ";" + Headsign + ";" + DepartureTime + ";";
-
+			/// <summary>
+			/// Trip ID, Service ID, Route ID, Departure Time.
+			/// </summary>
+            public override string ToString() => ID + ";" + Service.ID + ";" + Route.ID + ";" + DepartureTime + ";";
+			/// <summary>
+			/// Compares this instance to a specified Trip object and returns and indication of their relative values.
+			/// </summary>
+			/// <param name="other">Trip to compare.</param>
 			public int CompareTo(Trip other) => DepartureTime.CompareTo(other.DepartureTime);
-
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="id">Trip ID.</param>
+			/// <param name="headsign">Headsign.</param>
+			/// <param name="routeInfo">Route Info.</param>
+			/// <param name="service">Service.</param>
             public Trip(int id, string headsign, RoutesInfo.RouteInfo routeInfo, Calendar.Service service)
             {
                 StopTimes = new List<StopTimes.StopTime>();
@@ -60,28 +75,45 @@ namespace Timetables.Preprocessor
         /// Gets the total number of trip.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter trips)
+		/// <summary>
+		/// Sorts trips so that they are sorted ascending by their departure times.
+		/// </summary>
+		public void Sort()
+		{
+			List<Trip> sortedList = new List<Trip>(list.Values);
+			sortedList.Sort();
+
+			for (int i = 0; i < sortedList.Count; i++) // Change indices after sorting to load the data easily.
+				sortedList[i].ID = i;
+		}
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="trips">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter trips)
         {
-            List<Trip> sortedList = new List<Trip>(list.Values);
-            sortedList.Sort();
-
-            for (int i = 0; i < sortedList.Count; i++) // Change indices after sorting to load the data easily.
-                sortedList[i].ID = i;
-
             trips.WriteLine(Count);
-            foreach (var item in sortedList)
-                trips.Write(item);
+            foreach (var item in list)
+                trips.Write(item.Value);
             trips.Close();
             trips.Dispose();
         }
         public IEnumerator<KeyValuePair<string, Trip>> GetEnumerator() => list.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-    public sealed class GtfsTrips : Trips
-    {
-        public GtfsTrips(System.IO.StreamReader trips, Calendar services, RoutesInfo routesInfo)
+	/// <summary>
+	/// Class for trips with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsTrips : Trips
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="routesInfo">Routes Info.</param>
+		/// <param name="services">Services.</param>
+		/// <param name="trips">Trips.</param>
+		public GtfsTrips(System.IO.StreamReader trips, Calendar services, RoutesInfo routesInfo)
         {
-
             // Get order of field names.
             string[] fieldNames = trips.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();

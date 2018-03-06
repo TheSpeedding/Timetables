@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Calendar : IEnumerable<KeyValuePair<string, Calendar.Service>>
+	/// <summary>
+	/// Abstract class for calendar collecting information about services.
+	/// </summary>
+	public abstract class Calendar : IEnumerable<KeyValuePair<string, Calendar.Service>>
     {
         public class Service
         {
@@ -28,6 +31,9 @@ namespace Timetables.Preprocessor
 			/// List of extraordinary events.
 			/// </summary>
 			public List<Tuple<string, bool>> ExtraordinaryEvents { get; }
+			/// <summary>
+			/// Service ID, Mon, Tue, Thu, Wed, Fri, Sat, Sun, Valid Since, Valid Until.
+			/// </summary>
             public override string ToString()
             {
                 System.Text.StringBuilder result = new System.Text.StringBuilder();
@@ -44,6 +50,19 @@ namespace Timetables.Preprocessor
                 result.Append(";");
                 return result.ToString();
             }
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="id">Service ID.</param>
+			/// <param name="mon">Monday.</param>
+			/// <param name="tue">Tuesday.</param>
+			/// <param name="wed">Wednesday.</param>
+			/// <param name="thu">Thursday.</param>
+			/// <param name="fri">Friday.</param>
+			/// <param name="sat">Saturday.</param>
+			/// <param name="sun">Sunday.</param>
+			/// <param name="start">Valid Since.</param>
+			/// <param name="end">Valid Until.</param>
             public Service(int id, bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, string start, string end)
             {
 				ExtraordinaryEvents = new List<Tuple<string, bool>>();
@@ -64,7 +83,11 @@ namespace Timetables.Preprocessor
         /// Gets the total number of services.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter calendar)
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="calendar">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter calendar)
         {
             calendar.WriteLine(Count);
             foreach (var item in list)
@@ -82,14 +105,24 @@ namespace Timetables.Preprocessor
             foreach (var item in list)
                 if (item.Value.ValidUntil < min)
                     min = item.Value.ValidUntil;
-            return min;                        
-        }
+            return min;
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
 		public IEnumerator<KeyValuePair<string, Service>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
 	}
-    public sealed class GtfsCalendar : Calendar
-    {
-        public GtfsCalendar(System.IO.StreamReader calendar)
+	/// <summary>
+	/// Class for calendar with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsCalendar : Calendar
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="calendar">Calendar.</param>
+		public GtfsCalendar(System.IO.StreamReader calendar)
         {
             // Get order of field names.
             string[] fieldNames = calendar.ReadLine().Split(',');
@@ -127,10 +160,16 @@ namespace Timetables.Preprocessor
             }
             calendar.Dispose();
         }
-    }
-    public abstract class CalendarDates
-    {
-        public class ExtraordinaryEvent
+	}
+	/// <summary>
+	/// Abstract class for calendar information about extraordinary events in transport.
+	/// </summary>
+	public abstract class CalendarDates
+	{
+		/// <summary>
+		/// Collects information about one extraordinary event.
+		/// </summary>
+		public class ExtraordinaryEvent
         {
             /// <summary>
             /// Reference to the service that the extraordinary event belongs to.
@@ -144,7 +183,16 @@ namespace Timetables.Preprocessor
             /// The type of exception format. True means the service operation was added in this date. False symbolizes removal.
             /// </summary>
             public bool Type { get; }
+			/// <summary>
+			/// Service ID, Date, Type Of Event.
+			/// </summary>
             public override string ToString() => Service.ID + ";" + Date + ";" + (Type ? "1" : "0") + ";";
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="service">Service.</param>
+			/// <param name="date">Date.</param>
+			/// <param name="type">Type Of Event.</param>
             public ExtraordinaryEvent(Calendar.Service service, string date, bool type)
             {
                 Service = service;
@@ -157,7 +205,11 @@ namespace Timetables.Preprocessor
         /// Gets the total number of extraordinary events.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter calendarDates)
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="calendarDates">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter calendarDates)
         {
             calendarDates.WriteLine(Count);
             foreach (var item in list)
@@ -166,9 +218,17 @@ namespace Timetables.Preprocessor
             calendarDates.Dispose();
         }
     }
-    public sealed class GtfsCalendarDates : CalendarDates
+	/// <summary>
+	/// Class for extraordinary events with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsCalendarDates : CalendarDates
     {
-        public GtfsCalendarDates(System.IO.StreamReader calendarDates, Calendar calendar)
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="calendar">Calendar.</param>
+		/// <param name="calendarDates">Calendar Dates.</param>
+		public GtfsCalendarDates(System.IO.StreamReader calendarDates, Calendar calendar)
         {
             // Get order of field names.
             string[] fieldNames = calendarDates.ReadLine().Split(',');

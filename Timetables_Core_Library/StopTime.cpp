@@ -15,6 +15,6 @@ bool Timetables::Structures::StopTime::IsOperatingInDate(const DateTime& dateTim
 	return trip.Service().IsOperatingInDate(dateTime.AddDays((-1) * ((departure + trip.Departure()) / 86400)));
 }
 
-DateTime Timetables::Structures::StopTime::StartingDateForTrip(const DateTime & dateTime) const {
+DateTime Timetables::Structures::StopTime::StartingDateForTrip(const DateTime& dateTime) const {
 	return dateTime.AddDays((-1) * ((departure + trip.Departure()) / 86400)).Date();
 }

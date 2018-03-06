@@ -1,44 +1,37 @@
 #ifndef TRIP_HPP
 #define TRIP_HPP
 
-#include "Stops.hpp"
-#include "Utilities.hpp"
-#include "RoutesInfo.hpp"
-#include "Services.hpp"
-#include "StopTime.hpp"
-#include <string>
-#include <memory>
+#include "Stops.hpp" // Reference to the stops in SetTimetables method.
+#include "Routes.hpp" // Reference to the route in Trip class.
+#include "RoutesInfo.hpp" // Reference to the routes info in Trips class ctor.
+#include "Services.hpp" // Reference to the service in Trip class.
+#include "StopTime.hpp" // StopTime used as a data member in Trip class.
 
 namespace Timetables {
 	namespace Structures {
-		class Routes;
-		class Stops;
-		class StopTime;
 		class Trip {
 		private:
-			std::wstring headsign;
-			const RouteInfo& routeInfo;
-			const Service& service;
-			std::size_t departureTime;
-			std::vector<StopTime> stopTimes;
+			const Route& route; // Reference to the route serving this trip.
+			const Service& service; // Reference to the service that give us operating days for the trip.
+			std::size_t departureTime; // Departure from the first stop in the trip. Seconds since midnight.
+			std::vector<StopTime> stopTimes; // List of the stop times included in this trip.
 		public:
-			Trip(const RouteInfo& routeInfo, const Service& service, const std::wstring& headsign, std::size_t numberOfStopTimes, std::size_t departure) :
-				routeInfo(routeInfo), service(service), headsign(headsign), departureTime(departure) { stopTimes.reserve(numberOfStopTimes); }
+			Trip(const Service& service, const Route& route, std::size_t departure) :
+				service(service), departureTime(departure), route(route) { stopTimes.reserve(route.Stops().capacity()); }
 
 			inline const std::vector<StopTime>& StopTimes() const { return stopTimes; }
-			inline const RouteInfo& RouteInfo() const { return routeInfo; }
-			inline const std::wstring& Headsign() const { return headsign; }
+			inline const Route& Route() const { return route; }
 			inline const Service& Service() const { return service; }
 			inline const std::size_t Departure() const { return departureTime; }
-
+			
 			inline void AddToTrip(const StopTime& stopTime) { stopTimes.push_back(stopTime); }
 		};
 
 		class Trips {
 		private:
-			std::vector<Trip> list;
+			std::vector<Trip> list; // List of all the trips, index of the item is also identificator for the trip.
 		public:
-			Trips(std::wistream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services);
+			Trips(std::istream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services);
 
 			inline Trip& Get(std::size_t id) { return list.at(id); }
 			inline const std::size_t Count() const { return list.size(); }

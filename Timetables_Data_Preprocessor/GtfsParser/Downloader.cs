@@ -4,13 +4,21 @@ using System.Net;
 
 namespace Timetables.Preprocessor
 {
+	/// <summary>
+	/// Static class used for dealing with data stored in the internet.
+	/// </summary>
     public static class Downloader
     {
         private readonly static Uri defaultUrl = new Uri(@"http://opendata.iprpraha.cz/DPP/JR/jrdata.zip");
 
         [Flags]
         public enum DownloadState { OK = 0, UrlInvalidFormat = 2, ResourceFileNotFound = 4, NoInternetConnection = 8, DefaultDataDownloaded = 16, UnknownError = 32  }
-        public static DownloadState GetDataFeed(string path)
+		/// <summary>
+		/// Downloads and unzips data feed.
+		/// </summary>
+		/// <param name="path">Folder where the data should be extracted in.</param>
+		/// <returns>Return code.</returns>
+		public static DownloadState GetDataFeed(string path)
         {
             DownloadState state = DownloadState.OK;
 
@@ -24,19 +32,20 @@ namespace Timetables.Preprocessor
                     sr = new StreamReader("resource.txt");
                     url = new Uri(sr.ReadLine());
                 }
-                catch (FileNotFoundException)
+                catch (FileNotFoundException) // File with URL to the data source not found. Choosing default data source.
                 {
                     url = defaultUrl;
                     state = DownloadState.ResourceFileNotFound | DownloadState.DefaultDataDownloaded;
                 }
-                catch (UriFormatException)
+                catch (UriFormatException) // URL supplied in the file is invalid. Choosing default data source.
                 {
                     url = defaultUrl;
                     state = DownloadState.UrlInvalidFormat | DownloadState.DefaultDataDownloaded;
                 }
                 finally
                 {
-                    if (sr != null) sr.Dispose();
+                    if (sr != null)
+						sr.Dispose();
                 }
 
 
@@ -46,7 +55,7 @@ namespace Timetables.Preprocessor
                     {
                         client.DownloadFile(url, "data.zip");
                     }
-                    catch (WebException)
+                    catch (WebException) // Downloading of data unsuccessful. Missing internet connection?
                     {
                         state = DownloadState.NoInternetConnection;
                     }
@@ -61,7 +70,7 @@ namespace Timetables.Preprocessor
 
                 File.Delete("data.zip");
             }
-            catch (Exception)
+            catch (Exception) // We did our best but data were not successfully downloaded.
             {
                 state = DownloadState.UnknownError;
             }
@@ -69,6 +78,10 @@ namespace Timetables.Preprocessor
             return state;
         }
 
+		/// <summary>
+		/// Deletes given folder.
+		/// </summary>
+		/// <param name="path">Folder to delete.</param>
         public static void DeleteTrash(string path)
         {
             if (Directory.Exists(path))

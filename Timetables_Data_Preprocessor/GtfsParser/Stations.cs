@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Stations
+	/// <summary>
+	/// Abstract class for stations collecting information about stations.
+	/// </summary>
+	public abstract class Stations
     {
         public class Station
         {
@@ -15,7 +18,16 @@ namespace Timetables.Preprocessor
             /// Name of the station.
             /// </summary>
             public string Name { get; }
+			/// <summary>
+			/// Station ID, Name.
+			/// </summary>
+			/// <returns></returns>
             public override string ToString() => ID + ";" + Name + ";";
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="id">Station ID.</param>
+			/// <param name="name">Name.</param>
             public Station(int id, string name)
             {
                 ID = id;
@@ -33,7 +45,11 @@ namespace Timetables.Preprocessor
         /// Gets the total number of station.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter stations)
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="stations">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter stations)
         {
             stations.WriteLine(Count);
             foreach (var item in list)
@@ -42,9 +58,16 @@ namespace Timetables.Preprocessor
             stations.Dispose();
         }
     }
-    public sealed class GtfsStations : Stations
-    {
-        public GtfsStations(Stops stops)
+	/// <summary>
+	/// Class for stations with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsStations : Stations
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="stops">Stops</param>
+		public GtfsStations(Stops stops)
         {
             var flags = new Dictionary<string, Station>();
 

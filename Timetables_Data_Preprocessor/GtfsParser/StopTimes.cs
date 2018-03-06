@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class StopTimes
+	/// <summary>
+	/// Abstract class for stop times collecting information about stop times.
+	/// </summary>
+	public abstract class StopTimes
     {
         public class StopTime
         {
@@ -23,7 +26,17 @@ namespace Timetables.Preprocessor
             /// Stop that belong to the stop time.
             /// </summary>
             public Stops.Stop Stop { get; }
+			/// <summary>
+			/// Trip ID, Stop ID, Arrival Time, Departure Time.
+			/// </summary>
             public override string ToString() => Trip.ID + ";" + Stop.ID + ";" + ArrivalTime + ";" + DepartureTime + ";";
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="trip">Trip.</param>
+			/// <param name="arrival">Arrival.</param>
+			/// <param name="departure">Departure.</param>
+			/// <param name="stop">Stop.</param>
             public StopTime(Trips.Trip trip, int arrival, int departure, Stops.Stop stop)
             {
                 Trip = trip;
@@ -36,8 +49,12 @@ namespace Timetables.Preprocessor
         /// <summary>
         /// Gets the total number of stop times.
         /// </summary>
-        public int Count => list.Count;        
-        public void Write(System.IO.StreamWriter stopTimes)
+        public int Count => list.Count;
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="stopTimes">Stream that the data should be written in.</param>  
+		public void Write(System.IO.StreamWriter stopTimes)
         {
             stopTimes.WriteLine(Count);
             foreach (var item in list)
@@ -45,6 +62,11 @@ namespace Timetables.Preprocessor
             stopTimes.Close();
             stopTimes.Dispose();
         }
+		/// <summary>
+		/// Converts time in string format to seconds since midnight.
+		/// </summary>
+		/// <param name="time">String representation of time.</param>
+		/// <returns>Seconds since midnight.</returns>
 		protected int ConvertTimeToSecondsSinceMidnight(string time)
 		{
 			// Default format: HH:MM:SS or H:MM:SS
@@ -59,9 +81,18 @@ namespace Timetables.Preprocessor
 			return hours * 3600 + minutes * 60 + seconds;
 		}
     }
-    public sealed class GtfsStopTimes : StopTimes
-    {
-        public GtfsStopTimes(System.IO.StreamReader stopTimes, Trips trips, Stops stops)
+	/// <summary>
+	/// Class for stop times with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsStopTimes : StopTimes
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="stops">Stops.</param>
+		/// <param name="stopTimes">Stop Times.</param>
+		/// <param name="trips">Trip.</param>
+		public GtfsStopTimes(System.IO.StreamReader stopTimes, Trips trips, Stops stops)
         {
             // Get order of field names.
             string[] fieldNames = stopTimes.ReadLine().Split(',');

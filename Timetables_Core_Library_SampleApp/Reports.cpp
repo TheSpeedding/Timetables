@@ -115,7 +115,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				}
 
 				int color = 0;
-				switch (it->Trip().RouteInfo().Color()) {
+				switch (it->Trip().Route().Info().Color()) {
 				case 0x408000: color = 10; break;
 				case 0xFFFF00: color = 14; break;
 				case 0xFF0000: color = 12; break;
@@ -127,9 +127,9 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				SetConsoleTextAttribute(hConsole, color);
 
 
-				cout << "Board the line " << it->Trip().RouteInfo().ShortName() << " at " << it->DepartureFromSource() << " in ";
+				cout << "Board the line " << it->Trip().Route().Info().ShortName() << " at " << it->DepartureFromSource() << " in ";
 				wcout << it->IntermediateStops().cbegin()->second->Name() << " station going ahead to ";
-				wcout << it->Trip().Headsign() << L" station via following stops:" << endl;
+				wcout << it->Trip().Route().Headsign() << L" station via following stops:" << endl;
 
 				auto intStops = it->IntermediateStops();
 
@@ -137,7 +137,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 					wcout << L"  " << it1->second->Name(); cout << " with arrival at " << it->DepartureFromSource().AddSeconds(it1->first) << "." << endl;
 				}
 
-				cout << "Get off the line " << it->Trip().RouteInfo().ShortName() << " at " << it->ArrivalAtTarget() << " in ";
+				cout << "Get off the line " << it->Trip().Route().Info().ShortName() << " at " << it->ArrivalAtTarget() << " in ";
 				wcout << (it->IntermediateStops().cend() - 1)->second->Name() << " station." << endl << endl;
 
 				previousStop = (it->IntermediateStops().cend() - 1)->second;

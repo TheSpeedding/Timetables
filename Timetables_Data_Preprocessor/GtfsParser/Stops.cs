@@ -5,7 +5,10 @@ using System.Globalization;
 
 namespace Timetables.Preprocessor
 {
-    public abstract class Stops : IEnumerable<KeyValuePair<string, Stops.Stop>>
+	/// <summary>
+	/// Abstract class for routes collecting information about stops.
+	/// </summary>
+	public abstract class Stops : IEnumerable<KeyValuePair<string, Stops.Stop>>
     {
         public class Stop
         {
@@ -25,7 +28,17 @@ namespace Timetables.Preprocessor
             /// Reference to the parent station.
             /// </summary>
             public Stations.Station ParentStation { get; internal set; } 
+			/// <summary>
+			/// Stop ID, Name, Parent Station ID.
+			/// </summary>
             public override string ToString() => ID + ";" + Name + ";" + ParentStation.ID + ";";
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="id">Stop ID.</param>
+			/// <param name="name">Name.</param>
+			/// <param name="latitude">Latitude.</param>
+			/// <param name="longitude">Longitude.</param>
             public Stop(int id, string name, double latitude, double longitude)
             {
                 ID = id;
@@ -44,20 +57,34 @@ namespace Timetables.Preprocessor
         /// Gets the total number of stops.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter stops)
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="stops">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter stops)
         {
             stops.WriteLine(Count);
             foreach (var item in list)
                 stops.Write(item.Value);
             stops.Close();
             stops.Dispose();
-        }
-        public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-    public sealed class GtfsStops : Stops
-    {
-        public GtfsStops(System.IO.StreamReader stops)
+	/// <summary>
+	/// Class for stops with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsStops : Stops
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="stops">Stops.</param>
+		public GtfsStops(System.IO.StreamReader stops)
         {
 
             // Get order of field names.

@@ -30,8 +30,8 @@ namespace Timetables {
 				routesInfo(std::wifstream(path + "/routes_info.txt", std::ios::binary)),
 				stations(std::wifstream(path + "/stations.txt", std::ios::binary)),
 				stops(std::wifstream(path + "/stops.txt", std::ios::binary), stations),
-				routes(std::ifstream(path + "/routes.txt"), routesInfo),
-				trips(std::wifstream(path + "/trips.txt", std::ios::binary), routesInfo, routes, services) {
+				routes(std::wifstream(path + "/routes.txt", std::ios::binary), routesInfo),
+				trips(std::ifstream(path + "/trips.txt"), routesInfo, routes, services) {
 				stops.SetFootpaths(std::ifstream(path + "/footpaths.txt"));
 				trips.SetTimetables(std::ifstream(path + "/stop_times.txt"), stops);
 				routes.SetStopsForRoutes();

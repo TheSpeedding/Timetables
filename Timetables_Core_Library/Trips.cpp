@@ -9,33 +9,31 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::Trips::Trips(std::wistream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services) {
+Timetables::Structures::Trips::Trips(std::istream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services) {
 
 	trips.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
-	wstring token;
+	string token;
 	std::getline(trips, token); // Number of entries.
 
 	size_t size = stoi(token);
 
 	list.reserve(size);
 
-	array<wstring, 6> tokens;
+	array<string, 4> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: TripID, RouteInfoID, ServiceID, RouteID, Headsign, DepartureTime
+		// Entry format: TripID, ServiceID, RouteID, DepartureTime
 
-		for (size_t j = 0; j < 6; j++)
-			std::getline(trips, tokens[j], wchar_t(';'));
+		for (size_t j = 0; j < 4; j++)
+			std::getline(trips, tokens[j], ';');
+				
+		Service& service = services[stoi(tokens[1])];
 
-		RouteInfo& routeInfo = routesInfo[stoi(tokens[1])];
-		
-		Service& service = services[stoi(tokens[2])];
+		Route& route = routes[stoi(tokens[2])];
 
-		Route& route = routes[stoi(tokens[3])];
-
-		Trip t(routeInfo, service, tokens[4], route.Stops().capacity(), stoi(tokens[5]));
+		Trip t(service, route, stoi(tokens[3]));
 
 		list.push_back(move(t));
 

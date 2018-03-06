@@ -3,11 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
-{    
-    public abstract class RoutesInfo : IEnumerable<KeyValuePair<string, RoutesInfo.RouteInfo>>
-    {
-        public class RouteInfo
+{
+	/// <summary>
+	/// Abstract class for routes info collecting information about routes info.
+	/// </summary>
+	public abstract class RoutesInfo : IEnumerable<KeyValuePair<string, RoutesInfo.RouteInfo>>
+	{
+		/// <summary>
+		/// Collects information about one route info.
+		/// </summary>
+		public class RouteInfo
         {
+			/// <summary>
+			/// Type of the route.
+			/// </summary>
             public enum RouteType { Tram = 0, Subway = 1, Rail = 2, Bus = 3, Ship = 4, CableCar = 5, Gondola = 6, Funicular = 7 }
             /// <summary>
             /// ID of the route info.
@@ -29,7 +38,18 @@ namespace Timetables.Preprocessor
             /// Color in HEX format that represents the route.
             /// </summary>
             public string Color { get; }
+			/// <summary>
+			/// Route Info ID, Short Name, Long Name, Mean Of The Transport, Color.
+			/// </summary>
             public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color + ";";
+			/// <summary>
+			/// Initializes object.
+			/// </summary>
+			/// <param name="id">Route Info ID.</param>
+			/// <param name="shortName">Short Name.</param>
+			/// <param name="longName">Long Name.</param>
+			/// <param name="type">Mean Of The Transport.</param>
+			/// <param name="color">Color.</param>
             public RouteInfo(int id, string shortName, string longName, RouteType type, string color)
             {
                 ID = id;
@@ -77,20 +97,34 @@ namespace Timetables.Preprocessor
         /// Gets the total number of routes info.
         /// </summary>
         public int Count => list.Count;
-        public void Write(System.IO.StreamWriter routesInfo)
+		/// <summary>
+		/// Writes the data into given stream.
+		/// </summary>
+		/// <param name="routesInfo">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter routesInfo)
         {
             routesInfo.WriteLine(Count);
             foreach (var item in list)
                 routesInfo.Write(item.Value);
             routesInfo.Close();
             routesInfo.Dispose();
-        }
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
 		public IEnumerator<KeyValuePair<string, RouteInfo>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
 	}
-    public sealed class GtfsRoutesInfo : RoutesInfo
-    {
-        public GtfsRoutesInfo(System.IO.StreamReader routesInfo)
+	/// <summary>
+	/// Class for routes info with a specific parsing from GTFS format.
+	/// </summary>
+	public sealed class GtfsRoutesInfo : RoutesInfo
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		/// <param name="routesInfo">Routes Info.</param>
+		public GtfsRoutesInfo(System.IO.StreamReader routesInfo)
         {
             // Get order of field names.
             string[] fieldNames = routesInfo.ReadLine().Split(',');

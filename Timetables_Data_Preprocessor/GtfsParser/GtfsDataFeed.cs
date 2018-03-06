@@ -75,7 +75,9 @@ namespace Timetables.Preprocessor
                 Directory.Delete(path, true);
             Directory.CreateDirectory(path);
 
-            Trips.Write(new StreamWriter(path + "/trips.txt")); // This MUST come first, because of trip ID's reindexation.
+			Trips.Sort();
+
+            Trips.Write(new StreamWriter(path + "/trips.txt"));
             Calendar.Write(new StreamWriter(path + "/calendar.txt"));
             CalendarDates.Write(new StreamWriter(path + "/calendar_dates.txt"));
             RoutesInfo.Write(new StreamWriter(path + "/routes_info.txt"));

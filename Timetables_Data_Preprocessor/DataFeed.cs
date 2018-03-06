@@ -20,9 +20,14 @@ namespace Timetables.Preprocessor
         string ExpirationDate { get; }
         void CreateDataFeed(string path);
     }
-
+	/// <summary>
+	/// Static class including everything necessary for data feed generation.
+	/// </summary>
     public static class DataFeed
     {
+		/// <summary>
+		/// Downloads and creates data feed.
+		/// </summary>
         public static void GetAndTransformDataFeed<T>() where T : IDataFeed
         {
 			Downloader.GetDataFeed("temp_data/");
@@ -33,6 +38,9 @@ namespace Timetables.Preprocessor
 			
 			Downloader.DeleteTrash("temp_data/");
         }
+		/// <summary>
+		/// Checks if the data are present.
+		/// </summary>
         public static bool AreDataPresent => Directory.Exists("data") &&
             File.Exists("data/calendar.txt") && File.Exists("data/calendar_dates.txt") && File.Exists("data/expires.txt") &&
             File.Exists("data/footpaths.txt") && File.Exists("data/routes.txt") && File.Exists("data/routes_info.txt") &&

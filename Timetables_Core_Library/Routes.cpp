@@ -4,25 +4,25 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Routes::Routes(std::istream&& routes, RoutesInfo& routesInfo) {
+Timetables::Structures::Routes::Routes(std::wistream&& routes, RoutesInfo& routesInfo) {
 	
-	string token;
+	wstring token;
 	std::getline(routes, token); // Number of entries.
 
 	size_t size = stoi(token);
 
 	list.reserve(size);
 
-	array<string, 3> tokens;
+	array<wstring, 4> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: RouteID, RouteInfoID, NumberOfStopTimes
+		// Entry format: RouteID, RouteInfoID, NumberOfStopTimes, Headsign
 
-		for (size_t j = 0; j < 3; j++)
-			std::getline(routes, tokens[j], ';');
+		for (size_t j = 0; j < 4; j++)
+			std::getline(routes, tokens[j], wchar_t(';'));
 		
-		list.push_back(Route(routesInfo[size_t(stoi(tokens[1]))], stoi(tokens[2])));
+		list.push_back(Route(routesInfo[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[3]));
 
 	}
 }

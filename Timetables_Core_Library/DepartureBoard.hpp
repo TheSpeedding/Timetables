@@ -20,8 +20,8 @@ namespace Timetables {
 			Departure(const StopTime& stopTime, const DateTime& departure);
 
 			inline const DateTime& DepartureTime() const { return departure; }
-			inline const std::wstring& Headsign() const { return tripBegin->Trip().Headsign(); }
-			inline const RouteInfo& Line() const { return tripBegin->Trip().RouteInfo(); }
+			inline const std::wstring& Headsign() const { return tripBegin->Trip().Route().Headsign(); }
+			inline const RouteInfo& Line() const { return tripBegin->Trip().Route().Info(); }
 			inline const Stop& Stop() const { return tripBegin->Stop(); }
 			const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> FollowingStops() const;
 
