@@ -61,6 +61,8 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 		// Traverse the route from current stop.
 
+		const Stop* boardingStop = nullptr;
+
 		for (; nextStop != route.Stops().cend(); ++nextStop) { // 17th row of pseudocode.
 
 			// Can the label be improved in this round? Includes local and target pruning.
@@ -68,7 +70,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 			const Stop& currentStop = **nextStop;
 
 			if (currentTrip != nullptr) { // 18th row of pseudocode.
-
+				
 				const StopTime& st = *(currentTrip->StopTimes().cbegin() + (nextStop - route.Stops().cbegin()));
 
 				const DateTime& newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceTripBeginning()); // 18th row of pseudocode.
@@ -95,16 +97,18 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 					
 					if (journeys.size() == 2) {
 
-						JourneySegment segment(*currentTrip, newArrival, startingStop, currentStop);
+						JourneySegment segment(*currentTrip, newArrival, *boardingStop, currentStop);
+
+						(journeys.end() - 1)->erase(&currentStop);
 
 						(journeys.end() - 1)->insert(make_pair(&currentStop, Journey(move(segment))));
 					}
 
 					else {
 
-						Journey currentJourney((journeys.end() - 2)->find(&startingStop)->second);
+						Journey currentJourney((journeys.end() - 2)->find(boardingStop)->second);
 
-						JourneySegment segment(*currentTrip, newArrival, startingStop, currentStop);
+						JourneySegment segment(*currentTrip, newArrival, *boardingStop, currentStop);
 
 						currentJourney.AddToJourney(move(segment));
 
@@ -129,6 +133,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 					auto res = FindEarliestTrip(route, previousArrival->second, currentStop);
 					currentTrip = res.first; // 23rd row of pseudocode.
 					currentDateForTrip = move(res.second);
+					boardingStop = &currentStop; // We have just boarded the trip.
 				
 				}
 			}
@@ -143,6 +148,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 					auto res = FindEarliestTrip(route, previousArrival->second, currentStop);
 					currentTrip = res.first; // 23rd row of pseudocode.
 					currentDateForTrip = move(res.second);
+					boardingStop = &currentStop; // We have just boarded the trip.
 				}
 			}
 
@@ -160,7 +166,7 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 		for (auto&& footpath : stopA->Footpaths()) { // 25th row of pseudocode.
 
-			const int duration = footpath.first;
+			size_t duration = footpath.first;
 
 			const Stop* stopB = footpath.second;
 
@@ -186,14 +192,16 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 				throw runtime_error("Undefined state.");
 				
-			if ((arrivalTimeB == (labels.cend() - 1)->cend()) || min != arrivalTimeB->second) {
-				
+			if ((arrivalTimeB == (labels.cend() - 1)->cend()) && min != arrivalTimeB->second) {
+
 				(labels.end() - 1)->erase(stopB);
 
 				(labels.end() - 1)->insert(make_pair(stopB, min)); // 26th row of pseudocode.
-
-				Journey newJourney((journeys.cend() - 1)->find(stopA)->second); // The same journey, added just some footpath -> arrival time increased.
 				
+				Journey newJourney((journeys.cend() - 1)->find(stopA)->second); // The same journey, added just some footpath -> arrival time increased.
+
+				(journeys.end() - 1)->erase(stopB);
+
 				(journeys.end() - 1)->insert(make_pair(stopB, newJourney)); 
 
 			}
@@ -308,7 +316,8 @@ void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures:
 		if (fastestJourney == nullptr || fastestJourney->ArrivalTime() > journey.ArrivalTime())
 			fastestJourney = &journey;
 
-	fastestJourneys.push_back(move(*fastestJourney));
+	if (fastestJourney != nullptr)
+		fastestJourneys.push_back(move(*fastestJourney));
 }
 
 Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, const DateTime& arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {

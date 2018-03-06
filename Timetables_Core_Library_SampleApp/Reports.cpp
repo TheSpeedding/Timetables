@@ -74,7 +74,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	cout << endl << DateTime::Now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L".";
+	cout << endl << DateTime::Now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 	try {
 		Router r(feed, A, B, dateTime, count, maxTransfers);
@@ -83,7 +83,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 		SetConsoleTextAttribute(hConsole, 7);
 
-		cout << endl << DateTime::Now() << " : Ending journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
+		cout << DateTime::Now() << " : Ending journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 
 		for (auto&& journey : journeys) {
@@ -95,7 +95,6 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 			cout << " and approaching target station at " << journey.ArrivalTime() << "." << endl << endl;
 
 			const Stop* previousStop = nullptr;
-			const DateTime* previousArrival = nullptr;
 
 			for (auto it = journey.JourneySegments().cbegin(); it != journey.JourneySegments().cend(); ++it) {
 
@@ -105,9 +104,9 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 						SetConsoleTextAttribute(hConsole, 15);
 						
-						auto omg = find_if(previousStop->Footpaths().cbegin(), previousStop->Footpaths().cend(), [=](pair<size_t, const Stop*> pair) { return pair.second == it->IntermediateStops().cbegin()->second; });
+						auto transfer = find_if(previousStop->Footpaths().cbegin(), previousStop->Footpaths().cend(), [=](pair<size_t, const Stop*> pair) { return pair.second == it->IntermediateStops().cbegin()->second; });
 
-						cout << "Transfer " << omg->first / 60 << " minutes.";
+						cout << "Transfer " << transfer->first / 60 << " minutes and " << transfer->first % 60 << " seconds.";
 
 						cout << endl << endl;
 
@@ -142,7 +141,6 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				wcout << (it->IntermediateStops().cend() - 1)->second->Name() << " station." << endl << endl;
 
 				previousStop = (it->IntermediateStops().cend() - 1)->second;
-				previousArrival = &it->ArrivalAtTarget();
 			}
 
 		}
