@@ -29,9 +29,9 @@ namespace Timetables.Preprocessor
             /// </summary>
             public Stations.Station ParentStation { get; internal set; } 
 			/// <summary>
-			/// Stop ID, Name, Parent Station ID.
+			/// Stop ID, Parent Station ID.
 			/// </summary>
-            public override string ToString() => ID + ";" + Name + ";" + ParentStation.ID + ";";
+            public override string ToString() => ID + ";" + ParentStation.ID + ";";
 			/// <summary>
 			/// Initializes object.
 			/// </summary>

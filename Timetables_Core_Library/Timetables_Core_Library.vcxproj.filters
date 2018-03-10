@@ -98,8 +98,5 @@
     <ClCompile Include="Stations.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
-    <ClCompile Include="StopTime.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,8 +4,16 @@ using Timetables.Preprocessor;
 
 namespace Timetables.Xml
 {
+	/// <summary>
+	/// Everything necessary to create XML database.
+	/// </summary>
     public static class XmlOutput
     {
+		/// <summary>
+		/// Create XML file from data according to given DTD.
+		/// </summary>
+		/// <param name="data">Data from which the XML file should be created.</param>
+		/// <param name="file">Name of the new XML file.</param>
         public static void CreateXml(this IDataFeed data, string file)
         {
             StreamWriter sw = new StreamWriter(file);
@@ -35,6 +43,9 @@ namespace Timetables.Xml
             sw.Close();
             sw.Dispose();
         }
+		/// <summary>
+		/// Creates XML file and checks its valadity against supplied DTD.
+		/// </summary>
         public static void GetAndTransformDataFeedToXml<T>() where T : IDataFeed
         {
             Downloader.GetDataFeed("temp_data/");

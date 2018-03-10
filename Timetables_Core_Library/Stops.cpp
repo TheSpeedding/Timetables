@@ -9,47 +9,46 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Stops::Stops(std::wistream&& stops, Stations& stations) {
+Timetables::Structures::Stops::Stops(std::wistream&& stops, std::istream&& footpaths, Stations& stations) {
 	stops.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
-	wstring token;
-	std::getline(stops, token); // Number of entries.
+	wstring wtoken;
+	std::getline(stops, wtoken); // Number of entries.
 
-	size_t size = stoi(token);
+	size_t size = stoi(wtoken);
 
 	list.reserve(size);
 
-	array<wstring, 3> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: StopID, Name, ParentStationID
+		// Entry format: StopID, ParentStationID
 
-		for (size_t j = 0; j < 3; j++)
-			std::getline(stops, tokens[j], wchar_t(';'));
+		for (size_t j = 0; j < 2; j++)
+			std::getline(stops, wtoken, wchar_t(';'));
 
-		Station& station = stations[stoi(tokens[2])];
+		Station& station = stations[stoi(wtoken)];
 
-		Stop s(tokens[1], station);
+		Stop s(station);
 		
 		list.push_back(move(s));
 
 		station.AddChildStop(*(list.cend() - 1));
 
 	}
-}
 
-void Timetables::Structures::Stops::SetFootpaths(std::istream&& footpaths) {
+	// Sets footpaths.
+
 	string token;
 	std::getline(footpaths, token); // Number of entries.
 
 	size_t size = stoi(token);
-	
+
 	array<string, 3> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: Duration, FirstStop, SecondStop
+										// Entry format: Duration, FirstStop, SecondStop
 
 		for (size_t j = 0; j < 3; j++)
 			std::getline(footpaths, tokens[j], ';');

@@ -37,7 +37,7 @@
 
 <!ELEMENT routes-info (route-info*)>
 
-<!ELEMENT route-info (#PCDATA|label|mean-of-transport|color)*> <!-- Just to fulfill the task, otherwise I would create new tag "description" instead of using #PCDATA. I think it would be more usable in some database then. -->
+<!ELEMENT route-info (#PCDATA|label|mean-of-transport|color)*>
 <!ATTLIST route-info
 		routeInfoId ID #REQUIRED>
 
