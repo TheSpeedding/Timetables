@@ -3,12 +3,15 @@
 #include "StopTime.hpp"
 #include <algorithm>
 #include <array>
+#include <codecvt>
 
 using namespace std;
 using namespace Timetables::Structures;
 
 Timetables::Structures::Routes::Routes(std::wistream&& routes, RoutesInfo& routesInfo) {
 	
+	routes.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+
 	wstring token;
 	std::getline(routes, token); // Number of entries.
 

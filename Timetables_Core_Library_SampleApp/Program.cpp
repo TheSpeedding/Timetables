@@ -31,6 +31,6 @@ int main(int argc, char** argv) {
 
 	//GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 3);
 
-	GetJourneysReport(feed, L"Roztyly", L"Dejvická", DateTime::Now(), 3, 3);
+	GetJourneysReport(feed, L"Hlavní nádraží", L"Nemocnice Motol", DateTime::Now(), 1, 3);
 	
 }

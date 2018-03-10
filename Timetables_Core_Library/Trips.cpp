@@ -11,9 +11,7 @@ using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
 Timetables::Structures::Trips::Trips(std::istream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services) {
-
-	trips.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
-
+	
 	string token;
 	std::getline(trips, token); // Number of entries.
 
