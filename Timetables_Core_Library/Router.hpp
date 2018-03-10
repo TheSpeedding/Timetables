@@ -6,11 +6,8 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include "StopTime.hpp"
 #include "DataFeed.hpp"
-#include "Routes.hpp"
-#include "Utilities.hpp"
-#include "Stops.hpp"
-#include "Trips.hpp"
 
 namespace Timetables {
 	namespace Structures {

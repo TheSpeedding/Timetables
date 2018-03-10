@@ -67,7 +67,7 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 		list.push_back(move(s));
 
 	}
-
+	
 	// Let's process the file with extraordinary events.
 
 	std::getline(calendarDates, token); // Number of entries.

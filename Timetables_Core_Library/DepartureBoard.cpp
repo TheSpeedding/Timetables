@@ -1,6 +1,7 @@
 #include "Stops.hpp"
 #include "Trips.hpp"
 #include "DataFeed.hpp"
+#include "StopTime.hpp"
 #include "Exceptions.hpp"
 #include <vector>
 #include <string>

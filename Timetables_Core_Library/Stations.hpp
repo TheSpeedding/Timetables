@@ -4,11 +4,13 @@
 #include <vector> // Data sctructure for stations.
 #include <string> // A need for names.
 #include <algorithm> // Required for finding the station.
-#include "Stops.hpp" // References to child stops from station.
+// #include "Stops.hpp" // References to child stops from station.
 #include "Exceptions.hpp" // StopNotFoundException in stations find method.
 
 namespace Timetables {
 	namespace Structures {
+		class Stop; // Forward declaration.
+
 		// Class collecting information about station.
 		class Station {
 		private:

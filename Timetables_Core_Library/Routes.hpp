@@ -1,14 +1,17 @@
 #ifndef ROUTES_HPP
 #define ROUTES_HPP
 
-#include "Stops.hpp" // Reference to stops that the route goes through.
+// #include "Stops.hpp" // Reference to stops that the route goes through.
 #include "RoutesInfo.hpp" // Reference to the route info from route class.
-#include "Trips.hpp" // Pointers to the trips serving the route.
+// #include "Trips.hpp" // Pointers to the trips serving the route.
 #include <vector> // Main data structure in this header file.
 #include <algorithm> // Usage of find on the vector.
 
 namespace Timetables {
 	namespace Structures {
+		class Trip; // Forward declaration.
+		class Stop; // Forward declaration.
+
 		// Class collecting information about route.
 		class Route {
 		private:

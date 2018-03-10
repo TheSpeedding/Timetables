@@ -5,13 +5,16 @@
 
 #include "Stations.hpp" // Reference to the parent station in stop.
 #include "Routes.hpp" // Reference to the route in stop (throughgoing routes).
-#include "StopTime.hpp" // Reference to stop times in stop (departures).
+// #include "StopTime.hpp" // Reference to stop times in stop (departures).
 #include <string> // String is a need for names.
 #include <vector> // Data structure for stops.
 #include <map> // Data structure for departures and footpaths.
 
 namespace Timetables {
 	namespace Structures {
+		class Station; // Forward declaration.
+		class StopTime; // Forward declaration.
+
 		// Class collecting information about stop.
 		class Stop {
 		private:
@@ -38,8 +41,8 @@ namespace Timetables {
 		private:
 			std::vector<Stop> list; // List of all the stops, index of the item is also identificator for the stop.
 		public:
-			Stops(std::wistream&& stops, std::istream&& footpaths, Stations& stations);
-						
+			Stops(std::istream&& stops, std::istream&& footpaths, Stations& stations);
+			
 			inline Stop& Get(std::size_t id) { return list.at(id); } // Gets the stop with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline Stop& operator[](std::size_t id) { return list[id]; } // Gets the stop with given id.

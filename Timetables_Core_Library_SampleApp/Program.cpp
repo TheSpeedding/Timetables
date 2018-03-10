@@ -31,6 +31,6 @@ int main(int argc, char** argv) {
 
 	//GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 3);
 
-	GetJourneysReport(feed, L"Novodvorská", L"Obchodní centrum Èakovice", DateTime::Now().AddHours(1), 1, 5);
+	GetJourneysReport(feed, L"Roztyly", L"Dejvická", DateTime::Now(), 3, 3);
 	
 }

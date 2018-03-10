@@ -1,12 +1,9 @@
 #ifndef DEPARTURE_BOARD_HPP
 #define DEPARTURE_BOARD_HPP
 
-#include <vector>
-#include <string>
-#include "Trips.hpp"
 #include "DataFeed.hpp"
-#include "Utilities.hpp"
-#include "Stops.hpp"
+#include "Trips.hpp"
+#include "StopTime.hpp"
 
 namespace Timetables {
 	namespace Structures {

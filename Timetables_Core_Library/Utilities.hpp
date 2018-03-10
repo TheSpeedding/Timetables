@@ -5,7 +5,6 @@
 #include <string>
 #include <exception>
 #include <ctime>
-#include <chrono>
 
 namespace Timetables {
 	namespace Structures {

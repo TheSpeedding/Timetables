@@ -1,5 +1,8 @@
 #include "Routes.hpp"
+#include "Trips.hpp"
+#include "StopTime.hpp"
 #include <algorithm>
+#include <array>
 
 using namespace std;
 using namespace Timetables::Structures;
@@ -25,6 +28,7 @@ Timetables::Structures::Routes::Routes(std::wistream&& routes, RoutesInfo& route
 		list.push_back(Route(routesInfo[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[3]));
 
 	}
+
 }
 
 void Timetables::Structures::Routes::SetStopsForRoutes() {

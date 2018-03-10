@@ -1,4 +1,6 @@
 #include "Stops.hpp"
+#include "Trips.hpp"
+#include "StopTime.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -9,13 +11,12 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Stops::Stops(std::wistream&& stops, std::istream&& footpaths, Stations& stations) {
-	stops.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+Timetables::Structures::Stops::Stops(std::istream&& stops, std::istream&& footpaths, Stations& stations) {
 
-	wstring wtoken;
-	std::getline(stops, wtoken); // Number of entries.
+	string token;
+	std::getline(stops, token); // Number of entries.
 
-	size_t size = stoi(wtoken);
+	size_t size = stoi(token);
 
 	list.reserve(size);
 
@@ -25,9 +26,9 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops, std::istream&& footp
 		// Entry format: StopID, ParentStationID
 
 		for (size_t j = 0; j < 2; j++)
-			std::getline(stops, wtoken, wchar_t(';'));
+			std::getline(stops, token, ';');
 
-		Station& station = stations[stoi(wtoken)];
+		Station& station = stations[stoi(token)];
 
 		Stop s(station);
 		
@@ -39,10 +40,9 @@ Timetables::Structures::Stops::Stops(std::wistream&& stops, std::istream&& footp
 
 	// Sets footpaths.
 
-	string token;
 	std::getline(footpaths, token); // Number of entries.
 
-	size_t size = stoi(token);
+	size = stoi(token);
 
 	array<string, 3> tokens;
 

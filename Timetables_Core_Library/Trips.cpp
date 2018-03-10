@@ -1,5 +1,6 @@
 #include "Trips.hpp"
 #include "Exceptions.hpp"
+#include "StopTime.hpp"
 #include <string>
 #include <array>
 #include <algorithm>

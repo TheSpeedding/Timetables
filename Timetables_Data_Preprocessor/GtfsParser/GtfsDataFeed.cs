@@ -59,7 +59,7 @@ namespace Timetables.Preprocessor
             RoutesInfo = new GtfsRoutesInfo(new StreamReader(path + "/routes.txt"));
             Stops = new GtfsStops(new StreamReader(path + "/stops.txt"));
             Stations = new GtfsStations(Stops);
-            Footpaths = new GtfsFootpaths(Stops); // Since walking time is an optional field in GTFS format, we will compute it on our own everytime - even though the data for transfers exists.
+            Footpaths = new GtfsFootpaths(Stops); // Since walking time is an optional field in GTFS format, we will compute it on our own everytime - even though the data for transfers may exist.
             Trips = new GtfsTrips(new StreamReader(path + "/trips.txt"), Calendar, RoutesInfo);
             StopTimes = new GtfsStopTimes(new StreamReader(path + "/stop_times.txt"), Trips, Stops);
             Routes = new GtfsRoutes(Trips, RoutesInfo);
@@ -74,10 +74,9 @@ namespace Timetables.Preprocessor
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
             Directory.CreateDirectory(path);
+			
+            Trips.Write(new StreamWriter(path + "/trips.txt")); // This MUST come first because of trip reindexation (based on sorting).
 
-			Trips.Sort();
-
-            Trips.Write(new StreamWriter(path + "/trips.txt"));
             Calendar.Write(new StreamWriter(path + "/calendar.txt"));
             CalendarDates.Write(new StreamWriter(path + "/calendar_dates.txt"));
             RoutesInfo.Write(new StreamWriter(path + "/routes_info.txt"));

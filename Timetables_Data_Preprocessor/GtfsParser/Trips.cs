@@ -76,25 +76,22 @@ namespace Timetables.Preprocessor
         /// </summary>
         public int Count => list.Count;
 		/// <summary>
-		/// Sorts trips so that they are sorted ascending by their departure times.
+		/// Writes the data into given stream.
 		/// </summary>
-		public void Sort()
+		/// <param name="trips">Stream that the data should be written in.</param>
+		public void Write(System.IO.StreamWriter trips)
 		{
+			trips.WriteLine(Count);
+
 			List<Trip> sortedList = new List<Trip>(list.Values);
 			sortedList.Sort();
 
 			for (int i = 0; i < sortedList.Count; i++) // Change indices after sorting to load the data easily.
 				sortedList[i].ID = i;
-		}
-		/// <summary>
-		/// Writes the data into given stream.
-		/// </summary>
-		/// <param name="trips">Stream that the data should be written in.</param>
-		public void Write(System.IO.StreamWriter trips)
-        {
-            trips.WriteLine(Count);
-            foreach (var item in list)
-                trips.Write(item.Value);
+
+			foreach (var item in sortedList)
+				trips.Write(item);			
+                
             trips.Close();
             trips.Dispose();
         }

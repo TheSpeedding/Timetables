@@ -75,7 +75,7 @@ namespace Timetables.Preprocessor
             {
 				// Since this application is optimized for Prague, we have to union stations of type Florenc, Florenc - B, Florenc - C. Otherwise they would become three separate stations.
 
-				string name = stop.Value.Name[stop.Value.Name.Length - 3] == '-' ? stop.Value.Name.Substring(0, stop.Value.Name.Length - 4) : stop.Value.Name;
+				string name = stop.Value.Name.Length > 4 && stop.Value.Name[stop.Value.Name.Length - 3] == '-' ? stop.Value.Name.Substring(0, stop.Value.Name.Length - 4) : stop.Value.Name;
 
                 if (!flags.ContainsKey(name))
                 {
@@ -83,6 +83,7 @@ namespace Timetables.Preprocessor
                     list.Add(station);
                     flags.Add(name, station);
                 }
+
                 stop.Value.ParentStation = flags[name];
             }
         }
