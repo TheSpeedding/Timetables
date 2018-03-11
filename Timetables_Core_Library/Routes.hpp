@@ -45,6 +45,7 @@ namespace Timetables {
 			Routes(std::wistream&& routes, RoutesInfo& routesInfo);
 
 			inline Route& Get(std::size_t id) { return list.at(id); } // Gets the route with given id.
+			inline const Route& Get(std::size_t id) const { return list.at(id); } // Gets the route with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline Route& operator[](std::size_t id) { return list[id]; } // Gets the route with given id.
 

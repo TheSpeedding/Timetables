@@ -33,6 +33,7 @@ namespace Timetables {
 			RoutesInfo(std::wistream&& routesInfo);
 
 			inline RouteInfo& Get(std::size_t id) { return list.at(id); } // Gets the route info with given id.
+			inline const RouteInfo& Get(std::size_t id) const { return list.at(id); } // Gets the route info with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline RouteInfo& operator[](std::size_t id) { return list[id]; } // Gets the route info with given id.
 		};

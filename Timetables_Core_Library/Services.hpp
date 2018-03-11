@@ -34,6 +34,7 @@ namespace Timetables {
 			Services(std::istream&& calendar, std::istream&& calendarDates);
 
 			inline Service& Get(std::size_t id) { return list.at(id); } // Gets the service with given id.
+			inline const Service& Get(std::size_t id) const { return list.at(id); } // Gets the service with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline Service& operator[](std::size_t id) { return list[id]; } // Gets the service with given id.
 		};

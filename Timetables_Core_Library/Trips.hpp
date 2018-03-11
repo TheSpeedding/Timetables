@@ -39,6 +39,7 @@ namespace Timetables {
 			Trips(std::istream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services);
 
 			inline Trip& Get(std::size_t id) { return list.at(id); } // Gets the trip with given id.
+			inline const Trip& Get(std::size_t id) const { return list.at(id); } // Gets the trip with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline Trip& operator[](std::size_t id) { return list[id]; } // Gets the trip with given id.
 

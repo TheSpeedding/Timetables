@@ -42,8 +42,9 @@ namespace Timetables {
 			std::vector<Stop> list; // List of all the stops, index of the item is also identificator for the stop.
 		public:
 			Stops(std::istream&& stops, std::istream&& footpaths, Stations& stations);
-			
+
 			inline Stop& Get(std::size_t id) { return list.at(id); } // Gets the stop with given id.
+			inline const Stop& Get(std::size_t id) const { return list.at(id); } // Gets the stop with given id.
 			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
 			inline Stop& operator[](std::size_t id) { return list[id]; } // Gets the stop with given id.
 
