@@ -26,7 +26,7 @@ namespace Timetables {
 			inline const Trip& Trip() const { return trip; }
 			inline const Stop& SourceStop() const { return sourceStop->Stop(); }
 			inline const Stop& TargetStop() const { return targetStop->Stop(); }
-			inline std::time_t DepartureFromSource() const { return DateTime::AddSeconds(arrival, (-1) * targetStop->Arrival() - sourceStop->Departure()); }
+			inline std::time_t DepartureFromSource() const { return DateTime::AddSeconds(arrival, (-1) * (targetStop->Arrival() - sourceStop->Departure())); }
 			inline std::time_t ArrivalAtTarget() const { return arrival; }
 			const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> IntermediateStops() const;
 		};
@@ -34,16 +34,19 @@ namespace Timetables {
 		class Journey {
 		private:
 			std::vector<JourneySegment> journeySegments;
+			std::vector<std::size_t> transfers; // There is a footpath between every two journey segments.
 		public:
 			Journey(const JourneySegment& js) { AddToJourney(js); }
 
 			inline const std::time_t DepartureTime() const { return journeySegments.cbegin()->DepartureFromSource(); }
-			inline const std::time_t ArrivalTime() const { return (journeySegments.cend() - 1)->ArrivalAtTarget(); }
+			inline const std::time_t ArrivalTime() const { return (journeySegments.cend() - 1)->ArrivalAtTarget() + (journeySegments.size() == transfers.size() ? *(transfers.cend() - 1) : 0); }
 			inline const int TotalDuration() const { return ArrivalTime() - DepartureTime(); }
 
 			inline const std::vector<JourneySegment>& JourneySegments() const { return journeySegments; }
+			inline const std::vector<std::size_t>& Transfers() const { return transfers; }
 
 			inline void AddToJourney(const JourneySegment& js) { journeySegments.push_back(js); }
+			inline void AddFootpath(std::size_t duration) { transfers.push_back(duration); }
 		};
 	}
 
@@ -70,7 +73,7 @@ namespace Timetables {
 			void ObtainJourney(std::time_t departure);
 
 			std::pair<const Timetables::Structures::Trip*, std::time_t>
-				FindEarliestTrip(const Timetables::Structures::Route& route, std::time_t arrival, const Timetables::Structures::Stop& stop);
+				FindEarliestTrip(const Timetables::Structures::Route& route, std::time_t arrival, std::size_t stopIndex);
 		public:
 			Router(const Timetables::Structures::DataFeed& feed, const std::wstring& s, const std::wstring& t, std::time_t earliestDeparture, const std::size_t count, const std::size_t transfers) :
 				maxTransfers(transfers), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}

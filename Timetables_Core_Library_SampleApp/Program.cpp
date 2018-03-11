@@ -25,7 +25,7 @@ namespace Timetables {
 		}
 
 		void CpuTimeMicroBenchmark(const DataFeed& feed) {
-			for (int i = 0; i < 10000; i++) {
+			for (int i = 0; i < 1000; i++) {
 				try {
 					Router r(feed, RandomStation(feed), RandomStation(feed), DateTime::Now(), 1, 10);
 					r.ObtainJourneys();
@@ -64,5 +64,7 @@ int main(int argc, char** argv) {
 
 	// GetDepartureBoardReport(feed, L"Roztyly", DateTime(23, 50, 00, 28, 02, 2018), 3);
 	
+	// CpuTimeMicroBenchmark(feed);
+
 	GetJourneysReport(feed, RandomStation(feed), RandomStation(feed), DateTime::Now(), 1, 6);
 }

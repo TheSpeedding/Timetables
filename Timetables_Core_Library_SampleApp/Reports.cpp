@@ -74,7 +74,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	cout << endl << DateTime::Now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
+	cout << endl << DateTime::ToString(DateTime::Now()) << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 	try {
 		Router r(feed, A, B, dateTime, count, maxTransfers);
@@ -96,22 +96,19 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 			const Stop* previousStop = nullptr;
 
+			auto itTransfers = journey.Transfers().cbegin();
+
 			for (auto it = journey.JourneySegments().cbegin(); it != journey.JourneySegments().cend(); ++it) {
 
-				if (it != journey.JourneySegments().cbegin()) { // Transfer.
+				if (it != journey.JourneySegments().cbegin() && it->IntermediateStops().cbegin()->second != previousStop) { // Transfer.
+					
+					SetConsoleTextAttribute(hConsole, 15);
 
-					if (previousStop != it->IntermediateStops().cbegin()->second) { // Not the same station. Transfer.
+					cout << "Transfer " << *itTransfers / 60 << " minutes and " << *itTransfers % 60 << " seconds.";
 
-						SetConsoleTextAttribute(hConsole, 15);
-						
-						auto transfer = find_if(previousStop->Footpaths().cbegin(), previousStop->Footpaths().cend(), [=](pair<size_t, const Stop*> pair) { return pair.second == it->IntermediateStops().cbegin()->second; });
+					cout << endl << endl;
 
-						cout << "Transfer " << transfer->first / 60 << " minutes and " << transfer->first % 60 << " seconds.";
-
-						cout << endl << endl;
-
-					}
-
+					itTransfers++;
 				}
 
 				int color = 0;
@@ -141,6 +138,16 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				wcout << (it->IntermediateStops().cend() - 1)->second->Name() << " station." << endl << endl;
 
 				previousStop = (it->IntermediateStops().cend() - 1)->second;
+			}
+
+			if (itTransfers != journey.Transfers().cend()) { // Transfer.
+
+				SetConsoleTextAttribute(hConsole, 15);
+
+				cout << "Transfer " << *itTransfers / 60 << " minutes and " << *itTransfers % 60 << " seconds.";
+
+				cout << endl << endl;
+
 			}
 
 		}
