@@ -88,6 +88,6 @@ void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes
 void Timetables::Structures::Stop::AddDeparture(const StopTime& stopTime) {
 	// We have to set new time because of the time relativity. That means departure of the trip + departure from given stoptime. 
 	// Plus we will normalize it. This serves only for departure boards.
-	DateTime dep = DateTime((stopTime.Trip().Departure() + stopTime.Departure()) % 86400);
+	time_t dep = (stopTime.Trip().Departure() + stopTime.Departure()) % 86400;
 	departures.insert(std::make_pair(dep, &stopTime)); 
 }

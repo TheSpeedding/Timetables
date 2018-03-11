@@ -19,7 +19,7 @@ namespace Timetables {
 		class Stop {
 		private:
 			const Station& parentStation; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same).
-			std::multimap<DateTime, const StopTime*> departures; // Sorted by departure times. Vector might be sufficient. TO-DO: Move departures to the station might (= will definitely) be better.
+			std::multimap<std::time_t, const StopTime*> departures; // Sorted by departure times. Vector might be sufficient. TO-DO: Move departures to the station might (= will definitely) be better.
 			std::multimap<std::size_t, const Stop*> footpaths; // Stops reachable in walking-distance (< 10 min.) from this stop.
 			std::vector<const Route*> throughgoingRoutes; // Routes that goes through this stop.
 		public:
@@ -27,7 +27,7 @@ namespace Timetables {
 
 			inline const Station& ParentStation() const { return parentStation; } // Parent station for this stop.
 			inline const std::wstring& Name() const { return parentStation.Name(); } // Name of this stop.
-			inline const std::multimap<DateTime, const StopTime*>& Departures() const { return departures; } // Departures from this stop.
+			inline const std::multimap<std::time_t, const StopTime*>& Departures() const { return departures; } // Departures from this stop.
 			inline const std::vector<const Route*>& ThroughgoingRoutes() const { return throughgoingRoutes; } // Routes that goes through this stop.
 			inline const std::multimap<std::size_t, const Stop*>& Footpaths() const { return footpaths; } // Stops reachable in walking-distance (< 10 min.) from this stop.
 

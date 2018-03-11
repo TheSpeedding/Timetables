@@ -48,13 +48,13 @@ namespace Timetables {
 
 int main(int argc, char** argv) {
 
-	cout << DateTime::Now() << " : Application has started." << endl;
+	cout << DateTime::ToString(DateTime::Now()) << " : Application has started." << endl;
 
-	cout << DateTime::Now() << " : Starting data init." << endl;
+	cout << DateTime::ToString(DateTime::Now()) << " : Starting data init." << endl;
 
 	DataFeed feed;
 
-	cout << DateTime::Now() << " : Ending data init." << endl;
+	cout << DateTime::ToString(DateTime::Now()) << " : Ending data init." << endl;
 
 	setlocale(LC_ALL, "");
 

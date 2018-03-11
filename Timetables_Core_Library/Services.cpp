@@ -5,7 +5,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Service::Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const DateTime& start, const DateTime& end) :
+Timetables::Structures::Service::Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, std::time_t start, std::time_t end) :
 	validSince(start), validUntil(end) {
 	operatingDays[0] = mon;
 	operatingDays[1] = tue;
@@ -16,7 +16,7 @@ Timetables::Structures::Service::Service(bool mon, bool tue, bool wed, bool thu,
 	operatingDays[6] = sun;
 }
 
-bool Timetables::Structures::Service::IsAddedInDate(const DateTime& dateTime) const {
+bool Timetables::Structures::Service::IsAddedInDate(std::time_t dateTime) const {
 	auto entry = exceptions.find(dateTime);
 	if (entry == exceptions.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
@@ -25,7 +25,7 @@ bool Timetables::Structures::Service::IsAddedInDate(const DateTime& dateTime) co
 	return false;
 }
 
-bool Timetables::Structures::Service::IsRemovedInDate(const DateTime& dateTime) const {
+bool Timetables::Structures::Service::IsRemovedInDate(std::time_t dateTime) const {
 	auto entry = exceptions.find(dateTime);
 	if (entry == exceptions.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
@@ -34,12 +34,11 @@ bool Timetables::Structures::Service::IsRemovedInDate(const DateTime& dateTime) 
 	return false;
 }
 
-bool Timetables::Structures::Service::IsOperatingInDate(const DateTime& dateTime) const {
+bool Timetables::Structures::Service::IsOperatingInDate(std::time_t dateTime) const {
 	if (dateTime < validSince || dateTime > validUntil) return false;
-	if (IsAddedInDate(dateTime.Date())) return true;
-	if (IsRemovedInDate(dateTime.Date())) return false;
-	size_t dayInWeek = dateTime.DayInWeek();
-	return IsOperatingOnDay(dayInWeek);
+	if (IsAddedInDate(DateTime::Date(dateTime))) return true;
+	if (IsRemovedInDate(DateTime::Date(dateTime))) return false;
+	return IsOperatingOnDay(DateTime::DayInWeek(dateTime));
 }
 
 Timetables::Structures::Services::Services(std::istream&& calendar, std::istream&& calendarDates) {
@@ -62,7 +61,7 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 
 		Service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
 			tokens[4] == "1" ? true : false, tokens[5] == "1" ? true : false, tokens[6] == "1" ? true : false,
-			tokens[7] == "1" ? true : false, DateTime(tokens[8]), DateTime(tokens[9]));
+			tokens[7] == "1" ? true : false, DateTime::ParseDate(tokens[8]), DateTime::ParseDate(tokens[9]));
 
 		list.push_back(move(s));
 
@@ -87,7 +86,7 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 
 		bool type = tokens[2] == "1" ? true : false;
 
-		s.AddExtraordinaryEvent(DateTime(tokens[1]), type);
+		s.AddExtraordinaryEvent(DateTime::ParseDate(tokens[1]), type);
 	}
 
 }

@@ -12,7 +12,7 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Departure::Departure(const Timetables::Structures::StopTime& stopTime, const DateTime& dep) : departure(dep) {
+Departure::Departure(const Timetables::Structures::StopTime& stopTime, std::time_t dep) : departure(dep) {
 	
 	const vector<StopTime>& stopTimes = stopTime.Trip().StopTimes();
 
@@ -36,23 +36,23 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 	// In this structure we will store "count" departures from each child stop (meaning count * childStops.size()).
 	// Then we will return first "count" departures sorted by time.
 
-	multimap<DateTime, const StopTime*> departures;
+	multimap<std::time_t, const StopTime*> departures;
 
-	DateTime departureTime = earliestDeparture.Time(); // Lower bound for departures
+	std::time_t departureTime = DateTime::Time(earliestDeparture); // Lower bound for departures
 
 	for (auto&& childStop : station.ChildStops()) {
-		const multimap<DateTime, const StopTime*>& stopDepartures = childStop->Departures();
+		const multimap<std::time_t, const StopTime*>& stopDepartures = childStop->Departures();
 
 		auto firstRelevant = stopDepartures.upper_bound(departureTime);
 
-		DateTime departureDate = earliestDeparture.Date(); // A need for operating days checking.
+		std::time_t departureDate = DateTime::Date(earliestDeparture); // A need for operating days checking.
 
 		size_t foundDeparturesCount = 0, days = 0;
 		while (foundDeparturesCount < count && days < 7) {
 
 			if (firstRelevant == stopDepartures.cend()) {
 				firstRelevant = stopDepartures.cbegin(); // Midnight reached.
-				departureDate = departureDate.AddDays(1);
+				departureDate = DateTime::AddDays(departureDate, 1);
 				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
 				continue;
 			}
@@ -62,8 +62,8 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
 				if (&firstRelevant->second->Stop() != &(firstRelevant->second->Trip().StopTimes().cend() - 1)->Stop()) {
 					departures.insert(make_pair(
-					DateTime((firstRelevant->second->Trip().Departure() + firstRelevant->second->Departure()) % 86400) // Time of the departure.
-						+ departureDate.Date() // Date of the departure.
+						(firstRelevant->second->Trip().Departure() + firstRelevant->second->Departure()) % 86400 // Time of the departure.
+						+ DateTime::Date(departureDate) // Date of the departure.
 					, firstRelevant->second));
 					foundDeparturesCount++;
 				}

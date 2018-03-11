@@ -46,7 +46,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 	for (auto&& item : activeRoutes) { // 15th row of pseudocode.
 
 		const Trip* currentTrip = nullptr; // 16th row of pseudocode.
-		DateTime currentDateForTrip(0);
+		std::time_t currentDateForTrip = 0;
 
 		const Stop& startingStop = *item.second;
 		const Route& route = *item.first;
@@ -73,7 +73,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 				
 				const StopTime& st = *(currentTrip->StopTimes().cbegin() + (nextStop - route.Stops().cbegin()));
 
-				const DateTime& newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceTripBeginning()); // 18th row of pseudocode.
+				std::time_t newArrival = DateTime::AddSeconds(currentDateForTrip, st.ArrivalSinceTripBeginning()); // 18th row of pseudocode.
 					
 				auto currentStopBestArrival = tempLabels.find(&currentStop);
 				
@@ -128,7 +128,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				auto previousArrival = (labels.end() - 2)->find(&currentStop);
 
-				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= currentDateForTrip.AddSeconds(st.DepartureSinceTripBeginning())) { // 22nd row of pseudocode.
+				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= DateTime::AddSeconds(currentDateForTrip, st.DepartureSinceTripBeginning())) { // 22nd row of pseudocode.
 
 					auto res = FindEarliestTrip(route, previousArrival->second, currentStop);
 					currentTrip = res.first; // 23rd row of pseudocode.
@@ -174,7 +174,7 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 			auto arrivalTimeB = (labels.cend() - 1)->find(stopB);
 
-			DateTime min(0);
+			std::time_t min = 0;
 
 			if (arrivalTimeA == (labels.cend() - 1)->cend() && (arrivalTimeB != (labels.cend() - 1)->cend()))
 
@@ -182,11 +182,11 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 			else if (arrivalTimeA != (labels.cend() - 1)->cend() && (arrivalTimeB == (labels.cend() - 1)->cend()))
 
-				min = arrivalTimeA->second.AddSeconds(duration);
+				min = DateTime::AddSeconds(arrivalTimeA->second, duration);
 
 			else if (arrivalTimeA != (labels.cend() - 1)->cend() && (arrivalTimeB != (labels.cend() - 1)->cend()))
 
-				min = arrivalTimeB->second < arrivalTimeA->second.AddSeconds(duration) ? arrivalTimeB->second : arrivalTimeA->second.AddSeconds(duration);
+				min = arrivalTimeB->second < DateTime::AddSeconds(arrivalTimeA->second, duration) ? arrivalTimeB->second : DateTime::AddSeconds(arrivalTimeA->second, duration);
 
 			else
 
@@ -218,7 +218,7 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 }
 
-std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime> Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, const Timetables::Structures::Stop& stop) {
+std::pair<const Timetables::Structures::Trip*, std::time_t> Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, std::time_t arrival, const Timetables::Structures::Stop& stop) {
 
 	// At first we have to precompute index for given stop in route to have a constant access to that via trips. TO-DO: Keep indices in memory.
 
@@ -228,7 +228,7 @@ std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
 		if (*(route.Stops().cbegin() + index) == &stop)
 			break;
 
-	DateTime newArrival(arrival);
+	time_t newArrival = arrival;
 	size_t days = 0;
 
 	for (auto it = route.Trips().cbegin(); days < 7; ++it) {
@@ -236,20 +236,20 @@ std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
 		if (it == route.Trips().cend()) {
 			it = route.Trips().cbegin();
 			days++;
-			newArrival = newArrival.AddDays(1);
+			newArrival = DateTime::AddDays(newArrival, 1);
 		}
 
 		const StopTime& st = *((**it).StopTimes().cbegin() + index);
 
-		DateTime startingDateForTrip = st.StartingDateForTrip(newArrival);
+		time_t startingDateForTrip = st.StartingDateForTrip(newArrival);
 
-		if (startingDateForTrip.AddSeconds(st.DepartureSinceTripBeginning()) > arrival && st.IsOperatingInDate(newArrival))
+		if (DateTime::AddSeconds(startingDateForTrip, st.DepartureSinceTripBeginning()) > arrival && st.IsOperatingInDate(newArrival))
 
 			return make_pair(*it, startingDateForTrip);
 
 	}
 
-	return make_pair(nullptr, DateTime(0));
+	return make_pair(nullptr, 0);
 }
 
 void Timetables::Algorithms::Router::ObtainJourneys() {
@@ -263,11 +263,11 @@ void Timetables::Algorithms::Router::ObtainJourneys() {
 		throw JourneyNotFoundException(source.Name(), target.Name());
 
 	for (int i = 1; i < count; i++)
-		ObtainJourney((fastestJourneys.cend() - 1)->ArrivalTime().AddSeconds(1));
+		ObtainJourney(DateTime::AddSeconds((fastestJourneys.cend() - 1)->ArrivalTime(), 1));
 
 }
 
-void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures::DateTime& departure) {
+void Timetables::Algorithms::Router::ObtainJourney(std::time_t departure) {
 
 	labels.clear();
 	tempLabels.clear();
@@ -275,7 +275,7 @@ void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures:
 	activeRoutes.clear();
 	journeys.clear();
 
-	labels.push_back(unordered_map<const Stop*, DateTime>());
+	labels.push_back(unordered_map<const Stop*, std::time_t>());
 
 	journeys.push_back(unordered_map<const Stop*, Journey>());
 
@@ -288,7 +288,7 @@ void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures:
 
 	for (size_t k = 1; markedStops.size() > 0 && k <= maxTransfers; k++) { // 6th && 28th && 29th row of pseudocode.
 
-		labels.push_back(unordered_map<const Stop*, DateTime>());
+		labels.push_back(unordered_map<const Stop*, std::time_t>());
 
 		journeys.push_back(unordered_map<const Stop*, Journey>());
 
@@ -320,7 +320,7 @@ void Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures:
 		fastestJourneys.push_back(move(*fastestJourney));
 }
 
-Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, const DateTime& arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {
+Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, std::time_t arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {
 
 	for (std::vector<StopTime>::const_iterator it = trip.StopTimes().cbegin(); it != trip.StopTimes().cend(); ++it) {
 
