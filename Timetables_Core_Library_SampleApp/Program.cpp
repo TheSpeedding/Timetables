@@ -66,5 +66,6 @@ int main(int argc, char** argv) {
 	
 	// CpuTimeMicroBenchmark(feed);
 
-	GetJourneysReport(feed, L"Roztyly", L"Malostranské námìstí", DateTime::Now(), 1, 6);
+	GetJourneysReport(feed, L"Roztyly", L"Dejvická", DateTime::Now(), 3, 6);
+
 }

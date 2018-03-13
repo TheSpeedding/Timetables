@@ -58,19 +58,19 @@ namespace Timetables {
 			const std::time_t earliestDeparture;
 			const std::size_t maxTransfers;
 			const std::size_t count;
-
-			std::vector<Timetables::Structures::Journey> fastestJourneys;
-
+			
 			std::vector<std::unordered_map<const Timetables::Structures::Stop*, std::time_t>> labels;
 			std::vector<std::unordered_map<const Timetables::Structures::Stop*, Timetables::Structures::Journey>> journeys;
 			std::unordered_map<const Timetables::Structures::Stop*, std::time_t> tempLabels;
 			std::unordered_set<const Timetables::Structures::Stop*> markedStops;
 			std::unordered_map<const Timetables::Structures::Route*, const Timetables::Structures::Stop*> activeRoutes;
 
+			std::multimap<std::time_t, const Timetables::Structures::Journey> fastestJourneys; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
+
 			void AccumulateRoutes();
 			void TraverseEachRoute();
 			void LookAtFootpaths();
-			void ObtainJourney(std::time_t departure);
+			const Timetables::Structures::Journey& ObtainJourney(std::time_t departure); // Returns the best journey obtained in this round.
 
 			std::pair<const Timetables::Structures::Trip*, std::time_t>
 				FindEarliestTrip(const Timetables::Structures::Route& route, std::time_t arrival, std::size_t stopIndex);
@@ -80,7 +80,7 @@ namespace Timetables {
 
 			void ObtainJourneys();
 
-			const std::vector<Timetables::Structures::Journey>& ShowJourneys() const { return fastestJourneys; }
+			const std::multimap<std::time_t, const Timetables::Structures::Journey>& ShowJourneys() const { return fastestJourneys; }
 		};
 	}
 }

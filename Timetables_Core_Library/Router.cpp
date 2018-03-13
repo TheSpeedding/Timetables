@@ -191,8 +191,9 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 			else
 
 				throw runtime_error("Undefined state.");
-				
-			if ((arrivalTimeB == (labels.cend() - 1)->cend()) && min != arrivalTimeB->second) {
+			
+			if ((arrivalTimeB == (labels.cend() - 1)->cend()) || (arrivalTimeB == (labels.cend() - 1)->cend() && min != arrivalTimeB->second))
+			{
 
 				(labels.end() - 1)->erase(stopB);
 
@@ -249,21 +250,31 @@ std::pair<const Timetables::Structures::Trip*, std::time_t> Timetables::Algorith
 }
 
 void Timetables::Algorithms::Router::ObtainJourneys() {
-
-	if (fastestJourneys.size() == 0)
-		ObtainJourney(earliestDeparture);
+	
+	const Journey* previousFastestJourney = &ObtainJourney(earliestDeparture);
 
 	// We tried to search a journey but no journey found.
 
 	if (fastestJourneys.size() == 0)
 		throw JourneyNotFoundException(source.Name(), target.Name());
 
-	for (int i = 1; i < count; i++)
-		ObtainJourney(DateTime::AddSeconds((fastestJourneys.cend() - 1)->ArrivalTime(), 1));
+	for (int i = 1; i < count; i++) {
+		const Journey* temp = &ObtainJourney(DateTime::AddSeconds(previousFastestJourney->DepartureTime(), 1));
+
+		if (fastestJourneys.size() >= count + 1 && previousFastestJourney->ArrivalTime() <= temp->ArrivalTime()) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			break;		
+
+		previousFastestJourney = temp;
+	}
+
+	auto it = fastestJourneys.begin();
+	for (int i = 0; i < count && it != fastestJourneys.end(); ++it, i++);
+
+	fastestJourneys.erase(it, fastestJourneys.end()); // Delete unwanted journeys.
 
 }
 
-void Timetables::Algorithms::Router::ObtainJourney(std::time_t departure) {
+const Timetables::Structures::Journey& Timetables::Algorithms::Router::ObtainJourney(std::time_t departure) {
 
 	labels.clear();
 	tempLabels.clear();
@@ -293,27 +304,25 @@ void Timetables::Algorithms::Router::ObtainJourney(std::time_t departure) {
 		LookAtFootpaths();
 
 	}
+	
+	// Adds all the suitable journeys to the map.
 
-	vector<Journey> tempJourneys;
+	const Journey* fastestJourney = nullptr;
 
 	for (size_t i = 0; i < maxTransfers && i < journeys.size(); i++)
 		for (auto&& stop : target.ChildStops()) {
 			
 			auto res = journeys[i].find(stop);
 
-			if (res != journeys[i].cend())
-				tempJourneys.push_back(res->second);
+			if (res != journeys[i].cend()) {
+				fastestJourneys.insert(make_pair(res->second.ArrivalTime(), res->second));
+				if (fastestJourney == nullptr || fastestJourney->ArrivalTime() > res->second.ArrivalTime())
+					fastestJourney = &fastestJourneys.find(res->second.ArrivalTime())->second; // TO-DO: This is NOT correct.
+			}
 
 		}
 
-	const Journey* fastestJourney = nullptr;
-
-	for (auto&& journey : tempJourneys)
-		if (fastestJourney == nullptr || fastestJourney->ArrivalTime() > journey.ArrivalTime())
-			fastestJourney = &journey;
-
-	if (fastestJourney != nullptr)
-		fastestJourneys.push_back(move(*fastestJourney));
+	return *fastestJourney; // TO-DO: NullReferenceExpcetion... 
 }
 
 Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, std::time_t arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {

@@ -79,7 +79,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 	try {
 		Router r(feed, A, B, dateTime, count, maxTransfers);
 		r.ObtainJourneys();
-		const vector<Journey>& journeys = r.ShowJourneys();
+		auto journeys = r.ShowJourneys();
 
 		SetConsoleTextAttribute(hConsole, 7);
 
@@ -90,17 +90,17 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 			SetConsoleTextAttribute(hConsole, 15);
 
-			cout << endl << "Showing journey in total duration of " << journey.TotalDuration() / 60 << " minutes and " << journey.TotalDuration() % 60 << " seconds";
-			cout << " leaving source station at " << DateTime::ToString(journey.DepartureTime());
-			cout << " and approaching target station at " << DateTime::ToString(journey.ArrivalTime()) << "." << endl << endl;
+			cout << endl << "Showing journey in total duration of " << journey.second.TotalDuration() / 60 << " minutes and " << journey.second.TotalDuration() % 60 << " seconds";
+			cout << " leaving source station at " << DateTime::ToString(journey.second.DepartureTime());
+			cout << " and approaching target station at " << DateTime::ToString(journey.second.ArrivalTime()) << "." << endl << endl;
 
 			const Stop* previousStop = nullptr;
 
-			auto itTransfers = journey.Transfers().cbegin();
+			auto itTransfers = journey.second.Transfers().cbegin();
 
-			for (auto it = journey.JourneySegments().cbegin(); it != journey.JourneySegments().cend(); ++it) {
+			for (auto it = journey.second.JourneySegments().cbegin(); it != journey.second.JourneySegments().cend(); ++it) {
 
-				if (it != journey.JourneySegments().cbegin() && it->IntermediateStops().cbegin()->second != previousStop) { // Transfer.
+				if (it != journey.second.JourneySegments().cbegin() && it->IntermediateStops().cbegin()->second != previousStop) { // Transfer.
 					
 					SetConsoleTextAttribute(hConsole, 15);
 
@@ -140,7 +140,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				previousStop = (it->IntermediateStops().cend() - 1)->second;
 			}
 
-			if (itTransfers != journey.Transfers().cend()) { // Transfer.
+			if (itTransfers != journey.second.Transfers().cend()) { // Transfer.
 
 				SetConsoleTextAttribute(hConsole, 15);
 
