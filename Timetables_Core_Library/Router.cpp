@@ -192,7 +192,9 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 				throw runtime_error("Undefined state.");
 			
-			if ((arrivalTimeB == (labels.cend() - 1)->cend()) || (arrivalTimeB == (labels.cend() - 1)->cend() && min != arrivalTimeB->second))
+			if (((arrivalTimeB == (labels.cend() - 1)->cend()) || // We have not arrive to the stop yet. Set new arrival time.
+				(arrivalTimeB == (labels.cend() - 1)->cend() && min != arrivalTimeB->second)) && // We can improve the arrival to the stop.
+				&target != &stopB->ParentStation()) // The stop is the target station. No need to add footpath.
 			{
 
 				(labels.end() - 1)->erase(stopB);
@@ -272,6 +274,8 @@ void Timetables::Algorithms::Router::ObtainJourneys() {
 
 	fastestJourneys.erase(it, fastestJourneys.end()); // Delete unwanted journeys.
 
+
+
 }
 
 const Timetables::Structures::Journey& Timetables::Algorithms::Router::ObtainJourney(std::time_t departure) {
@@ -293,7 +297,7 @@ const Timetables::Structures::Journey& Timetables::Algorithms::Router::ObtainJou
 		markedStops.insert(stop); // 5th row of pseudocode.
 	}
 
-	for (size_t k = 1; markedStops.size() > 0 && k <= maxTransfers; k++) { // 6th && 28th && 29th row of pseudocode.
+	for (size_t k = 1; markedStops.size() > 0 && k < maxTransfers; k++) { // 6th && 28th && 29th row of pseudocode.
 
 		labels.push_back(unordered_map<const Stop*, std::time_t>());
 

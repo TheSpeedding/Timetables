@@ -76,7 +76,7 @@ namespace Timetables {
 				FindEarliestTrip(const Timetables::Structures::Route& route, std::time_t arrival, std::size_t stopIndex);
 		public:
 			Router(const Timetables::Structures::DataFeed& feed, const std::wstring& s, const std::wstring& t, std::time_t earliestDeparture, const std::size_t count, const std::size_t transfers) :
-				maxTransfers(transfers), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}
+				maxTransfers(transfers + 1), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}
 
 			void ObtainJourneys();
 
