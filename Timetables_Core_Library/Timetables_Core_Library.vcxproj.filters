@@ -28,9 +28,6 @@
     <Filter Include="Header Files\Utilities">
       <UniqueIdentifier>{f4174d94-280a-4072-bf2c-0547a4601664}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utilities">
-      <UniqueIdentifier>{08783fb2-1fb6-4d01-a44b-f07d2d81815e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Services.hpp">
@@ -83,9 +80,6 @@
     <ClCompile Include="DepartureBoard.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Router.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
@@ -98,5 +92,8 @@
     <ClCompile Include="Stations.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

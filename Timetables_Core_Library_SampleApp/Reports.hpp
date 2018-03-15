@@ -11,8 +11,8 @@
 
 namespace Timetables {
 	namespace SampleApp {
-		void GetDepartureBoardReport(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, std::time_t dateTime, const size_t count);
-		void GetJourneysReport(const Timetables::Structures::DataFeed& feed, const std::wstring& A, const std::wstring& B, std::time_t dateTime, const size_t count, const size_t maxTransfers);
+		void GetDepartureBoardReport(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& dateTime, const size_t count);
+		void GetJourneysReport(const Timetables::Structures::DataFeed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::DateTime& dateTime, const size_t count, const size_t maxTransfers);
 	}
 }
 

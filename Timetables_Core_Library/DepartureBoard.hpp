@@ -10,13 +10,13 @@ namespace Timetables {
 		// We could use StopTime class, but we will define this one instead to have it more user friendly.
 		class Departure {
 		private:
-			std::time_t departure;
+			DateTime departure;
 			std::vector<StopTime>::const_iterator tripBegin; // Start of the trip from departure stop.
 			std::vector<StopTime>::const_iterator tripEnd; // End of the trip at the end stop.
 		public:
-			Departure(const StopTime& stopTime, std::time_t departure);
+			Departure(const StopTime& stopTime, const DateTime& departure);
 
-			inline std::time_t DepartureTime() const { return departure; }
+			inline const DateTime& DepartureTime() const { return departure; }
 			inline const std::wstring& Headsign() const { return tripBegin->Trip().Route().Headsign(); }
 			inline const RouteInfo& Line() const { return tripBegin->Trip().Route().Info(); }
 			inline const Stop& Stop() const { return tripBegin->Stop(); }
@@ -33,10 +33,10 @@ namespace Timetables {
 		private:
 			std::vector<Timetables::Structures::Departure> foundDepartures;
 			const Timetables::Structures::Station& station;
-			const std::time_t earliestDeparture;
+			const Timetables::Structures::DateTime earliestDeparture;
 			const std::size_t count;
 		public:
-			DepartureBoard(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, std::time_t earliestDeparture,
+			DepartureBoard(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& earliestDeparture,
 				const size_t count) : earliestDeparture(earliestDeparture), count(count), station(feed.Stations().Find(stationName)) {}
 
 			void ObtainDepartureBoard();

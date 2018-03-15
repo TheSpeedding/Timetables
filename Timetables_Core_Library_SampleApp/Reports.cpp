@@ -15,7 +15,7 @@ using namespace Timetables::Algorithms;
 using namespace Timetables::Exceptions;
 
 
-void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures::DataFeed & feed, const std::wstring & stationName, std::time_t dateTime, const size_t count) {
+void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& dateTime, const size_t count) {
 	
 	vector<Departure> departures;
 
@@ -23,26 +23,26 @@ void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	cout << endl << DateTime::ToString(DateTime::Now()) << " : Starting departure board finding for "; wcout << stationName; cout << " station in datetime " << DateTime::ToString(dateTime) << "." << endl;
+	cout << endl << DateTime::Now() << " : Starting departure board finding for "; wcout << stationName; cout << " station in datetime " << dateTime << "." << endl;
 
 	try {
 		DepartureBoard db(feed, stationName, dateTime, count);
 		db.ObtainDepartureBoard();
 		departures = db.ShowDepartureBoard();
 	}
-	catch (StopNotFoundException ex) {
+	catch (StationNotFoundException ex) {
 		SetConsoleTextAttribute(hConsole, 7);
-		wcout << L"Stop " << ex.GetStopName() << L" not found." << endl;
+		wcout << L"Stop " << ex.GetStationName() << L" not found." << endl << endl;
 		return;
 	}
 	catch (NoDeparturesFoundException ex) {
 		SetConsoleTextAttribute(hConsole, 7);
-		wcout << L"No departures for stop " << ex.GetStopName() << L" found." << endl;
+		wcout << L"No departures for stop " << ex.GetStationName() << L" found." << endl << endl;
 	}
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	cout << DateTime::ToString(DateTime::Now()) << " : Ending departure board finding for "; wcout << stationName << L" station." << endl << endl;
+	cout << DateTime::Now() << " : Ending departure board finding for "; wcout << stationName << L" station." << endl << endl;
 
 	
 	for (auto&& dep : departures) {
@@ -60,21 +60,26 @@ void Timetables::SampleApp::GetDepartureBoardReport(const Timetables::Structures
 		SetConsoleTextAttribute(hConsole, color);
 
 		cout << "Departure at " << dep.DepartureTime() << " with line " << dep.Line().ShortName() << " going ahead to "; wcout << dep.Headsign(); cout << " station goes via following stops:" << endl;
+		
 		auto followingStops = dep.FollowingStops();
-		for (auto it = followingStops.cbegin() + 1; it != followingStops.cend(); ++it) {
-			cout << "  "; wcout << it->second->Name(); cout << " with arrival at " << DateTime::AddSeconds(dep.DepartureTime(), it->first) << "." << endl;
+
+		for (auto it = followingStops.cbegin(); it != followingStops.cend(); ++it) {
+			cout << "  "; wcout << it->second->Name(); cout << " with arrival at " << dep.DepartureTime().AddSeconds(it->first) << "." << endl;
 		}
+
 		cout << endl;
+
+		SetConsoleTextAttribute(hConsole, 7);
 	}
 }
 
-void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::DataFeed & feed, const std::wstring & A, const std::wstring & B, std::time_t dateTime, const size_t count, const size_t maxTransfers) {
+void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::DataFeed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::DateTime& dateTime, const size_t count, const size_t maxTransfers) {
 	
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	cout << endl << DateTime::ToString(DateTime::Now()) << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
+	cout << endl << DateTime::Now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 	try {
 		Router r(feed, A, B, dateTime, count, maxTransfers);
@@ -83,7 +88,7 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 
 		SetConsoleTextAttribute(hConsole, 7);
 
-		cout << DateTime::ToString(DateTime::Now()) << " : Ending journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
+		cout << DateTime::Now() << " : Ending journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 
 		for (auto&& journey : journeys) {
@@ -91,8 +96,8 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 			SetConsoleTextAttribute(hConsole, 15);
 
 			cout << endl << "Showing journey in total duration of " << journey.second.TotalDuration() / 60 << " minutes and " << journey.second.TotalDuration() % 60 << " seconds";
-			cout << " leaving source station at " << DateTime::ToString(journey.second.DepartureTime());
-			cout << " and approaching target station at " << DateTime::ToString(journey.second.ArrivalTime()) << "." << endl << endl;
+			cout << " leaving source station at " << journey.second.DepartureTime();
+			cout << " and approaching target station at " << journey.second.ArrivalTime() << "." << endl << endl;
 
 			const Stop* previousStop = nullptr;
 
@@ -124,17 +129,17 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 				SetConsoleTextAttribute(hConsole, color);
 
 
-				cout << "Board the line " << it->Trip().Route().Info().ShortName() << " at " << DateTime::ToString(it->DepartureFromSource()) << " in ";
+				cout << "Board the line " << it->Trip().Route().Info().ShortName() << " at " << it->DepartureFromSource() << " in ";
 				wcout << it->IntermediateStops().cbegin()->second->Name() << " station going ahead to ";
 				wcout << it->Trip().Route().Headsign() << L" station via following stops:" << endl;
 
 				auto intStops = it->IntermediateStops();
 
 				for (auto it1 = intStops.cbegin() + 1; it1 != intStops.cend() - 1; ++it1) {
-					wcout << L"  " << it1->second->Name(); cout << " with arrival at " << DateTime::ToString(DateTime::AddSeconds(it->DepartureFromSource(), it1->first)) << "." << endl;
+					wcout << L"  " << it1->second->Name(); cout << " with arrival at " << it->DepartureFromSource().AddSeconds(it1->first) << "." << endl;
 				}
 
-				cout << "Get off the line " << it->Trip().Route().Info().ShortName() << " at " << DateTime::ToString(it->ArrivalAtTarget()) << " in ";
+				cout << "Get off the line " << it->Trip().Route().Info().ShortName() << " at " << it->ArrivalAtTarget() << " in ";
 				wcout << (it->IntermediateStops().cend() - 1)->second->Name() << " station." << endl << endl;
 
 				previousStop = (it->IntermediateStops().cend() - 1)->second;
@@ -153,14 +158,16 @@ void Timetables::SampleApp::GetJourneysReport(const Timetables::Structures::Data
 		}
 	}
 
-	catch (StopNotFoundException ex) {
+	catch (StationNotFoundException ex) {
 		SetConsoleTextAttribute(hConsole, 7);
-		wcout << L"Stop " << ex.GetStopName() << L" not found." << endl;
+		wcout << L"Stop " << ex.GetStationName() << L" not found." << endl << endl;
 		return;
 	}
 	catch (JourneyNotFoundException ex) {
 		SetConsoleTextAttribute(hConsole, 7);
-		wcout << L"No journeys between stops " << ex.GetStations().first << L" and " << ex.GetStations().second << L" found." << endl;
+		wcout << L"No journeys between stops " << ex.GetStations().first << L" and " << ex.GetStations().second << L" found." << endl << endl;
 	}
-	
+
+
+	SetConsoleTextAttribute(hConsole, 7);	
 }

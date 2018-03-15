@@ -12,18 +12,18 @@ namespace Timetables {
 		// Class collecting information about service.
 		class Service {
 		private:
-			bool IsAddedInDate(std::time_t dateTime) const; // Determines whether the service is added in given date.
-			bool IsRemovedInDate(std::time_t dateTime) const; // Determines whether the service is removed in given date.
-			std::time_t validSince; // Date that the service is valid since.
-			std::time_t validUntil; // Date that the service is valid until.
+			bool IsAddedInDate(const DateTime& dateTime) const; // Determines whether the service is added in given date.
+			bool IsRemovedInDate(const DateTime& dateTime) const; // Determines whether the service is removed in given date.
+			DateTime validSince; // Date that the service is valid since.
+			DateTime validUntil; // Date that the service is valid until.
 			std::array<bool, 7> operatingDays; // True at i-th position = the service is operating on this weekday.
-			std::map<std::time_t, bool> exceptions; // True = service added in this date. False = service removed in this date.
+			std::map<DateTime, bool> exceptions; // True = service added in this date. False = service removed in this date.
 		public:
-			Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, std::time_t start, std::time_t end);
+			Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const DateTime& start, const DateTime& end);
 
 			inline bool IsOperatingOnDay(std::size_t day) const { return operatingDays.at(day); } // Determines whether the service is operating on given day.
-			inline void AddExtraordinaryEvent(std::time_t dateTime, bool type) { exceptions.insert(std::make_pair(dateTime, type)); } // Adds an exception.
-			bool IsOperatingInDate(std::time_t dateTime) const; // Determines whether the service is operating in given date.
+			inline void AddExtraordinaryEvent(const DateTime& dateTime, bool type) { exceptions.insert(std::make_pair(dateTime, type)); } // Adds an exception.
+			bool IsOperatingInDate(const DateTime& dateTime) const; // Determines whether the service is operating in given date.
 		};
 
 		// Class collecting information about collection of the services.

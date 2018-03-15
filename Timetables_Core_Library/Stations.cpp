@@ -1,4 +1,5 @@
 #include "Stations.hpp"
+#include "StopTime.hpp"
 #include <codecvt>
 
 using namespace std;
@@ -26,3 +27,9 @@ Timetables::Structures::Stations::Stations(std::wistream&& stations) {
 	}
 
 }
+
+void Timetables::Structures::Station::AddDeparture(const StopTime & stopTime) {
+	// We have to set new time because of the time relativity. That means departure of the trip + departure from given stoptime. 
+	// Plus we will normalize it. This serves only for departure boards.
+	departures.insert(std::make_pair(DateTime((stopTime.Trip().Departure() + stopTime.Departure()) % 86400), &stopTime));
+} 

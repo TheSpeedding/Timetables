@@ -65,7 +65,7 @@ void Timetables::Structures::Trips::SetTimetables(std::istream&& stopTimes, Stop
 
 		trip.AddToTrip(move(st));
 
-		stop.AddDeparture(*(trip.StopTimes().cend() - 1));
+		stop.ParentStation().AddDeparture(*(trip.StopTimes().cend() - 1));
 
 
 	}

@@ -72,7 +72,7 @@ void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes
 			size_t index = s - list.data(); // Variable s is a const observer pointer to the stop. We have to modify it. We need non-const reference.
 											// So we will use contiguousnity of vector elements and compute index in the vector (of that stop) using difference of two addresses.
 
-			Stop& stop = list[index]; 
+			Stop& stop = list[index];
 
 			auto it = find(stop.ThroughgoingRoutes().cbegin(), stop.ThroughgoingRoutes().cend(), &routes[i]);
 
@@ -82,12 +82,4 @@ void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes
 		}
 
 	}
-
-}
-
-void Timetables::Structures::Stop::AddDeparture(const StopTime& stopTime) {
-	// We have to set new time because of the time relativity. That means departure of the trip + departure from given stoptime. 
-	// Plus we will normalize it. This serves only for departure boards.
-	time_t dep = (stopTime.Trip().Departure() + stopTime.Departure()) % 86400;
-	departures.insert(std::make_pair(dep, &stopTime)); 
 }

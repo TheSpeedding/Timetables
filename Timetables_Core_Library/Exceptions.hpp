@@ -5,36 +5,30 @@
 #include <exception>
 
 namespace Timetables {
-	namespace Structures {
-		class Station;
-	}
-
 	namespace Exceptions {
 
-		class StopNotFoundException : public std::exception {
+		// Exception which is thrown iff station with given name was not found.
+		class StationNotFoundException : public std::exception {
 		private:
 			std::wstring stopName;
 		public:
-			StopNotFoundException(const std::wstring& stopName) : stopName(stopName) {}
-			StopNotFoundException(const std::string& stopId) : stopName(std::wstring(stopId.cbegin(), stopId.cend())) {}
+			StationNotFoundException(const std::wstring& stopName) : stopName(stopName) {}
+			StationNotFoundException(const std::string& stopId) : stopName(std::wstring(stopId.cbegin(), stopId.cend())) {}
 
-			inline const std::wstring& GetStopName() const { return stopName; }
+			inline const std::wstring& GetStationName() const { return stopName; }
 		};
 
+		// Exception which is thrown iff no departures from given station were found.
 		class NoDeparturesFoundException : public std::exception {
 		private:
 			std::wstring stopName;
 		public:
 			NoDeparturesFoundException(const std::wstring& stopName) : stopName(stopName) {}
 
-			inline const std::wstring& GetStopName() const { return stopName; }
+			inline const std::wstring& GetStationName() const { return stopName; } // Gets name of the station.
 		};
-
-		class InvalidDataFormatException : public std::invalid_argument {
-		public:
-			InvalidDataFormatException(const std::string& message) : std::invalid_argument(message) {};
-		};
-
+		
+		// Exception is thrown iff no journeys between two stations were found. Increasing number of transfers might solve this problem.
 		class JourneyNotFoundException : public std::exception {
 		private:
 			const std::wstring& A;
@@ -42,7 +36,7 @@ namespace Timetables {
 		public:
 			JourneyNotFoundException(const std::wstring& A, const std::wstring& B) : A(A), B(B) {}
 
-			inline const std::pair<std::wstring, std::wstring> GetStations() const { return std::make_pair(A, B); }
+			inline const std::pair<std::wstring, std::wstring> GetStations() const { return std::make_pair(A, B); } // Gets names of stations.
 		};
 
 	}
