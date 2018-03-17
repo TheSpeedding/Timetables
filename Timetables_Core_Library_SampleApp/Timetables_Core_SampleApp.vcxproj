@@ -123,7 +123,6 @@
   <ItemGroup>
     <ClCompile Include="Reports.cpp" />
     <ClCompile Include="Program.cpp" />
-    <ClCompile Include="Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Timetables_Core_Library\Timetables_Core_Library.vcxproj">

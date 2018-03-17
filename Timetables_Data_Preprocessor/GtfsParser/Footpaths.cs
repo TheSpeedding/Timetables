@@ -33,7 +33,7 @@ namespace Timetables.Preprocessor
             double BlonR = B.Location.Item2.DegreesToRadians();
             double u = Math.Sin((BlatR - AlatR) / 2);
             double v = Math.Sin((BlonR - AlonR) / 2);
-            return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 1.25);
+            return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 1.2);
         }
     }
 	/// <summary>
@@ -114,8 +114,9 @@ namespace Timetables.Preprocessor
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
                     if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
-                        list.Add(new Footpath(walkingTime, A.Value, B.Value));
-                }
+						if (A.Value.ParentStation == B.Value.ParentStation)
+							list.Add(new Footpath(walkingTime, A.Value, B.Value));
+				}
         }
     }
 }

@@ -44,7 +44,7 @@ void Timetables::Algorithms::DepartureBoard::ObtainDepartureBoard() {
 		}
 
 		// Check if the stop-time (trip respectively) is operating in required date.
-		if (firstRelevant->second->IsOperatingInDate(departureDate))
+		if (firstRelevant->second->IsOperatingInDateTime(departureDate + firstRelevant->first))
 			// Check if this stop is not the last stop in the trip (meaning to have no successors).
 			if (&firstRelevant->second->Stop() != &(firstRelevant->second->Trip().StopTimes().cend() - 1)->Stop())
 				foundDepartures.push_back(Departure(*firstRelevant->second, // Stop time.

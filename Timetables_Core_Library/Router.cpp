@@ -73,7 +73,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 				
 				const StopTime& st = *(currentTrip->StopTimes().cbegin() + (nextStop - route.Stops().cbegin()));
 
-				DateTime newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceTripBeginning()); // 18th row of pseudocode.
+				DateTime newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceMidnight()); // 18th row of pseudocode.
 					
 				auto currentStopBestArrival = tempLabels.find(&currentStop);
 				
@@ -128,7 +128,7 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 				auto previousArrival = (labels.end() - 2)->find(&currentStop);
 
-				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= currentDateForTrip.AddSeconds(st.DepartureSinceTripBeginning())) { // 22nd row of pseudocode.
+				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= currentDateForTrip.AddSeconds(st.DepartureSinceTripMidnight())) { // 22nd row of pseudocode.
 
 					auto res = FindEarliestTrip(route, previousArrival->second, nextStop - route.Stops().cbegin());
 					currentTrip = res.first; // 23rd row of pseudocode.
@@ -225,24 +225,26 @@ void Timetables::Algorithms::Router::LookAtFootpaths() {
 
 std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime> Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, std::size_t stopIndex) {
 
-	DateTime newArrival = arrival;
+	DateTime newDepartureDate = arrival.Date();
 	size_t days = 0;
+	
+	// Searches for trip in horizon of a week. If not found, terminates looking for a journey using this route.
 
 	for (auto it = route.Trips().cbegin(); days < 7; ++it) {
 		
 		if (it == route.Trips().cend()) {
 			it = route.Trips().cbegin();
 			days++;
-			newArrival = newArrival.AddDays(1);
+			newDepartureDate = newDepartureDate.AddDays(1);
 		}
 
 		const StopTime& st = *((**it).StopTimes().cbegin() + stopIndex);
 
-		DateTime startingDateForTrip = st.StartingDateForTrip(newArrival);
-		
-		if (startingDateForTrip.AddSeconds(st.DepartureSinceTripBeginning()) > arrival && st.IsOperatingInDate(newArrival))
+		DateTime newDepartureDateTime = newDepartureDate.AddSeconds(st.DepartureSinceTripMidnight() % 86400);
+				
+		if (newDepartureDateTime > arrival && st.IsOperatingInDateTime(newDepartureDateTime))
 
-			return make_pair(*it, startingDateForTrip);
+			return make_pair(*it, newDepartureDateTime.AddSeconds((-1) * st.DepartureSinceTripMidnight()));
 
 	}
 
@@ -271,9 +273,6 @@ void Timetables::Algorithms::Router::ObtainJourneys() {
 	for (int i = 0; i < count && it != fastestJourneys.end(); ++it, i++);
 
 	fastestJourneys.erase(it, fastestJourneys.end()); // Delete unwanted journeys.
-
-
-
 }
 
 const Timetables::Structures::Journey& Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures::DateTime& departure) {

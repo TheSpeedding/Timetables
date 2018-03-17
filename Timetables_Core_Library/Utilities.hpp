@@ -42,7 +42,7 @@ namespace Timetables {
 			inline std::size_t Day() const { return boost::posix_time::from_time_t(dateTime).date().day(); }
 			inline std::size_t Month() const { return boost::posix_time::from_time_t(dateTime).date().month(); }
 			inline std::size_t Year() const { return boost::posix_time::from_time_t(dateTime).date().year(); }
-			inline std::size_t DayInWeek() const { return ((dateTime / 86400) + 4) % 7; }
+			inline std::size_t DayInWeek() const { return ((dateTime / 86400) + 3) % 7; }
 
 			DateTime Date() const { return DateTime(86400 * (dateTime / 86400)); } // Seconds since epoch until midnight.
 			DateTime Time() const { return DateTime(dateTime % 86400); } // Seconds since midnight till time.
