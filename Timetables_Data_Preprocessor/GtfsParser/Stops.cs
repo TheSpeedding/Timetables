@@ -161,6 +161,7 @@ namespace Timetables.Preprocessor
                     list.Add(tokens[dic["stop_id"]], stop);
                 }
             }
+
             stops.Dispose();
         }
     }
