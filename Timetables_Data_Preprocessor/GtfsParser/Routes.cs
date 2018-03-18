@@ -17,7 +17,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// ID of the route.
             /// </summary>
-            public int ID { get; }
+            public int ID { internal set; get; }
             /// <summary>
             /// Basic info for the route.
             /// </summary>
@@ -91,7 +91,20 @@ namespace Timetables.Preprocessor
 		/// </summary>
         public IEnumerator<Route> GetEnumerator() => ((IEnumerable<Route>)list).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Route>)list).GetEnumerator();
-    }
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Routes other)
+		{
+			foreach (var item in other)
+			{
+				item.ID = Count; // Reindex the item.
+				list.Add(item);
+			}
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for routes with a specific parsing from GTFS format.
 	/// </summary>

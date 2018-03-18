@@ -14,7 +14,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// ID of the service.
             /// </summary>
-            public int ID { get; }
+            public int ID { internal set; get; }
             /// <summary>
             /// The date in string format that the data are valid since.
             /// </summary>
@@ -112,6 +112,21 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public IEnumerator<KeyValuePair<string, Service>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, Service>>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Calendar other)
+		{
+			foreach (var item in other)
+			{
+				var service = item.Value;
+				service.ID = Count; // Reindex the item.
+				string key;
+				while (list.ContainsKey(key = DataFeed.RandomString())) ; // We can index the item using some random string, since this identificator is only used while initialization. Both data are already initialized.
+				list.Add(key, service);
+			}
+		}
 	}
 	/// <summary>
 	/// Class for calendar with a specific parsing from GTFS format.
@@ -128,7 +143,7 @@ namespace Timetables.Preprocessor
             string[] fieldNames = calendar.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("service_id")) throw new FormatException("Service ID field name missing.");
@@ -143,9 +158,43 @@ namespace Timetables.Preprocessor
             if (!dic.ContainsKey("end_date")) throw new FormatException("End date field name missing.");
 
             while (!calendar.EndOfStream)
-            {
-                string[] tokens = calendar.ReadLine().Split(',');
+			{
+				Queue<string> q = new Queue<string>(calendar.ReadLine().Split(','));
 
+				// Check if there was a comma within the quotes.
+
+				List<string> tokens = new List<string>();
+
+				bool quotes = false;
+
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
+
+					bool toBeAdded = false;
+
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
+
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
+
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
+
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
+				
                 bool mon = tokens[dic["monday"]] == "1" ? true : false;
                 bool tue = tokens[dic["tuesday"]] == "1" ? true : false;
                 bool wed = tokens[dic["wednesday"]] == "1" ? true : false;
@@ -164,7 +213,7 @@ namespace Timetables.Preprocessor
 	/// <summary>
 	/// Abstract class for calendar information about extraordinary events in transport.
 	/// </summary>
-	public abstract class CalendarDates
+	public abstract class CalendarDates : IEnumerable<CalendarDates.ExtraordinaryEvent>
 	{
 		/// <summary>
 		/// Collects information about one extraordinary event.
@@ -216,8 +265,23 @@ namespace Timetables.Preprocessor
                 calendarDates.Write(item);
             calendarDates.Close();
             calendarDates.Dispose();
-        }
-    }
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<ExtraordinaryEvent> GetEnumerator() => ((IEnumerable<ExtraordinaryEvent>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<ExtraordinaryEvent>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(CalendarDates other)
+		{
+			foreach (var item in other)
+				list.Add(item);
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for extraordinary events with a specific parsing from GTFS format.
 	/// </summary>
@@ -234,7 +298,7 @@ namespace Timetables.Preprocessor
             string[] fieldNames = calendarDates.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("service_id")) throw new FormatException("Service ID field name missing.");
@@ -242,10 +306,45 @@ namespace Timetables.Preprocessor
             if (!dic.ContainsKey("exception_type")) throw new FormatException("Exception type field name missing.");
 
             while (!calendarDates.EndOfStream)
-            {
-                string[] tokens = calendarDates.ReadLine().Split(',');
+			{
+				Queue<string> q = new Queue<string>(calendarDates.ReadLine().Split(','));
 
-                Calendar.Service service;
+				// Check if there was a comma within the quotes.
+
+				List<string> tokens = new List<string>();
+
+				bool quotes = false;
+
+
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
+
+					bool toBeAdded = false;
+
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
+
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
+
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
+
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
+
+				Calendar.Service service;
 
                 try
                 {

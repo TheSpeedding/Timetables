@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
@@ -6,7 +7,7 @@ namespace Timetables.Preprocessor
 	/// <summary>
 	/// Abstract class for stop times collecting information about stop times.
 	/// </summary>
-	public abstract class StopTimes
+	public abstract class StopTimes : IEnumerable<StopTimes.StopTime>
     {
         public class StopTime
         {
@@ -80,7 +81,22 @@ namespace Timetables.Preprocessor
 
 			return hours * 3600 + minutes * 60 + seconds;
 		}
-    }
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<StopTime> GetEnumerator() => ((IEnumerable<StopTime>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StopTime>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(StopTimes other)
+		{
+			foreach (var item in other)
+				list.Add(item);
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for stop times with a specific parsing from GTFS format.
 	/// </summary>
@@ -98,7 +114,7 @@ namespace Timetables.Preprocessor
             string[] fieldNames = stopTimes.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("arrival_time")) throw new FormatException("Arrival time field name missing.");
@@ -116,20 +132,35 @@ namespace Timetables.Preprocessor
 
                 bool quotes = false;
 
-                
-                while (q.Count > 0)
-                {
-                    string entry = q.Dequeue();
 
-                    if (quotes)
-                        tokens[tokens.Count - 1] += ',' + entry;
-                    else
-                        tokens.Add(entry);
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
 
-                    if (entry.Length > 0 && entry[0] == '"') quotes = true; // Start of the quotes.
-                    if (entry.Length > 0 && entry[entry.Length - 1] == '"') quotes = false; // End of the quotes.
-                }
-                
+					bool toBeAdded = false;
+
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
+
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
+
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
+
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
+
 				Trips.Trip trip = trips[tokens[dic["trip_id"]]];
 
 				if (trip.StopTimes.Count == 0) // Set departure time of the trip.

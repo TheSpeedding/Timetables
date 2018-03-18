@@ -94,10 +94,29 @@ namespace Timetables.Preprocessor
                 
             trips.Close();
             trips.Dispose();
-        }
-        public IEnumerator<KeyValuePair<string, Trip>> GetEnumerator() => list.GetEnumerator();
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<KeyValuePair<string, Trip>> GetEnumerator() => list.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    }
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Trips other)
+		{
+			foreach (var item in other)
+			{
+				var trip = item.Value;
+				trip.ID = Count; // Reindex the item.
+				string key;
+				while (list.ContainsKey(key = DataFeed.RandomString())) ; // We can index the item using some random string, since this identificator is only used while initialization. Both data are already initialized.
+				list.Add(key, trip);
+			}
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for trips with a specific parsing from GTFS format.
 	/// </summary>
@@ -115,7 +134,7 @@ namespace Timetables.Preprocessor
             string[] fieldNames = trips.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("route_id")) throw new FormatException("Route ID field name missing.");
@@ -133,27 +152,35 @@ namespace Timetables.Preprocessor
 
                 bool quotes = false;
 
-                while (q.Count > 0)
-                {
-                    string entry = q.Dequeue();
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
 
-                    if (quotes)
-                        tokens[tokens.Count - 1] += ',' + entry;
-                    else
-                        tokens.Add(entry);
+					bool toBeAdded = false;
 
-                    if (entry.Length > 0 && entry[0] == '"') quotes = true; // Start of the quotes.
-                    if (entry.Length > 0 && entry[entry.Length - 1] == '"') quotes = false; // End of the quotes.
-                }
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
 
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
 
-                string headsign = tokens[dic["trip_headsign"]];
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
 
-                if (headsign[0] == '"') headsign = headsign.Substring(1, headsign.Length - 1);
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
 
-                if (headsign[headsign.Length - 1] == '"') headsign = headsign.Substring(0, headsign.Length - 1);
-
-                Trip trip = new Trip(Count, headsign, routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
+				Trip trip = new Trip(Count, tokens[dic["trip_headsign"]], routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
 
                 list.Add(tokens[dic["trip_id"]], trip);
             }

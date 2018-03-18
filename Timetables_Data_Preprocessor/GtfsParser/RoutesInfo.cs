@@ -21,7 +21,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// ID of the route info.
             /// </summary>
-            public int ID { get; }
+            public int ID { internal set; get; }
             /// <summary>
             /// Short name of the route.
             /// </summary>
@@ -86,7 +86,7 @@ namespace Timetables.Preprocessor
                     Color = color;
             }
         }
-        protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
+		protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
         /// <summary>
         /// Gets required route info.
         /// </summary>
@@ -114,6 +114,22 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public IEnumerator<KeyValuePair<string, RouteInfo>> GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<string, RouteInfo>>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(RoutesInfo other)
+		{ 
+			foreach (var item in other)
+			{
+				var info = item.Value;
+				info.ID = Count; // Reindex the item.
+				string key;
+				while (list.ContainsKey(key = DataFeed.RandomString())); // We can index the item using some random string, since this identificator is only used while initialization. Both data are already initialized.
+				list.Add(key, info);
+			}
+			other = null;
+		}
 	}
 	/// <summary>
 	/// Class for routes info with a specific parsing from GTFS format.
@@ -130,7 +146,7 @@ namespace Timetables.Preprocessor
             string[] fieldNames = routesInfo.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("route_id")) throw new FormatException("Route ID field name missing.");
@@ -147,37 +163,41 @@ namespace Timetables.Preprocessor
 
                 List<string> tokens = new List<string>();
 
-                bool quotes = false;
+				for (int i = 0; i < tokens.Count; i++) tokens[i] = tokens[i].Replace("\"", "");
 
-                while (q.Count > 0)
-                {
-                    string entry = q.Dequeue();
+				bool quotes = false;
 
-                    if (quotes)
-                        tokens[tokens.Count - 1] += ',' + entry;
-                    else
-                        tokens.Add(entry);
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
 
-                    if (entry.Length > 0 && entry[0] == '"') quotes = true; // Start of the quotes.
-                    if (entry.Length > 0 && entry[entry.Length - 1] == '"') quotes = false; // End of the quotes.
-                }
+					bool toBeAdded = false;
 
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
 
-                string shortName = tokens[dic["route_short_name"]];
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
 
-                if (shortName[0] == '"') shortName = shortName.Substring(1, shortName.Length - 1);
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
 
-                if (shortName[shortName.Length - 1] == '"') shortName = shortName.Substring(0, shortName.Length - 1);
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
 
-                string longName = tokens[dic["route_long_name"]];
+				RouteInfo.RouteType type = (RouteInfo.RouteType)int.Parse(tokens[dic["route_type"]]);
 
-                if (longName[0] == '"') longName = longName.Substring(1, longName.Length - 1);
-
-                if (longName[longName.Length - 1] == '"') longName = longName.Substring(0, longName.Length - 1);
-
-                RouteInfo.RouteType type = (RouteInfo.RouteType)int.Parse(tokens[dic["route_type"]]);
-
-                RouteInfo routeInfo = new RouteInfo(Count, shortName, longName, type, tokens[dic["route_color"]]);
+                RouteInfo routeInfo = new RouteInfo(Count, tokens[dic["route_short_name"]], tokens[dic["route_long_name"]], type, tokens[dic["route_color"]]);
 
                 list.Add(tokens[dic["route_id"]], routeInfo);
             }

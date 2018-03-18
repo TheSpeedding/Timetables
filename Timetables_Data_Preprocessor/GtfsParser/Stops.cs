@@ -15,7 +15,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// ID of the stop.
             /// </summary>
-            public int ID { get; }
+            public int ID { internal set; get; }
             /// <summary>
             /// Name of the stop.
             /// </summary>
@@ -74,7 +74,23 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public IEnumerator<KeyValuePair<string, Stop>> GetEnumerator() => list.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    }
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Stops other)
+		{
+			foreach (var item in other)
+			{
+				var stop = item.Value;
+				stop.ID = Count; // Reindex the item.
+				string key;
+				while (list.ContainsKey(key = DataFeed.RandomString())) ; // We can index the item using some random string, since this identificator is only used while initialization. Both data are already initialized.
+				list.Add(key, stop);
+			}
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for stops with a specific parsing from GTFS format.
 	/// </summary>
@@ -91,14 +107,14 @@ namespace Timetables.Preprocessor
             string[] fieldNames = stops.ReadLine().Split(',');
             Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < fieldNames.Length; i++)
-                dic.Add(fieldNames[i], i);
+                dic.Add(fieldNames[i].Replace("\"", ""), i);
 
             // These fields are required for our purpose.
             if (!dic.ContainsKey("stop_id")) throw new FormatException("Stop ID field name missing.");
             if (!dic.ContainsKey("stop_name")) throw new FormatException("Stop name field name missing.");
             if (!dic.ContainsKey("stop_lat")) throw new FormatException("Stop latitude field name missing.");
             if (!dic.ContainsKey("stop_lon")) throw new FormatException("Stop longitude field name missing.");
-            if (!dic.ContainsKey("location_type")) throw new FormatException("Location type field name missing.");
+            // if (!dic.ContainsKey("location_type")) throw new FormatException("Location type field name missing."); Optional, but we "need" it (partionally).
 
             while (!stops.EndOfStream)
             {
@@ -107,32 +123,40 @@ namespace Timetables.Preprocessor
                 // Check if there was a comma within the quotes.
 
                 List<string> tokens = new List<string>();
+				
+				bool quotes = false;
 
-                bool quotes = false;
+				while (q.Count > 0)
+				{
+					string entry = q.Dequeue();
 
-                while (q.Count > 0)
+					bool toBeAdded = false;
+
+					if (quotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
+						toBeAdded = true;
+
+					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+					{
+						entry = entry.Substring(1, entry.Length - 1);
+						quotes = true;
+					}
+
+					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+					{
+						entry = entry.Substring(0, entry.Length - 1);
+						quotes = false;
+					}
+
+					if (toBeAdded)
+						tokens.Add(entry);
+					toBeAdded = false;
+				}
+
+				if (!dic.ContainsKey("location_type") || tokens[dic["location_type"]] == "0")
                 {
-                    string entry = q.Dequeue();
-
-                    if (quotes)
-                        tokens[tokens.Count - 1] += ',' + entry;
-                    else
-                        tokens.Add(entry);
-
-                    if (entry.Length > 0 && entry[0] == '"') quotes = true; // Start of the quotes.
-                    if (entry.Length > 0 && entry[entry.Length - 1] == '"') quotes = false; // End of the quotes.
-                }
-
-
-                string name = tokens[dic["stop_name"]];
-
-                if (name[0] == '"') name = name.Substring(1, name.Length - 1);
-
-                if (name[name.Length - 1] == '"') name = name.Substring(0, name.Length - 1);
-
-                if (tokens[dic["location_type"]] == "0")
-                {
-                    Stop stop = new Stop(Count, name, double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
+                    Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 
                     list.Add(tokens[dic["stop_id"]], stop);
                 }

@@ -10,7 +10,7 @@ namespace Timetables.Preprocessor
         {
             // Few hours before expiration of data or ~ 3 days after the last run, everytime at 3.00 am.
 
-            // If the data expires today, we will try to redownload them every hour since we get the actual ones.
+            // If the data expires today, we will try to redownload them every hour until we get the actual ones.
             
             if (expiration.Date == DateTime.Today.Date || DateTime.Now.AddHours(8) > expiration) // Expires today? Refresh in one hour.
                 return DateTime.Now.AddHours(1);

@@ -97,6 +97,16 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public IEnumerator<Footpath> GetEnumerator() => ((IEnumerable<Footpath>)list).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Footpath>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Footpaths other)
+		{
+			foreach (var footpath in other)
+				list.Add(footpath);
+			other = null;
+		}
 	}
 	/// <summary>
 	/// Class for routes with a specific parsing from GTFS format.

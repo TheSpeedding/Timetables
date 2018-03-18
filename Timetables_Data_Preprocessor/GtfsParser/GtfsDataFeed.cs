@@ -47,7 +47,7 @@ namespace Timetables.Preprocessor
         /// <summary>
         /// Date that the timetables expires in.
         /// </summary>
-        public string ExpirationDate { get; }
+        public string ExpirationDate { set; get; }
         /// <summary>
         /// Loads Gtfs data feed to memory.
         /// </summary>

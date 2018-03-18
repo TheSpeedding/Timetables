@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed.cs" />
-    <Compile Include="GtfsParser\Downloader.cs" />
+    <Compile Include="Downloader.cs" />
     <Compile Include="GtfsParser\Footpaths.cs" />
     <Compile Include="GtfsParser\GtfsDataFeed.cs" />
     <Compile Include="GtfsParser\Routes.cs" />

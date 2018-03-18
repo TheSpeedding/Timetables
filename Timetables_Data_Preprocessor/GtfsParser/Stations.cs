@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Timetables.Preprocessor
@@ -6,14 +7,14 @@ namespace Timetables.Preprocessor
 	/// <summary>
 	/// Abstract class for stations collecting information about stations.
 	/// </summary>
-	public abstract class Stations
+	public abstract class Stations : IEnumerable<Stations.Station>
     {
         public class Station
         {
             /// <summary>
             /// ID of the station.
             /// </summary>
-            public int ID { get; }
+            public int ID { internal set; get; }
             /// <summary>
             /// Name of the station.
             /// </summary>
@@ -56,8 +57,26 @@ namespace Timetables.Preprocessor
                 stations.Write(item);
             stations.Close();
             stations.Dispose();
-        }
-    }
+		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<Station> GetEnumerator() => ((IEnumerable<Station>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Station>)list).GetEnumerator();
+		/// <summary>
+		/// Merges two collections into one.
+		/// </summary>
+		/// <param name="other">The other collection that should be merged.</param>
+		public void MergeCollections(Stations other)
+		{
+			foreach (var item in other)
+			{
+				item.ID = Count; // Reindex the item.
+				list.Add(item);
+			}
+			other = null;
+		}
+	}
 	/// <summary>
 	/// Class for stations with a specific parsing from GTFS format.
 	/// </summary>
