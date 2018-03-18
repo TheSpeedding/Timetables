@@ -1,9 +1,9 @@
-#include "../Timetables_Core_Library/DataFeed.hpp"
-#include "../Timetables_Core_Library/Utilities.hpp"
-#include "../Timetables_Core_Library/Router.hpp"
-#include "../Timetables_Core_Library/DepartureBoard.hpp"
-#include "../Timetables_Core_Library/Exceptions.hpp"
-#include "Reports.hpp"
+#include "../Timetables_Core_Library/data_feed.hpp"
+#include "../Timetables_Core_Library/utilities.hpp"
+#include "../Timetables_Core_Library/router.hpp"
+#include "../Timetables_Core_Library/departure_board.hpp"
+#include "../Timetables_Core_Library/exceptions.hpp"
+#include "reports.hpp"
 #include <exception>
 #include <iostream>
 #include <sstream>
@@ -21,24 +21,24 @@ using namespace Timetables::Exceptions;
 
 namespace Timetables {
 	namespace SampleApp {
-		const wstring& RandomStation(const DataFeed& feed) {
+		const wstring& random_station(const data_feed& feed) {
 			std::mt19937 rng;
 			rng.seed(std::random_device()());
-			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, feed.Stations().Count() - 1);
-			return feed.Stations().Get(dist6(rng)).Name();
+			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, feed.stations().size() - 1);
+			return feed.stations().at(dist6(rng)).name();
 		}
 
-		void CpuTimeMicroBenchmark(const DataFeed& feed) {
+		void cpu_time_micro_benchmark(const data_feed& feed) {
 			for (int i = 0; i < 1000; i++) {
 				try {
-					Router r(feed, RandomStation(feed), RandomStation(feed), DateTime::Now(), 1, 10);
-					r.ObtainJourneys();
+					router r(feed, random_station(feed), random_station(feed), date_time::now(), 1, 10);
+					r.obtain_journeys();
 				}
-				catch (StationNotFoundException ex) {
-					wcout << L"Stop " << ex.GetStationName() << L" not found." << endl;
+				catch (station_not_found ex) {
+					wcout << L"Stop " << ex.station_name() << L" not found." << endl;
 				}
-				catch (JourneyNotFoundException ex) {
-					wcout << L"No journeys between stops " << ex.GetStations().first << L" and " << ex.GetStations().second << L" found." << endl;
+				catch (journey_not_found ex) {
+					wcout << L"No journeys between stops " << ex.stations().first << L" and " << ex.stations().second << L" found." << endl;
 				}
 				catch (exception ex) {
 					cout << "Unknown exception " << ex.what() << endl;
@@ -52,13 +52,13 @@ namespace Timetables {
 
 int main(int argc, char** argv) {
 
-	cout << DateTime::Now() << " : Application has started." << endl;
+	cout << date_time::now() << " : Application has started." << endl;
 
-	cout << DateTime::Now() << " : Starting data init." << endl;
+	cout << date_time::now() << " : Starting data init." << endl;
 
-	DataFeed feed;
+	data_feed feed;
 
-	cout << DateTime::Now() << " : Ending data init." << endl;
+	cout << date_time::now() << " : Ending data init." << endl;
 
 	setlocale(LC_ALL, "");
 	SetConsoleCP(GetACP());
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 		
 	locale::global(locale("Czech"));
 			
-	// CpuTimeMicroBenchmark(feed); return 0;
+	// cpu_time_micro_benchmark(feed); return 0;
 
 	wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 				}
 				wstring count;
 				getline(input, count);
-				GetDepartureBoardReport(feed, station, DateTime::Now(), stoi(count));
+				get_departure_board_report(feed, station, date_time::now(), stoi(count));
 			}
 
 			else if (token == L"R") { // Router. Example: R;Malostranské námìstí;Václavské námìstí;5;5
@@ -129,7 +129,7 @@ int main(int argc, char** argv) {
 				wstring transfers;
 				getline(input, transfers);
 
-				GetJourneysReport(feed, stationA, stationB, DateTime::Now(), stoi(count), stoi(transfers));
+				get_journeys_report(feed, stationA, stationB, date_time::now(), stoi(count), stoi(transfers));
 			}
 
 			else if (token == L"END")

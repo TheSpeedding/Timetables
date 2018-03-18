@@ -1,47 +1,47 @@
-#include "Services.hpp"
+#include "services.hpp"
 #include <string>
 #include <iostream>
 
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Service::Service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const DateTime& start, const DateTime& end) :
-	validSince(start), validUntil(end) {
-	operatingDays[0] = mon;
-	operatingDays[1] = tue;
-	operatingDays[2] = wed;
-	operatingDays[3] = thu;
-	operatingDays[4] = fri;
-	operatingDays[5] = sat;
-	operatingDays[6] = sun;
+Timetables::Structures::service::service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const date_time& start, const date_time& end) :
+	valid_since_(start), valid_until_(end) {
+	operating_days_[0] = mon;
+	operating_days_[1] = tue;
+	operating_days_[2] = wed;
+	operating_days_[3] = thu;
+	operating_days_[4] = fri;
+	operating_days_[5] = sat;
+	operating_days_[6] = sun;
 }
 
-bool Timetables::Structures::Service::IsAddedInDate(const DateTime& dateTime) const {
-	auto entry = exceptions.find(dateTime);
-	if (entry == exceptions.cend())
+bool Timetables::Structures::service::is_added_in_date(const date_time& date_time) const {
+	auto entry = exceptions_.find(date_time);
+	if (entry == exceptions_.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
 	else if (entry->second == true) // Found. Service IS operating in this Date. Returns true.
 		return true;
 	return false;
 }
 
-bool Timetables::Structures::Service::IsRemovedInDate(const DateTime& dateTime) const {
-	auto entry = exceptions.find(dateTime);
-	if (entry == exceptions.cend())
+bool Timetables::Structures::service::is_removed_in_date(const date_time& date_time) const {
+	auto entry = exceptions_.find(date_time);
+	if (entry == exceptions_.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this Date.
 	else if (entry->second == false) // Found. Service IS NOT operating in this Date. Returns true.
 		return true;
 	return false;
 }
 
-bool Timetables::Structures::Service::IsOperatingInDate(const DateTime& dateTime) const {
-	if (dateTime < validSince || dateTime > validUntil) return false;
-	if (IsAddedInDate(dateTime.Date())) return true;
-	if (IsRemovedInDate(dateTime.Date())) return false;
-	return IsOperatingOnDay(dateTime.DayInWeek());
+bool Timetables::Structures::service::is_operating_in_date(const date_time& date_time) const {
+	if (date_time < valid_since_ || date_time > valid_until_) return false;
+	if (is_added_in_date(date_time.date())) return true;
+	if (is_removed_in_date(date_time.date())) return false;
+	return is_operating_on_day(date_time.day_in_week());
 }
 
-Timetables::Structures::Services::Services(std::istream&& calendar, std::istream&& calendarDates) {
+Timetables::Structures::services::services(std::istream&& calendar, std::istream&& calendar_dates) {
 
 	string token;
 	std::getline(calendar, token); // Number of entries.
@@ -59,9 +59,9 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 		for (size_t j = 0; j < 10; j++)
 			std::getline(calendar, tokens[j], ';');
 
-		Service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
+		service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
 			tokens[4] == "1" ? true : false, tokens[5] == "1" ? true : false, tokens[6] == "1" ? true : false,
-			tokens[7] == "1" ? true : false, DateTime(tokens[8]), DateTime(tokens[9]));
+			tokens[7] == "1" ? true : false, date_time(tokens[8]), date_time(tokens[9]));
 
 		list.push_back(move(s));
 
@@ -69,7 +69,7 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 	
 	// Let's process the file with extraordinary events.
 
-	std::getline(calendarDates, token); // Number of entries.
+	std::getline(calendar_dates, token); // Number of entries.
 
 	size = stoi(token);
 	
@@ -78,15 +78,15 @@ Timetables::Structures::Services::Services(std::istream&& calendar, std::istream
 		// Entry format: ServiceID, Date, TypeOfExtraordinaryEvent
 
 		for (size_t j = 0; j < 3; j++)
-			std::getline(calendarDates, tokens[j], ';');
+			std::getline(calendar_dates, tokens[j], ';');
 
 		size_t id(stoi(tokens[0]));
 
-		Service& s = list[id];
+		service& s = list[id];
 
 		bool type = tokens[2] == "1" ? true : false;
 
-		s.AddExtraordinaryEvent(DateTime(tokens[1]), type);
+		s.add_extraordinary_event(date_time(tokens[1]), type);
 	}
 
 }

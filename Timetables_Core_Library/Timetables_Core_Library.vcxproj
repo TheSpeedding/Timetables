@@ -19,28 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DepartureBoard.hpp" />
-    <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="DataFeed.hpp" />
-    <ClInclude Include="Router.hpp" />
-    <ClInclude Include="Routes.hpp" />
-    <ClInclude Include="RoutesInfo.hpp" />
-    <ClInclude Include="Services.hpp" />
-    <ClInclude Include="Stations.hpp" />
-    <ClInclude Include="Stops.hpp" />
-    <ClInclude Include="StopTime.hpp" />
-    <ClInclude Include="Trips.hpp" />
-    <ClInclude Include="Utilities.hpp" />
+    <ClInclude Include="departure_board.hpp" />
+    <ClInclude Include="exceptions.hpp" />
+    <ClInclude Include="data_feed.hpp" />
+    <ClInclude Include="router.hpp" />
+    <ClInclude Include="routes.hpp" />
+    <ClInclude Include="routes_info.hpp" />
+    <ClInclude Include="services.hpp" />
+    <ClInclude Include="stations.hpp" />
+    <ClInclude Include="stops.hpp" />
+    <ClInclude Include="stop_time.hpp" />
+    <ClInclude Include="trips.hpp" />
+    <ClInclude Include="utilities.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DepartureBoard.cpp" />
-    <ClCompile Include="Router.cpp" />
-    <ClCompile Include="Routes.cpp" />
-    <ClCompile Include="RoutesInfo.cpp" />
-    <ClCompile Include="Services.cpp" />
-    <ClCompile Include="Stations.cpp" />
-    <ClCompile Include="Stops.cpp" />
-    <ClCompile Include="Trips.cpp" />
+    <ClCompile Include="departure_board.cpp" />
+    <ClCompile Include="router.cpp" />
+    <ClCompile Include="routes.cpp" />
+    <ClCompile Include="routes_info.cpp" />
+    <ClCompile Include="services.cpp" />
+    <ClCompile Include="stations.cpp" />
+    <ClCompile Include="stops.cpp" />
+    <ClCompile Include="trips.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

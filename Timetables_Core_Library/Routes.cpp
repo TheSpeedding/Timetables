@@ -1,6 +1,6 @@
-#include "Routes.hpp"
-#include "Trips.hpp"
-#include "StopTime.hpp"
+#include "routes.hpp"
+#include "trips.hpp"
+#include "stop_time.hpp"
 #include <algorithm>
 #include <array>
 #include <codecvt>
@@ -8,7 +8,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Routes::Routes(std::wistream&& routes, RoutesInfo& routesInfo) {
+Timetables::Structures::routes::routes(std::wistream&& routes, routes_info& routes_info) {
 	
 	routes.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 
@@ -28,20 +28,20 @@ Timetables::Structures::Routes::Routes(std::wistream&& routes, RoutesInfo& route
 		for (size_t j = 0; j < 4; j++)
 			std::getline(routes, tokens[j], wchar_t(';'));
 		
-		list.push_back(Route(routesInfo[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[3]));
+		list.push_back(route(routes_info[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[3]));
 
 	}
 
 }
 
-void Timetables::Structures::Routes::SetStopsForRoutes() {
+void Timetables::Structures::routes::set_stops_for_routes() {
 
 	for (auto&& route : list) {
 
 		// We will reconstruct stops from any of the trip using stop times -> stop time has reference to the stop.
 
-		for (auto&& stopTime : route.Trips()[0]->StopTimes())
-			route.AddStop(stopTime.Stop());
+		for (auto&& stop_time : route.trips()[0]->stop_times())
+			route.add_stop(stop_time.stop());
 
 	}
 

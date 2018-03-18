@@ -1,86 +1,87 @@
 #ifndef ROUTER_HPP
 #define ROUTER_HPP
 
-#include <string>
-#include <algorithm>
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include "StopTime.hpp"
-#include "DataFeed.hpp"
+#include <vector> // Used in journeys.
+#include <unordered_map> // Structure for algorithm
+#include <unordered_set> // Structure for algorithm.
+#include "stop_time.hpp" // Used in journeys.
+#include "data_feed.hpp" // Reference to data feed.
 
 namespace Timetables {
 	namespace Structures {
-		class Trip;
-		class StopTime;
+		class trip; // Forward declaration.
+		class stop_time; // Forward declaration.
 
-		class JourneySegment {
+		// Class used in journeys.
+		class journey_segment {
 		private:
-			const Trip& trip;
-			std::vector<StopTime>::const_iterator sourceStop;
-			std::vector<StopTime>::const_iterator targetStop;
-			const Timetables::Structures::DateTime arrival;
+			const trip& trip_; // Trip that serves the journey segment.
+			std::vector<stop_time>::const_iterator source_stop_; // Source stop.
+			std::vector<stop_time>::const_iterator target_stop_; // Target stop.
+			const Timetables::Structures::date_time arrival_; // Arrival at target stop.
 		public:
-			JourneySegment(const Trip& trip, const Timetables::Structures::DateTime& arrival, const Stop& source, const Stop& target);
+			journey_segment(const trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target);
 
-			inline const Trip& Trip() const { return trip; }
-			inline const Stop& SourceStop() const { return sourceStop->Stop(); }
-			inline const Stop& TargetStop() const { return targetStop->Stop(); }
-			inline const DateTime DepartureFromSource() const { return arrival.AddSeconds((-1) * (targetStop->Arrival() - sourceStop->Departure())); }
-			inline const DateTime& ArrivalAtTarget() const { return arrival; }
-			const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> IntermediateStops() const;
+			inline const trip& trip() const { return trip_; } // Trip.
+			inline const stop& source_stop() const { return source_stop_->stop(); } // Source stop.
+			inline const stop& target_stop() const { return target_stop_->stop(); } // Target stop.
+			inline const date_time departure_from_source() const { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
+			inline const date_time& arrival_at_target() const { return arrival_; } // Gets arrival at target.
+			const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const; // Gets intermediate stops between source and target stop.
 		};
 
-		class Journey {
+		// Class collecting information about one journey.
+		class journey {
 		private:
-			std::vector<JourneySegment> journeySegments;
-			std::vector<std::size_t> transfers; // There is a footpath between every two journey segments.
+			std::vector<journey_segment> journey_segments_; // Journey consists of multiple trips, we will store them here.
+			std::vector<std::size_t> transfers_; // There is a footpath between every two journey segments.
 		public:
-			Journey(const JourneySegment& js) { AddToJourney(js); }
+			journey(const journey_segment& js) { add_to_journey(js); }
 
-			inline const DateTime DepartureTime() const { return journeySegments.cbegin()->DepartureFromSource(); }
-			inline const DateTime& ArrivalTime() const { return (journeySegments.cend() - 1)->ArrivalAtTarget(); }
-			inline const int TotalDuration() const { return DateTime::Difference(ArrivalTime(), DepartureTime()); }
+			inline const date_time departure_time() const { return journey_segments_.cbegin()->departure_from_source(); } // Departure time from source stop.
+			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->arrival_at_target().add_seconds(*(transfers_.cend() - 1)); } // Arrival time at target stop.
+			inline const int duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 
-			inline const std::vector<JourneySegment>& JourneySegments() const { return journeySegments; }
-			inline const std::vector<std::size_t>& Transfers() const { return transfers; }
+			inline const std::vector<journey_segment>& journey_segments() const { return journey_segments_; } // Gets journey segments.
+			inline const std::vector<std::size_t>& transfers() const { return transfers_; } // Gets transfer. There is a footpath between every two journey segments.
 
-			inline void AddToJourney(const JourneySegment& js) { journeySegments.push_back(js); }
-			inline void AddFootpath(std::size_t duration) { transfers.push_back(duration); }
+			inline void add_to_journey(const journey_segment& js) { journey_segments_.push_back(js); transfers_.push_back(0); } // Adds journey segment to the journey.
+			inline void set_last_transfer(std::size_t duration) { *(transfers_.end() - 1) = duration; } // Sets last transfer.
 		};
 	}
 
 	namespace Algorithms {
-		class Router {
+		// Class ensuring functionality of the main algorithm.
+		class router {
 		private:
-			const Timetables::Structures::Station& source;
-			const Timetables::Structures::Station& target;
-			const Timetables::Structures::DateTime earliestDeparture;
-			const std::size_t maxTransfers;
-			const std::size_t count;
+			const Timetables::Structures::station& source_; // Source station defined by the user..
+			const Timetables::Structures::station& target_; // Target station defined by the user.
+			const Timetables::Structures::date_time earliest_departure_; // Earliest departure defined by the user.
+			const std::size_t max_transfers_; // Maximum number of transfers defined by the user.
+			const std::size_t count_; // Count of journeys to search defined by the user.
 			
-			std::vector<std::unordered_map<const Timetables::Structures::Stop*, Timetables::Structures::DateTime>> labels;
-			std::vector<std::unordered_map<const Timetables::Structures::Stop*, Timetables::Structures::Journey>> journeys;
-			std::unordered_map<const Timetables::Structures::Stop*, Timetables::Structures::DateTime> tempLabels;
-			std::unordered_set<const Timetables::Structures::Stop*> markedStops;
-			std::unordered_map<const Timetables::Structures::Route*, const Timetables::Structures::Stop*> activeRoutes;
+			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time>> labels_; // The best arrival date time at a stop in k-th round. TO-DO: Move to journeys.
+			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::journey>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
+			std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
+			std::unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
+			std::unordered_map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
 
-			std::multimap<Timetables::Structures::DateTime, const Timetables::Structures::Journey> fastestJourneys; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
+			std::multimap<Timetables::Structures::date_time, const Timetables::Structures::journey> fastest_journeys_; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
 
-			void AccumulateRoutes();
-			void TraverseEachRoute();
-			void LookAtFootpaths();
-			const Timetables::Structures::Journey& ObtainJourney(const Timetables::Structures::DateTime& departure); // Returns the best journey obtained in this round.
+			void accumulate_routes(); // Accumulates routes that will be traversed in next method.
+			void traverse_each_route(); // Traverses each route.
+			void look_at_footpaths(); // Tries to improve journeys using footpaths.
+			const Timetables::Structures::journey& obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this round.
 
-			std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime>
-				FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, std::size_t stopIndex);
+			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.
+				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 
 		public:
-			Router(const Timetables::Structures::DataFeed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::DateTime& earliestDeparture, const std::size_t count, const std::size_t transfers) :
-				maxTransfers(transfers + 1), count(count), earliestDeparture(earliestDeparture), source(feed.Stations().Find(s)), target(feed.Stations().Find(t)) {}
+			router(const Timetables::Structures::data_feed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers) :
+				max_transfers_(transfers + 1), count_(count), earliest_departure_(earliest_departure), source_(feed.stations().find(s)), target_(feed.stations().find(t)) {}
 
-			void ObtainJourneys();
+			void obtain_journeys(); // Obtains given count of the best journeys.
 
-			const std::multimap<Timetables::Structures::DateTime, const Timetables::Structures::Journey>& ShowJourneys() const { return fastestJourneys; }
+			const std::multimap<Timetables::Structures::date_time, const Timetables::Structures::journey>& show_journeys() const { return fastest_journeys_; } // Shows the best journeys found by the algorithm.
 		};
 	}
 }

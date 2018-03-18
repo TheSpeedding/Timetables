@@ -121,8 +121,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Reports.cpp" />
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="reports.cpp" />
+    <ClCompile Include="program.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Timetables_Core_Library\Timetables_Core_Library.vcxproj">
@@ -130,7 +130,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Reports.hpp" />
+    <ClInclude Include="reports.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

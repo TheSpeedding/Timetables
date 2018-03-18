@@ -45,25 +45,25 @@
     <ClInclude Include="Exceptions.hpp">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="DepartureBoard.hpp">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="Router.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="RoutesInfo.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
     <ClInclude Include="Routes.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="DataFeed.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Stations.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="StopTime.hpp">
+    <ClInclude Include="departure_board.hpp">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="data_feed.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="routes_info.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="stop_time.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,20 +77,20 @@
     <ClCompile Include="Trips.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
-    <ClCompile Include="DepartureBoard.cpp">
-      <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
     <ClCompile Include="Router.cpp">
       <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
-    <ClCompile Include="RoutesInfo.cpp">
-      <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Routes.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="Stations.cpp">
       <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="routes_info.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="departure_board.cpp">
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

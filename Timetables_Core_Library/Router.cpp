@@ -1,29 +1,29 @@
-#include "Router.hpp"
+#include "router.hpp"
 
 using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 using namespace Timetables::Algorithms;
 
-void Timetables::Algorithms::Router::AccumulateRoutes() {
+void Timetables::Algorithms::router::accumulate_routes() {
 
 	// Accumulate routes serving marked stops from previous round.
 
-	activeRoutes.clear(); // 7th row of pseudocode.
+	active_routes_.clear(); // 7th row of pseudocode.
 
-	for (auto&& stop : markedStops) { // 8th row of pseudocode.
+	for (auto&& stop : marked_stops_) { // 8th row of pseudocode.
 
-		for (auto&& route : stop->ThroughgoingRoutes()) { // 9th row of pseudocode.
+		for (auto&& route : stop->throughgoing_routes()) { // 9th row of pseudocode.
 
-			auto someStop = activeRoutes.find(route);
+			auto some_stop = active_routes_.find(route);
 
-			if (someStop != activeRoutes.cend()) { // 10th row of pseudocode.
+			if (some_stop != active_routes_.cend()) { // 10th row of pseudocode.
 
-				if (route->StopComesBefore(*stop, *someStop->second)) { // 11th row of pseudocode.
+				if (route->stop_comes_before(*stop, *some_stop->second)) { // 11th row of pseudocode.
 
-					activeRoutes.erase(route);
+					active_routes_.erase(route);
 
-					activeRoutes.insert(make_pair(route, stop)); // 11th row of pseudocode.
+					active_routes_.insert(make_pair(route, stop)); // 11th row of pseudocode.
 
 				}
 
@@ -31,124 +31,124 @@ void Timetables::Algorithms::Router::AccumulateRoutes() {
 
 			else // 12th row of pseudocode.
 
-				activeRoutes.insert(make_pair(route, stop)); // 13th row of pseudocode.
+				active_routes_.insert(make_pair(route, stop)); // 13th row of pseudocode.
 
 		}
 
 	}
 
-	markedStops.clear(); // 14th row of pseudocode.
+	marked_stops_.clear(); // 14th row of pseudocode.
 
 }
 
-void Timetables::Algorithms::Router::TraverseEachRoute() {
+void Timetables::Algorithms::router::traverse_each_route() {
 	
-	for (auto&& item : activeRoutes) { // 15th row of pseudocode.
+	for (auto&& item : active_routes_) { // 15th row of pseudocode.
 
-		const Trip* currentTrip = nullptr; // 16th row of pseudocode.
-		DateTime currentDateForTrip = DateTime::Infinity();
+		const trip* current_trip = nullptr; // 16th row of pseudocode.
+		date_time date_for_current_trip = date_time::infinity();
 
-		const Stop& startingStop = *item.second;
-		const Route& route = *item.first;
+		const stop& starting_stop = *item.second;
+		const route& route = *item.first;
 
 		// Find the current stop in route.
 
-		vector<const Stop*>::const_iterator nextStop;
+		vector<const stop*>::const_iterator next_stop;
 
-		for (nextStop = route.Stops().cbegin(); nextStop != route.Stops().cend(); ++nextStop)
-			if (*nextStop == &startingStop)
+		for (next_stop = route.stops().cbegin(); next_stop != route.stops().cend(); ++next_stop)
+			if (*next_stop == &starting_stop)
 				break;
 
 		// Traverse the route from current stop.
 
-		const Stop* boardingStop = nullptr;
+		const stop* boarding_stop = nullptr;
 
-		for (; nextStop != route.Stops().cend(); ++nextStop) { // 17th row of pseudocode.
+		for (; next_stop != route.stops().cend(); ++next_stop) { // 17th row of pseudocode.
 
 			// Can the label be improved in this round? Includes local and target pruning.
 
-			const Stop& currentStop = **nextStop;
+			const stop& current_stop = **next_stop;
 
-			if (currentTrip != nullptr) { // 18th row of pseudocode.
+			if (current_trip != nullptr) { // 18th row of pseudocode.
 				
-				const StopTime& st = *(currentTrip->StopTimes().cbegin() + (nextStop - route.Stops().cbegin()));
+				const stop_time& st = *(current_trip->stop_times().cbegin() + (next_stop - route.stops().cbegin()));
 
-				DateTime newArrival = currentDateForTrip.AddSeconds(st.ArrivalSinceMidnight()); // 18th row of pseudocode.
+				date_time new_arrival = date_for_current_trip.add_seconds(st.arrival_since_midnight()); // 18th row of pseudocode.
 					
-				auto currentStopBestArrival = tempLabels.find(&currentStop);
+				auto current_stop_best_arrival = temp_labels_.find(&current_stop);
 				
-				auto targetStopBestArrival = tempLabels.cend();
+				auto target_stop_best_arrival = temp_labels_.cend();
 
-				for (auto&& stop : target.ChildStops())
-					if (tempLabels.find(stop) != tempLabels.cend() && (targetStopBestArrival == tempLabels.cend() || tempLabels.find(stop)->second < targetStopBestArrival->second))
-						targetStopBestArrival = tempLabels.find(stop); // 18th row of pseudocode.
+				for (auto&& stop : target_.child_stops())
+					if (temp_labels_.find(stop) != temp_labels_.cend() && (target_stop_best_arrival == temp_labels_.cend() || temp_labels_.find(stop)->second < target_stop_best_arrival->second))
+						target_stop_best_arrival = temp_labels_.find(stop); // 18th row of pseudocode.
 
 
-				if ((currentStopBestArrival == tempLabels.cend() && targetStopBestArrival == tempLabels.cend()) || // Then the minimum is an infinity. Process the if block.
-					(currentStopBestArrival == tempLabels.cend() && targetStopBestArrival != tempLabels.cend() && newArrival < targetStopBestArrival->second) ||
-					(currentStopBestArrival != tempLabels.cend() && targetStopBestArrival == tempLabels.cend() && newArrival < currentStopBestArrival->second) || 
-					(currentStopBestArrival != tempLabels.cend() && targetStopBestArrival != tempLabels.cend() && newArrival < (targetStopBestArrival->second < currentStopBestArrival->second ? targetStopBestArrival->second : currentStopBestArrival->second))
+				if ((current_stop_best_arrival == temp_labels_.cend() && target_stop_best_arrival == temp_labels_.cend()) || // Then the minimum is an infinity. Process the if block.
+					(current_stop_best_arrival == temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < target_stop_best_arrival->second) ||
+					(current_stop_best_arrival != temp_labels_.cend() && target_stop_best_arrival == temp_labels_.cend() && new_arrival < current_stop_best_arrival->second) ||
+					(current_stop_best_arrival != temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < (target_stop_best_arrival->second < current_stop_best_arrival->second ? target_stop_best_arrival->second : current_stop_best_arrival->second))
 					) { // 18th row of pseudocode.
 
-					(labels.end() - 1)->erase(&currentStop);
-					tempLabels.erase(&currentStop);
+					(labels_.end() - 1)->erase(&current_stop);
+					temp_labels_.erase(&current_stop);
 
-					(labels.end() - 1)->insert(make_pair(&currentStop, newArrival)); // 19th row of pseudocode.
+					(labels_.end() - 1)->insert(make_pair(&current_stop, new_arrival)); // 19th row of pseudocode.
 					
-					if (journeys.size() == 2) {
+					if (journeys_.size() == 2) {
 
-						JourneySegment segment(*currentTrip, newArrival, *boardingStop, currentStop);
+						journey_segment segment(*current_trip, new_arrival, *boarding_stop, current_stop);
 
-						(journeys.end() - 1)->erase(&currentStop);
+						(journeys_.end() - 1)->erase(&current_stop);
 
-						(journeys.end() - 1)->insert(make_pair(&currentStop, Journey(move(segment))));
+						(journeys_.end() - 1)->insert(make_pair(&current_stop, journey(move(segment))));
 					}
 
 					else {
 
-						Journey currentJourney((journeys.end() - 2)->find(boardingStop)->second);
+						journey current_journey((journeys_.end() - 2)->find(boarding_stop)->second);
 
-						JourneySegment segment(*currentTrip, newArrival, *boardingStop, currentStop);
+						journey_segment segment(*current_trip, new_arrival, *boarding_stop, current_stop);
 
-						currentJourney.AddToJourney(move(segment));
+						current_journey.add_to_journey(move(segment));
 
-						(journeys.end() - 1)->erase(&currentStop);
+						(journeys_.end() - 1)->erase(&current_stop);
 
-						(journeys.end() - 1)->insert(make_pair(&currentStop, move(currentJourney)));
+						(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey)));
 
 					}
 
-					tempLabels.insert(make_pair(&currentStop, newArrival)); // 20th row of pseudocode.
+					temp_labels_.insert(make_pair(&current_stop, new_arrival)); // 20th row of pseudocode.
 
-					markedStops.insert(&currentStop); // 21st row of pseudocode.
+					marked_stops_.insert(&current_stop); // 21st row of pseudocode.
 				}
 
 
 				// Can we catch an earlier trip?
 
-				auto previousArrival = (labels.end() - 2)->find(&currentStop);
+				auto previous_arrival = (labels_.end() - 2)->find(&current_stop);
 
-				if (previousArrival != (labels.end() - 2)->cend() && previousArrival->second <= currentDateForTrip.AddSeconds(st.DepartureSinceTripMidnight())) { // 22nd row of pseudocode.
+				if (previous_arrival != (labels_.end() - 2)->cend() && previous_arrival->second <= date_for_current_trip.add_seconds(st.departure_since_midnight())) { // 22nd row of pseudocode.
 
-					auto res = FindEarliestTrip(route, previousArrival->second, nextStop - route.Stops().cbegin());
-					currentTrip = res.first; // 23rd row of pseudocode.
-					currentDateForTrip = move(res.second);
-					boardingStop = &currentStop; // We have just boarded the trip.
+					auto res = find_earliest_trip(route, previous_arrival->second, next_stop - route.stops().cbegin());
+					current_trip = res.first; // 23rd row of pseudocode.
+					date_for_current_trip = move(res.second);
+					boarding_stop = &current_stop; // We have just boarded the trip.
 				
 				}
 			}
 
 			// Can we catch an earlier trip?
 
-			if (currentTrip == nullptr) { // 22nd row of pseudocode.
+			if (current_trip == nullptr) { // 22nd row of pseudocode.
 
-				auto previousArrival = (labels.end() - 2)->find(&currentStop);
+				auto previous_arrival = (labels_.end() - 2)->find(&current_stop);
 
-				if (previousArrival != (labels.end() - 2)->cend()) {
-					auto res = FindEarliestTrip(route, previousArrival->second, nextStop - route.Stops().cbegin());
-					currentTrip = res.first; // 23rd row of pseudocode.
-					currentDateForTrip = move(res.second);
-					boardingStop = &currentStop; // We have just boarded the trip.
+				if (previous_arrival != (labels_.end() - 2)->cend()) {
+					auto res = find_earliest_trip(route, previous_arrival->second, next_stop - route.stops().cbegin());
+					current_trip = res.first; // 23rd row of pseudocode.
+					date_for_current_trip = move(res.second);
+					boarding_stop = &current_stop; // We have just boarded the trip.
 				}
 			}
 
@@ -158,190 +158,190 @@ void Timetables::Algorithms::Router::TraverseEachRoute() {
 
 }
 
-void Timetables::Algorithms::Router::LookAtFootpaths() {
+void Timetables::Algorithms::router::look_at_footpaths() {
 
-	vector<const Stop*> tempMarked;
+	vector<const stop*> temp_marked;
 
-	for (auto&& stopA : markedStops) { // 24th row of pseudocode.
+	for (auto&& stopA : marked_stops_) { // 24th row of pseudocode.
 
-		for (auto&& footpath : stopA->Footpaths()) { // 25th row of pseudocode.
+		for (auto&& footpath : stopA->footpaths()) { // 25th row of pseudocode.
 
 			size_t duration = footpath.first;
 
-			const Stop* stopB = footpath.second;
+			const stop* stop_B = footpath.second;
 
-			auto arrivalTimeA = (labels.cend() - 1)->find(stopA);
+			auto arrival_time_A = (labels_.cend() - 1)->find(stopA);
 
-			auto arrivalTimeB = (labels.cend() - 1)->find(stopB);
+			auto arrival_time_B = (labels_.cend() - 1)->find(stop_B);
 
-			Timetables::Structures::DateTime min = DateTime::Infinity();
+			Timetables::Structures::date_time min = date_time::infinity();
 
-			if (arrivalTimeA == (labels.cend() - 1)->cend() && (arrivalTimeB != (labels.cend() - 1)->cend()))
+			if (arrival_time_A == (labels_.cend() - 1)->cend() && (arrival_time_B != (labels_.cend() - 1)->cend()))
 
-				min = arrivalTimeB->second;
+				min = arrival_time_B->second;
 
-			else if (arrivalTimeA != (labels.cend() - 1)->cend() && (arrivalTimeB == (labels.cend() - 1)->cend()))
+			else if (arrival_time_A != (labels_.cend() - 1)->cend() && (arrival_time_B == (labels_.cend() - 1)->cend()))
 
-				min = arrivalTimeA->second.AddSeconds(duration);
+				min = arrival_time_A->second.add_seconds(duration);
 
-			else if (arrivalTimeA != (labels.cend() - 1)->cend() && (arrivalTimeB != (labels.cend() - 1)->cend()))
+			else if (arrival_time_A != (labels_.cend() - 1)->cend() && (arrival_time_B != (labels_.cend() - 1)->cend()))
 
-				min = arrivalTimeB->second < arrivalTimeA->second.AddSeconds(duration) ? arrivalTimeB->second : arrivalTimeA->second.AddSeconds(duration);
+				min = arrival_time_B->second < arrival_time_A->second.add_seconds(duration) ? arrival_time_B->second : arrival_time_A->second.add_seconds(duration);
 
 			else
 
 				throw runtime_error("Undefined state.");
 			
-			if (((arrivalTimeB == (labels.cend() - 1)->cend()) || // We have not arrive to the stop yet. Set new arrival time.
-				(arrivalTimeB == (labels.cend() - 1)->cend() && min != arrivalTimeB->second)) && // We can improve the arrival to the stop.
-				&target != &stopB->ParentStation()) // The stop is the target station. No need to add footpath.
+			if (((arrival_time_B == (labels_.cend() - 1)->cend()) || // We have not arrive to the stop yet. Set new arrival time.
+				(arrival_time_B == (labels_.cend() - 1)->cend() && min != arrival_time_B->second)) && // We can improve the arrival to the stop.
+				&target_ != &stop_B->parent_station()) // The stop is the target station. No need to add footpath.
 			{
 
-				(labels.end() - 1)->erase(stopB);
+				(labels_.end() - 1)->erase(stop_B);
 
-				(labels.end() - 1)->insert(make_pair(stopB, min)); // 26th row of pseudocode.
+				(labels_.end() - 1)->insert(make_pair(stop_B, min)); // 26th row of pseudocode.
 				
-				Journey newJourney((journeys.cend() - 1)->find(stopA)->second); // The same journey, added just some footpath -> arrival time increased.
+				journey new_journey((journeys_.cend() - 1)->find(stopA)->second); // The same journey, added just some footpath -> arrival time increased.
 
-				newJourney.AddFootpath(duration);
+				new_journey.set_last_transfer(duration);
 
-				(journeys.end() - 1)->erase(stopB);
+				(journeys_.end() - 1)->erase(stop_B);
 
-				(journeys.end() - 1)->insert(make_pair(stopB, newJourney)); 
+				(journeys_.end() - 1)->insert(make_pair(stop_B, new_journey)); 
 
 			}
 
 
-			tempMarked.push_back(stopB); // Temp because it may invalidate iterators.
+			temp_marked.push_back(stop_B); // Temp because it may invalidate iterators.
 
 		}
 
 	}
 
-	for (auto&& stop : tempMarked)
-		markedStops.insert(stop); // 27th row of pseudocode.
+	for (auto&& stop : temp_marked)
+		marked_stops_.insert(stop); // 27th row of pseudocode.
 
 }
 
-std::pair<const Timetables::Structures::Trip*, Timetables::Structures::DateTime> Timetables::Algorithms::Router::FindEarliestTrip(const Timetables::Structures::Route& route, const Timetables::Structures::DateTime& arrival, std::size_t stopIndex) {
+std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> Timetables::Algorithms::router::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
 
-	DateTime newDepartureDate = arrival.Date();
+	date_time new_departure_date = arrival.date();
 	size_t days = 0;
 	
 	// Searches for trip in horizon of a week. If not found, terminates looking for a journey using this route.
 
-	for (auto it = route.Trips().cbegin(); days < 7; ++it) {
+	for (auto it = route.trips().cbegin(); days < 7; ++it) {
 		
-		if (it == route.Trips().cend()) {
-			it = route.Trips().cbegin();
+		if (it == route.trips().cend()) {
+			it = route.trips().cbegin();
 			days++;
-			newDepartureDate = newDepartureDate.AddDays(1);
+			new_departure_date = new_departure_date.add_days(1);
 		}
 
-		const StopTime& st = *((**it).StopTimes().cbegin() + stopIndex);
+		const stop_time& st = *((**it).stop_times().cbegin() + stop_index);
 
-		DateTime newDepartureDateTime = newDepartureDate.AddSeconds(st.DepartureSinceTripMidnight() % 86400);
+		date_time new_departure_date_time = new_departure_date.add_seconds(st.departure_since_midnight() % 86400);
 				
-		if (newDepartureDateTime > arrival && st.IsOperatingInDateTime(newDepartureDateTime))
+		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
 
-			return make_pair(*it, newDepartureDateTime.AddSeconds((-1) * st.DepartureSinceTripMidnight()));
+			return make_pair(*it, new_departure_date_time.add_seconds((-1) * st.departure_since_midnight()));
 
 	}
 
 	return make_pair(nullptr, 0);
 }
 
-void Timetables::Algorithms::Router::ObtainJourneys() {
+void Timetables::Algorithms::router::obtain_journeys() {
 	
-	const Journey* previousFastestJourney = &ObtainJourney(earliestDeparture);
+	const journey* previous_fastest_journey = &obtain_journey(earliest_departure_);
 
 	// We tried to search a journey but no journey found.
 
-	if (fastestJourneys.size() == 0)
-		throw JourneyNotFoundException(source.Name(), target.Name());
+	if (fastest_journeys_.size() == 0)
+		throw journey_not_found(source_.name(), target_.name());
 
-	for (int i = 1; i < count; i++) {
-		const Journey* temp = &ObtainJourney(previousFastestJourney->DepartureTime().AddSeconds(1));
+	for (int i = 1; i < count_; i++) {
+		const journey* temp = &obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
 
-		if (fastestJourneys.size() >= count + 1 && previousFastestJourney->ArrivalTime() <= temp->ArrivalTime()) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey->arrival_time() <= temp->arrival_time()) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;		
 
-		previousFastestJourney = temp;
+		previous_fastest_journey = temp;
 	}
 
-	auto it = fastestJourneys.begin();
-	for (int i = 0; i < count && it != fastestJourneys.end(); ++it, i++);
+	auto it = fastest_journeys_.begin();
+	for (int i = 0; i < count_ && it != fastest_journeys_.end(); ++it, i++);
 
-	fastestJourneys.erase(it, fastestJourneys.end()); // Delete unwanted journeys.
+	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
 }
 
-const Timetables::Structures::Journey& Timetables::Algorithms::Router::ObtainJourney(const Timetables::Structures::DateTime& departure) {
+const Timetables::Structures::journey& Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
 
-	labels.clear();
-	tempLabels.clear();
-	markedStops.clear();
-	activeRoutes.clear();
-	journeys.clear();
+	labels_.clear();
+	temp_labels_.clear();
+	marked_stops_.clear();
+	active_routes_.clear();
+	journeys_.clear();
 
-	labels.push_back(unordered_map<const Stop*, DateTime>());
+	labels_.push_back(unordered_map<const stop*, date_time>());
 
-	journeys.push_back(unordered_map<const Stop*, Journey>());
+	journeys_.push_back(unordered_map<const stop*, journey>());
 
 	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
 
-	for (auto&& stop : source.ChildStops()) {
-		labels.at(0).insert(make_pair(stop, departure)); // 4th row of pseudocode.
-		markedStops.insert(stop); // 5th row of pseudocode.
+	for (auto&& stop : source_.child_stops()) {
+		labels_.at(0).insert(make_pair(stop, departure)); // 4th row of pseudocode.
+		marked_stops_.insert(stop); // 5th row of pseudocode.
 	}
 
-	for (size_t k = 1; markedStops.size() > 0 && k < maxTransfers; k++) { // 6th && 28th && 29th row of pseudocode.
+	for (size_t k = 1; marked_stops_.size() > 0 && k < max_transfers_; k++) { // 6th && 28th && 29th row of pseudocode.
 
-		labels.push_back(unordered_map<const Stop*, DateTime>());
+		labels_.push_back(unordered_map<const stop*, date_time>());
 
-		journeys.push_back(unordered_map<const Stop*, Journey>());
+		journeys_.push_back(unordered_map<const stop*, journey>());
 
-		AccumulateRoutes();
-		TraverseEachRoute();
-		LookAtFootpaths();
+		accumulate_routes();
+		traverse_each_route();
+		look_at_footpaths();
 
 	}
 	
 	// Adds all the suitable journeys to the map.
 
-	const Journey* fastestJourney = nullptr;
+	const journey* fastest_journey = nullptr;
 
-	for (size_t i = 0; i < maxTransfers && i < journeys.size(); i++)
-		for (auto&& stop : target.ChildStops()) {
+	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++)
+		for (auto&& stop : target_.child_stops()) {
 			
-			auto res = journeys[i].find(stop);
+			auto res = journeys_[i].find(stop);
 
-			if (res != journeys[i].cend()) {
-				fastestJourneys.insert(make_pair(res->second.ArrivalTime(), res->second));
-				if (fastestJourney == nullptr || fastestJourney->ArrivalTime() > res->second.ArrivalTime())
-					fastestJourney = &fastestJourneys.find(res->second.ArrivalTime())->second; // TO-DO: This is NOT correct.
+			if (res != journeys_[i].cend()) {
+				fastest_journeys_.insert(make_pair(res->second.arrival_time(), res->second));
+				if (fastest_journey == nullptr || fastest_journey->arrival_time() > res->second.arrival_time())
+					fastest_journey = &fastest_journeys_.find(res->second.arrival_time())->second; // TO-DO: This is NOT correct.
 			}
 
 		}
 
-	return *fastestJourney; // TO-DO: NullReferenceExpcetion... 
+	return *fastest_journey; // TO-DO: NullReferenceExpcetion... 
 }
 
-Timetables::Structures::JourneySegment::JourneySegment(const Timetables::Structures::Trip& trip, const Timetables::Structures::DateTime& arrival, const Stop& source, const Stop& target) : trip(trip), arrival(arrival) {
+Timetables::Structures::journey_segment::journey_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target) : trip_(trip), arrival_(arrival) {
 
-	for (std::vector<StopTime>::const_iterator it = trip.StopTimes().cbegin(); it != trip.StopTimes().cend(); ++it) {
+	for (std::vector<stop_time>::const_iterator it = trip.stop_times().cbegin(); it != trip.stop_times().cend(); ++it) {
 
-		if (&it->Stop() == &source) sourceStop = it;
+		if (&it->stop() == &source) source_stop_ = it;
 
-		if (&it->Stop() == &target) targetStop = it;
+		if (&it->stop() == &target) target_stop_ = it;
 
 	}
 
 }
 
-const std::vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> Timetables::Structures::JourneySegment::IntermediateStops() const {
-	vector<std::pair<std::size_t, const Timetables::Structures::Stop*>> stops;
-	size_t base = sourceStop->Departure();
-	for (auto it = sourceStop; it <= targetStop; ++it)
-		stops.push_back(make_pair(it->Arrival() - base, &it->Stop()));
+const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> Timetables::Structures::journey_segment::intermediate_stops() const {
+	vector<std::pair<std::size_t, const Timetables::Structures::stop*>> stops;
+	size_t base = source_stop_->departure();
+	for (auto it = source_stop_; it <= target_stop_; ++it)
+		stops.push_back(make_pair(it->arrival() - base, &it->stop()));
 	return move(stops);
 }

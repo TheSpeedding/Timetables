@@ -1,6 +1,6 @@
-#include "Stops.hpp"
-#include "Trips.hpp"
-#include "StopTime.hpp"
+#include "stops.hpp"
+#include "trips.hpp"
+#include "stop_time.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -11,7 +11,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::Stops::Stops(std::istream&& stops, std::istream&& footpaths, Stations& stations) {
+Timetables::Structures::stops::stops(std::istream&& stops, std::istream&& footpaths, stations& stations) {
 
 	string token;
 	std::getline(stops, token); // Number of entries.
@@ -28,13 +28,13 @@ Timetables::Structures::Stops::Stops(std::istream&& stops, std::istream&& footpa
 		for (size_t j = 0; j < 2; j++)
 			std::getline(stops, token, ';');
 
-		Station& station = stations[stoi(token)];
+		station& station = stations[stoi(token)];
 
-		Stop s(station);
+		stop s(station);
 		
 		list.push_back(move(s));
 
-		station.AddChildStop(*(list.cend() - 1));
+		station.add_child_stop(*(list.cend() - 1));
 
 	}
 
@@ -48,36 +48,36 @@ Timetables::Structures::Stops::Stops(std::istream&& stops, std::istream&& footpa
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-										// Entry format: Duration, FirstStop, SecondStop
+		// Entry format: Duration, FirstStop, SecondStop
 
 		for (size_t j = 0; j < 3; j++)
 			std::getline(footpaths, tokens[j], ';');
 
-		Stop& stopA = list[stoi(tokens[1])];
+		stop& stopA = list[stoi(tokens[1])];
 
-		Stop& stopB = list[stoi(tokens[2])];
+		stop& stopB = list[stoi(tokens[2])];
 
-		stopA.AddFootpath(stopB, stoi(tokens[0]));
+		stopA.add_footpath(stopB, stoi(tokens[0]));
 	}
 }
 
-void Timetables::Structures::Stops::SetThroughgoingRoutesForStops(Routes& routes) {
+void Timetables::Structures::stops::set_throughgoing_routes_for_stops(routes& routes) {
 
-	for (size_t i = 0; i < routes.Count(); i++) {
+	for (size_t i = 0; i < routes.size(); i++) {
 
-		const vector<const Stop*>& stops = routes[i].Stops();
+		const vector<const stop*>& stops = routes[i].stops();
 
 		for (auto&& s : stops) {
 
 			size_t index = s - list.data(); // Variable s is a const observer pointer to the stop. We have to modify it. We need non-const reference.
 											// So we will use contiguousnity of vector elements and compute index in the vector (of that stop) using difference of two addresses.
 
-			Stop& stop = list[index];
+			stop& stop = list[index];
 
-			auto it = find(stop.ThroughgoingRoutes().cbegin(), stop.ThroughgoingRoutes().cend(), &routes[i]);
+			auto it = find(stop.throughgoing_routes().cbegin(), stop.throughgoing_routes().cend(), &routes[i]);
 
-			if (it == stop.ThroughgoingRoutes().cend())
-				stop.AddThroughgoingRoute(routes[i]);
+			if (it == stop.throughgoing_routes().cend())
+				stop.add_throughgoing_route(routes[i]);
 
 		}
 

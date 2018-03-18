@@ -1,6 +1,6 @@
-#include "Trips.hpp"
-#include "Exceptions.hpp"
-#include "StopTime.hpp"
+#include "trips.hpp"
+#include "exceptions.hpp"
+#include "stop_time.hpp"
 #include <string>
 #include <array>
 #include <algorithm>
@@ -10,7 +10,7 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 
-Timetables::Structures::Trips::Trips(std::istream&& trips, RoutesInfo& routesInfo, Routes& routes, Services& services) {
+Timetables::Structures::trips::trips(std::istream&& trips, routes_info& routes_info, routes& routes, services& services) {
 	
 	string token;
 	std::getline(trips, token); // Number of entries.
@@ -28,23 +28,23 @@ Timetables::Structures::Trips::Trips(std::istream&& trips, RoutesInfo& routesInf
 		for (size_t j = 0; j < 4; j++)
 			std::getline(trips, tokens[j], ';');
 				
-		Service& service = services[stoi(tokens[1])];
+		service& service = services[stoi(tokens[1])];
 
-		Route& route = routes[stoi(tokens[2])];
+		route& route = routes[stoi(tokens[2])];
 
-		Trip t(service, route, stoi(tokens[3]));
+		trip t(service, route, stoi(tokens[3]));
 
 		list.push_back(move(t));
 
-		route.AddTrip(*(list.cend() - 1));
+		route.add_trip(*(list.cend() - 1));
 	}
 
 }
 
-void Timetables::Structures::Trips::SetTimetables(std::istream&& stopTimes, Stops& stops) {
+void Timetables::Structures::trips::set_timetables(std::istream&& stop_times, stops& stops) {
 
 	string token;
-	std::getline(stopTimes, token); // Number of entries.
+	std::getline(stop_times, token); // Number of entries.
 
 	size_t size = stoi(token);
 	
@@ -55,18 +55,17 @@ void Timetables::Structures::Trips::SetTimetables(std::istream&& stopTimes, Stop
 		// Entry format: TripID, StopID, ArrivalTime, DepartureTime
 
 		for (size_t j = 0; j < 4; j++)
-			std::getline(stopTimes, tokens[j], ';');
+			std::getline(stop_times, tokens[j], ';');
 
-		Trip& trip = list[stoi(tokens[0])];
+		trip& trip = list[stoi(tokens[0])];
 
-		Stop& stop = stops[stoi(tokens[1])];
+		stop& stop = stops[stoi(tokens[1])];
 
-		StopTime st(trip, stop, stoi(tokens[2]), stoi(tokens[3]));
+		stop_time st(trip, stop, stoi(tokens[2]), stoi(tokens[3]));
 
-		trip.AddToTrip(move(st));
+		trip.add_to_trip(move(st));
 
-		stop.ParentStation().AddDeparture(*(trip.StopTimes().cend() - 1));
-
+		stop.parent_station().add_departure(*(trip.stop_times().cend() - 1));
 
 	}
 

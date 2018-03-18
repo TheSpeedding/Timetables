@@ -1,48 +1,48 @@
 #ifndef STOPS_HPP
 #define STOPS_HPP
 
-#include "Utilities.hpp" // Dealing with time.
-#include "Stations.hpp" // Reference to the parent station in stop.
-#include "Routes.hpp" // Reference to the route in stop (throughgoing routes).
+#include "utilities.hpp" // Dealing with time.
+#include "stations.hpp" // Reference to the parent station in stop.
+#include "routes.hpp" // Reference to the route in stop (throughgoing routes).
 #include <string> // String is a need for names.
 #include <vector> // Data structure for stops.
 #include <map> // Data structure for footpaths.
 
 namespace Timetables {
 	namespace Structures {
-		class Station; // Forward declaration.
+		class station; // Forward declaration.
 
 		// Class collecting information about stop.
-		class Stop {
+		class stop {
 		private:
-			Station& parentStation; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same). be better.
-			std::multimap<std::size_t, const Stop*> footpaths; // Stops reachable in walking-distance (< 10 min.) from this stop.
-			std::vector<const Route*> throughgoingRoutes; // Routes that goes through this stop.
+			station& parent_station_; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same). be better.
+			std::multimap<std::size_t, const stop*> footpaths_; // Stops reachable in walking-distance (< 10 min.) from this stop.
+			std::vector<const route*> throughgoing_routes_; // Routes that goes through this stop.
 		public:
-			Stop(Station& parentStation) : parentStation(parentStation) {}
+			stop(station& parent_station) : parent_station_(parent_station) {}
 
-			inline Station& ParentStation() const { return parentStation; } // Parent station for this stop.
-			inline const std::wstring& Name() const { return parentStation.Name(); } // Name of this stop.
-			inline const std::vector<const Route*>& ThroughgoingRoutes() const { return throughgoingRoutes; } // Routes that goes through this stop.
-			inline const std::multimap<std::size_t, const Stop*>& Footpaths() const { return footpaths; } // Stops reachable in walking-distance (< 10 min.) from this stop.
+			inline station& parent_station() const { return parent_station_; } // Parent station for this stop.
+			inline const std::wstring& name() const { return parent_station_.name(); } // Name of this stop.
+			inline const std::vector<const route*>& throughgoing_routes() const { return throughgoing_routes_; } // Routes that goes through this stop.
+			inline const std::multimap<std::size_t, const stop*>& footpaths() const { return footpaths_; } // Stops reachable in walking-distance (< 10 min.) from this stop.
 
-			inline void AddThroughgoingRoute(const Route& route) { throughgoingRoutes.push_back(&route); } // Adds routes that goes through this stop. Used in initialization.
-			inline void AddFootpath(const Stop& stop, std::size_t time) { footpaths.insert(std::make_pair(time, &stop)); } // Adds a footpath. Used in initialization.
+			inline void add_throughgoing_route(const route& route) { throughgoing_routes_.push_back(&route); } // Adds routes that goes through this stop. Used in initialization.
+			inline void add_footpath(const stop& stop, std::size_t time) { footpaths_.insert(std::make_pair(time, &stop)); } // Adds a footpath. Used in initialization.
 		};
 
 		// Class collecting information about collection of the stops.
-		class Stops {
+		class stops {
 		private:
-			std::vector<Stop> list; // List of all the stops, index of the item is also identificator for the stop.
+			std::vector<stop> list; // List of all the stops, index of the item is also identificator for the stop.
 		public:
-			Stops(std::istream&& stops, std::istream&& footpaths, Stations& stations);
+			stops(std::istream&& stops, std::istream&& footpaths, stations& stations);
 
-			inline Stop& Get(std::size_t id) { return list.at(id); } // Gets the stop with given id.
-			inline const Stop& Get(std::size_t id) const { return list.at(id); } // Gets the stop with given id.
-			inline const std::size_t Count() const { return list.size(); } // Gets count of items in the collection.
-			inline Stop& operator[](std::size_t id) { return list[id]; } // Gets the stop with given id.
+			inline stop& at(std::size_t id) { return list.at(id); } // Gets the stop with given id.
+			inline const stop& at(std::size_t id) const { return list.at(id); } // Gets the stop with given id.
+			inline const std::size_t size() const { return list.size(); } // Gets count of items in the collection.
+			inline stop& operator[](std::size_t id) { return list[id]; } // Gets the stop with given id.
 
-			void SetThroughgoingRoutesForStops(Routes& routes); // Sets throughoing routes for every single stop. Based on the data loaded later than stops.
+			void set_throughgoing_routes_for_stops(routes& routes); // Sets throughoing routes for every single stop. Based on the data loaded later than stops.
 		};
 
 	}

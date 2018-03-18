@@ -9,89 +9,89 @@
 namespace Timetables {
 	namespace Structures {
 		// Class that collects information about date time.
-		class DateTime {
+		class date_time {
 		private:
-			std::time_t dateTime;
+			std::time_t date_time_;
 		public:
-			DateTime(const std::string& input) {
+			date_time(const std::string& input) {
 				// Accepts date format in YYYYMMDD and time format in HH:MM:SS.
 				// For maximal performance, no format validity check. 
 				// The library operates with data that should be correct, because they were produced by preprocessor (containing format checking).
 
 				if (input[2] == ':' && input[5] == ':')
 					// Time parsing.
-					dateTime = stoi(input.substr(0, 2)) * 3600 + stoi(input.substr(3, 2)) * 60 + stoi(input.substr(6, 2));
+					date_time_ = stoi(input.substr(0, 2)) * 3600 + stoi(input.substr(3, 2)) * 60 + stoi(input.substr(6, 2));
 
 				else
 					// Date parsing.
-					dateTime = boost::posix_time::to_time_t(boost::posix_time::ptime(
+					date_time_ = boost::posix_time::to_time_t(boost::posix_time::ptime(
 						boost::gregorian::date(stoi(input.substr(0, 4)), stoi(input.substr(4, 2)), stoi(input.substr(6, 2)))));
 			}
-			DateTime(std::time_t totalSecs) : dateTime(totalSecs) {}
-			DateTime(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) : dateTime(
+			date_time(std::time_t totalSecs) : date_time_(totalSecs) {}
+			date_time(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) : date_time_(
 				boost::posix_time::to_time_t(boost::posix_time::ptime(boost::gregorian::date(year, month, day), boost::posix_time::time_duration(hours, mins, secs)))
 			) {}
 
-			static DateTime Infinity() { return DateTime(std::numeric_limits<time_t>::max()); }
+			static date_time infinity() { return date_time(std::numeric_limits<time_t>::max()); }
 
-			static DateTime Now() { return DateTime(boost::posix_time::to_time_t(boost::posix_time::second_clock::local_time())); }
+			static date_time now() { return date_time(boost::posix_time::to_time_t(boost::posix_time::second_clock::local_time())); }
 
-			inline std::size_t Hours() const { return (dateTime / 3600) % 24; }
-			inline std::size_t Minutes() const { return (dateTime / 60) % 60; }
-			inline std::size_t Seconds() const { return dateTime % 60; }
-			inline std::size_t Day() const { return boost::posix_time::from_time_t(dateTime).date().day(); }
-			inline std::size_t Month() const { return boost::posix_time::from_time_t(dateTime).date().month(); }
-			inline std::size_t Year() const { return boost::posix_time::from_time_t(dateTime).date().year(); }
-			inline std::size_t DayInWeek() const { return ((dateTime / 86400) + 3) % 7; }
+			inline std::size_t hours() const { return (date_time_ / 3600) % 24; }
+			inline std::size_t minutes() const { return (date_time_ / 60) % 60; }
+			inline std::size_t seconds() const { return date_time_ % 60; }
+			inline std::size_t day() const { return boost::posix_time::from_time_t(date_time_).date().day(); }
+			inline std::size_t month() const { return boost::posix_time::from_time_t(date_time_).date().month(); }
+			inline std::size_t year() const { return boost::posix_time::from_time_t(date_time_).date().year(); }
+			inline std::size_t day_in_week() const { return ((date_time_ / 86400) + 3) % 7; }
 
-			DateTime Date() const { return DateTime(86400 * (dateTime / 86400)); } // Seconds since epoch until midnight.
-			DateTime Time() const { return DateTime(dateTime % 86400); } // Seconds since midnight till time.
+			date_time date() const { return date_time(86400 * (date_time_ / 86400)); } // Seconds since epoch until midnight.
+			date_time time() const { return date_time(date_time_ % 86400); } // Seconds since midnight till time.
 			
-			friend std::ostream& operator<<(std::ostream& output, const DateTime& dateTime) { output << boost::posix_time::from_time_t(dateTime.dateTime); return output; }
+			friend std::ostream& operator<<(std::ostream& output, const date_time& date_time) { output << boost::posix_time::from_time_t(date_time.date_time_); return output; }
 			
-			inline bool operator< (const DateTime& other) const { return dateTime < other.dateTime; }
-			inline bool operator> (const DateTime& other) const { return dateTime > other.dateTime; }
-			inline bool operator== (const DateTime& other) const { return dateTime == other.dateTime; }
-			inline bool operator<= (const DateTime& other) const { return dateTime <= other.dateTime; }
-			inline bool operator>= (const DateTime& other) const { return dateTime >= other.dateTime; }
-			inline bool operator!= (const DateTime& other) const { return dateTime != other.dateTime; }
+			inline bool operator< (const date_time& other) const { return date_time_ < other.date_time_; }
+			inline bool operator> (const date_time& other) const { return date_time_ > other.date_time_; }
+			inline bool operator== (const date_time& other) const { return date_time_ == other.date_time_; }
+			inline bool operator<= (const date_time& other) const { return date_time_ <= other.date_time_; }
+			inline bool operator>= (const date_time& other) const { return date_time_ >= other.date_time_; }
+			inline bool operator!= (const date_time& other) const { return date_time_ != other.date_time_; }
 
-			inline static long int Difference(const DateTime& first, const DateTime& second) { return first.dateTime - second.dateTime; }
+			inline static long int difference(const date_time& first, const date_time& second) { return first.date_time_ - second.date_time_; }
 
-			inline DateTime operator+(const DateTime& other) {
-				DateTime newDate(*this);
-				newDate.dateTime += other.dateTime;
-				return newDate;
+			inline date_time operator+(const date_time& other) {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ += other.date_time_;
+				return new_date_time;
 			}
 
-			inline DateTime operator-(const DateTime& other) {
-				DateTime newDate(*this);
-				newDate.dateTime -= other.dateTime;
-				return newDate;
+			inline date_time operator-(const date_time& other) {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ -= other.date_time_;
+				return new_date_time;
 			}
 
-			inline DateTime AddSeconds(int seconds) const {
-				DateTime newDate(*this);
-				newDate.dateTime += seconds;
-				return newDate;
+			inline date_time add_seconds(int seconds) const {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ += seconds;
+				return new_date_time;
 			}
 
-			inline DateTime AddMinutes(int minutes) const {
-				DateTime newDate(*this);
-				newDate.dateTime += 60 * minutes;
-				return newDate;
+			inline date_time add_minutes(int minutes) const {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ += 60 * minutes;
+				return new_date_time;
 			}
 
-			inline DateTime AddHours(int hours) const {
-				DateTime newDate(*this);
-				newDate.dateTime += 3600 * hours;
-				return newDate;
+			inline date_time add_hours(int hours) const {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ += 3600 * hours;
+				return new_date_time;
 			}
 
-			inline DateTime AddDays(int days) const {
-				DateTime newDate(*this);
-				newDate.dateTime += 86400 * days;
-				return newDate;
+			inline date_time add_days(int days) const {
+				date_time new_date_time(*this);
+				new_date_time.date_time_ += 86400 * days;
+				return new_date_time;
 			}
 
 		};

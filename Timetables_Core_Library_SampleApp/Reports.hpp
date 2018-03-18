@@ -4,15 +4,15 @@
 #include <exception>
 #include <iostream>
 #include <string>
-#include "../Timetables_Core_Library/DataFeed.hpp"
-#include "../Timetables_Core_Library/Utilities.hpp"
-#include "../Timetables_Core_Library/Exceptions.hpp"
-#include "../Timetables_Core_Library/DepartureBoard.hpp"
+#include "../Timetables_Core_Library/data_feed.hpp"
+#include "../Timetables_Core_Library/utilities.hpp"
+#include "../Timetables_Core_Library/exceptions.hpp"
+#include "../Timetables_Core_Library/departure_board.hpp"
 
 namespace Timetables {
 	namespace SampleApp {
-		void GetDepartureBoardReport(const Timetables::Structures::DataFeed& feed, const std::wstring& stationName, const Timetables::Structures::DateTime& dateTime, const size_t count);
-		void GetJourneysReport(const Timetables::Structures::DataFeed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::DateTime& dateTime, const size_t count, const size_t maxTransfers);
+		void get_departure_board_report(const Timetables::Structures::data_feed& feed, const std::wstring& station_name, const Timetables::Structures::date_time& date_time, const size_t count);
+		void get_journeys_report(const Timetables::Structures::data_feed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::date_time& date_time, const size_t count, const size_t max_transfers);
 	}
 }
 
