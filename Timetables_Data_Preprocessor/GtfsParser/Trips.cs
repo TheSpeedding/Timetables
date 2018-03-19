@@ -156,12 +156,7 @@ namespace Timetables.Preprocessor
 				{
 					string entry = q.Dequeue();
 
-					bool toBeAdded = false;
-
-					if (quotes)
-						tokens[tokens.Count - 1] += ',' + entry;
-					else
-						toBeAdded = true;
+					bool prevQuotes = quotes;
 
 					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
 					{
@@ -175,9 +170,10 @@ namespace Timetables.Preprocessor
 						quotes = false;
 					}
 
-					if (toBeAdded)
+					if (prevQuotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
 						tokens.Add(entry);
-					toBeAdded = false;
 				}
 
 				Trip trip = new Trip(Count, tokens[dic["trip_headsign"]], routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);

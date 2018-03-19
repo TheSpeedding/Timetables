@@ -130,13 +130,8 @@ namespace Timetables.Preprocessor
 				{
 					string entry = q.Dequeue();
 
-					bool toBeAdded = false;
-
-					if (quotes)
-						tokens[tokens.Count - 1] += ',' + entry;
-					else
-						toBeAdded = true;
-
+					bool prevQuotes = quotes;
+										
 					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
 					{
 						entry = entry.Substring(1, entry.Length - 1);
@@ -149,9 +144,10 @@ namespace Timetables.Preprocessor
 						quotes = false;
 					}
 
-					if (toBeAdded)
+					if (prevQuotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
 						tokens.Add(entry);
-					toBeAdded = false;
 				}
 
 				if (!dic.ContainsKey("location_type") || tokens[dic["location_type"]] == "0")

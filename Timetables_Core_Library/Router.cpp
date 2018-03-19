@@ -186,7 +186,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 			else if (arrival_time_A != (labels_.cend() - 1)->cend() && (arrival_time_B != (labels_.cend() - 1)->cend()))
 
-				min = arrival_time_B->second < arrival_time_A->second.add_seconds(duration) ? arrival_time_B->second : arrival_time_A->second.add_seconds(duration);
+				min = arrival_time_B->second <= arrival_time_A->second.add_seconds(duration) ? arrival_time_B->second : arrival_time_A->second.add_seconds(duration);
 
 			else
 
@@ -323,7 +323,7 @@ const Timetables::Structures::journey& Timetables::Algorithms::router::obtain_jo
 
 		}
 
-	return *fastest_journey; // TO-DO: NullReferenceExpcetion... 
+	return *fastest_journey; // TO-DO: NullReferenceException... 
 }
 
 Timetables::Structures::journey_segment::journey_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target) : trip_(trip), arrival_(arrival) {

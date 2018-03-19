@@ -80,6 +80,9 @@ namespace Timetables.Preprocessor
                         case RouteType.Tram:
                             Color = "CC0000";
                             break;
+						default:
+							Color = "000000";
+							break;
                     }
 
                 else
@@ -171,12 +174,7 @@ namespace Timetables.Preprocessor
 				{
 					string entry = q.Dequeue();
 
-					bool toBeAdded = false;
-
-					if (quotes)
-						tokens[tokens.Count - 1] += ',' + entry;
-					else
-						toBeAdded = true;
+					bool prevQuotes = quotes;
 
 					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
 					{
@@ -190,12 +188,18 @@ namespace Timetables.Preprocessor
 						quotes = false;
 					}
 
-					if (toBeAdded)
+					if (prevQuotes)
+						tokens[tokens.Count - 1] += ',' + entry;
+					else
 						tokens.Add(entry);
-					toBeAdded = false;
 				}
 
-				RouteInfo.RouteType type = (RouteInfo.RouteType)int.Parse(tokens[dic["route_type"]]);
+				int intType = int.Parse(tokens[dic["route_type"]]);
+
+				if (!(intType >= 0 && intType <= 7))
+					throw new FormatException("Invalid mean of transport.");
+
+				RouteInfo.RouteType type = (RouteInfo.RouteType)intType;
 
                 RouteInfo routeInfo = new RouteInfo(Count, tokens[dic["route_short_name"]], tokens[dic["route_long_name"]], type, tokens[dic["route_color"]]);
 
