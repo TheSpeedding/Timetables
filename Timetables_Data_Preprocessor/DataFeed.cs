@@ -29,6 +29,15 @@ namespace Timetables.Preprocessor
     {
 		private static Random random = new Random();
 		/// <summary>
+		/// Delegate serving problems with data.
+		/// </summary>
+		/// <param name="message">Message to be shown.</param>
+		public delegate void DataProcessingEventHandler(string message);
+		/// <summary>
+		/// The event is fired iff there is any problem with data. Or iff they were parsed successfully.
+		/// </summary>
+		public static event DataProcessingEventHandler DataProcessing;
+		/// <summary>
 		/// Returns random string of length 10. Probability of getting the same string is 37^10, more than 4 quadrillions.
 		/// </summary>
 		public static string RandomString() => new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10).Select(s => s[random.Next(s.Length)]).ToArray());
@@ -42,8 +51,31 @@ namespace Timetables.Preprocessor
 
 			for (int i = 0; i < urls.Length; i++)
 			{
-				Downloader.GetDataFeed($"{ i }_temp_data/", urls[i]);
-				dataList.Add((T)Activator.CreateInstance(typeof(T), (string)$"{ i }_temp_data/"));
+				try
+				{
+					Downloader.GetDataFeed($"{ i }_temp_data/", urls[i]);
+					dataList.Add((T)Activator.CreateInstance(typeof(T), (string)$"{ i }_temp_data/"));
+				}
+				catch (Exception ex)
+				{
+					if (ex is System.Reflection.TargetInvocationException)
+						ex = ex.InnerException;
+					
+					if (ex is UriFormatException)
+						DataProcessing?.Invoke($"The URL { urls[i] } is invalid.");
+
+					else if (ex is System.Net.WebException)
+						DataProcessing?.Invoke($"There was a problem downloading file { urls[i] }. Server may be inacessible or you are missing internet connection.");
+
+					else if (ex is FormatException)
+						DataProcessing?.Invoke($"The data downloaded from { urls[i] } are not well-formed.");
+
+					else
+						DataProcessing?.Invoke($"Parsing of data located in { urls[i] } ended with an unknown error.");
+
+					continue;
+				}
+				DataProcessing?.Invoke($"The data downloaded from { urls[i] } parsed successfully.");
 			}
 
 			IDataFeed mergedData = MergeMultipleDataFeeds(dataList);

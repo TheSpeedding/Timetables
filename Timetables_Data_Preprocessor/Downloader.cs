@@ -16,9 +16,11 @@ namespace Timetables.Preprocessor
 		/// <param name="url">Url to the data.</param>
 		public static void GetDataFeed(string path, string url)
 		{
+			Uri uri = new Uri(url);
+
 			using (var client = new WebClient())
 			{
-				client.DownloadFile(url, "data.zip");
+				client.DownloadFile(uri, "data.zip");
 			}
 
 			if (Directory.Exists(path))

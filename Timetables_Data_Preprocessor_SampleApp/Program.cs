@@ -12,6 +12,7 @@ namespace Timetables.SampleApp
 			Console.WriteLine("Type END command to end the input.");
 
 			List<string> urls = new List<string> { "http://opendata.iprpraha.cz/DPP/JR/jrdata.zip" }; // Link to Prague data source added implicitly.
+			Console.WriteLine("http://opendata.iprpraha.cz/DPP/JR/jrdata.zip");			
 
 			string line;
 			while ((line = Console.ReadLine()) != "END")
@@ -19,9 +20,13 @@ namespace Timetables.SampleApp
 
 			Console.WriteLine($"{ DateTime.Now }: Starting data processing.");
 
+			DataFeed.DataProcessing += new DataFeed.DataProcessingEventHandler((string message) => Console.WriteLine(DateTime.Now + ": " + message));
+
 			DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(urls.ToArray());
 
 			Console.WriteLine($"{ DateTime.Now }: Ending data processing.");
+
+			Console.ReadLine();
 		}
 	}
 }
