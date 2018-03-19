@@ -350,9 +350,9 @@ namespace Timetables.Preprocessor
                 {
                     service = calendar[tokens[dic["service_id"]]];
                 }
-                catch (IndexOutOfRangeException)
+                catch (KeyNotFoundException)
                 {
-                    throw new FormatException("Service with this ID does not exist.");
+					throw new FormatException("Service with this ID does not exist.");
                 }
 
                 bool type = tokens[dic["exception_type"]] == "1" ? true : false;
