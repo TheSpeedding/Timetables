@@ -255,7 +255,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	
 	const journey* previous_fastest_journey = &obtain_journey(earliest_departure_);
 
-	// We tried to search a journey but no journey found.
+	// We tried to search a journey but no journeys found.
 
 	if (fastest_journeys_.size() == 0)
 		throw journey_not_found(source_.name(), target_.name());
@@ -318,7 +318,7 @@ const Timetables::Structures::journey& Timetables::Algorithms::router::obtain_jo
 			if (res != journeys_[i].cend()) {
 				fastest_journeys_.insert(make_pair(res->second.arrival_time(), res->second));
 				if (fastest_journey == nullptr || fastest_journey->arrival_time() > res->second.arrival_time())
-					fastest_journey = &fastest_journeys_.find(res->second.arrival_time())->second; // TO-DO: This is NOT correct.
+					fastest_journey = &(--fastest_journeys_.upper_bound(res->second.arrival_time()))->second; // Items are being inserted into an upper bound.
 			}
 
 		}
