@@ -37,13 +37,14 @@ namespace Timetables.Preprocessor
 			/// </summary>
 			public override string ToString() => ID + ";" + ParentStation.ID + ";";
 			/// <summary>
-			/// Stop ID, Parent Station ID, Latitude, Longitude, List Of All Throughgoing Routes (separated by `.
+			/// Stop ID, Parent Station ID, Latitude, Longitude, List Of All Throughgoing Routes (separated by a backtick).
 			/// </summary>
 			public string ToStringBasic()
 			{
 				System.Text.StringBuilder result = new System.Text.StringBuilder();
 				result.Append(ID + ";" + ParentStation.ID + ";" + Location.Item1 + ";" + Location.Item2 + ";");
 				
+
 				foreach (var route in ThroughgoingRoutes)
 					result.Append(route.ID + "`");
 
