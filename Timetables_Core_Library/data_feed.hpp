@@ -26,13 +26,13 @@ namespace Timetables {
 			trips trips_;
 		public:
 			data_feed(const std::string& path) :
-				services_(std::ifstream(path + "/calendar.txt"), std::ifstream(path + "/calendar_dates.txt")),
-				routes_info_(std::wifstream(path + "/routes_info.txt", std::ios::binary)),
-				stations_(std::wifstream(path + "/stations.txt", std::ios::binary)),
-				stops_(std::ifstream(path + "/stops.txt"), std::ifstream(path + "/footpaths.txt"), stations_),
-				routes_(std::wifstream(path + "/routes.txt", std::ios::binary), routes_info_),
-				trips_(std::ifstream(path + "/trips.txt"), routes_info_, routes_, services_) {
-				trips_.set_timetables(std::ifstream(path + "/stop_times.txt"), stops_);
+				services_(std::ifstream(path + "/calendar.tfd"), std::ifstream(path + "/calendar_dates.tfd")),
+				routes_info_(std::wifstream(path + "/routes_info.tfd", std::ios::binary)),
+				stations_(std::wifstream(path + "/stations.tfd", std::ios::binary)),
+				stops_(std::ifstream(path + "/stops.tfd"), std::ifstream(path + "/footpaths.tfd"), stations_),
+				routes_(std::wifstream(path + "/routes.tfd", std::ios::binary), routes_info_),
+				trips_(std::ifstream(path + "/trips.tfd"), routes_info_, routes_, services_) {
+				trips_.set_timetables(std::ifstream(path + "/stop_times.tfd"), stops_);
 				routes_.set_stops_for_routes();
 				stops_.set_throughgoing_routes_for_stops(routes_);
 			}

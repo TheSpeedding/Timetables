@@ -83,17 +83,17 @@ namespace Timetables.Preprocessor
                 Directory.Delete(path, true);
             Directory.CreateDirectory(path);
 			
-            Trips.Write(new StreamWriter(path + "/trips.txt")); // This MUST come first because of trip reindexation (based on sorting).
+            Trips.Write(new StreamWriter(path + "/trips.tfd")); // This MUST come first because of trip reindexation (based on sorting).
 
-            Calendar.Write(new StreamWriter(path + "/calendar.txt"));
-            CalendarDates.Write(new StreamWriter(path + "/calendar_dates.txt"));
-            RoutesInfo.Write(new StreamWriter(path + "/routes_info.txt"));
-            Stops.Write(new StreamWriter(path + "/stops.txt"));
-            Stations.Write(new StreamWriter(path + "/stations.txt"));
-            Footpaths.Write(new StreamWriter(path + "/footpaths.txt"));
-            StopTimes.Write(new StreamWriter(path + "/stop_times.txt"));
-            Routes.Write(new StreamWriter(path + "/routes.txt"));
-            using (var expiration = new StreamWriter(path + "/expires.txt"))
+            Calendar.Write(new StreamWriter(path + "/calendar.tfd"));
+            CalendarDates.Write(new StreamWriter(path + "/calendar_dates.tfd"));
+            RoutesInfo.Write(new StreamWriter(path + "/routes_info.tfd"));
+            Stops.Write(new StreamWriter(path + "/stops.tfd"));
+            Stations.Write(new StreamWriter(path + "/stations.tfd"));
+            Footpaths.Write(new StreamWriter(path + "/footpaths.tfd"));
+            StopTimes.Write(new StreamWriter(path + "/stop_times.tfd"));
+            Routes.Write(new StreamWriter(path + "/routes.tfd"));
+            using (var expiration = new StreamWriter(path + "/expires.tfd"))
                 expiration.Write(ExpirationDate);
 		}
 		/// <summary>
@@ -151,10 +151,10 @@ namespace Timetables.Preprocessor
 				Directory.Delete(path, true);
 			Directory.CreateDirectory(path);
 
-			RoutesInfo.WriteBasic(new StreamWriter(path + "/routes_info.txt"));
-			Stops.WriteBasic(new StreamWriter(path + "/stops.txt"));
-			Stations.WriteBasic(new StreamWriter(path + "/stations.txt"));
-			using (var expiration = new StreamWriter(path + "/expires.txt"))
+			RoutesInfo.WriteBasic(new StreamWriter(path + "/routes_info.tfb"));
+			Stops.WriteBasic(new StreamWriter(path + "/stops.tfb"));
+			Stations.WriteBasic(new StreamWriter(path + "/stations.tfb"));
+			using (var expiration = new StreamWriter(path + "/expires.tfb"))
 				expiration.Write(ExpirationDate);
 
 		}
