@@ -27,9 +27,3 @@ Timetables::Structures::stations::stations(std::wistream&& stations) {
 	}
 
 }
-
-void Timetables::Structures::station::add_departure(const stop_time& stop_time) {
-	// We have to set new time because of the time relativity. That means departure of the trip + departure from given stoptime. 
-	// Plus we will normalize it. This serves only for departure boards.
-	departures_.insert(std::make_pair(date_time((stop_time.trip().departure() + stop_time.departure()) % 86400), &stop_time));
-} 

@@ -117,8 +117,8 @@ namespace Timetables.Preprocessor
             // if (!dic.ContainsKey("location_type")) throw new FormatException("Location type field name missing."); Optional, but we "need" it (partionally).
 
             while (!stops.EndOfStream)
-            {
-				List<string> tokens = new List<string>(stops.ReadLine().SplitGtfs());
+			{
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(stops.ReadLine());
 
 				Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 

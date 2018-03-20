@@ -21,11 +21,11 @@ using namespace Timetables::Exceptions;
 
 namespace Timetables {
 	namespace SampleApp {
-		const wstring& random_station(const data_feed& feed) {
+		const size_t random_station(const data_feed& feed) {
 			std::mt19937 rng;
 			rng.seed(std::random_device()());
 			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, feed.stations().size() - 1);
-			return feed.stations().at(dist6(rng)).name();
+			return dist6(rng);
 		}
 
 		void cpu_time_micro_benchmark(const data_feed& feed) {

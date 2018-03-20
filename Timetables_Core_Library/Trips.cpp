@@ -65,7 +65,7 @@ void Timetables::Structures::trips::set_timetables(std::istream&& stop_times, st
 
 		trip.add_to_trip(move(st));
 
-		stop.parent_station().add_departure(*(trip.stop_times().cend() - 1));
+		stop.add_departure(*(trip.stop_times().cend() - 1));
 
 	}
 

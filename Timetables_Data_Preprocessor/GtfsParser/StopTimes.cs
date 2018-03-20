@@ -123,8 +123,8 @@ namespace Timetables.Preprocessor
             if (!dic.ContainsKey("stop_id")) throw new FormatException("Stop ID field name missing.");
 
             while (!stopTimes.EndOfStream)
-            {
-				List<string> tokens = new List<string>(stopTimes.ReadLine().SplitGtfs());
+			{
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(stopTimes.ReadLine());
 
 				Trips.Trip trip = trips[tokens[dic["trip_id"]]];
 

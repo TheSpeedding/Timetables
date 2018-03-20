@@ -32,29 +32,46 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 
 	auto departure_date = earliest_departure_.date(); // A need for operating days checking.
 	
-	auto first_relevant = station_.departures().upper_bound(departure_time); // Upper bound of earliest departure.
+	// We have to find "count" departure from each stop of the station. This cannot be done better since we want to support showing departure board from map in mobile application.
 
-	size_t days = 0;
-	while (found_departures_.size() < count_ && days < 7) {
+	for (auto&& stop : stops_) {
 
-		if (first_relevant == station_.departures().cend()) {
-			first_relevant = station_.departures().cbegin(); // Midnight reached.
-			departure_date = departure_date.add_days(1);
-			days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
+		if (stop->departures().cend() == stop->departures().cbegin()) continue; // The stop contains no departures.
+
+		auto first_relevant = stop->departures().upper_bound(departure_time); // Upper bound of earliest departure.
+
+		size_t days = 0;
+		size_t counter = 0;
+
+		while (counter < count_ && days < 7) {
+
+			if (first_relevant == stop->departures().cend()) {
+				first_relevant = stop->departures().cbegin(); // Midnight reached.
+				departure_date = departure_date.add_days(1);
+				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
+			}
+
+			// Check if the stop-time (trip respectively) is operating in required date.
+			if (first_relevant->second->is_operating_in_date_time(departure_date + first_relevant->first)) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+																										   // Check if this stop is not the last stop in the trip (meaning to have no successors).
+				if (&first_relevant->second->stop() != &(first_relevant->second->trip().stop_times().cend() - 1)->stop()) {
+
+					date_time dep = date_time((first_relevant->second->trip().departure() + first_relevant->second->departure()) % 86400) // Time of the departure.
+						+ departure_date.date(); // Date of the departure.
+
+					found_departures_.push_back(departure(*first_relevant->second // Stop time.
+						, dep)); // Date time of the departure.
+
+					counter++;
+				}
+
+
+			first_relevant++;
 		}
+	}	
 
-		// Check if the stop-time (trip respectively) is operating in required date.
-		if (first_relevant->second->is_operating_in_date_time(departure_date + first_relevant->first)) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
-			// Check if this stop is not the last stop in the trip (meaning to have no successors).
-			if (&first_relevant->second->stop() != &(first_relevant->second->trip().stop_times().cend() - 1)->stop())
-				found_departures_.push_back(departure(*first_relevant->second, // Stop time.
-					date_time((first_relevant->second->trip().departure() + first_relevant->second->departure()) % 86400) // Time of the departure.
-					+ departure_date.date() // Date of the departure.
-				));
+	sort(found_departures_.begin(), found_departures_.end());
 
-		first_relevant++;
-	}
-
-	if (found_departures_.size() == 0) // This may be removed later.
-		throw no_departures_found(station_.name());
+	if (found_departures_.size() > count_)
+		found_departures_.erase(found_departures_.begin() + count_, found_departures_.end());	
 }

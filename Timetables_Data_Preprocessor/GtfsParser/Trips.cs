@@ -143,8 +143,8 @@ namespace Timetables.Preprocessor
             if (!dic.ContainsKey("trip_headsign")) throw new FormatException("Trip headsign field name missing.");
 
             while (!trips.EndOfStream)
-            {
-				List<string> tokens = new List<string>(trips.ReadLine().SplitGtfs());
+			{
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(trips.ReadLine());
 
 				Trip trip = new Trip(Count, tokens[dic["trip_headsign"]], routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
 

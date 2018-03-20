@@ -13,8 +13,7 @@ namespace Timetables.SampleApp
 			WriteLine("You can enter as many URLs to data sources as you wish. Seperate them with a new line.");
 			WriteLine("Type END command to end the input.");
 
-			List<string> urls = new List<string> { "http://opendata.iprpraha.cz/DPP/JR/jrdata.zip" }; // Link to Prague data source added implicitly.
-			WriteLine("http://opendata.iprpraha.cz/DPP/JR/jrdata.zip");			
+			List<string> urls = new List<string>();		
 
 			string line;
 			while ((line = ReadLine()) != "END")

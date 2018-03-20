@@ -159,7 +159,7 @@ namespace Timetables.Preprocessor
 
             while (!calendar.EndOfStream)
 			{
-				List<string> tokens = new List<string>(calendar.ReadLine().SplitGtfs());
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(calendar.ReadLine());
 
 				bool mon = tokens[dic["monday"]] == "1" ? true : false;
                 bool tue = tokens[dic["tuesday"]] == "1" ? true : false;
@@ -252,7 +252,11 @@ namespace Timetables.Preprocessor
 	/// Class for extraordinary events with a specific parsing from GTFS format.
 	/// </summary>
 	public sealed class GtfsCalendarDates : CalendarDates
-    {
+	{
+		/// <summary>
+		/// Initializes object using GTFS data feed.
+		/// </summary>
+		public GtfsCalendarDates() { }
 		/// <summary>
 		/// Initializes object using GTFS data feed.
 		/// </summary>
@@ -273,7 +277,7 @@ namespace Timetables.Preprocessor
 
             while (!calendarDates.EndOfStream)
 			{
-				List<string> tokens = new List<string>(calendarDates.ReadLine().SplitGtfs());
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(calendarDates.ReadLine());
 
 				Calendar.Service service;
 

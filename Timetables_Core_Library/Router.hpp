@@ -76,8 +76,8 @@ namespace Timetables {
 			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.
 				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 
 		public:
-			router(const Timetables::Structures::data_feed& feed, const std::wstring& s, const std::wstring& t, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers) :
-				max_transfers_(transfers + 1), count_(count), earliest_departure_(earliest_departure), source_(feed.stations().find(s)), target_(feed.stations().find(t)) {}
+			router(const Timetables::Structures::data_feed& feed, const std::size_t source_id, const std::size_t target_id, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers) :
+				max_transfers_(transfers + 1), count_(count), earliest_departure_(earliest_departure), source_(feed.stations().at(source_id)), target_(feed.stations().at(target_id)) {}
 
 			void obtain_journeys(); // Obtains given count of the best journeys.
 

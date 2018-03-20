@@ -160,7 +160,7 @@ namespace Timetables.Preprocessor
 
             while (!routesInfo.EndOfStream)
             {
-				List<string> tokens = new List<string>(routesInfo.ReadLine().SplitGtfs());
+				IList<string> tokens = GtfsDataFeed.SplitGtfs(routesInfo.ReadLine());
 
 				int intType = int.Parse(tokens[dic["route_type"]]);
 

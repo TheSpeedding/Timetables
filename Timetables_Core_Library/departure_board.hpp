@@ -20,6 +20,10 @@ namespace Timetables {
 			inline const route_info& line() const { return trip_begin_->trip().route().info(); } // Returns basic information about the line.
 			inline const stop& stop() const { return trip_begin_->stop(); } // Return the stop.
 			const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> following_stops() const; // Returns following stops in the trip.
+
+			inline bool operator< (const departure& other) const { return departure_ < other.departure_; }
+			inline bool operator> (const departure& other) const { return departure_ > other.departure_; }
+			inline bool operator==(const departure& other) const { return departure_ == other.departure_; }
 		};
 	}
 
@@ -28,12 +32,20 @@ namespace Timetables {
 		class departure_board {
 		private:
 			std::vector<Timetables::Structures::departure> found_departures_; // Departures found by the algorithm.
-			const Timetables::Structures::station& station_; // Station of origin.
+			std::vector<const Timetables::Structures::stop*> stops_; // Stops of origin.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
 		public:
-			departure_board(const Timetables::Structures::data_feed& feed, const std::wstring& station_name, const Timetables::Structures::date_time& earliest_departure,
-				const size_t count) : earliest_departure_(earliest_departure), count_(count), station_(feed.stations().find(station_name)) {}
+			departure_board(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
+				const size_t count, bool true_if_station) : earliest_departure_(earliest_departure), count_(count) {
+				
+				if (true_if_station)
+						stops_ = feed.stations().at(station_or_stop_id).child_stops();
+
+				else
+					stops_.push_back(&feed.stops().at(station_or_stop_id));
+
+			}
 
 			void obtain_departure_board(); // Gets a departure board.
 

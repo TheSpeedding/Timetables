@@ -255,10 +255,10 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	
 	const journey* previous_fastest_journey = &obtain_journey(earliest_departure_);
 
-	// We tried to search a journey but no journeys found.
+	// We tried to search a journey but no journeys found. No point of continuing.
 
 	if (fastest_journeys_.size() == 0)
-		throw journey_not_found(source_.name(), target_.name());
+		return;		
 
 	for (int i = 1; i < count_; i++) {
 		const journey* temp = &obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));

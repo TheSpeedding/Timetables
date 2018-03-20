@@ -26,8 +26,10 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 	cout << endl << date_time::now() << " : Starting departure board finding for "; wcout << station_name; cout << " station in datetime " << date_time << "." << endl;
 
 	try {
-		departure_board db(feed, station_name, date_time, count);
+		departure_board db(feed, feed.stations().find_index(station_name), date_time, count, true);
 		db.obtain_departure_board();
+		if (db.show_departure_board().size() == 0)
+			throw no_departures_found(station_name);
 		departures = db.show_departure_board();
 	}
 	catch (station_not_found ex) {
@@ -82,8 +84,11 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 	cout << endl << date_time::now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
 	try {
-		router r(feed, A, B, date_time, count, max_transfers);
+		router r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers);
 		r.obtain_journeys();
+		if (r.show_journeys().size() == 0)
+			throw journey_not_found(A, B);
+
 		auto journeys = r.show_journeys();
 
 		SetConsoleTextAttribute(hConsole, 7);
