@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Timetables.Preprocessor
 {
@@ -15,7 +16,7 @@ namespace Timetables.Preprocessor
         RoutesInfo RoutesInfo { get; }
         Stops Stops { get; }
         Stations Stations { get; }
-        Footpaths Footpaths { get; }
+        Footpaths Footpaths { set; get; }
         Trips Trips { get; }
         StopTimes StopTimes { get; }
         Routes Routes { get; }
@@ -41,7 +42,48 @@ namespace Timetables.Preprocessor
 		/// Returns random string of length 10. Probability of getting the same string is 37^10, more than 4 quadrillions.
 		/// </summary>
 		public static string RandomString() => new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10).Select(s => s[random.Next(s.Length)]).ToArray());
+		/// <summary>
+		/// Method that splits string according to GTFS rules which are the same as CSV files.
+		/// </summary>
+		/// <param name="input">Input to be splitted.</param>
+		public static IList<string> SplitGtfs(this string input)
+		{
+			// This approach is faster than using regex's.
 
+			Queue<string> q = new Queue<string>(input.Replace("\"\"","").Split(','));
+
+			// Check if there was a comma within the quotes.
+
+			List<string> tokens = new List<string>();
+
+			bool quotes = false;
+
+			while (q.Count > 0)
+			{
+				string entry = q.Dequeue();
+
+				bool prevQuotes = quotes;
+
+				if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
+				{
+					entry = entry.Substring(1, entry.Length - 1);
+					quotes = true;
+				}
+
+				if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
+				{
+					entry = entry.Substring(0, entry.Length - 1);
+					quotes = false;
+				}
+
+				if (prevQuotes)
+					tokens[tokens.Count - 1] += ',' + entry;
+				else
+					tokens.Add(entry);
+			}
+
+			return tokens;
+		}
 		/// <summary>
 		/// Downloads and creates data feed.
 		/// </summary>
@@ -51,6 +93,9 @@ namespace Timetables.Preprocessor
 
 			for (int i = 0; i < urls.Length; i++)
 			{
+
+				// TO-DO: This can be done using multiple threads.
+
 				try
 				{
 					Downloader.GetDataFeed($"{ i }_temp_data/", urls[i]);
@@ -69,14 +114,15 @@ namespace Timetables.Preprocessor
 
 					else if (ex is FormatException)
 						DataProcessing?.Invoke($"The data downloaded from { urls[i] } are not well-formed.");
-
+#if !DEBUG
 					else
-						DataProcessing?.Invoke($"Parsing of data located in { urls[i] } ended with an unknown error.");
-
+						DataProcessing?.Invoke($"Parsing of data located in { urls[i] } ended with an unknown error. Error: { ex.Message }");
+#endif
 					continue;
 				}
 				DataProcessing?.Invoke($"The data downloaded from { urls[i] } parsed successfully.");
 			}
+			
 
 			IDataFeed mergedData = MergeMultipleDataFeeds(dataList);
 
@@ -113,6 +159,7 @@ namespace Timetables.Preprocessor
 
 		private static void AddToDataFeed(this IDataFeed dataFeed, IDataFeed toBeAdded)
 		{
+			dataFeed.Footpaths.MergeCollections(toBeAdded.Footpaths, dataFeed.Stops, toBeAdded.Stops);
 			dataFeed.Calendar.MergeCollections(toBeAdded.Calendar);
 			dataFeed.CalendarDates.MergeCollections(toBeAdded.CalendarDates);
 			dataFeed.RoutesInfo.MergeCollections(toBeAdded.RoutesInfo);
@@ -121,7 +168,6 @@ namespace Timetables.Preprocessor
 			dataFeed.Stops.MergeCollections(toBeAdded.Stops);
 			dataFeed.StopTimes.MergeCollections(toBeAdded.StopTimes);
 			dataFeed.Trips.MergeCollections(toBeAdded.Trips);
-			dataFeed.Footpaths.MergeCollections(toBeAdded.Footpaths);
 			dataFeed.ExpirationDate = int.Parse(dataFeed.ExpirationDate) < int.Parse(toBeAdded.ExpirationDate) ? dataFeed.ExpirationDate : toBeAdded.ExpirationDate;
 		}
 

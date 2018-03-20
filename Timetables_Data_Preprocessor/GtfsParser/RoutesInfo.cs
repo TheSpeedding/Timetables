@@ -160,39 +160,7 @@ namespace Timetables.Preprocessor
 
             while (!routesInfo.EndOfStream)
             {
-                Queue<string> q = new Queue<string>(routesInfo.ReadLine().Split(','));
-
-                // Check if there was a comma within the quotes.
-
-                List<string> tokens = new List<string>();
-
-				for (int i = 0; i < tokens.Count; i++) tokens[i] = tokens[i].Replace("\"", "");
-
-				bool quotes = false;
-
-				while (q.Count > 0)
-				{
-					string entry = q.Dequeue();
-
-					bool prevQuotes = quotes;
-
-					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
-					{
-						entry = entry.Substring(1, entry.Length - 1);
-						quotes = true;
-					}
-
-					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
-					{
-						entry = entry.Substring(0, entry.Length - 1);
-						quotes = false;
-					}
-
-					if (prevQuotes)
-						tokens[tokens.Count - 1] += ',' + entry;
-					else
-						tokens.Add(entry);
-				}
+				List<string> tokens = new List<string>(routesInfo.ReadLine().SplitGtfs());
 
 				int intType = int.Parse(tokens[dic["route_type"]]);
 

@@ -9,3 +9,26 @@ Berlin: https://transitfeeds.com/p/verkehrsverbund-berlin-brandenburg/213/latest
 
 For example, by combining (merging) data feed for FLIX Buses, Prague public transport and Vienna public transport, it is possible to get from any point in Prague to any point in Vienna. Example of a routing algorithm work follows.
 
+Showing journey in total duration of 400 minutes and 0 seconds leaving source station at 2018-Mar-20 08:55:00 and approaching target station at 2018-Mar-20 15:35:00.
+
+Board the line 15 at 2018-Mar-20 08:55:00 in Malostranské náměstí station going ahead to Vozovna Žižkov station via following stops:
+  Malostranská with arrival at 2018-Mar-20 08:58:00.
+  Čechův most with arrival at 2018-Mar-20 09:00:00.
+  Dlouhá třída with arrival at 2018-Mar-20 09:02:00.
+  Náměstí Republiky with arrival at 2018-Mar-20 09:05:00.
+Get off the line 15 at 2018-Mar-20 09:07:00 in Masarykovo nádraží station.
+
+Transfer 11 minutes and 16 seconds.
+
+Board the line FlixBus at 2018-Mar-20 11:05:00 in Prague, Prague Main Railway Station station going ahead to Zagreb station via following stops:
+Get off the line FlixBus at 2018-Mar-20 15:25:00 in Vienna, Vienna Erdberg station.
+
+Transfer 1 minutes and 17 seconds.
+
+Board the line U3 at 2018-Mar-20 15:28:00 in Erdberg station going ahead to Wien Ottakring station via following stops:
+  Schlachthausgasse with arrival at 2018-Mar-20 15:29:00.
+  Kardinal-Nagl-Platz with arrival at 2018-Mar-20 15:30:00.
+  Rochusgasse with arrival at 2018-Mar-20 15:31:00.
+  Landstraße with arrival at 2018-Mar-20 15:33:00.
+  Stubentor with arrival at 2018-Mar-20 15:34:00.
+Get off the line U3 at 2018-Mar-20 15:35:00 in Stephansplatz station.

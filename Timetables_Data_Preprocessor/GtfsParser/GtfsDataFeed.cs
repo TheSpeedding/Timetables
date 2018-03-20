@@ -31,7 +31,7 @@ namespace Timetables.Preprocessor
         /// <summary>
         /// Includes information about footpaths.
         /// </summary>
-        public Footpaths Footpaths { get; }
+        public Footpaths Footpaths { set; get; }
         /// <summary>
         /// Includes information about trips.
         /// </summary>

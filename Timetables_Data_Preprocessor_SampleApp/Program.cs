@@ -10,7 +10,7 @@ namespace Timetables.SampleApp
 	{
 		static void Main(string[] args)
 		{
-			WriteLine("You can enter as many URLs to data sources as you wish. Seperate them with a new line");
+			WriteLine("You can enter as many URLs to data sources as you wish. Seperate them with a new line.");
 			WriteLine("Type END command to end the input.");
 
 			List<string> urls = new List<string> { "http://opendata.iprpraha.cz/DPP/JR/jrdata.zip" }; // Link to Prague data source added implicitly.

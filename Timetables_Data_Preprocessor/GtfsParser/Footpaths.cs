@@ -101,11 +101,18 @@ namespace Timetables.Preprocessor
 		/// Merges two collections into one.
 		/// </summary>
 		/// <param name="other">The other collection that should be merged.</param>
-		public void MergeCollections(Footpaths other)
+		public void MergeCollections(Footpaths other, Stops stopsA, Stops stopsB)
 		{
 			foreach (var footpath in other)
 				list.Add(footpath);
 			other = null;
+			foreach (var A in stopsA)
+				foreach (var B in stopsB)
+				{
+					int walkingTime = A.Value.GetWalkingTime(B.Value);
+					if (walkingTime < 900 && walkingTime > 0) // While moving to another data feed, will consider only the footpaths with walking time lower than 15 mins.
+						list.Add(new Footpath(walkingTime, A.Value, B.Value));
+				}
 		}
 	}
 	/// <summary>
@@ -124,8 +131,7 @@ namespace Timetables.Preprocessor
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
                     if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
-						if (A.Value.ParentStation == B.Value.ParentStation)
-							list.Add(new Footpath(walkingTime, A.Value, B.Value));
+						list.Add(new Footpath(walkingTime, A.Value, B.Value));
 				}
         }
     }

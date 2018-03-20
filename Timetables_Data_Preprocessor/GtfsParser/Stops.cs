@@ -118,44 +118,11 @@ namespace Timetables.Preprocessor
 
             while (!stops.EndOfStream)
             {
-                Queue<string> q = new Queue<string>(stops.ReadLine().Split(','));
+				List<string> tokens = new List<string>(stops.ReadLine().SplitGtfs());
 
-                // Check if there was a comma within the quotes.
+				Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 
-                List<string> tokens = new List<string>();
-				
-				bool quotes = false;
-
-				while (q.Count > 0)
-				{
-					string entry = q.Dequeue();
-
-					bool prevQuotes = quotes;
-										
-					if (entry.Length > 0 && entry[0] == '"') // Start of the quotes.
-					{
-						entry = entry.Substring(1, entry.Length - 1);
-						quotes = true;
-					}
-
-					if (entry.Length > 0 && entry[entry.Length - 1] == '"') // End of the quotes.
-					{
-						entry = entry.Substring(0, entry.Length - 1);
-						quotes = false;
-					}
-
-					if (prevQuotes)
-						tokens[tokens.Count - 1] += ',' + entry;
-					else
-						tokens.Add(entry);
-				}
-
-				if (!dic.ContainsKey("location_type") || tokens[dic["location_type"]] == "0")
-                {
-                    Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
-
-                    list.Add(tokens[dic["stop_id"]], stop);
-                }
+                list.Add(tokens[dic["stop_id"]], stop);
             }
 
             stops.Dispose();
