@@ -136,6 +136,9 @@ namespace Timetables.Preprocessor
 				
 				st.Trip.StopTimes.Add(st);
 
+				if (!st.Stop.ThroughgoingRoutes.Contains(st.Trip.RouteInfo))
+					st.Stop.ThroughgoingRoutes.Add(st.Trip.RouteInfo);
+
 				list.Add(st);
             }
             stopTimes.Dispose();

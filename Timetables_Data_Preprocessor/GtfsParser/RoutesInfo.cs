@@ -41,7 +41,11 @@ namespace Timetables.Preprocessor
 			/// <summary>
 			/// Route Info ID, Short Name, Long Name, Mean Of The Transport, Color.
 			/// </summary>
-            public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color + ";";
+			public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color + ";";
+			/// <summary>
+			/// Route Info ID, Short Name, Mean Of The Transport, Color.
+			/// </summary>
+			public string ToStringBasic() => ID + ";" + ShortName + ";" + (int)Type + ";" + Color + ";";
 			/// <summary>
 			/// Initializes object.
 			/// </summary>
@@ -50,7 +54,7 @@ namespace Timetables.Preprocessor
 			/// <param name="longName">Long Name.</param>
 			/// <param name="type">Mean Of The Transport.</param>
 			/// <param name="color">Color.</param>
-            public RouteInfo(int id, string shortName, string longName, RouteType type, string color)
+			public RouteInfo(int id, string shortName, string longName, RouteType type, string color)
             {
                 ID = id;
                 ShortName = shortName;
@@ -105,12 +109,24 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		/// <param name="routesInfo">Stream that the data should be written in.</param>
 		public void Write(System.IO.StreamWriter routesInfo)
-        {
-            routesInfo.WriteLine(Count);
-            foreach (var item in list)
-                routesInfo.Write(item.Value);
-            routesInfo.Close();
-            routesInfo.Dispose();
+		{
+			routesInfo.WriteLine(Count);
+			foreach (var item in list)
+				routesInfo.Write(item.Value);
+			routesInfo.Close();
+			routesInfo.Dispose();
+		}
+		/// <summary>
+		/// Writes basic data into given stream.
+		/// </summary>
+		/// <param name="routesInfo">Stream that the data should be written in.</param>
+		public void WriteBasic(System.IO.StreamWriter routesInfo)
+		{
+			routesInfo.WriteLine(Count);
+			foreach (var item in list)
+				routesInfo.Write(item.Value.ToStringBasic());
+			routesInfo.Close();
+			routesInfo.Dispose();
 		}
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.

@@ -140,5 +140,23 @@ namespace Timetables.Preprocessor
 
 			return tokens;
 		}
+
+		/// <summary>
+		/// Creates data feed that is required in GUI.
+		/// </summary>
+		/// <param name="path">Path to the folder that will be the feed saved to.</param>
+		public void CreateBasicData(string path)
+		{
+			if (Directory.Exists(path))
+				Directory.Delete(path, true);
+			Directory.CreateDirectory(path);
+
+			RoutesInfo.WriteBasic(new StreamWriter(path + "/routes_info.txt"));
+			Stops.WriteBasic(new StreamWriter(path + "/stops.txt"));
+			Stations.WriteBasic(new StreamWriter(path + "/stations.txt"));
+			using (var expiration = new StreamWriter(path + "/expires.txt"))
+				expiration.Write(ExpirationDate);
+
+		}
 	}
 }

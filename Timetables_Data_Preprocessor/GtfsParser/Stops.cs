@@ -24,14 +24,33 @@ namespace Timetables.Preprocessor
             /// Gps coords of the stop. Latitude and longitude.
             /// </summary>
             public Tuple<double, double> Location { get; }
-            /// <summary>
-            /// Reference to the parent station.
-            /// </summary>
-            public Stations.Station ParentStation { get; internal set; } 
+			/// <summary>
+			/// Reference to the parent station.
+			/// </summary>
+			public Stations.Station ParentStation { get; internal set; }
+			/// <summary>
+			/// Throughgoing routes for this stop.
+			/// </summary>
+			public List<RoutesInfo.RouteInfo> ThroughgoingRoutes { get; internal set; }
 			/// <summary>
 			/// Stop ID, Parent Station ID.
 			/// </summary>
-            public override string ToString() => ID + ";" + ParentStation.ID + ";";
+			public override string ToString() => ID + ";" + ParentStation.ID + ";";
+			/// <summary>
+			/// Stop ID, Parent Station ID, Latitude, Longitude, List Of All Throughgoing Routes (separated by `.
+			/// </summary>
+			public string ToStringBasic()
+			{
+				System.Text.StringBuilder result = new System.Text.StringBuilder();
+				result.Append(ID + ";" + ParentStation.ID + ";" + Location.Item1 + ";" + Location.Item2 + ";");
+				
+				foreach (var route in ThroughgoingRoutes)
+					result.Append(route.ID + "`");
+
+
+				result.Append(";");
+				return result.ToString();
+			}
 			/// <summary>
 			/// Initializes object.
 			/// </summary>
@@ -39,11 +58,12 @@ namespace Timetables.Preprocessor
 			/// <param name="name">Name.</param>
 			/// <param name="latitude">Latitude.</param>
 			/// <param name="longitude">Longitude.</param>
-            public Stop(int id, string name, double latitude, double longitude)
+			public Stop(int id, string name, double latitude, double longitude)
             {
                 ID = id;
                 Name = name;
                 Location = new Tuple<double, double>(latitude, longitude);
+				ThroughgoingRoutes = new List<RoutesInfo.RouteInfo>();
             }
         }
         protected Dictionary<string, Stop> list = new Dictionary<string, Stop>();
@@ -62,12 +82,24 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		/// <param name="stops">Stream that the data should be written in.</param>
 		public void Write(System.IO.StreamWriter stops)
-        {
-            stops.WriteLine(Count);
-            foreach (var item in list)
-                stops.Write(item.Value);
-            stops.Close();
-            stops.Dispose();
+		{
+			stops.WriteLine(Count);
+			foreach (var item in list)
+				stops.Write(item.Value);
+			stops.Close();
+			stops.Dispose();
+		}
+		/// <summary>
+		/// Writes basic data into given stream.
+		/// </summary>
+		/// <param name="stops">Stream that the data should be written in.</param>
+		public void WriteBasic(System.IO.StreamWriter stops)
+		{
+			stops.WriteLine(Count);
+			foreach (var item in list)
+				stops.Write(item.Value.ToStringBasic());
+			stops.Close();
+			stops.Dispose();
 		}
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.

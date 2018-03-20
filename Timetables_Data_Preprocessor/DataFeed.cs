@@ -22,6 +22,7 @@ namespace Timetables.Preprocessor
         Routes Routes { get; }
         string ExpirationDate { set; get; }
         void CreateDataFeed(string path);
+		void CreateBasicData(string path);
     }
 	/// <summary>
 	/// Static class including everything necessary for data feed generation.
@@ -102,6 +103,8 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 			DataProcessing?.Invoke($"Trying to create new data feed.");
 
 			mergedData.CreateDataFeed("data/");
+
+			mergedData.CreateBasicData("basic/");
 
 			DataProcessing?.Invoke($"Data feed created successfully.");
 

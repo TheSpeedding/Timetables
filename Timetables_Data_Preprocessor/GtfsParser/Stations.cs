@@ -51,13 +51,18 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		/// <param name="stations">Stream that the data should be written in.</param>
 		public void Write(System.IO.StreamWriter stations)
-        {
-            stations.WriteLine(Count);
-            foreach (var item in list)
-                stations.Write(item);
-            stations.Close();
-            stations.Dispose();
+		{
+			stations.WriteLine(Count);
+			foreach (var item in list)
+				stations.Write(item);
+			stations.Close();
+			stations.Dispose();
 		}
+		/// <summary>
+		/// Writes basic data into given stream.
+		/// </summary>
+		/// <param name="stations">Stream that the data should be written in.</param>
+		public void WriteBasic(System.IO.StreamWriter stations) => Write(stations);
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
