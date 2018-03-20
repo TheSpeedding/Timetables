@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Timetables.Preprocessor
 {
@@ -31,7 +31,11 @@ namespace Timetables.Preprocessor
     {
 		private static Random random = new Random();
 		/// <summary>
-		/// Delegate serving problems with data.
+		/// Returns random string of length 10. Probability of getting the same string is 37^10, more than 4 quadrillions.
+		/// </summary>
+		public static string RandomString() => new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10).Select(s => s[random.Next(s.Length)]).ToArray());
+		/// <summary>
+		/// Delegate serving information about data processing.
 		/// </summary>
 		/// <param name="message">Message to be shown.</param>
 		public delegate void DataProcessingEventHandler(string message);
@@ -40,54 +44,68 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public static event DataProcessingEventHandler DataProcessing;
 		/// <summary>
-		/// Returns random string of length 10. Probability of getting the same string is 37^10, more than 4 quadrillions.
+		/// Processes one data source.
 		/// </summary>
-		public static string RandomString() => new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10).Select(s => s[random.Next(s.Length)]).ToArray());
+		/// <typeparam name="T">Type of data.</typeparam>
+		/// <param name="dataList">List where should data be added.</param>
+		/// <param name="url">URL to data.</param>
+		/// <param name="index">Internal identifier for creating temporary folders.</param>
+		private static void ProcessData<T>(IList<IDataFeed> dataList, string url, int index = 0) where T : IDataFeed
+		{
+			try
+			{
+				lock (Downloader.Client) // Webclient cannot download multiple files in parallel.
+				{
+					DataProcessing?.Invoke($"Trying to download data from URL { url }.");
+
+					Downloader.GetDataFeed($"{ index }_temp_data/", url, index);
+
+					DataProcessing?.Invoke($"Data from URL { url } downloaded successfully.");
+				}
+
+				DataProcessing?.Invoke($"Trying to parse data downloaded from { url }.");
+
+				IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)$"{ index }_temp_data/");
+
+				lock (dataList)
+				{
+					dataList.Add(data);
+				}
+
+				DataProcessing?.Invoke($"The data downloaded from { url } parsed successfully.");
+			}
+			catch (Exception ex)
+			{
+				if (ex is System.Reflection.TargetInvocationException)
+					ex = ex.InnerException;
+
+				if (ex is UriFormatException)
+					DataProcessing?.Invoke($"The URL { url } is invalid.");
+
+				else if (ex is System.Net.WebException)
+					DataProcessing?.Invoke($"There was a problem downloading file { url }. Server may be inacessible or you are missing internet connection.");
+
+				else if (ex is FormatException)
+					DataProcessing?.Invoke($"The data downloaded from { url } are not well-formed.");
+#if !DEBUG
+				else
+					DataProcessing?.Invoke($@"Parsing of data located in { url } ended with an unknown error.
+Error: { ex.Message } Type of { ex.GetType() }.");
+#else
+					else
+						throw;
+#endif
+			}
+		}
 		/// <summary>
 		/// Downloads and creates data feed.
 		/// </summary>
 		public static void GetAndTransformDataFeed<T>(params string[] urls) where T : IDataFeed
         {
 			List<IDataFeed> dataList = new List<IDataFeed>();
-
-			for (int i = 0; i < urls.Length; i++)
-			{
-
-				// TO-DO: This can be done using multiple threads.
-
-				try
-				{
-					DataProcessing?.Invoke($"Trying to download data from URL { urls[i] }.");
-					Downloader.GetDataFeed($"{ i }_temp_data/", urls[i]);
-					DataProcessing?.Invoke($"Data from URL { urls[i] } downloaded successfully.");
-					DataProcessing?.Invoke($"Trying to parse data downloaded from { urls[i] }.");
-					dataList.Add((T)Activator.CreateInstance(typeof(T), (string)$"{ i }_temp_data/"));
-					DataProcessing?.Invoke($"The data downloaded from { urls[i] } parsed successfully.");
-				}
-				catch (Exception ex)
-				{
-					if (ex is System.Reflection.TargetInvocationException)
-						ex = ex.InnerException;
-
-					if (ex is UriFormatException)
-						DataProcessing?.Invoke($"The URL { urls[i] } is invalid.");
-
-					else if (ex is System.Net.WebException)
-						DataProcessing?.Invoke($"There was a problem downloading file { urls[i] }. Server may be inacessible or you are missing internet connection.");
-
-					else if (ex is FormatException)
-						DataProcessing?.Invoke($"The data downloaded from { urls[i] } are not well-formed.");
-#if !DEBUG
-					else
-						DataProcessing?.Invoke($@"Parsing of data located in { urls[i] } ended with an unknown error.
-Error: { ex.Message } Type of { ex.GetType() }.");
-#else
-					else
-						throw;
-#endif
-				}
-			}
-
+			
+			Parallel.For(0, urls.Length, (int i) => ProcessData<T>(dataList, urls[i], i)); // Try to process the data in parallel mode.
+						
 			if (dataList.Count == 0)
 			{
 				DataProcessing?.Invoke($"There are no data to process.");
@@ -101,7 +119,7 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 			DataProcessing?.Invoke($"Data merged successfully.");
 			
 			DataProcessing?.Invoke($"Trying to create new data feed.");
-
+			
 			mergedData.CreateDataFeed("data/");
 
 			mergedData.CreateBasicData("basic/");

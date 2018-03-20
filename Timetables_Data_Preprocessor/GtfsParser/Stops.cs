@@ -42,7 +42,7 @@ namespace Timetables.Preprocessor
 			public string ToStringBasic()
 			{
 				System.Text.StringBuilder result = new System.Text.StringBuilder();
-				result.Append(ID + ";" + ParentStation.ID + ";" + Location.Item1 + ";" + Location.Item2 + ";");
+				result.Append(ID + ";" + ParentStation.ID + ";" + Location.Item1.ToString(CultureInfo.InvariantCulture) + ";" + Location.Item2.ToString(CultureInfo.InvariantCulture) + ";");
 				
 
 				foreach (var route in ThroughgoingRoutes)
@@ -147,15 +147,19 @@ namespace Timetables.Preprocessor
             if (!dic.ContainsKey("stop_name")) throw new FormatException("Stop name field name missing.");
             if (!dic.ContainsKey("stop_lat")) throw new FormatException("Stop latitude field name missing.");
             if (!dic.ContainsKey("stop_lon")) throw new FormatException("Stop longitude field name missing.");
-            // if (!dic.ContainsKey("location_type")) throw new FormatException("Location type field name missing."); Optional, but we "need" it (partionally).
 
-            while (!stops.EndOfStream)
+			bool containsLocationType = dic.ContainsKey("location_type"); // Optional, but we "need" it (partionally).
+
+			while (!stops.EndOfStream)
 			{
 				IList<string> tokens = GtfsDataFeed.SplitGtfs(stops.ReadLine());
 
-				Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
+				if (!containsLocationType || (containsLocationType && tokens[dic["location_type"]] == "0"))
+				{
+					Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 
-                list.Add(tokens[dic["stop_id"]], stop);
+					list.Add(tokens[dic["stop_id"]], stop);
+				}
             }
 
             stops.Dispose();

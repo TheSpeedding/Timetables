@@ -264,3 +264,7 @@ __pycache__/
 **/data/
 **/data/*
 data/
+
+**/basic/
+**/basic/*
+basic/

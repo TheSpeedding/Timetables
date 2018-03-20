@@ -8,29 +8,32 @@ namespace Timetables.Preprocessor
 	/// Static class used for dealing with data stored in the internet.
 	/// </summary>
     public static class Downloader
-    {		
+    {
+		/// <summary>
+		/// Client used to download stuff.
+		/// </summary>
+		public static WebClient Client { get; }
+		static Downloader() => Client = new WebClient();
 		/// <summary>
 		/// Downloads and unzips data feed.
 		/// </summary>
 		/// <param name="path">Folder where the data should be extracted in.</param>
 		/// <param name="url">Url to the data.</param>
-		public static void GetDataFeed(string path, string url)
+		/// <param name="index">Internal identifier for creating temporary files.</param>
+		public static void GetDataFeed(string path, string url, int index = 0)
 		{
 			Uri uri = new Uri(url);
-
-			using (var client = new WebClient())
-			{
-				client.DownloadFile(uri, "data.zip");
-			}
+			
+			Client.DownloadFile(uri, $"{ index }_data.zip");
 
 			if (Directory.Exists(path))
 				Directory.Delete(path, true);
 
 			Directory.CreateDirectory(path);
 
-			System.IO.Compression.ZipFile.ExtractToDirectory("data.zip", path);
+			System.IO.Compression.ZipFile.ExtractToDirectory($"{ index }_data.zip", path);
 
-			File.Delete("data.zip");
+			File.Delete($"{ index }_data.zip");
 		}
 
 		/// <summary>
