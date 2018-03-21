@@ -10,11 +10,6 @@ namespace Timetables.Preprocessor
     public static class Downloader
     {
 		/// <summary>
-		/// Client used to download stuff.
-		/// </summary>
-		public static WebClient Client { get; }
-		static Downloader() => Client = new WebClient();
-		/// <summary>
 		/// Downloads and unzips data feed.
 		/// </summary>
 		/// <param name="path">Folder where the data should be extracted in.</param>
@@ -24,7 +19,10 @@ namespace Timetables.Preprocessor
 		{
 			Uri uri = new Uri(url);
 			
-			Client.DownloadFile(uri, $"{ index }_data.zip");
+			using (WebClient client = new WebClient())
+			{
+				client.DownloadFile(uri, $"{ index }_data.zip");
+			}
 
 			if (Directory.Exists(path))
 				Directory.Delete(path, true);

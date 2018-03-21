@@ -54,14 +54,12 @@ namespace Timetables.Preprocessor
 		{
 			try
 			{
-				lock (Downloader.Client) // Webclient cannot download multiple files in parallel.
-				{
-					DataProcessing?.Invoke($"Trying to download data from URL { url }.");
 
-					Downloader.GetDataFeed($"{ index }_temp_data/", url, index);
+				DataProcessing?.Invoke($"Trying to download data from URL { url }.");
 
-					DataProcessing?.Invoke($"Data from URL { url } downloaded successfully.");
-				}
+				Downloader.GetDataFeed($"{ index }_temp_data/", url, index);
+
+				DataProcessing?.Invoke($"Data from URL { url } downloaded successfully.");
 
 				DataProcessing?.Invoke($"Trying to parse data downloaded from { url }.");
 
@@ -102,7 +100,7 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 		/// </summary>
 		public static void GetAndTransformDataFeed<T>(params string[] urls) where T : IDataFeed
         {
-			List<IDataFeed> dataList = new List<IDataFeed>();
+			List<IDataFeed> dataList = new List<IDataFeed>(); // Data are added into the list only if they are (downloaded and) parsed successfully.
 			
 			Parallel.For(0, urls.Length, (int i) => ProcessData<T>(dataList, urls[i], i)); // Try to process the data in parallel mode.
 						
