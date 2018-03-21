@@ -71,7 +71,7 @@ namespace Timetables {
 			void accumulate_routes(); // Accumulates routes that will be traversed in next method.
 			void traverse_each_route(); // Traverses each route.
 			void look_at_footpaths(); // Tries to improve journeys using footpaths.
-			const Timetables::Structures::journey& obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this round.
+			const Timetables::Structures::journey* obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this iteration.
 
 			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.
 				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 

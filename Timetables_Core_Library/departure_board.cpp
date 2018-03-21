@@ -38,35 +38,37 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 
 		if (stop->departures().cend() == stop->departures().cbegin()) continue; // The stop contains no departures.
 
-		auto first_relevant = stop->departures().upper_bound(departure_time); // Upper bound of earliest departure.
+		auto it = stop->departures().cbegin();
 
 		size_t days = 0;
 		size_t counter = 0;
 
 		while (counter < count_ && days < 7) {
 
-			if (first_relevant == stop->departures().cend()) {
-				first_relevant = stop->departures().cbegin(); // Midnight reached.
+			if (it == stop->departures().cend()) {
+				it = stop->departures().cbegin(); // Midnight reached.
 				departure_date = departure_date.add_days(1);
 				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
 			}
 
-			// Check if the stop-time (trip respectively) is operating in required date.
-			if (first_relevant->second->is_operating_in_date_time(departure_date + first_relevant->first)) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
-																										   // Check if this stop is not the last stop in the trip (meaning to have no successors).
-				if (&first_relevant->second->stop() != &(first_relevant->second->trip().stop_times().cend() - 1)->stop()) {
+			// Check if the departure does not leave before required time.
+			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) &&
+				// Check if the stop-time (trip respectively) is operating in required date.
+				(**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight())) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+																			  // Check if this stop is not the last stop in the trip (meaning to have no successors).
+				if (&(**it).stop() != &((**it).trip().stop_times().cend() - 1)->stop()) {
 
-					date_time dep = date_time((first_relevant->second->trip().departure() + first_relevant->second->departure()) % 86400) // Time of the departure.
+					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % 86400) // Time of the departure.
 						+ departure_date.date(); // Date of the departure.
 
-					found_departures_.push_back(departure(*first_relevant->second // Stop time.
+					found_departures_.push_back(departure(**it // Stop time.
 						, dep)); // Date time of the departure.
 
 					counter++;
 				}
 
 
-			first_relevant++;
+			it++;
 		}
 	}	
 

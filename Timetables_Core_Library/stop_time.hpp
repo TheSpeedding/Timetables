@@ -27,6 +27,10 @@ namespace Timetables {
 			inline int departure_since_midnight() const { return departure_ + trip_.departure(); } // Absolute time, departure in seconds since midnight.
 
 			inline bool is_operating_in_date_time(const date_time& date_time) const { return trip_.service().is_operating_in_date(date_time.add_seconds((-1) * departure_since_midnight())); } // Checks whether trip is operating in this datetime.
+
+			inline bool operator< (const stop_time& other) const { return departure_since_midnight() < other.departure_since_midnight(); }
+			inline bool operator> (const stop_time& other) const { return departure_since_midnight() > other.departure_since_midnight(); }
+			inline bool operator==(const stop_time& other) const { return departure_since_midnight() == other.departure_since_midnight(); }
 		};
 	}
 }

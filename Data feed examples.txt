@@ -3,7 +3,7 @@ URLs to these data feeds are suitable to be used as an example of a preprocessor
 Note that merging multiple data feeds may lead to greater time complexity and definitely bigger memory consumption. Due to this, merging the data for (for example) the whole Europe may be possible only by using some efficient server with octa-core CPU and 16 GB RAM. It does not come in question to use some kind of database, 'cause it would slow down the algorithm drastically so it wouldn't be usable.
 
 FLIX Bus: https://transitfeeds.com/p/flixbus/795/latest/download
-Prague Integrated Transport: http://opendata.iprpraha.cz/DPP/JR/jrdata.zip (This data feed is downloaded implicitly while running Preprocessor SampleApp.)
+Prague Integrated Transport: http://opendata.iprpraha.cz/DPP/JR/jrdata.zip
 Vienna: https://go.gv.at/l9gtfs
 Berlin: https://transitfeeds.com/p/verkehrsverbund-berlin-brandenburg/213/latest/download
 

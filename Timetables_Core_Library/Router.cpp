@@ -253,7 +253,7 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 void Timetables::Algorithms::router::obtain_journeys() {
 	
-	const journey* previous_fastest_journey = &obtain_journey(earliest_departure_);
+	const journey* previous_fastest_journey = obtain_journey(earliest_departure_);
 
 	// We tried to search a journey but no journeys found. No point of continuing.
 
@@ -261,7 +261,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		return;		
 
 	for (int i = 1; i < count_; i++) {
-		const journey* temp = &obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
+		const journey* temp = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
 
 		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey->arrival_time() <= temp->arrival_time()) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;		
@@ -275,7 +275,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
 }
 
-const Timetables::Structures::journey& Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
+const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
 
 	labels_.clear();
 	temp_labels_.clear();
@@ -323,7 +323,7 @@ const Timetables::Structures::journey& Timetables::Algorithms::router::obtain_jo
 
 		}
 
-	return *fastest_journey; // TO-DO: NullReferenceException... 
+	return fastest_journey; 
 }
 
 Timetables::Structures::journey_segment::journey_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target) : trip_(trip), arrival_(arrival) {
