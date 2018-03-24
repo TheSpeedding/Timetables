@@ -70,7 +70,7 @@ namespace Timetables.Preprocessor
                         case RouteType.CableCar:
                         case RouteType.Funicular:
                         case RouteType.Gondola:
-                            Color = "FFFFFF";
+                            Color = "FF8C00";
                             break;
                         case RouteType.Rail:
                             Color = "006600";

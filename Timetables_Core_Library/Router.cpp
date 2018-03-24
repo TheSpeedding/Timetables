@@ -292,6 +292,15 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 	for (auto&& stop : source_.child_stops()) {
 		labels_.at(0).insert(make_pair(stop, departure)); // 4th row of pseudocode.
 		marked_stops_.insert(stop); // 5th row of pseudocode.
+
+		// We are also to reach the stops that are connected with footpaths.
+
+		for (auto&& footpath : stop->footpaths()) {
+			if (&footpath.second->parent_station() != &source_) {
+				labels_.at(0).insert(make_pair(footpath.second, departure.add_seconds(footpath.first)));
+				marked_stops_.insert(footpath.second);
+			}
+		}
 	}
 
 	for (size_t k = 1; marked_stops_.size() > 0 && k < max_transfers_; k++) { // 6th && 28th && 29th row of pseudocode.

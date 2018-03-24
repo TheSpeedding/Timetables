@@ -146,7 +146,16 @@ namespace Timetables.Preprocessor
 			{
 				IList<string> tokens = GtfsDataFeed.SplitGtfs(trips.ReadLine());
 
-				Trip trip = new Trip(Count, tokens[dic["trip_headsign"]], routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
+				// Since this application is optimized for Prague, we have to union stations of type Florenc, Florenc - B, Florenc - C. Otherwise they would become three separate stations.
+
+				string headsign = tokens[dic["trip_headsign"]].Length > 4 && tokens[dic["trip_headsign"]][tokens[dic["trip_headsign"]].Length - 3] == '-' ? tokens[dic["trip_headsign"]].Substring(0, tokens[dic["trip_headsign"]].Length - 4) : tokens[dic["trip_headsign"]];
+
+				// The same for Újezd LD and Újezd.
+
+				headsign = headsign.Length > 4 && headsign.Substring(headsign.Length - 4, 4) == "  LD" ? headsign.Substring(0, headsign.Length - 4) : headsign;
+				headsign = headsign.Length > 3 && headsign.Substring(headsign.Length - 3, 3) == " LD" ? headsign.Substring(0, headsign.Length - 3) : headsign;
+
+				Trip trip = new Trip(Count, headsign, routesInfo[tokens[dic["route_id"]]], services[tokens[dic["service_id"]]]);
 
                 list.Add(tokens[dic["trip_id"]], trip);
             }

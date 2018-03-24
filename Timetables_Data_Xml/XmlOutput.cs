@@ -46,11 +46,11 @@ namespace Timetables.Xml
 		/// <summary>
 		/// Creates XML file and checks its valadity against supplied DTD.
 		/// </summary>
-        public static void GetAndTransformDataFeedToXml<T>() where T : IDataFeed
+        public static void GetAndTransformDataFeedToXml<T>(string url) where T : IDataFeed
         {
-            Downloader.GetDataFeed("temp_data/");
+            Downloader.GetDataFeed("0_temp_data/", url);
 			
-            IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)"temp_data/");
+            IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)"0_temp_data/");
 
             data.CreateXml("Data.xml");
 
@@ -59,7 +59,7 @@ namespace Timetables.Xml
 			if (!checker.CheckXmlWellFormednessAgainstDtd())
 				throw new FormatException("XML not well-formed.");
             
-            Downloader.DeleteTrash("temp_data/");
+            Downloader.DeleteTrash("0_temp_data/");
         }
     }
 }

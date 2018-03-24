@@ -101,7 +101,12 @@ namespace Timetables.Preprocessor
 
 				string name = stop.Value.Name.Length > 4 && stop.Value.Name[stop.Value.Name.Length - 3] == '-' ? stop.Value.Name.Substring(0, stop.Value.Name.Length - 4) : stop.Value.Name;
 
-                if (!flags.ContainsKey(name))
+				// The same for Újezd LD and Újezd.
+				
+				name = name.Length > 4 && name.Substring(name.Length - 4, 4) == "  LD" ? name.Substring(0, name.Length - 4) : name;
+				name = name.Length > 3 && name.Substring(name.Length - 3, 3) ==  " LD" ? name.Substring(0, name.Length - 3) : name;
+				
+				if (!flags.ContainsKey(name))
                 {
                     var station = new Station(Count, name);
                     list.Add(station);
