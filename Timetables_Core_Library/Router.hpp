@@ -15,14 +15,14 @@ namespace Timetables {
 		// Class used in journeys.
 		class journey_segment {
 		private:
-			const trip& trip_; // Trip that serves the journey segment.
+			const trip* trip_; // Trip that serves the journey segment.
 			std::vector<stop_time>::const_iterator source_stop_; // Source stop.
 			std::vector<stop_time>::const_iterator target_stop_; // Target stop.
 			const Timetables::Structures::date_time arrival_; // Arrival at target stop.
 		public:
 			journey_segment(const trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target);
 
-			inline const trip& trip() const { return trip_; } // Trip.
+			inline const trip& trip() const { return *trip_; } // Trip.
 			inline const stop& source_stop() const { return source_stop_->stop(); } // Source stop.
 			inline const stop& target_stop() const { return target_stop_->stop(); } // Target stop.
 			inline const date_time departure_from_source() const { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
@@ -47,6 +47,12 @@ namespace Timetables {
 
 			inline void add_to_journey(const journey_segment& js) { journey_segments_.push_back(js); transfers_.push_back(0); } // Adds journey segment to the journey.
 			inline void set_last_transfer(std::size_t duration) { *(transfers_.end() - 1) = duration; } // Sets last transfer.
+
+			inline std::size_t total_transfer_time() const { // Gets total transfer time so the algorithm can choose preferences (less transfer time = better when deciding which journey to choose).
+				std::size_t total = 0;
+				for (auto&& time : transfers_) total += time;
+				return total;
+			}
 		};
 	}
 
@@ -71,8 +77,10 @@ namespace Timetables {
 			void accumulate_routes(); // Accumulates routes that will be traversed in next method.
 			void traverse_each_route(); // Traverses each route.
 			void look_at_footpaths(); // Tries to improve journeys using footpaths.
+
 			const Timetables::Structures::journey* obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this iteration.
 
+			void traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop); // Traverses one route.
 			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.
 				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 
 		public:
