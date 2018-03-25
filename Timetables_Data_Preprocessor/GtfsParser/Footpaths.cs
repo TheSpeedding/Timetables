@@ -131,7 +131,22 @@ namespace Timetables.Preprocessor
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
                     if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
-						list.Add(new Footpath(walkingTime, A.Value, B.Value));
+					{
+						// Lets check if it is a transfer from surface to underground transport. If so, double the walking time.
+
+						if (A.Value.ThroughgoingRoutes.Count != 0 && B.Value.ThroughgoingRoutes.Count != 0 && (
+						   (A.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway) ||
+						   (A.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway)))
+						{
+							if (2 * walkingTime < 600)
+								list.Add(new Footpath(2 * walkingTime, A.Value, B.Value));
+
+						}
+
+						else
+
+							list.Add(new Footpath(walkingTime, A.Value, B.Value));
+					}
 				}
         }
     }

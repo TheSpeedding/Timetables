@@ -194,8 +194,8 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 				(current_stop_best_arrival != temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < (target_stop_best_arrival->second < current_stop_best_arrival->second ? target_stop_best_arrival->second : current_stop_best_arrival->second))
 				) { // 18th row of pseudocode.
 
-				//(labels_.end() - 1)->erase(&current_stop);
-				//temp_labels_.erase(&current_stop);
+				(labels_.end() - 1)->erase(&current_stop);
+				temp_labels_.erase(&current_stop);
 
 				(labels_.end() - 1)->insert(make_pair(&current_stop, new_arrival)); // 19th row of pseudocode.
 				temp_labels_.insert(make_pair(&current_stop, new_arrival)); // 20th row of pseudocode.
@@ -204,7 +204,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 					journey_segment segment(*current_trip, new_arrival, *boarding_stop, current_stop);
 
-					//(journeys_.end() - 1)->erase(&current_stop);
+					(journeys_.end() - 1)->erase(&current_stop);
 
 					(journeys_.end() - 1)->insert(make_pair(&current_stop, journey(move(segment))));
 				}
@@ -218,9 +218,10 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 					current_journey.add_to_journey(move(segment));
 
 					if ((journeys_.end() - 1)->find(&current_stop) == (journeys_.end() - 1)->cend() || (journeys_.end() - 1)->find(boarding_stop) == (journeys_.end() - 1)->cend() ||
-						current_journey.total_transfer_time() <= (journeys_.end() - 1)->find(boarding_stop)->second.total_transfer_time()) { // The transfer time is no worse. We can update the journey.
+						current_journey.duration() <= (journeys_.end() - 1)->find(boarding_stop)->second.duration()) 
+					{ // The transfer time is no worse. We can update the journey.
 
-						//(journeys_.end() - 1)->erase(&current_stop);
+						(journeys_.end() - 1)->erase(&current_stop);
 
 						(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey)));
 
@@ -335,7 +336,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		// We are also to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
-			if (&footpath.second->parent_station() != &source_) {
+			if (&footpath.second->parent_station() != &source_ && footpath.first < 300) {
 				labels_.at(0).insert(make_pair(footpath.second, departure.add_seconds(footpath.first)));
 				marked_stops_.insert(footpath.second);
 			}

@@ -16,11 +16,11 @@ namespace Timetables.Preprocessor
         RoutesInfo RoutesInfo { get; }
         Stops Stops { get; }
         Stations Stations { get; }
-        Footpaths Footpaths { set; get; }
         Trips Trips { get; }
         StopTimes StopTimes { get; }
         Routes Routes { get; }
-        string ExpirationDate { set; get; }
+		Footpaths Footpaths { set; get; }
+		string ExpirationDate { set; get; }
         void CreateDataFeed(string path);
 		void CreateBasicData(string path);
     }

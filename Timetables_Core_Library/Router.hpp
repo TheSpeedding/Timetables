@@ -47,12 +47,6 @@ namespace Timetables {
 
 			inline void add_to_journey(const journey_segment& js) { journey_segments_.push_back(js); transfers_.push_back(0); } // Adds journey segment to the journey.
 			inline void set_last_transfer(std::size_t duration) { *(transfers_.end() - 1) = duration; } // Sets last transfer.
-
-			inline std::size_t total_transfer_time() const { // Gets total transfer time so the algorithm can choose preferences (less transfer time = better when deciding which journey to choose).
-				std::size_t total = 0;
-				for (auto&& time : transfers_) total += time;
-				return total;
-			}
 		};
 	}
 

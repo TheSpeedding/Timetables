@@ -30,10 +30,6 @@ namespace Timetables.Preprocessor
         /// </summary>
         public Stations Stations { get; }
         /// <summary>
-        /// Includes information about footpaths.
-        /// </summary>
-        public Footpaths Footpaths { set; get; }
-        /// <summary>
         /// Includes information about trips.
         /// </summary>
         public Trips Trips { get; }
@@ -45,10 +41,14 @@ namespace Timetables.Preprocessor
         /// Includes information about routes.
         /// </summary>
         public Routes Routes { get; }
-        /// <summary>
-        /// Date that the timetables expires in.
-        /// </summary>
-        public string ExpirationDate { set; get; }
+		/// <summary>
+		/// Includes information about footpaths.
+		/// </summary>
+		public Footpaths Footpaths { set; get; }
+		/// <summary>
+		/// Date that the timetables expires in.
+		/// </summary>
+		public string ExpirationDate { set; get; }
         /// <summary>
         /// Loads Gtfs data feed to memory.
         /// </summary>
@@ -66,12 +66,13 @@ namespace Timetables.Preprocessor
             Stops = new GtfsStops(new StreamReader(path + "/stops.txt"));
             Stations = new GtfsStations(Stops);
 
-            Footpaths = new GtfsFootpaths(Stops); // Even though walking time is an optional field in GTFS format, we will compute it on our own everytime - even though the data for transfers may exist. It ensures us better consistency.
-
 			Trips = new GtfsTrips(new StreamReader(path + "/trips.txt"), Calendar, RoutesInfo);
             StopTimes = new GtfsStopTimes(new StreamReader(path + "/stop_times.txt"), Trips, Stops);
             Routes = new GtfsRoutes(Trips, RoutesInfo);
-            ExpirationDate = Calendar.GetExpirationDate().ToString();
+
+			Footpaths = new GtfsFootpaths(Stops); // Even though walking time is an optional field in GTFS format, we will compute it on our own everytime - even though the data for transfers may exist. It ensures us better consistency.
+
+			ExpirationDate = Calendar.GetExpirationDate().ToString();
         }
         /// <summary>
         /// Creates data feed that is required for the application.
