@@ -2,8 +2,8 @@
 #define ROUTER_HPP
 
 #include <vector> // Used in journeys.
-#include <tbb/concurrent_unordered_map.h> // Structure for algorithm
-#include <tbb/concurrent_unordered_set.h> // Structure for algorithm
+#include <unordered_map> // Structure for algorithm
+#include <unordered_set>// Structure for algorithm
 #include "stop_time.hpp" // Used in journeys.
 #include "data_feed.hpp" // Reference to data feed.
 
@@ -66,11 +66,11 @@ namespace Timetables {
 			const std::size_t max_transfers_; // Maximum number of transfers defined by the user.
 			const std::size_t count_; // Count of journeys to search defined by the user.
 			
-			std::vector<tbb::concurrent_unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time>> labels_; // The best arrival date time at a stop in k-th round. TO-DO: Move to journeys.
-			std::vector<tbb::concurrent_unordered_map<const Timetables::Structures::stop*, Timetables::Structures::journey>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
-			tbb::concurrent_unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
-			tbb::concurrent_unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
-			tbb::concurrent_unordered_map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
+			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time>> labels_; // The best arrival date time at a stop in k-th round. TO-DO: Move to journeys.
+			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::journey>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
+			std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
+			std::unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
+			std::unordered_map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
 
 			std::multimap<Timetables::Structures::date_time, const Timetables::Structures::journey> fastest_journeys_; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
 
