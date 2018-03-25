@@ -21,7 +21,7 @@ void Timetables::Algorithms::router::accumulate_routes() {
 
 				if (route->stop_comes_before(*stop, *some_stop->second)) { // 11th row of pseudocode.
 
-					active_routes_.erase(route);
+					active_routes_.unsafe_erase(route);
 
 					active_routes_.insert(make_pair(route, stop)); // 11th row of pseudocode.
 
@@ -91,7 +91,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 				&target_ != &stop_B->parent_station()) // The stop is the target station. No need to add footpath.
 			{
 
-				(labels_.end() - 1)->erase(stop_B);
+				(labels_.end() - 1)->unsafe_erase(stop_B);
 
 				(labels_.end() - 1)->insert(make_pair(stop_B, min)); // 26th row of pseudocode.
 				
@@ -99,7 +99,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 				new_journey.set_last_transfer(duration);
 
-				(journeys_.end() - 1)->erase(stop_B);
+				(journeys_.end() - 1)->unsafe_erase(stop_B);
 
 				(journeys_.end() - 1)->insert(make_pair(stop_B, new_journey)); 
 
@@ -161,8 +161,8 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 				(current_stop_best_arrival != temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < (target_stop_best_arrival->second < current_stop_best_arrival->second ? target_stop_best_arrival->second : current_stop_best_arrival->second))
 				) { // 18th row of pseudocode.
 
-				(labels_.end() - 1)->erase(&current_stop);
-				temp_labels_.erase(&current_stop);
+				(labels_.end() - 1)->unsafe_erase(&current_stop);
+				temp_labels_.unsafe_erase(&current_stop);
 
 				(labels_.end() - 1)->insert(make_pair(&current_stop, new_arrival)); // 19th row of pseudocode.
 
@@ -170,7 +170,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 					journey_segment segment(*current_trip, new_arrival, *boarding_stop, current_stop);
 
-					(journeys_.end() - 1)->erase(&current_stop);
+					(journeys_.end() - 1)->unsafe_erase(&current_stop);
 
 					(journeys_.end() - 1)->insert(make_pair(&current_stop, journey(move(segment))));
 				}
@@ -186,7 +186,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 					if ((journeys_.end() - 1)->find(&current_stop) == (journeys_.end() - 1)->cend() || (journeys_.end() - 1)->find(boarding_stop) == (journeys_.end() - 1)->cend() ||
 						current_journey.total_transfer_time() <= (journeys_.end() - 1)->find(boarding_stop)->second.total_transfer_time()) { // The transfer time is no worse. We can update the journey.
 
-						(journeys_.end() - 1)->erase(&current_stop);
+						(journeys_.end() - 1)->unsafe_erase(&current_stop);
 
 						(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey)));
 
@@ -290,9 +290,9 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 	active_routes_.clear();
 	journeys_.clear();
 
-	labels_.push_back(unordered_map<const stop*, date_time>());
+	labels_.push_back(tbb::concurrent_unordered_map<const stop*, date_time>());
 
-	journeys_.push_back(unordered_map<const stop*, journey>());
+	journeys_.push_back(tbb::concurrent_unordered_map<const stop*, journey>());
 
 	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
 
@@ -312,9 +312,9 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 
 	for (size_t k = 1; marked_stops_.size() > 0 && k < max_transfers_; k++) { // 6th && 28th && 29th row of pseudocode.
 
-		labels_.push_back(unordered_map<const stop*, date_time>());
+		labels_.push_back(tbb::concurrent_unordered_map<const stop*, date_time>());
 
-		journeys_.push_back(unordered_map<const stop*, journey>());
+		journeys_.push_back(tbb::concurrent_unordered_map<const stop*, journey>());
 
 		accumulate_routes();
 		traverse_each_route();
