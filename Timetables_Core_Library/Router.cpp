@@ -1,6 +1,9 @@
 #include "router.hpp"
+#include <tbb/tbb.h>
+#include <thread>
 
 using namespace std;
+using namespace tbb;
 using namespace Timetables::Structures;
 using namespace Timetables::Exceptions;
 using namespace Timetables::Algorithms;
@@ -43,12 +46,38 @@ void Timetables::Algorithms::router::accumulate_routes() {
 
 
 void Timetables::Algorithms::router::traverse_each_route() {
-	
-	for (auto&& item : active_routes_) { // 15th row of pseudocode.
 
-		traverse_route(*item.first, *item.second);
+	int available_cores = std::thread::hardware_concurrency();
 
+	int threads_to_start = active_routes_.size() / 100 + 1;
+
+	if (threads_to_start > available_cores)
+		threads_to_start = available_cores;
+
+	vector<vector<pair<const route*, const stop*>>> buckets;
+
+	for (size_t i = 0; i < threads_to_start; i++)
+		buckets.push_back(vector<pair<const route*, const stop*>>());
+
+	size_t i = 0;
+
+	for (auto&& item : active_routes_) {
+
+		buckets[i % threads_to_start].push_back(item); // Divide items into buckets equally so multiple threads cant process it in parallel.
+
+		i++;
 	}
+
+	task_group g;
+
+	for (auto task = buckets.begin(); task != buckets.end(); ++task) {
+		g.run([=] {
+			for (auto&& item : *task) // 15th row of pseudocode.
+				traverse_route(*item.first, *item.second);
+		});
+	}
+
+	g.wait();
 
 }
 
