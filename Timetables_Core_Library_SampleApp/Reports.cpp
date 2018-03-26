@@ -106,50 +106,49 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 
 			const stop* previous_stop = nullptr;
 
-			auto it_transfers = journey.second.transfers().cbegin();
 
-			for (auto it = journey.second.journey_segments().cbegin(); it != journey.second.journey_segments().cend(); ++it) {
+			for (auto&& it : journey.second.journey_segments()) {
 
-				if (it != journey.second.journey_segments().cbegin()) { // Transfer.
-					
-					if (*it_transfers != 0) {
-						SetConsoleTextAttribute(hConsole, 15);
+				if (it->trip() == nullptr) { // Transfer.
+					SetConsoleTextAttribute(hConsole, 15);
 
-						cout << "Transfer " << *it_transfers / 60 << " minutes and " << *it_transfers % 60 << " seconds.";
+					int duration = date_time::difference(it->arrival_at_target(), it->departure_from_source());
 
-						cout << endl << endl;
+					cout << "Transfer " << duration / 60 << " minutes and " << duration % 60 << " seconds.";
+
+					cout << endl << endl;
+				}
+
+				else { // Trip segment.
+
+					int color = 0;
+					switch (it->trip()->route().info().color()) {
+					case 0x408000: color = 10; break;
+					case 0xFFFF00: color = 14; break;
+					case 0xFF0000: color = 12; break;
+					case 0x00FFFF: color = 11; break;
+					case 0xCC0000: color = 6; break;
+					default: color = 15; break;
 					}
 
-					it_transfers++;
+					SetConsoleTextAttribute(hConsole, color);
+
+					cout << "Board the line " << it->trip()->route().info().short_name() << " at " << it->departure_from_source() << " in ";
+					wcout << it->intermediate_stops().cbegin()->second->name() << " station going ahead to ";
+					wcout << it->trip()->route().headsign() << L" station via following stops:" << endl;
+
+					auto intermediate_stops = it->intermediate_stops();
+
+					for (auto it1 = intermediate_stops.cbegin() + 1; it1 != intermediate_stops.cend() - 1; ++it1) {
+						wcout << L"  " << it1->second->name(); cout << " with arrival at " << it->departure_from_source().add_seconds(it1->first) << "." << endl;
+					}
+
+					cout << "Get off the line " << it->trip()->route().info().short_name() << " at " << it->arrival_at_target() << " in ";
+					wcout << (it->intermediate_stops().cend() - 1)->second->name() << " station." << endl << endl;
+
+					previous_stop = (it->intermediate_stops().cend() - 1)->second;
+
 				}
-
-				int color = 0;
-				switch (it->trip().route().info().color()) {
-				case 0x408000: color = 10; break;
-				case 0xFFFF00: color = 14; break;
-				case 0xFF0000: color = 12; break;
-				case 0x00FFFF: color = 11; break;
-				case 0xCC0000: color = 6; break;
-				default: color = 15; break;
-				}
-
-				SetConsoleTextAttribute(hConsole, color);
-
-
-				cout << "Board the line " << it->trip().route().info().short_name() << " at " << it->departure_from_source() << " in ";
-				wcout << it->intermediate_stops().cbegin()->second->name() << " station going ahead to ";
-				wcout << it->trip().route().headsign() << L" station via following stops:" << endl;
-
-				auto intermediate_stops = it->intermediate_stops();
-
-				for (auto it1 = intermediate_stops.cbegin() + 1; it1 != intermediate_stops.cend() - 1; ++it1) {
-					wcout << L"  " << it1->second->name(); cout << " with arrival at " << it->departure_from_source().add_seconds(it1->first) << "." << endl;
-				}
-
-				cout << "Get off the line " << it->trip().route().info().short_name() << " at " << it->arrival_at_target() << " in ";
-				wcout << (it->intermediate_stops().cend() - 1)->second->name() << " station." << endl << endl;
-
-				previous_stop = (it->intermediate_stops().cend() - 1)->second;
 			}
 		}
 	}

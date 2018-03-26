@@ -1,6 +1,7 @@
 #ifndef ROUTER_HPP
 #define ROUTER_HPP
 
+#include <memory> // Polymorphism.
 #include <vector> // Used in journeys.
 #include <unordered_map> // Structure for algorithm
 #include <unordered_set>// Structure for algorithm
@@ -14,39 +15,97 @@ namespace Timetables {
 
 		// Class used in journeys.
 		class journey_segment {
+			friend class journey; // Clone method should not be a part of API.
+		protected:
+			virtual inline std::unique_ptr<journey_segment> clone() = 0;
+		public:
+			virtual ~journey_segment() noexcept {}
+			virtual inline const trip* trip() const = 0;
+			virtual inline const stop& source_stop() const = 0;
+			virtual inline const stop& target_stop() const = 0;
+			virtual inline const date_time departure_from_source() const = 0;
+			virtual inline const date_time& arrival_at_target() const = 0;
+			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const = 0;
+		};
+
+		// Trip segment.
+		class trip_segment : public journey_segment {
 		private:
-			const trip* trip_; // Trip that serves the journey segment.
+			const date_time arrival_; // Arrival at target stop.
+			const Timetables::Structures::trip* trip_; // Trip that serves the trip segment.
 			std::vector<stop_time>::const_iterator source_stop_; // Source stop.
 			std::vector<stop_time>::const_iterator target_stop_; // Target stop.
-			const Timetables::Structures::date_time arrival_; // Arrival at target stop.
+		protected:
+			virtual inline std::unique_ptr<journey_segment> clone() { return std::make_unique<trip_segment>(*this); }
 		public:
-			journey_segment(const trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target);
+			trip_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target) :
+				trip_(&trip), arrival_(arrival) {
+				for (std::vector<stop_time>::const_iterator it = trip.stop_times().cbegin(); it != trip.stop_times().cend(); ++it) { // Searches for stops in the trip.
+					if (&it->stop() == &source) source_stop_ = it;
+					if (&it->stop() == &target) target_stop_ = it;
+				}
+			}
 
-			inline const trip& trip() const { return *trip_; } // Trip.
-			inline const stop& source_stop() const { return source_stop_->stop(); } // Source stop.
-			inline const stop& target_stop() const { return target_stop_->stop(); } // Target stop.
-			inline const date_time departure_from_source() const { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
-			inline const date_time& arrival_at_target() const { return arrival_; } // Gets arrival at target.
-			const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const; // Gets intermediate stops between source and target stop.
+			virtual inline const Timetables::Structures::trip* trip() const override { return trip_; } // Trip.
+			virtual inline const stop& source_stop() const override { return source_stop_->stop(); } // Source stop.
+			virtual inline const stop& target_stop() const override { return target_stop_->stop(); } // Target stop.
+			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
+			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
+			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override; // Gets intermediate stops between source and target stop.
+		
+		};
+
+		// Transfer.
+		class footpath_segment : public journey_segment {
+		private:
+			const std::size_t duration_; // Duration of the transfer.
+			const date_time arrival_; // Arrival at target stop.
+			const stop& source_stop_; // Source stop.
+			const stop& target_stop_; // Target stop.
+		protected:
+			virtual inline std::unique_ptr<journey_segment> clone() { return std::make_unique<footpath_segment>(*this); }
+		public:
+			footpath_segment(const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, std::size_t duration) :
+				duration_(duration), arrival_(arrival), source_stop_(source), target_stop_(target) {}
+
+			virtual inline const Timetables::Structures::trip* trip() const override { return nullptr; } // Trip. Nullptr because this is a transfer.
+			virtual inline const stop& source_stop() const override { return source_stop_; } // Source stop.
+			virtual inline const stop& target_stop() const override { return target_stop_; } // Target stop.
+			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * duration_); } // Gets departure from source stop.
+			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
+			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { return std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>>(); } // Gets intermediate stops between source and target stop.
+
 		};
 
 		// Class collecting information about one journey.
 		class journey {
 		private:
-			std::vector<journey_segment> journey_segments_; // Journey consists of multiple trips, we will store them here.
-			std::vector<std::size_t> transfers_; // There is a footpath between every two journey segments.
-		public:
-			journey(const journey_segment& js) { add_to_journey(js); }
+			std::vector<std::unique_ptr<journey_segment>> journey_segments_; // Journey consists of multiple segments, we will store them here.
 
-			inline const date_time departure_time() const { return journey_segments_.cbegin()->departure_from_source(); } // Departure time from source stop.
-			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->arrival_at_target().add_seconds(*(transfers_.cend() - 1)); } // Arrival time at target stop.
+			void clone(const journey& other) {
+				for (auto&& segment : other.journey_segments_)
+					journey_segments_.push_back(segment->clone());
+			}
+		public:
+			journey(const trip_segment& js) { add_to_journey(js); }
+			journey(const footpath_segment& js) { add_to_journey(js); }
+
+			journey(const journey& other) { clone(other); }
+			journey& operator= (const journey& other) {
+				if (&other == this) return *this;
+				journey_segments_.clear();
+				clone(other);
+				return *this;
+			}
+
+			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
+			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const int duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 
-			inline const std::vector<journey_segment>& journey_segments() const { return journey_segments_; } // Gets journey segments.
-			inline const std::vector<std::size_t>& transfers() const { return transfers_; } // Gets transfer. There is a footpath between every two journey segments.
+			inline const std::vector<std::unique_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.
 
-			inline void add_to_journey(const journey_segment& js) { journey_segments_.push_back(js); transfers_.push_back(0); } // Adds journey segment to the journey.
-			inline void set_last_transfer(std::size_t duration) { *(transfers_.end() - 1) = duration; } // Sets last transfer.
+			inline void add_to_journey(const trip_segment& js) { journey_segments_.push_back(std::move(std::make_unique<trip_segment>(js))); } // Adds trip segment to the journey.
+			inline void add_to_journey(const footpath_segment& js) { journey_segments_.push_back(std::move(std::make_unique<footpath_segment>(js))); } // Adds footpath segment to the journey.
 		};
 	}
 
