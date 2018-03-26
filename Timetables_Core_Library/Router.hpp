@@ -104,8 +104,26 @@ namespace Timetables {
 
 			inline const std::vector<std::unique_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.
 
-			inline void add_to_journey(const trip_segment& js) { journey_segments_.push_back(std::move(std::make_unique<trip_segment>(js))); } // Adds trip segment to the journey.
-			inline void add_to_journey(const footpath_segment& js) { journey_segments_.push_back(std::move(std::make_unique<footpath_segment>(js))); } // Adds footpath segment to the journey.
+			inline void add_to_journey(const trip_segment& js) { // Adds trip segment to the journey.
+				if (journey_segments_.size() > 0 && date_time::difference((journey_segments_.cend() - 1)->get()->departure_from_source(), (journey_segments_.cend() - 1)->get()->arrival_at_target()) == 0)
+					journey_segments_.pop_back(); // The last segments lasts 0 seconds. No point of having it in the vector.
+
+				journey_segments_.push_back(std::move(std::make_unique<trip_segment>(js))); 
+			} 
+
+			inline void add_to_journey(const footpath_segment& js) { // Adds trip segment to the journey.
+				if (journey_segments_.size() > 0 && date_time::difference((journey_segments_.cend() - 1)->get()->departure_from_source(), (journey_segments_.cend() - 1)->get()->arrival_at_target()) == 0)
+					journey_segments_.pop_back(); // The last segments lasts 0 seconds. No point of having it in the vector.
+
+				journey_segments_.push_back(std::move(std::make_unique<footpath_segment>(js)));
+			}
+
+			inline bool operator< (const journey& other) const { return arrival_time() < other.arrival_time(); }
+			inline bool operator> (const journey& other) const { return arrival_time() > other.arrival_time(); }
+			inline bool operator==(const journey& other) const { return arrival_time() == other.arrival_time(); }
+			inline bool operator>=(const journey& other) const { return arrival_time() >= other.arrival_time(); }
+			inline bool operator<=(const journey& other) const { return arrival_time() <= other.arrival_time(); }
+			inline bool operator!=(const journey& other) const { return arrival_time() != other.arrival_time(); }
 		};
 	}
 
@@ -119,7 +137,6 @@ namespace Timetables {
 			const std::size_t max_transfers_; // Maximum number of transfers defined by the user.
 			const std::size_t count_; // Count of journeys to search defined by the user.
 			
-			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time>> labels_; // The best arrival date time at a stop in k-th round. TO-DO: Move to journeys.
 			std::vector<std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::journey>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
 			std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
 			std::unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.

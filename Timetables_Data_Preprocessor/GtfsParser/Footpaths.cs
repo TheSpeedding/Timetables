@@ -143,6 +143,24 @@ namespace Timetables.Preprocessor
 
 						}
 
+						else if (A.Value.ThroughgoingRoutes.Count != 0 && B.Value.ThroughgoingRoutes.Count != 0 &&
+						         A.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway)
+						{
+							// Transfer from subway to subway. 
+														
+							if (A.Value.ThroughgoingRoutes[0].ID == B.Value.ThroughgoingRoutes[0].ID)
+
+							// Transfer to same line usually take less time, multiply it by 0.5. This is because distance is measured from the beginning of the platfrom.
+
+								list.Add(new Footpath((int)(0.5 * walkingTime), A.Value, B.Value));
+
+							else
+
+							// Transfer between two lines usually take more time, multiply it by 1.5.
+
+								list.Add(new Footpath((int)(1.5 * walkingTime), A.Value, B.Value));
+						}
+
 						else
 
 							list.Add(new Footpath(walkingTime, A.Value, B.Value));

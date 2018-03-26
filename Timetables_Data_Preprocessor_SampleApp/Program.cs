@@ -29,7 +29,7 @@ namespace Timetables.SampleApp
 			WriteLine($"{ DateTime.Now }: Ending data preprocessing.");
 
 			WriteLine("Press any key to continue...");
-			ReadLine();
+			Read();
 		}
 	}
 }
