@@ -77,9 +77,6 @@
     <ClCompile Include="Trips.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
-    <ClCompile Include="Router.cpp">
-      <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
     <ClCompile Include="Routes.cpp">
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
@@ -90,6 +87,9 @@
       <Filter>Source Files\Structures</Filter>
     </ClCompile>
     <ClCompile Include="departure_board.cpp">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="router.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
   </ItemGroup>

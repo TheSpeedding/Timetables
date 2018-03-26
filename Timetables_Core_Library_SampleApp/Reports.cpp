@@ -100,14 +100,14 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 
 			SetConsoleTextAttribute(hConsole, 15);
 
-			cout << endl << "Showing journey in total duration of " << journey.second.duration() / 60 << " minutes and " << journey.second.duration() % 60 << " seconds";
-			cout << " leaving source station at " << journey.second.departure_time();
-			cout << " and approaching target station at " << journey.second.arrival_time() << "." << endl << endl;
+			cout << endl << "Showing journey in total duration of " << journey.duration() / 60 << " minutes and " << journey.duration() % 60 << " seconds";
+			cout << " leaving source station at " << journey.departure_time();
+			cout << " and approaching target station at " << journey.arrival_time() << "." << endl << endl;
 
 			const stop* previous_stop = nullptr;
 
 
-			for (auto&& it : journey.second.journey_segments()) {
+			for (auto&& it : journey.journey_segments()) {
 
 				if (it->trip() == nullptr) { // Transfer.
 					SetConsoleTextAttribute(hConsole, 15);

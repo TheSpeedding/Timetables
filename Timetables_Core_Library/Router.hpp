@@ -4,7 +4,8 @@
 #include <memory> // Polymorphism.
 #include <vector> // Used in journeys.
 #include <unordered_map> // Structure for algorithm
-#include <unordered_set>// Structure for algorithm
+#include <unordered_set> // Structure for algorithm
+#include <set> // Structure for algorithm
 #include "stop_time.hpp" // Used in journeys.
 #include "data_feed.hpp" // Reference to data feed.
 
@@ -52,7 +53,6 @@ namespace Timetables {
 			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override; // Gets intermediate stops between source and target stop.
-		
 		};
 
 		// Transfer.
@@ -74,7 +74,6 @@ namespace Timetables {
 			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * duration_); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { return std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>>(); } // Gets intermediate stops between source and target stop.
-
 		};
 
 		// Class collecting information about one journey.
@@ -104,26 +103,41 @@ namespace Timetables {
 
 			inline const std::vector<std::unique_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.
 
-			inline void add_to_journey(const trip_segment& js) { // Adds trip segment to the journey.
-				if (journey_segments_.size() > 0 && date_time::difference((journey_segments_.cend() - 1)->get()->departure_from_source(), (journey_segments_.cend() - 1)->get()->arrival_at_target()) == 0)
-					journey_segments_.pop_back(); // The last segments lasts 0 seconds. No point of having it in the vector.
+			template <typename T>
+			void add_to_journey(const T& js) { // Adds trip or footpath segment to the journey.
+				// static_assert(std::is_base_of<journey_segment, T>::value); // C++17 feature
 
-				journey_segments_.push_back(std::move(std::make_unique<trip_segment>(js))); 
+				if (journey_segments_.size() == 1) { 
+
+					if ((journey_segments_.cend() - 1)->get()->departure_from_source() == (journey_segments_.cend() - 1)->get()->arrival_at_target())
+						journey_segments_.pop_back(); // The last segment lasts 0 seconds. No point of having it in the vector.
+
+					else if (journey_segments_[0]->trip() == nullptr) { // Change initial departure time if footpath comes first.
+						
+						// "The problem" is the journey segment is immutable.
+
+						const stop& source = journey_segments_[0]->source_stop();
+						const stop& target = journey_segments_[0]->target_stop();
+						const size_t duration = date_time::difference(journey_segments_[0]->arrival_at_target(), journey_segments_[0]->departure_from_source());
+
+						journey_segments_.pop_back();
+
+						add_to_journey(footpath_segment(static_cast<const journey_segment&>(js).departure_from_source(), source, target, duration));
+					}
+				}
+
+				journey_segments_.push_back(std::move(std::make_unique<T>(js))); 
 			} 
-
-			inline void add_to_journey(const footpath_segment& js) { // Adds trip segment to the journey.
-				if (journey_segments_.size() > 0 && date_time::difference((journey_segments_.cend() - 1)->get()->departure_from_source(), (journey_segments_.cend() - 1)->get()->arrival_at_target()) == 0)
-					journey_segments_.pop_back(); // The last segments lasts 0 seconds. No point of having it in the vector.
-
-				journey_segments_.push_back(std::move(std::make_unique<footpath_segment>(js)));
+			
+			inline bool operator< (const journey& other) const {
+				// Preferences: Arrival time, duration, number of transfers.
+				if (arrival_time() != other.arrival_time())
+					return arrival_time() < other.arrival_time();
+				else if (departure_time() != other.departure_time())
+					return departure_time() < other.departure_time();
+				else
+					return journey_segments_.size() < other.journey_segments_.size();
 			}
-
-			inline bool operator< (const journey& other) const { return arrival_time() < other.arrival_time(); }
-			inline bool operator> (const journey& other) const { return arrival_time() > other.arrival_time(); }
-			inline bool operator==(const journey& other) const { return arrival_time() == other.arrival_time(); }
-			inline bool operator>=(const journey& other) const { return arrival_time() >= other.arrival_time(); }
-			inline bool operator<=(const journey& other) const { return arrival_time() <= other.arrival_time(); }
-			inline bool operator!=(const journey& other) const { return arrival_time() != other.arrival_time(); }
 		};
 	}
 
@@ -142,7 +156,7 @@ namespace Timetables {
 			std::unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
 			std::unordered_map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
 
-			std::multimap<Timetables::Structures::date_time, const Timetables::Structures::journey> fastest_journeys_; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
+			std::set<Timetables::Structures::journey> fastest_journeys_; // Fastest journeys found by the router, key is the arrival time to the target station. That means, they are sorted.
 
 			void accumulate_routes(); // Accumulates routes that will be traversed in next method.
 			void traverse_each_route(); // Traverses each route.
@@ -159,7 +173,7 @@ namespace Timetables {
 
 			void obtain_journeys(); // Obtains given count of the best journeys.
 
-			const std::multimap<Timetables::Structures::date_time, const Timetables::Structures::journey>& show_journeys() const { return fastest_journeys_; } // Shows the best journeys found by the algorithm.
+			const std::set<Timetables::Structures::journey>& show_journeys() const { return fastest_journeys_; } // Shows the best journeys found by the algorithm.
 		};
 	}
 }

@@ -5,6 +5,6 @@ namespace Timetables.SampleApp
 {
     class Program
     {
-        static void Main(string[] args) => XmlOutput.GetAndTransformDataFeedToXml<GtfsDataFeed>();
+        static void Main(string[] args) => XmlOutput.GetAndTransformDataFeedToXml<GtfsDataFeed>("");
     }
 }

@@ -44,6 +44,8 @@ namespace Timetables {
 			inline std::size_t year() const { return boost::posix_time::from_time_t(date_time_).date().year(); }
 			inline std::size_t day_in_week() const { return ((date_time_ / 86400) + 3) % 7; }
 
+			inline std::time_t timestamp() const { return date_time_; }
+
 			date_time date() const { return date_time(86400 * (date_time_ / 86400)); } // Seconds since epoch until midnight.
 			date_time time() const { return date_time(date_time_ % 86400); } // Seconds since midnight till time.
 			

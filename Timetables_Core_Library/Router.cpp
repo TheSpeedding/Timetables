@@ -273,18 +273,21 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	
 	const journey* previous_fastest_journey = obtain_journey(earliest_departure_);
 
-	// We tried to search a journey but no journeys found. No point of continuing.
+	// We tried to search a journey but no journeys found. No point of continue.
 
 	if (fastest_journeys_.size() == 0)
 		return;		
+	int i;
+	for (i = 1; i < count_; i++) {
+		const journey* current_fastest_journey = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
 
-	for (int i = 1; i < count_; i++) {
-		const journey* temp = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
+		if (current_fastest_journey == nullptr) // No journey found.
+			break;
 
-		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey->arrival_time() <= temp->arrival_time()) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
-			break;		
+		/*if (fastest_journeys_.size() >= count_ + 1 && *previous_fastest_journey < *current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			break;*/	
 
-		previous_fastest_journey = temp;
+		previous_fastest_journey = current_fastest_journey;
 	}
 
 	auto it = fastest_journeys_.begin();
@@ -330,7 +333,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 	
 	// Adds all the suitable journeys to the map.
 
-	const journey* fastest_journey = nullptr;
+	const journey* fastest_journey = nullptr; // Fastest journey found in this round.
 
 	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++)
 		for (auto&& stop : target_.child_stops()) {
@@ -338,9 +341,12 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 			auto res = journeys_[i].find(stop);
 
 			if (res != journeys_[i].cend()) {
-				fastest_journeys_.insert(make_pair(res->second.arrival_time(), res->second));
-				if (fastest_journey == nullptr || fastest_journey->arrival_time() > res->second.arrival_time())
-					fastest_journey = &(--fastest_journeys_.upper_bound(res->second.arrival_time()))->second; // Items are being inserted into an upper bound.
+				if (fastest_journeys_.insert(res->second).second == true) {
+
+					if (fastest_journey == nullptr || res->second < *fastest_journey)
+						fastest_journey = &*(--fastest_journeys_.upper_bound(res->second)); // Items are being inserted into an upper bound.
+
+				}
 			}
 
 		}

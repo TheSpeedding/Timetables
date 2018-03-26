@@ -2,6 +2,8 @@
 #include <array>
 #include <codecvt>
 
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 using namespace std;
 using namespace Timetables::Structures;
 

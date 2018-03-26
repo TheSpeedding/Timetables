@@ -1,4 +1,4 @@
-﻿using Timetables.Preprocessor;
+using Timetables.Preprocessor;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
