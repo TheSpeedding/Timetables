@@ -1,9 +1,9 @@
 #ifndef STOP_TIME_HPP
 #define STOP_TIME_HPP
 
-#include "utilities.hpp" // Extension methods for datetime.
-#include "trips.hpp" // Reference to the trip in stop time class.
-#include "stops.hpp" // Reference to the stop in stop time class.
+#include "../Structures/date_time.hpp" // Extension methods for datetime.
+#include "../Structures/trips.hpp" // Reference to the trip in stop time class.
+#include "../Structures/stops.hpp" // Reference to the stop in stop time class.
 
 namespace Timetables {
 	namespace Structures {

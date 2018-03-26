@@ -1,11 +1,11 @@
 #ifndef TRIP_HPP
 #define TRIP_HPP
 
-#include "services.hpp" // Reference to the service in Trip class.
-#include "routes_info.hpp" // Reference to the routes info in Trips class ctor.
-#include "stops.hpp" // Reference to the stops in SetTimetables method.
+#include "../Structures/services.hpp" // Reference to the service in Trip class.
+#include "../Structures/routes_info.hpp" // Reference to the routes info in Trips class ctor.
+#include "../Structures/stops.hpp" // Reference to the stops in SetTimetables method.
 #include "routes.hpp" // Reference to the route in Trip class.
-// #include "StopTime.hpp" // StopTime used as a data member in Trip class.
+// #include "../Structures/stop_time.hpp" // StopTime used as a data member in Trip class.
 #include <vector> // Data structure for trips.
 
 namespace Timetables {

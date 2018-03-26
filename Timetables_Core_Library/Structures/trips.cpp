@@ -1,6 +1,5 @@
-#include "trips.hpp"
-#include "exceptions.hpp"
-#include "stop_time.hpp"
+#include "../Structures/trips.hpp"
+#include "../Structures/stop_time.hpp"
 #include <string>
 #include <array>
 #include <algorithm>
@@ -8,7 +7,6 @@
 
 using namespace std;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 
 Timetables::Structures::trips::trips(std::istream&& trips, routes_info& routes_info, routes& routes, services& services) {
 	

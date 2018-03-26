@@ -1,8 +1,7 @@
-#include "../Timetables_Core_Library/data_feed.hpp"
-#include "../Timetables_Core_Library/utilities.hpp"
-#include "../Timetables_Core_Library/router.hpp"
-#include "../Timetables_Core_Library/departure_board.hpp"
-#include "../Timetables_Core_Library/exceptions.hpp"
+#include "../Timetables_Core_Library/Structures/data_feed.hpp"
+#include "../Timetables_Core_Library/Structures/date_time.hpp"
+#include "../Timetables_Core_Library/Algorithms/router.hpp"
+#include "../Timetables_Core_Library/Algorithms/departure_board.hpp"
 #include "reports.hpp"
 #include <exception>
 #include <iostream>
@@ -17,7 +16,6 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 using namespace Timetables::SampleApp;
-using namespace Timetables::Exceptions;
 
 namespace Timetables {
 	namespace SampleApp {
@@ -33,12 +31,6 @@ namespace Timetables {
 				try {
 					router r(feed, random_station(feed), random_station(feed), date_time::now(), 1, 10);
 					r.obtain_journeys();
-				}
-				catch (station_not_found ex) {
-					wcout << L"Stop " << ex.station_name() << L" not found." << endl;
-				}
-				catch (journey_not_found ex) {
-					wcout << L"No journeys between stops " << ex.stations().first << L" and " << ex.stations().second << L" found." << endl;
 				}
 				catch (exception ex) {
 					cout << "Unknown exception " << ex.what() << endl;

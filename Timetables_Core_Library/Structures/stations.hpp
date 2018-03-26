@@ -6,8 +6,7 @@
 #include <algorithm> // Required for finding the station.
 #include <map> // Structure for departures.
 #include <ctime> // time_t is defined here.
-// #include "stops.hpp" // References to child stops from station.
-#include "exceptions.hpp" // StopNotFoundException in stations find method.
+// #include "../Structures/stops.hpp" // References to child stops from station.
 
 namespace Timetables {
 	namespace Structures {
@@ -42,9 +41,7 @@ namespace Timetables {
 			inline station& operator[](std::size_t id) { return list[id]; } // Gets the station with given id.
 
 			inline auto find(const std::wstring& name) const { // Looks for the station with given name.
-				auto it = std::find_if(list.cbegin(), list.cend(), [=](const station& st) { return st.name() == name; });
-				if (it == list.cend()) throw Timetables::Exceptions::station_not_found(name);
-				return it;
+				return std::find_if(list.cbegin(), list.cend(), [=](const station& st) { return st.name() == name; });;
 			}
 
 			inline std::size_t find_index(const std::wstring& name) const { // Looks for the station and returns its index.

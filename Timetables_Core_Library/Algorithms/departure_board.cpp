@@ -1,16 +1,14 @@
-#include "stops.hpp"
-#include "trips.hpp"
-#include "data_feed.hpp"
-#include "stop_time.hpp"
-#include "exceptions.hpp"
+#include "../Structures/stops.hpp"
+#include "../Structures/trips.hpp"
+#include "../Structures/data_feed.hpp"
+#include "../Structures/stop_time.hpp"
 #include <vector>
 #include <string>
 #include <map>
-#include "departure_board.hpp"
+#include "../Algorithms/departure_board.hpp"
 
 using namespace std;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 
 departure::departure(const Timetables::Structures::stop_time& stop_time, const Timetables::Structures::date_time& dep) : departure_(dep) {	
 	const vector<Timetables::Structures::stop_time>& stop_times = stop_time.trip().stop_times();

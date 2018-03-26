@@ -1,9 +1,9 @@
 #ifndef ROUTES_HPP
 #define ROUTES_HPP
 
-// #include "Stops.hpp" // Reference to stops that the route goes through.
-#include "routes_info.hpp" // Reference to the route info from route class.
-// #include "trips.hpp" // Pointers to the trips serving the route.
+// #include "../Structures/stops.hpp" // Reference to stops that the route goes through.
+#include "../Structures/routes_info.hpp" // Reference to the route info from route class.
+// #include "../Structures/trips.hpp" // Pointers to the trips serving the route.
 #include <vector> // Main data structure in this header file.
 #include <algorithm> // Usage of find on the vector.
 

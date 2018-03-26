@@ -1,11 +1,11 @@
 #ifndef GTFS_FEED_HPP
 #define GTFS_FEED_HPP
 
-#include "services.hpp"
-#include "routes_info.hpp"
-#include "routes.hpp"
-#include "stops.hpp"
-#include "trips.hpp"
+#include "../Structures/services.hpp"
+#include "../Structures/routes_info.hpp"
+#include "../Structures/routes.hpp"
+#include "../Structures/stops.hpp"
+#include "../Structures/trips.hpp"
 #include <fstream>
 #include <iostream>
 

@@ -1,6 +1,6 @@
-#include "routes.hpp"
-#include "trips.hpp"
-#include "stop_time.hpp"
+#include "../Structures/routes.hpp"
+#include "../Structures/trips.hpp"
+#include "../Structures/stop_time.hpp"
 #include <algorithm>
 #include <array>
 #include <codecvt>

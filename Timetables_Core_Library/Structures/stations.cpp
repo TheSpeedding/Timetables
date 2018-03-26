@@ -1,5 +1,5 @@
-#include "stations.hpp"
-#include "stop_time.hpp"
+#include "../Structures/stations.hpp"
+#include "../Structures/stop_time.hpp"
 #include <codecvt>
 
 using namespace std;

@@ -6,8 +6,8 @@
 #include <unordered_map> // Structure for algorithm
 #include <unordered_set> // Structure for algorithm
 #include <set> // Structure for algorithm
-#include "stop_time.hpp" // Used in journeys.
-#include "data_feed.hpp" // Reference to data feed.
+#include "../Structures/stop_time.hpp" // Used in journeys.
+#include "../Structures/data_feed.hpp" // Reference to data feed.
 
 namespace Timetables {
 	namespace Structures {

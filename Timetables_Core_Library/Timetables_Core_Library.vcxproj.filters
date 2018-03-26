@@ -25,72 +25,66 @@
     <Filter Include="Source Files\Algorithms">
       <UniqueIdentifier>{bd7fbbd7-90c3-4451-a471-4703b1dfee35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Utilities">
-      <UniqueIdentifier>{f4174d94-280a-4072-bf2c-0547a4601664}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Services.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Stops.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Trips.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities.hpp">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Exceptions.hpp">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Router.hpp">
+    <ClInclude Include="Algorithms/departure_board.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="Routes.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Stations.hpp">
-      <Filter>Header Files\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="departure_board.hpp">
+    <ClInclude Include="Algorithms/router.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="data_feed.hpp">
+    <ClInclude Include="Structures/data_feed.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="routes_info.hpp">
+    <ClInclude Include="Structures/date_time.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="stop_time.hpp">
+    <ClInclude Include="Structures/routes.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/routes_info.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/services.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/stations.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/stop_time.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/stops.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures/trips.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Services.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Stops.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Trips.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Routes.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Stations.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="routes_info.cpp">
-      <Filter>Source Files\Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="departure_board.cpp">
+    <ClCompile Include="Algorithms/departure_board.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
-    <ClCompile Include="router.cpp">
+    <ClCompile Include="Algorithms/router.cpp">
       <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/trips.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/routes.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/routes_info.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/services.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/stations.cpp">
+      <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Structures/stops.cpp">
+      <Filter>Source Files\Structures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

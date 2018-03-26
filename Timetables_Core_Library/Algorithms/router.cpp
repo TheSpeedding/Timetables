@@ -1,11 +1,10 @@
-#include "router.hpp"
+#include "../Algorithms/router.hpp"
 #include <tbb/tbb.h>
 #include <thread>
 
 using namespace std;
 using namespace tbb;
 using namespace Timetables::Structures;
-using namespace Timetables::Exceptions;
 using namespace Timetables::Algorithms;
 
 void Timetables::Algorithms::router::accumulate_routes() {

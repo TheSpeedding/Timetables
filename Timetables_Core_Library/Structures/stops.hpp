@@ -1,9 +1,9 @@
 #ifndef STOPS_HPP
 #define STOPS_HPP
 
-#include "utilities.hpp" // Dealing with time.
-#include "stations.hpp" // Reference to the parent station in stop.
-#include "routes.hpp" // Reference to the route in stop (throughgoing routes).
+#include "../Structures/date_time.hpp" // Dealing with time.
+#include "../Structures/stations.hpp" // Reference to the parent station in stop.
+#include "../Structures/routes.hpp" // Reference to the route in stop (throughgoing routes).
 #include <string> // String is a need for names.
 #include <vector> // Data structure for stops.
 #include <algorithm> // Sorting.
