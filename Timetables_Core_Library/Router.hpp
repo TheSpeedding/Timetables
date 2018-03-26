@@ -162,7 +162,7 @@ namespace Timetables {
 			void traverse_each_route(); // Traverses each route.
 			void look_at_footpaths(); // Tries to improve journeys using footpaths.
 
-			const Timetables::Structures::journey* obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this iteration.
+			std::unique_ptr<Timetables::Structures::journey> obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this iteration.
 
 			void traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop); // Traverses one route.
 			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.

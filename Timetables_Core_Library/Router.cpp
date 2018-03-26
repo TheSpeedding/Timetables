@@ -196,15 +196,9 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 				current_journey.add_to_journey(move(segment));
 				
-				//if ((journeys_.end() - 1)->find(&current_stop) == (journeys_.end() - 1)->cend() || (journeys_.end() - 1)->find(boarding_stop) == (journeys_.end() - 1)->cend() ||
-				//current_journey.duration() <= (journeys_.end() - 1)->find(boarding_stop)->second.duration()) 
-				{ // The transfer time is no worse. We can update the journey.
+				(journeys_.end() - 1)->erase(&current_stop);
 
-					(journeys_.end() - 1)->erase(&current_stop);
-
-					(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey))); // 19th row of pseudocode.
-
-				}
+				(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey))); // 19th row of pseudocode.
 
 				marked_stops_.insert(&current_stop); // 21st row of pseudocode.
 			}
@@ -271,23 +265,23 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 void Timetables::Algorithms::router::obtain_journeys() {
 	
-	const journey* previous_fastest_journey = obtain_journey(earliest_departure_);
+	unique_ptr<journey> previous_fastest_journey = move(obtain_journey(earliest_departure_));
 
 	// We tried to search a journey but no journeys found. No point of continue.
 
 	if (fastest_journeys_.size() == 0)
 		return;		
-	int i;
-	for (i = 1; i < count_; i++) {
-		const journey* current_fastest_journey = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
+
+	for (int i = 1; i < count_; i++) {
+		unique_ptr<journey> current_fastest_journey = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 
-		/*if (fastest_journeys_.size() >= count_ + 1 && *previous_fastest_journey < *current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
-			break;*/	
+		if (fastest_journeys_.size() >= count_ + 1 && *previous_fastest_journey < *current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			break;
 
-		previous_fastest_journey = current_fastest_journey;
+		previous_fastest_journey = move(current_fastest_journey);
 	}
 
 	auto it = fastest_journeys_.begin();
@@ -296,7 +290,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
 }
 
-const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
+std::unique_ptr<Timetables::Structures::journey> Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
 
 	temp_labels_.clear();
 	marked_stops_.clear();
@@ -314,7 +308,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		// We are also to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
-			if (&footpath.second->parent_station() != &source_ /*&& footpath.first < 300*/ ) {
+			if (&footpath.second->parent_station() != &source_ && footpath.first < 300 ) { // Consider the stops in small radius only.
 				marked_stops_.insert(footpath.second);
 				journeys_.at(0).insert(make_pair(footpath.second, journey(footpath_segment(departure.add_seconds(footpath.first), *stop, *footpath.second, footpath.first))));
 			}
@@ -341,17 +335,14 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 			auto res = journeys_[i].find(stop);
 
 			if (res != journeys_[i].cend()) {
-				if (fastest_journeys_.insert(res->second).second == true) {
-
-					if (fastest_journey == nullptr || res->second < *fastest_journey)
-						fastest_journey = &*(--fastest_journeys_.upper_bound(res->second)); // Items are being inserted into an upper bound.
-
-				}
+				if (fastest_journey == nullptr || res->second.arrival_time() < fastest_journey->arrival_time())
+					fastest_journey = &res->second;
+				fastest_journeys_.insert(res->second).second; // Insert only if unique.
 			}
 
 		}
-
-	return fastest_journey; 
+	
+	return fastest_journey == nullptr ? nullptr : make_unique<journey>(*fastest_journey);
 }
 
 
