@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 		
 	locale::global(locale("Czech"));
 			
-	// cpu_time_micro_benchmark(feed); return 0;
+	cpu_time_micro_benchmark(feed); return 0;
 
 	wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 

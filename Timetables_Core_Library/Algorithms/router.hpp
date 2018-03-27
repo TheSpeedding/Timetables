@@ -89,6 +89,8 @@ namespace Timetables {
 		public:
 			journey(const trip_segment& js) { add_to_journey(js); }
 			journey(const footpath_segment& js) { add_to_journey(js); }
+
+			journey() {} // VERY UGLY !!! But better performance.
 			
 			journey(const journey& other) { clone(other); }
 			journey& operator= (const journey& other) {

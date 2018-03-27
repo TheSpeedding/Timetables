@@ -23,9 +23,7 @@ void Timetables::Algorithms::router::accumulate_routes() {
 
 				if (route->stop_comes_before(*stop, *some_stop->second)) { // 11th row of pseudocode.
 
-					active_routes_.erase(route); 
-
-					active_routes_.insert(make_pair(route, stop)); // 11th row of pseudocode.
+					active_routes_[route] = stop; // 11th row of pseudocode.
 
 				}
 
@@ -100,7 +98,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 			auto arrival_time_B = (journeys_.cend() - 1)->find(stop_B);
 
-			Timetables::Structures::date_time min = date_time::infinity();
+			date_time min;
 
 			if (arrival_time_A == (journeys_.cend() - 1)->cend() && (arrival_time_B != (journeys_.cend() - 1)->cend()))
 
@@ -122,9 +120,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 				new_journey.add_to_journey(footpath_segment(min, *stop_A, *stop_B, duration));
 
-				(journeys_.end() - 1)->erase(stop_B); 
-
-				(journeys_.end() - 1)->insert(make_pair(stop_B, new_journey));  // 26th row of pseudocode.
+				(journeys_.end() - 1)->operator[](stop_B) = new_journey;
 
 			}
 
@@ -143,7 +139,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 void Timetables::Algorithms::router::traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop) {
 
 	const trip* current_trip = nullptr; // 16th row of pseudocode.
-	date_time date_for_current_trip = date_time::infinity();
+	date_time date_for_current_trip;
 	
 	// Find the current stop in route.
 
@@ -184,10 +180,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 				(current_stop_best_arrival != temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < (target_stop_best_arrival->second < current_stop_best_arrival->second ? target_stop_best_arrival->second : current_stop_best_arrival->second))
 				) { // 18th row of pseudocode.
 
-				(journeys_.end() - 1)->erase(&current_stop);
-				temp_labels_.erase(&current_stop);
-
-				temp_labels_.insert(make_pair(&current_stop, new_arrival)); // 20th row of pseudocode.
+				temp_labels_[&current_stop] = new_arrival; // 20th row of pseudocode.
 
 				journey current_journey((journeys_.end() - 2)->find(boarding_stop)->second);
 
@@ -195,9 +188,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 				current_journey.add_to_journey(move(segment));
 				
-				(journeys_.end() - 1)->erase(&current_stop);
-
-				(journeys_.end() - 1)->insert(make_pair(&current_stop, move(current_journey))); // 19th row of pseudocode.
+				(journeys_.end() - 1)->operator[](&current_stop) = move(current_journey); // 19th row of pseudocode.
 
 				marked_stops_.insert(&current_stop); // 21st row of pseudocode.
 			}

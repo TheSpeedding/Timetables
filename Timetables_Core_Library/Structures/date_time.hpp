@@ -32,8 +32,8 @@ namespace Timetables {
 				boost::posix_time::to_time_t(boost::posix_time::ptime(boost::gregorian::date(year, month, day), boost::posix_time::time_duration(hours, mins, secs)))
 			) {}
 
-			static date_time infinity() { return date_time(std::numeric_limits<time_t>::max()); }
-
+			date_time() : date_time_(std::numeric_limits<time_t>::max()) {}
+			
 			static date_time now() { return date_time(boost::posix_time::to_time_t(boost::posix_time::second_clock::local_time())); }
 
 			inline std::size_t hours() const { return (date_time_ / 3600) % 24; }
