@@ -67,7 +67,4 @@ void Timetables::Structures::trips::set_timetables(std::istream&& stop_times, st
 
 	}
 
-	for (size_t i = 0; i < stops.size(); i++) // All the departures are set at this moment. We have to sort them because we use a vector, not a multimap. It gives us bigger time complexity but consumes much less memory.
-		stops.at(i).sort_departures();
-
 }

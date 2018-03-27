@@ -57,7 +57,8 @@ namespace Timetables.Preprocessor
 		/// <param name="stopTimes">Stream that the data should be written in.</param>  
 		public void Write(System.IO.StreamWriter stopTimes)
         {
-            stopTimes.WriteLine(Count);
+			list.Sort((StopTime x, StopTime y) => { return (x.DepartureTime + x.Trip.DepartureTime).CompareTo(y.DepartureTime + y.Trip.DepartureTime); });
+            stopTimes.WriteLine(Count); 
             foreach (var item in list)
                 stopTimes.Write(item);
             stopTimes.Close();

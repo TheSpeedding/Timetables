@@ -32,7 +32,6 @@ namespace Timetables {
 			void add_departure(const stop_time& stop_time); // Adds a departure. Used in initialization.
 			inline void add_throughgoing_route(const route& route) { throughgoing_routes_.push_back(&route); } // Adds routes that goes through this stop. Used in initialization.
 			inline void add_footpath(const stop& stop, std::size_t time) { footpaths_.insert(std::make_pair(time, &stop)); } // Adds a footpath. Used in initialization.
-			inline void sort_departures() { std::sort(departures_.begin(), departures_.end()); } // Sorts the departures.
 		};
 
 		// Class collecting information about collection of the stops.
