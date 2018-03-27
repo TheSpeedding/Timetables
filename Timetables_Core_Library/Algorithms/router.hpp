@@ -30,7 +30,7 @@ namespace Timetables {
 		};
 
 		// Trip segment.
-		class trip_segment : public journey_segment {
+		class trip_segment final : public journey_segment {
 		private:
 			const date_time arrival_; // Arrival at target stop.
 			const Timetables::Structures::trip* trip_; // Trip that serves the trip segment.
@@ -53,10 +53,11 @@ namespace Timetables {
 			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override; // Gets intermediate stops between source and target stop.
+			
 		};
 
 		// Transfer.
-		class footpath_segment : public journey_segment {
+		class footpath_segment final : public journey_segment {
 		private:
 			const std::size_t duration_; // Duration of the transfer.
 			const date_time arrival_; // Arrival at target stop.
@@ -88,7 +89,7 @@ namespace Timetables {
 		public:
 			journey(const trip_segment& js) { add_to_journey(js); }
 			journey(const footpath_segment& js) { add_to_journey(js); }
-
+			
 			journey(const journey& other) { clone(other); }
 			journey& operator= (const journey& other) {
 				if (&other == this) return *this;
@@ -100,6 +101,35 @@ namespace Timetables {
 			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const int duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
+			
+			inline bool operator< (const journey& other) const { // Preferences: Arrival time, duration, number of transfers, total duration of transfers, number of stops.
+				if (arrival_time() != other.arrival_time())
+					return arrival_time() < other.arrival_time();
+				else if (departure_time() != other.departure_time())
+					return departure_time() < other.departure_time();
+				else if (duration_of_transfers() != other.duration_of_transfers())
+					return duration_of_transfers() < other.duration_of_transfers();
+				else if (number_of_stops() != other.number_of_stops())
+					return number_of_stops() < other.number_of_stops();
+				else
+					return journey_segments_.size() < other.journey_segments_.size();
+			}
+
+			inline const std::size_t number_of_stops() const { // Total number of stops in the journey.
+				std::size_t number = 1;
+				for (auto&& seg : journey_segments_)
+					if (seg->trip() != nullptr)
+						number += seg->intermediate_stops().size() + 1;
+				return number;
+			}
+			
+			inline const std::size_t duration_of_transfers() const { // Duration of all the footpaths in the journey.
+				std::size_t number = 0;
+				for (auto&& seg : journey_segments_)
+					if (seg->trip() == nullptr)
+						number += date_time::difference(seg->arrival_at_target(), seg->departure_from_source());
+				return number;
+			}
 
 			inline const std::vector<std::unique_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.
 
@@ -108,7 +138,7 @@ namespace Timetables {
 				// static_assert(std::is_base_of<journey_segment, T>::value); // C++17 feature
 
 				if (journey_segments_.size() == 1) { 
-
+					
 					if ((journey_segments_.cend() - 1)->get()->departure_from_source() == (journey_segments_.cend() - 1)->get()->arrival_at_target())
 						journey_segments_.pop_back(); // The last segment lasts 0 seconds. No point of having it in the vector.
 
@@ -128,16 +158,6 @@ namespace Timetables {
 
 				journey_segments_.push_back(std::move(std::make_unique<T>(js))); 
 			} 
-			
-			inline bool operator< (const journey& other) const {
-				// Preferences: Arrival time, duration, number of transfers.
-				if (arrival_time() != other.arrival_time())
-					return arrival_time() < other.arrival_time();
-				else if (departure_time() != other.departure_time())
-					return departure_time() < other.departure_time();
-				else
-					return journey_segments_.size() < other.journey_segments_.size();
-			}
 		};
 	}
 
