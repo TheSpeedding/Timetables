@@ -60,6 +60,9 @@
     <ClInclude Include="Structures/trips.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="Structures/journey.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms/departure_board.cpp">

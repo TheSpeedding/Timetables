@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms/departure_board.hpp" />
+    <ClInclude Include="Structures/journey.hpp" />
     <ClInclude Include="Structures/data_feed.hpp" />
     <ClInclude Include="Algorithms/router.hpp" />
     <ClInclude Include="Structures/routes.hpp" />
@@ -174,6 +175,8 @@
       <PrecompiledHeaderFile />
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <AdditionalOptions>/std:c++17 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

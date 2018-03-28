@@ -334,12 +334,4 @@ std::unique_ptr<Timetables::Structures::journey> Timetables::Algorithms::router:
 	
 	return fastest_journey == nullptr ? nullptr : make_unique<journey>(*fastest_journey);
 }
-
-
-const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> Timetables::Structures::trip_segment::intermediate_stops() const {
-	vector<std::pair<std::size_t, const Timetables::Structures::stop*>> stops;
-	size_t base = source_stop_->departure();
-	for (auto it = source_stop_; it <= target_stop_; ++it)
-		stops.push_back(make_pair(it->arrival() - base, &it->stop()));
-	return move(stops);
-}
+ 

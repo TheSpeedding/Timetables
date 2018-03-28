@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "../Timetables_Core_Library/Structures/data_feed.hpp"
+#include "../Timetables_Core_Library/Structures/journey.hpp"
 #include "../Timetables_Core_Library/Structures/date_time.hpp"
 #include "../Timetables_Core_Library/Algorithms/departure_board.hpp"
 #include "../Timetables_Core_Library/Algorithms/router.hpp"
