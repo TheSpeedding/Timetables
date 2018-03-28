@@ -7,6 +7,9 @@ Since the application is intended for Prague Integrated Transport, we are forced
 <h1>Architecture</h1>
 <img src="Architecture.png">
 
+<h1>TFD Data Format</h1>
+<img src="TFD_Data_Format.png">
+
 <h2>Links</h2>
 <a href="https://developers.google.com/transit/gtfs/reference/">GTFS Format Reference</a><br>
 <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf">RAPTOR Algorithm</a><br>
