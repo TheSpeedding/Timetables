@@ -106,7 +106,7 @@ namespace Timetables {
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const int duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 
-			inline bool operator< (const journey& other) const { // Preferences: Arrival time, number of transfers, duration, number of stops, total duration of transfers,.
+			inline bool operator< (const journey& other) const { // Preferences: Arrival time, number of transfers, duration (=dep. time), number of stops, total duration of transfers,.
 				if (arrival_time() != other.arrival_time())
 					return arrival_time() < other.arrival_time();
 				else if (journey_segments_.size() != other.journey_segments_.size())
@@ -121,23 +121,19 @@ namespace Timetables {
 
 			inline const std::size_t number_of_stops() const { // Total number of stops in the journey.
 				std::size_t number = 1;
-				for (auto&& seg : journey_segments_)
-					if (seg->trip() != nullptr)
-						number += seg->intermediate_stops().size() + 1;
+				for (auto&& seg : journey_segments_) if (seg->trip() != nullptr) number += seg->intermediate_stops().size() + 1;
 				return number;
 			}
 
 			inline const std::size_t duration_of_transfers() const { // Duration of all the footpaths in the journey.
 				std::size_t number = 0;
-				for (auto&& seg : journey_segments_)
-					if (seg->trip() == nullptr)
-						number += date_time::difference(seg->arrival_at_target(), seg->departure_from_source());
+				for (auto&& seg : journey_segments_) if (seg->trip() == nullptr) number += date_time::difference(seg->arrival_at_target(), seg->departure_from_source());
 				return number;
 			}
 
 			inline const std::vector<std::unique_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.
 
-			template <typename T>
+			template <typename T> // Templated, so it must be in header.
 			void add_to_journey(const T& js) { // Adds trip or footpath segment to the journey.
 				static_assert(std::is_base_of<journey_segment, T>::value); // C++17 feature
 
