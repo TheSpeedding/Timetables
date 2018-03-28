@@ -41,6 +41,7 @@
     <ClCompile Include="Structures/stations.cpp" />
     <ClCompile Include="Structures/stops.cpp" />
     <ClCompile Include="Structures/trips.cpp" />
+    <ClCompile Include="Structures\journey.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -48,90 +48,98 @@ int main(int argc, char** argv) {
 
 	cout << date_time::now() << " : Starting data init." << endl;
 
-	data_feed feed;
+	try {
+		data_feed feed;
 
-	cout << date_time::now() << " : Ending data init." << endl;
+		cout << date_time::now() << " : Ending data init." << endl;
 
-	setlocale(LC_ALL, "");
-	SetConsoleCP(GetACP());
-	SetConsoleOutputCP(GetACP());
+		setlocale(LC_ALL, "");
+		SetConsoleCP(GetACP());
+		SetConsoleOutputCP(GetACP());
 		
-	locale::global(locale("Czech"));
+		locale::global(locale("Czech"));
 			
-	// cpu_time_micro_benchmark(feed); return 0;
+		// cpu_time_micro_benchmark(feed); return 0;
 
-	wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
+		wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 
-	wcout << "To obtain a journey, use the command R;Source station;Target station;Number of journeys shown;Max transfers number." << endl << L"E.g. R;Malostranské námìstí;Nádraží Hostivaø;5;3." << endl << endl;
+		wcout << "To obtain a journey, use the command R;Source station;Target station;Number of journeys shown;Max transfers number." << endl << L"E.g. R;Malostranské námìstí;Nádraží Hostivaø;5;3." << endl << endl;
 
-	wcout << "To exit the application, use the command END." << endl << endl;
+		wcout << "To exit the application, use the command END." << endl << endl;
 
-	wstring line;
-	while (line != L"END") {
-		getline(wcin, line);
-		wistringstream input(line);
+		wstring line;
+		while (line != L"END") {
+			getline(wcin, line);
+			wistringstream input(line);
 
-		wstring token;
-		getline(input, token, wchar_t(';'));
+			wstring token;
+			getline(input, token, wchar_t(';'));
 
-		try {
-			if (token == L"DB") { // Departure board. Example: DB;Malostranské námìstí;3
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
+			try {
+				if (token == L"DB") { // Departure board. Example: DB;Malostranské námìstí;3
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring station;
+					getline(input, station, wchar_t(';'));
+
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring count;
+					getline(input, count);
+					get_departure_board_report(feed, station, date_time::now(), stoi(count));
 				}
-				wstring station;
-				getline(input, station, wchar_t(';'));
 
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
+				else if (token == L"R") { // Router. Example: R;Malostranské námìstí;Václavské námìstí;5;5
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring stationA;
+					getline(input, stationA, wchar_t(';'));
+
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring stationB;
+					getline(input, stationB, wchar_t(';'));
+
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring count;
+					getline(input, count, wchar_t(';'));
+
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring transfers;
+					getline(input, transfers);
+
+					get_journeys_report(feed, stationA, stationB, date_time::now(), stoi(count), stoi(transfers));
 				}
-				wstring count;
-				getline(input, count);
-				get_departure_board_report(feed, station, date_time::now(), stoi(count));
+
+				else if (token == L"END")
+					continue;
+
+				else
+					cout << "Unknown token." << endl << endl;
 			}
-
-			else if (token == L"R") { // Router. Example: R;Malostranské námìstí;Václavské námìstí;5;5
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
-				}
-				wstring stationA;
-				getline(input, stationA, wchar_t(';'));
-
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
-				}
-				wstring stationB;
-				getline(input, stationB, wchar_t(';'));
-
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
-				}
-				wstring count;
-				getline(input, count, wchar_t(';'));
-
-				if (!input.good()) {
-					cout << "Too few arguments." << endl << endl;
-					continue;
-				}
-				wstring transfers;
-				getline(input, transfers);
-
-				get_journeys_report(feed, stationA, stationB, date_time::now(), stoi(count), stoi(transfers));
+			catch (...) {
+				cout << "Unknown error." << endl << endl;
 			}
-
-			else if (token == L"END")
-				continue;
-
-			else
-				cout << "Unknown token." << endl << endl;
-		}
-		catch (...) {
-			cout << "Unknown error." << endl << endl;
 		}
 	}
+	catch (...) {
+		cout << "Invalid or missing data." << endl;
+		return 1;
+	}
+
+	return 0;
 }
