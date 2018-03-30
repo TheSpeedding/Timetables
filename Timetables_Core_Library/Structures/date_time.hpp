@@ -6,6 +6,11 @@
 #include <boost/date_time/posix_time/posix_time.hpp> // Using ptime class.
 #include <limits> // Infinity.
 
+#define SECOND 1
+#define MINUTE 60
+#define HOUR 3600
+#define DAY 86400
+
 namespace Timetables {
 	namespace Structures {
 		// Class that collects information about date time.
@@ -34,6 +39,8 @@ namespace Timetables {
 
 			date_time() : date_time_(std::numeric_limits<time_t>::max()) {}
 			
+			date_time(const date_time& other, int seconds) : date_time_(other.date_time_ + seconds) {}
+
 			static date_time now() { return date_time(boost::posix_time::to_time_t(boost::posix_time::second_clock::local_time())); }
 
 			inline std::size_t hours() const { return (date_time_ / 3600) % 24; }
@@ -69,30 +76,6 @@ namespace Timetables {
 			inline date_time operator-(const date_time& other) {
 				date_time new_date_time(*this);
 				new_date_time.date_time_ -= other.date_time_;
-				return new_date_time;
-			}
-
-			inline date_time add_seconds(int seconds) const {
-				date_time new_date_time(*this);
-				new_date_time.date_time_ += seconds;
-				return new_date_time;
-			}
-
-			inline date_time add_minutes(int minutes) const {
-				date_time new_date_time(*this);
-				new_date_time.date_time_ += 60 * minutes;
-				return new_date_time;
-			}
-
-			inline date_time add_hours(int hours) const {
-				date_time new_date_time(*this);
-				new_date_time.date_time_ += 3600 * hours;
-				return new_date_time;
-			}
-
-			inline date_time add_days(int days) const {
-				date_time new_date_time(*this);
-				new_date_time.date_time_ += 86400 * days;
 				return new_date_time;
 			}
 

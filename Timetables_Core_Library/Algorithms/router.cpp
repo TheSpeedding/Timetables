@@ -106,12 +106,15 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 			else if (arrival_time_A != (journeys_.cend() - 1)->cend() && (arrival_time_B == (journeys_.cend() - 1)->cend()))
 
-				min = arrival_time_A->second->arrival_at_target().add_seconds(duration);
+				min = date_time(arrival_time_A->second->arrival_at_target(), SECOND * duration);
 
-			else
+			else {
 
-				min = arrival_time_B->second->arrival_at_target() <= arrival_time_A->second->arrival_at_target().add_seconds(duration) ? arrival_time_B->second->arrival_at_target() : arrival_time_A->second->arrival_at_target().add_seconds(duration);
-			
+				date_time other(arrival_time_A->second->arrival_at_target(), SECOND * duration);
+
+				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
+				
+			}
 			if (((arrival_time_B == (journeys_.cend() - 1)->cend()) || // We have not arrive to the stop yet. Set new arrival time.
 				(arrival_time_B == (journeys_.cend() - 1)->cend() && min != arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop.
 				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
@@ -161,7 +164,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			const stop_time& st = *(current_trip->stop_times().cbegin() + (next_stop - current_route.stops().cbegin()));
 
-			date_time new_arrival = date_for_current_trip.add_seconds(st.arrival_since_midnight()); // 18th row of pseudocode.
+			date_time new_arrival(date_for_current_trip, SECOND * st.arrival_since_midnight()); // 18th row of pseudocode.
 
 			auto current_stop_best_arrival = temp_labels_.find(&current_stop);
 
@@ -192,7 +195,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			auto previous_arrival = (journeys_.end() - 2)->find(&current_stop);
 
-			if (previous_arrival != (journeys_.end() - 2)->cend() && previous_arrival->second->arrival_at_target() <= date_for_current_trip.add_seconds(st.departure_since_midnight())) { // 22nd row of pseudocode.
+			if (previous_arrival != (journeys_.end() - 2)->cend() && previous_arrival->second->arrival_at_target() <= date_time(date_for_current_trip, SECOND * st.departure_since_midnight())) { // 22nd row of pseudocode.
 
 				auto res = find_earliest_trip(current_route, previous_arrival->second->arrival_at_target(), next_stop - current_route.stops().cbegin());
 				current_trip = res.first; // 23rd row of pseudocode.
@@ -231,16 +234,16 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 		if (it == route.trips().cend()) {
 			it = route.trips().cbegin();
 			days++;
-			new_departure_date = new_departure_date.add_days(1);
+			new_departure_date = date_time(new_departure_date, DAY);
 		}
 
 		const stop_time& st = *((**it).stop_times().cbegin() + stop_index);
 
-		date_time new_departure_date_time = new_departure_date.add_seconds(st.departure_since_midnight() % 86400);
+		date_time new_departure_date_time(new_departure_date, SECOND * st.departure_since_midnight() % 86400);
 				
 		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
 
-			return make_pair(*it, new_departure_date_time.add_seconds((-1) * st.departure_since_midnight()));
+			return make_pair(*it, date_time(new_departure_date_time, SECOND * (-1) * st.departure_since_midnight()));
 
 	}
 
@@ -257,7 +260,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		return;		
 
 	for (int i = 1; i < count_; i++) {
-		const journey* current_fastest_journey = obtain_journey(previous_fastest_journey->departure_time().add_seconds(1));
+		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
@@ -294,7 +297,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_ && footpath.first < 300 ) { // Consider the stops in small radius only.
 				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(departure.add_seconds(footpath.first), *stop, *footpath.second, footpath.first, nullptr));
+				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, SECOND * footpath.first), *stop, *footpath.second, footpath.first, nullptr));
 			}
 		}
 	}

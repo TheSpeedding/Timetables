@@ -45,7 +45,7 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 
 			if (it == stop->departures().cend()) {
 				it = stop->departures().cbegin(); // Midnight reached.
-				departure_date = departure_date.add_days(1);
+				departure_date = date_time(departure_date, DAY);
 				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
 			}
 

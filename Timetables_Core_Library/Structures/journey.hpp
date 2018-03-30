@@ -49,7 +49,7 @@ namespace Timetables {
 			virtual inline const Timetables::Structures::trip* trip() const override { return trip_; } // Trip.
 			virtual inline const stop& source_stop() const override { return source_stop_->stop(); } // Source stop.
 			virtual inline const stop& target_stop() const override { return target_stop_->stop(); } // Target stop.
-			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
+			virtual inline const date_time departure_from_source() const override { return date_time(arrival_, SECOND * (-1) * (target_stop_->arrival() - source_stop_->departure())); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { // Gets intermediate stops between source and target stop.
 				std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> stops;
@@ -75,7 +75,7 @@ namespace Timetables {
 			virtual inline const Timetables::Structures::trip* trip() const override { return nullptr; } // Trip. Nullptr because this is a transfer.
 			virtual inline const stop& source_stop() const override { return source_stop_; } // Source stop.
 			virtual inline const stop& target_stop() const override { return target_stop_; } // Target stop.
-			virtual inline const date_time departure_from_source() const override { return arrival_.add_seconds((-1) * duration_); } // Gets departure from source stop.
+			virtual inline const date_time departure_from_source() const override { return date_time(arrival_, SECOND * (-1) * duration_); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { return std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>>(); } // Gets intermediate stops between source and target stop.
 		};

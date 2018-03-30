@@ -60,7 +60,7 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 		auto following_stops = dep.following_stops();
 
 		for (auto it = following_stops.cbegin(); it != following_stops.cend(); ++it) {
-			cout << "  "; wcout << it->second->name(); cout << " with arrival at " << dep.departure_time().add_seconds(it->first) << "." << endl;
+			cout << "  "; wcout << it->second->name(); cout << " with arrival at " << Timetables::Structures::date_time(dep.departure_time(), SECOND * it->first) << "." << endl;
 		}
 
 		cout << endl;
@@ -138,7 +138,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 				auto intermediate_stops = it->intermediate_stops();
 
 				for (auto it1 = intermediate_stops.cbegin() + 1; it1 != intermediate_stops.cend() - 1; ++it1) {
-					wcout << L"  " << it1->second->name(); cout << " with arrival at " << it->departure_from_source().add_seconds(it1->first) << "." << endl;
+					wcout << L"  " << it1->second->name(); cout << " with arrival at " << Timetables::Structures::date_time(it->departure_from_source(), SECOND * it1->first) << "." << endl;
 				}
 
 				cout << "Get off the line " << it->trip()->route().info().short_name() << " at " << it->arrival_at_target() << " in ";
