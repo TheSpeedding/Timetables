@@ -131,7 +131,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 
 				SetConsoleTextAttribute(hConsole, color);
 
-				cout << "Board the line " << it->trip()->route().info().short_name() << " at " << it->departure_from_source() << " in ";
+				cout << "Board the line " << it->trip()->route().info().short_name() << " at " << it->departure_from_source() << " at ";
 				wcout << it->intermediate_stops().cbegin()->second->name() << " station going ahead to ";
 				wcout << it->trip()->route().headsign() << L" station via following stops:" << endl;
 

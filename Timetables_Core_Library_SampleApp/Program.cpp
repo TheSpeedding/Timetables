@@ -12,6 +12,8 @@
 #include <locale>
 #include <Windows.h>
 
+#define BENCHMARK false
+
 using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
@@ -22,8 +24,8 @@ namespace Timetables {
 		const size_t random_station(const data_feed& feed) {
 			std::mt19937 rng;
 			rng.seed(std::random_device()());
-			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, feed.stations().size() - 1);
-			return dist6(rng);
+			std::uniform_int_distribution<std::mt19937::result_type> dist(0, feed.stations().size() - 1);
+			return dist(rng);
 		}
 
 		void cpu_time_micro_benchmark(const data_feed& feed) {
@@ -47,7 +49,7 @@ namespace Timetables {
 	}
 }
 
-int main(int argc, char** argv) {
+int main() {
 
 	cout << date_time::now() << " : Application has started." << endl;
 
@@ -63,8 +65,10 @@ int main(int argc, char** argv) {
 		SetConsoleOutputCP(GetACP());
 		
 		locale::global(locale("Czech"));
-			
-		// cpu_time_micro_benchmark(feed); return 0;
+		
+#if BENCHMARK
+		cpu_time_micro_benchmark(feed); return 0;
+#endif
 
 		wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 

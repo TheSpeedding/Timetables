@@ -64,7 +64,7 @@ void Timetables::Algorithms::router::traverse_each_route() {
 
 	for (auto&& item : active_routes_) {
 
-		buckets[i % threads_to_start].push_back(item); // Divide items into buckets equally so multiple threads cant process it in parallel.
+		buckets[i % threads_to_start].push_back(item); // Divide items into buckets equally so multiple threads can process it in parallel.
 
 		i++;
 	}

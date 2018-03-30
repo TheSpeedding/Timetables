@@ -14,9 +14,8 @@ namespace Timetables {
 
 		// Class used in journeys.
 		class journey_segment {
-			friend class journey; // Clone method should not be a part of API. Pointer to the previous segment as well.
+			friend class journey; // Pointer to the previous segment should not be a part of API.
 		protected:
-			virtual inline std::unique_ptr<journey_segment> clone() = 0;
 			date_time arrival_; // Arrival at target stop.
 			std::shared_ptr<journey_segment> previous_; // Previous segment in the sequence.
 		public:
@@ -35,8 +34,6 @@ namespace Timetables {
 			const Timetables::Structures::trip* trip_; // Trip that serves the trip segment.
 			std::vector<stop_time>::const_iterator source_stop_; // Source stop.
 			std::vector<stop_time>::const_iterator target_stop_; // Target stop.
-		protected:
-			virtual inline std::unique_ptr<journey_segment> clone() { return std::make_unique<trip_segment>(*this); }
 		public:
 			trip_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, std::shared_ptr<journey_segment> previous) : trip_(&trip) {
 				arrival_ = arrival; previous_ = previous;
@@ -66,8 +63,6 @@ namespace Timetables {
 			const int duration_; // Duration of the transfer.
 			const stop& source_stop_; // Source stop.
 			const stop& target_stop_; // Target stop.
-		protected:
-			virtual inline std::unique_ptr<journey_segment> clone() { return std::make_unique<footpath_segment>(*this); }
 		public:
 			footpath_segment(const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, int duration, std::shared_ptr<journey_segment> previous) :
 				duration_(duration), source_stop_(source), target_stop_(target) { arrival_ = arrival; previous_ = previous;	}
@@ -84,32 +79,15 @@ namespace Timetables {
 		class journey {
 		private:
 			std::vector<std::shared_ptr<journey_segment>> journey_segments_; // Journey consists of multiple segments, we will store them here.
-
-			void clone(const journey& other) {
-				for (auto&& segment : other.journey_segments_)
-					journey_segments_.push_back(segment->clone());
-			}
-
-			bool add_to_journey(std::shared_ptr<journey_segment> js); // Adds trip or footpath segment to the journey.
-
-
+			bool add_to_journey(std::shared_ptr<journey_segment> js); // Adds trip or footpath segment to the journey.			
 		public:
-			journey(std::shared_ptr<journey_segment> js);
-						
-			journey(const journey& other) { clone(other); }
-
-			journey& operator= (const journey& other) {
-				if (&other == this) return *this;
-				journey_segments_.clear();
-				clone(other);
-				return *this;
-			}
+			journey(std::shared_ptr<journey_segment> js);						
 
 			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 
-			bool operator< (const journey& other) const; // Preferences: Arrival time, duration (=dep. time), number of transfers, number of stops, total duration of transfers,.
+			bool operator< (const journey& other) const; // Preferences: Arrival time, duration, number of transfers, number of stops, total duration of transfers,.
 		
 			inline const std::size_t number_of_stops() const { // Total number of stops in the journey.
 				std::size_t number = 1;
