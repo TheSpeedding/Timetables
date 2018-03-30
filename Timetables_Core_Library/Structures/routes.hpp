@@ -18,16 +18,19 @@ namespace Timetables {
 			std::wstring headsign_; // Headsign of the route.
 			const route_info& info_; // Basic info for the route.
 			std::vector<const stop*> stops_sequence_; // Stops that the route goes through
-			std::vector<const trip*> trips_; // Pointers to trips which are sorted by departure.
+			std::vector<trip> trips_; // Trips which are sorted by departure.
 		public:
-			route(const route_info& info, std::size_t numberOfStops, const std::wstring& headsign) : info_(info), headsign_(headsign) { stops_sequence_.reserve(numberOfStops); }
+			route(const route_info& info, std::size_t number_of_stops, const std::wstring& headsign, std::size_t number_of_trips) : info_(info), headsign_(headsign) { 
+				stops_sequence_.reserve(number_of_stops); 
+				trips_.reserve(number_of_trips);
+			}
 
 			inline const std::wstring& headsign() const { return headsign_; } // Headsign of the route.
 			inline const route_info& info() const { return info_; } // Info for the route.
 			inline const std::vector<const stop*>& stops() const { return stops_sequence_; } // Stops for the route.
-			inline const std::vector<const trip*>& trips() const { return trips_; } // Trips for the route-
+			inline const std::vector<trip>& trips() const { return trips_; } // Trips for the route-
 
-			inline void add_trip(const trip& trip) { trips_.push_back(&trip); } // Adds trip to the route. Used in initialization. Assuming that the trip are sorted by departure time.
+			inline trip* add_trip(const trip& trip) { trips_.push_back(trip); return &*(trips_.end() - 1); } // Adds trip to the route. Used in initialization. Assuming that the trip are sorted by departure time.
 			inline void add_stop(const stop& stop) { stops_sequence_.push_back(&stop); } // Adds stop to the route. Used in initialization.
 
 			inline bool stop_comes_before(const stop& A, const stop& B) const { // Checks whether stop A comes before stop B in the route. A need for RAPTOR algorithm.

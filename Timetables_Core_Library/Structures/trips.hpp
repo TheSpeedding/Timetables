@@ -34,14 +34,14 @@ namespace Timetables {
 		// Class collecting information about collection of the trips.
 		class trips {
 		private:
-			std::vector<trip> list; // List of all the trips, index of the item is also identificator for the trip.
+			std::vector<trip*> list; // List of all the trips, index of the item is also identificator for the trip.
 		public:
 			trips(std::istream&& trips, routes_info& routes_info, routes& routes, services& services);
 
-			inline trip& at(std::size_t id) { return list.at(id); } // Gets the trip with given id.
-			inline const trip& at(std::size_t id) const { return list.at(id); } // Gets the trip with given id.
+			inline trip& at(std::size_t id) { return *list.at(id); } // Gets the trip with given id.
+			inline const trip& at(std::size_t id) const { return *list.at(id); } // Gets the trip with given id.
 			inline const std::size_t size() const { return list.size(); } // Gets count of items in the collection.
-			inline trip& operator[](std::size_t id) { return list[id]; } // Gets the trip with given id.
+			inline trip& operator[](std::size_t id) { return *list[id]; } // Gets the trip with given id.
 
 			void set_timetables(std::istream&& stop_times, stops& stops); // Loads the file with stop times and sets timetables.
 		};

@@ -27,13 +27,18 @@ namespace Timetables {
 		}
 
 		void cpu_time_micro_benchmark(const data_feed& feed) {
+			auto A = random_station(feed);
+			auto B = random_station(feed);
 			for (int i = 0; i < 1000; i++) {
 				try {
-					router r(feed, random_station(feed), random_station(feed), date_time::now(), 1, 10);
+					router r(feed, A, B, date_time::now(), 1, 10);
 					r.obtain_journeys();
 				}
 				catch (exception ex) {
-					cout << "Unknown exception " << ex.what() << endl;
+					cout << "Unknown exception " << ex.what() << endl; wcout << L"Stations: " << feed.stations().at(A).name() << L" and " << feed.stations().at(B).name() << L"." << endl;
+				}
+				catch (...) {
+					cout << "Unknown error, not an exception." << endl; wcout << L"Stations: " << feed.stations().at(A).name() << L" and " << feed.stations().at(B).name() << L"." << endl;
 				}
 				if (i % 100 == 0)
 					cout << i << endl;
@@ -59,7 +64,7 @@ int main(int argc, char** argv) {
 		
 		locale::global(locale("Czech"));
 			
-		// cpu_time_micro_benchmark(feed); return 0;
+		cpu_time_micro_benchmark(feed); return 0;
 
 		wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 

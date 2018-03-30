@@ -237,13 +237,13 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 			new_departure_date = date_time(new_departure_date, DAY);
 		}
 
-		const stop_time& st = *((**it).stop_times().cbegin() + stop_index);
+		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
 		date_time new_departure_date_time(new_departure_date, SECOND * st.departure_since_midnight() % 86400);
 				
 		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
 
-			return make_pair(*it, date_time(new_departure_date_time, SECOND * (-1) * st.departure_since_midnight()));
+			return make_pair(&*it, date_time(new_departure_date_time, SECOND * (-1) * st.departure_since_midnight()));
 
 	}
 

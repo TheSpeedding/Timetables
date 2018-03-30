@@ -22,18 +22,22 @@ namespace Timetables.Preprocessor
             /// Basic info for the route.
             /// </summary>
             public RoutesInfo.RouteInfo RouteInfo { get; }
-            /// <summary>
-            /// Stops for the route in-order.
-            /// </summary>
-            public List<Stops.Stop> Stops { get; }
+			/// <summary>
+			/// Stops for the route in-order.
+			/// </summary>
+			public List<Stops.Stop> Stops { get; }
+			/// <summary>
+			/// Trips for the route.
+			/// </summary>
+			public List<Trips.Trip> Trips { get; }
 			/// <summary>
 			/// Headsign of the route.
 			/// </summary>
 			public string Headsign { get; }
 			/// <summary>
-			/// Route ID, Route Info ID, Number Of Stops, Headsign.
+			/// Route ID, Route Info ID, Number Of Stops, Number Of Trips, Headsign.
 			/// </summary>
-            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Stops.Count + ";" + Headsign + ";";
+            public override string ToString() => ID + ";" + RouteInfo.ID + ";" + Stops.Count + ";" + Trips.Count + ";" + Headsign + ";";
 			/// <summary>
 			/// Compares this instance to a specified Route object and returns and indication of their relative values.
 			/// </summary>
@@ -64,6 +68,7 @@ namespace Timetables.Preprocessor
             public Route(int id, RoutesInfo.RouteInfo info, List<Stops.Stop> stops, string headsign)
             {
                 ID = id;
+				Trips = new List<Trips.Trip>();
                 RouteInfo = info;
                 Stops = stops;
 				Headsign = headsign;
@@ -132,6 +137,8 @@ namespace Timetables.Preprocessor
                     r = list.Find(x => x.Equals(r));
 
                 trip.Value.Route = r;
+
+				r.Trips.Add(trip.Value);
             }
         }
     }

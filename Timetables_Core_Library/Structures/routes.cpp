@@ -21,16 +21,16 @@ Timetables::Structures::routes::routes(std::wistream&& routes, routes_info& rout
 
 	list.reserve(size);
 
-	array<wstring, 4> tokens;
+	array<wstring, 5> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: RouteID, RouteInfoID, NumberOfStopTimes, Headsign
+		// Entry format: RouteID, RouteInfoID, NumberOfStopTimes, NumberOfTrips, Headsign
 
-		for (size_t j = 0; j < 4; j++)
+		for (size_t j = 0; j < 5; j++)
 			std::getline(routes, tokens[j], wchar_t(';'));
 		
-		list.push_back(route(routes_info[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[3]));
+		list.push_back(route(routes_info[size_t(stoi(tokens[1]))], stoi(tokens[2]), tokens[4], stoi(tokens[3])));
 
 	}
 
@@ -42,7 +42,7 @@ void Timetables::Structures::routes::set_stops_for_routes() {
 
 		// We will reconstruct stops from any of the trip using stop times -> stop time has reference to the stop.
 
-		for (auto&& stop_time : route.trips()[0]->stop_times())
+		for (auto&& stop_time : route.trips()[0].stop_times())
 			route.add_stop(stop_time.stop());
 
 	}

@@ -32,9 +32,10 @@ Timetables::Structures::trips::trips(std::istream&& trips, routes_info& routes_i
 
 		trip t(service, route, stoi(tokens[3]));
 
-		list.push_back(move(t));
+		auto ptr = route.add_trip(move(t));
 
-		route.add_trip(*(list.cend() - 1));
+		list.push_back(ptr);		
+
 	}
 
 }
@@ -55,7 +56,7 @@ void Timetables::Structures::trips::set_timetables(std::istream&& stop_times, st
 		for (size_t j = 0; j < 4; j++)
 			std::getline(stop_times, tokens[j], ';');
 
-		trip& trip = list[stoi(tokens[0])];
+		trip& trip = *list[stoi(tokens[0])];
 
 		stop& stop = stops[stoi(tokens[1])];
 
