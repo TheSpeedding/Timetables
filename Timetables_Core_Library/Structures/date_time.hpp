@@ -27,13 +27,16 @@ namespace Timetables {
 					// Time parsing.
 					date_time_ = stoi(input.substr(0, 2)) * 3600 + stoi(input.substr(3, 2)) * 60 + stoi(input.substr(6, 2));
 
+#pragma warning( push )
+#pragma warning( disable : 4244) // There is no function string to unsigned short.
 				else
 					// Date parsing.
 					date_time_ = boost::posix_time::to_time_t(boost::posix_time::ptime(
 						boost::gregorian::date(stoi(input.substr(0, 4)), stoi(input.substr(4, 2)), stoi(input.substr(6, 2)))));
+#pragma warning( pop ) 
 			}
-			date_time(std::time_t totalSecs) : date_time_(totalSecs) {}
-			date_time(std::size_t hours, std::size_t mins, std::size_t secs, std::size_t day, std::size_t month, std::size_t year) : date_time_(
+			date_time(std::time_t total_secs) : date_time_(total_secs) {}
+			date_time(unsigned short hours, unsigned short mins, unsigned short secs, unsigned short day, unsigned short month, unsigned short year) : date_time_(
 				boost::posix_time::to_time_t(boost::posix_time::ptime(boost::gregorian::date(year, month, day), boost::posix_time::time_duration(hours, mins, secs)))
 			) {}
 
@@ -43,13 +46,13 @@ namespace Timetables {
 
 			static date_time now() { return date_time(boost::posix_time::to_time_t(boost::posix_time::second_clock::local_time())); }
 
-			inline std::size_t hours() const { return (date_time_ / 3600) % 24; }
-			inline std::size_t minutes() const { return (date_time_ / 60) % 60; }
-			inline std::size_t seconds() const { return date_time_ % 60; }
-			inline std::size_t day() const { return boost::posix_time::from_time_t(date_time_).date().day(); }
-			inline std::size_t month() const { return boost::posix_time::from_time_t(date_time_).date().month(); }
-			inline std::size_t year() const { return boost::posix_time::from_time_t(date_time_).date().year(); }
-			inline std::size_t day_in_week() const { return ((date_time_ / 86400) + 3) % 7; }
+			inline auto hours() const { return (date_time_ / 3600) % 24; }
+			inline auto minutes() const { return (date_time_ / 60) % 60; }
+			inline auto seconds() const { return date_time_ % 60; }
+			inline auto day() const { return boost::posix_time::from_time_t(date_time_).date().day(); }
+			inline auto month() const { return boost::posix_time::from_time_t(date_time_).date().month(); }
+			inline auto year() const { return boost::posix_time::from_time_t(date_time_).date().year(); }
+			inline auto day_in_week() const { return ((date_time_ / 86400) + 3) % 7; }
 
 			inline std::time_t timestamp() const { return date_time_; }
 
@@ -65,7 +68,7 @@ namespace Timetables {
 			inline bool operator>= (const date_time& other) const { return date_time_ >= other.date_time_; }
 			inline bool operator!= (const date_time& other) const { return date_time_ != other.date_time_; }
 
-			inline static long int difference(const date_time& first, const date_time& second) { return first.date_time_ - second.date_time_; }
+			inline static std::time_t difference(const date_time& first, const date_time& second) { return first.date_time_ - second.date_time_; }
 
 			inline date_time operator+(const date_time& other) {
 				date_time new_date_time(*this);

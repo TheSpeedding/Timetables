@@ -15,18 +15,18 @@ namespace Timetables {
 		// Class collecting information about one trip.
 		class trip {
 		private:
+			const int departure_time_; // Departure from the first stop in the trip. Seconds since midnight.
+			std::vector<stop_time> stop_times_; // List of the stop times included in this trip.
 			const route& route_; // Reference to the route serving this trip.
 			const service& service_; // Reference to the service that give us operating days for the trip.
-			std::size_t departure_time_; // Departure from the first stop in the trip. Seconds since midnight.
-			std::vector<stop_time> stop_times_; // List of the stop times included in this trip.
 		public:
-			trip(const service& service, const route& route, std::size_t departure) :
+			trip(const service& service, const route& route, int departure) :
 				service_(service), departure_time_(departure), route_(route) { stop_times_.reserve(route.stops().capacity()); }
 
 			inline const std::vector<stop_time>& stop_times() const { return stop_times_; } // Gets list of stop times belonging to the trip.
 			inline const route& route() const { return route_; } // Gets information about route.
 			inline const service& service() const { return service_; } // Gets service for this trip.
-			inline const std::size_t departure() const { return departure_time_; } // Gets departure from the first stop of the trip, seconds since midnight.
+			inline const int departure() const { return departure_time_; } // Gets departure from the first stop of the trip, seconds since midnight.
 			
 			inline void add_to_trip(const stop_time& stop_time) { stop_times_.push_back(stop_time); } // Adds stop time into the trip. Used in initialization.
 		};

@@ -90,7 +90,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 		for (auto&& footpath : stop_A->footpaths()) { // 25th row of pseudocode.
 
-			size_t duration = footpath.first;
+			int duration = footpath.first;
 
 			const stop* stop_B = footpath.second;
 
@@ -106,11 +106,11 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 			else if (arrival_time_A != (journeys_.cend() - 1)->cend() && (arrival_time_B == (journeys_.cend() - 1)->cend()))
 
-				min = date_time(arrival_time_A->second->arrival_at_target(), SECOND * duration);
+				min = date_time(arrival_time_A->second->arrival_at_target(), duration);
 
 			else {
 
-				date_time other(arrival_time_A->second->arrival_at_target(), SECOND * duration);
+				date_time other(arrival_time_A->second->arrival_at_target(), duration);
 
 				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
 				
@@ -164,7 +164,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			const stop_time& st = *(current_trip->stop_times().cbegin() + (next_stop - current_route.stops().cbegin()));
 
-			date_time new_arrival(date_for_current_trip, SECOND * st.arrival_since_midnight()); // 18th row of pseudocode.
+			date_time new_arrival(date_for_current_trip, st.arrival_since_midnight()); // 18th row of pseudocode.
 
 			auto current_stop_best_arrival = temp_labels_.find(&current_stop);
 
@@ -195,7 +195,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			auto previous_arrival = (journeys_.end() - 2)->find(&current_stop);
 
-			if (previous_arrival != (journeys_.end() - 2)->cend() && previous_arrival->second->arrival_at_target() <= date_time(date_for_current_trip, SECOND * st.departure_since_midnight())) { // 22nd row of pseudocode.
+			if (previous_arrival != (journeys_.end() - 2)->cend() && previous_arrival->second->arrival_at_target() <= date_time(date_for_current_trip, st.departure_since_midnight())) { // 22nd row of pseudocode.
 
 				auto res = find_earliest_trip(current_route, previous_arrival->second->arrival_at_target(), next_stop - current_route.stops().cbegin());
 				current_trip = res.first; // 23rd row of pseudocode.
@@ -239,11 +239,11 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
-		date_time new_departure_date_time(new_departure_date, SECOND * st.departure_since_midnight() % 86400);
+		date_time new_departure_date_time(new_departure_date, st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
 				
 		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
 
-			return make_pair(&*it, date_time(new_departure_date_time, SECOND * (-1) * st.departure_since_midnight()));
+			return make_pair(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()));
 
 	}
 
@@ -260,7 +260,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		return;		
 
 	for (int i = 1; i < count_; i++) {
-		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
+		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), 1));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
@@ -297,7 +297,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_ && footpath.first < 300 ) { // Consider the stops in small radius only.
 				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, SECOND * footpath.first), *stop, *footpath.second, footpath.first, nullptr));
+				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first), *stop, *footpath.second, footpath.first, nullptr));
 			}
 		}
 	}

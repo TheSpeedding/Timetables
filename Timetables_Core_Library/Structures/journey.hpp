@@ -63,13 +63,13 @@ namespace Timetables {
 		// Transfer.
 		class footpath_segment final : public journey_segment {
 		private:
-			const std::size_t duration_; // Duration of the transfer.
+			const int duration_; // Duration of the transfer.
 			const stop& source_stop_; // Source stop.
 			const stop& target_stop_; // Target stop.
 		protected:
 			virtual inline std::unique_ptr<journey_segment> clone() { return std::make_unique<footpath_segment>(*this); }
 		public:
-			footpath_segment(const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, std::size_t duration, std::shared_ptr<journey_segment> previous) :
+			footpath_segment(const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, int duration, std::shared_ptr<journey_segment> previous) :
 				duration_(duration), source_stop_(source), target_stop_(target) { arrival_ = arrival; previous_ = previous;	}
 
 			virtual inline const Timetables::Structures::trip* trip() const override { return nullptr; } // Trip. Nullptr because this is a transfer.
@@ -107,7 +107,7 @@ namespace Timetables {
 
 			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
-			inline const int duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
+			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 
 			bool operator< (const journey& other) const; // Preferences: Arrival time, duration (=dep. time), number of transfers, number of stops, total duration of transfers,.
 		

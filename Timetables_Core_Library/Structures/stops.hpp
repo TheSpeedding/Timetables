@@ -17,7 +17,7 @@ namespace Timetables {
 		class stop {
 		private:
 			station& parent_station_; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same). be better.
-			std::multimap<std::size_t, const stop*> footpaths_; // Stops reachable in walking-distance (< 10 min.) from this stop.
+			std::multimap<int, const stop*> footpaths_; // Stops reachable in walking-distance (< 10 min.) from this stop.
 			std::vector<const route*> throughgoing_routes_; // Routes that goes through this stop.
 			std::vector<const stop_time*> departures_; // Sorted by departure times.
 		public:
@@ -26,12 +26,12 @@ namespace Timetables {
 			inline station& parent_station() const { return parent_station_; } // Parent station for this stop.
 			inline const std::wstring& name() const { return parent_station_.name(); } // Name of this stop.
 			inline const std::vector<const route*>& throughgoing_routes() const { return throughgoing_routes_; } // Routes that goes through this stop.
-			inline const std::multimap<std::size_t, const stop*>& footpaths() const { return footpaths_; } // Stops reachable in walking-distance (< 10 min.) from this stop.
+			inline const std::multimap<int, const stop*>& footpaths() const { return footpaths_; } // Stops reachable in walking-distance (< 10 min.) from this stop.
 			inline const std::vector<const stop_time*>& departures() const { return departures_; } // Departures from this stop.
 
 			void add_departure(const stop_time& stop_time); // Adds a departure. Used in initialization.
 			inline void add_throughgoing_route(const route& route) { throughgoing_routes_.push_back(&route); } // Adds routes that goes through this stop. Used in initialization.
-			inline void add_footpath(const stop& stop, std::size_t time) { footpaths_.insert(std::make_pair(time, &stop)); } // Adds a footpath. Used in initialization.
+			inline void add_footpath(const stop& stop, int time) { footpaths_.insert(std::make_pair(time, &stop)); } // Adds a footpath. Used in initialization.
 		};
 
 		// Class collecting information about collection of the stops.
