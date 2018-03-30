@@ -25,14 +25,14 @@ const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> d
 }
 
 void Timetables::Algorithms::departure_board::obtain_departure_board() {
-		
-	auto departure_time = earliest_departure_.time(); // Lower bound for departures
-
-	auto departure_date = earliest_departure_.date(); // A need for operating days checking.
 	
 	// We have to find "count" departure from each stop of the station. This cannot be done better since we want to support showing departure board from map in mobile application.
 
 	for (auto&& stop : stops_) {
+
+		auto departure_time = earliest_departure_.time(); // Lower bound for departures
+
+		auto departure_date = earliest_departure_.date(); // A need for operating days checking.
 
 		if (stop->departures().cend() == stop->departures().cbegin()) continue; // The stop contains no departures.
 
@@ -53,7 +53,9 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) &&
 				// Check if the stop-time (trip respectively) is operating in required date.
 				(**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight())) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
-																			  // Check if this stop is not the last stop in the trip (meaning to have no successors).
+				
+				// Check if this stop is not the last stop in the trip (meaning to have no successors).
+				
 				if (&(**it).stop() != &((**it).trip().stop_times().cend() - 1)->stop()) {
 
 					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % 86400) // Time of the departure.
