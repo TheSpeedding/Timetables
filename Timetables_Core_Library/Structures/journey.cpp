@@ -56,12 +56,12 @@ Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
 bool Timetables::Structures::journey::operator< (const Timetables::Structures::journey& other) const {
 	if (arrival_time() != other.arrival_time())
 		return arrival_time() < other.arrival_time();
-	else if (duration() != other.duration())
-		return duration() < other.duration();
+	else if (departure_time() != other.departure_time())
+		return departure_time() > other.departure_time();
 	else if (journey_segments_.size() != other.journey_segments_.size())
 		return journey_segments_.size() < other.journey_segments_.size();
 	else if (number_of_stops() != other.number_of_stops())
 		return number_of_stops() < other.number_of_stops();
-	else
+	else 
 		return duration_of_transfers() < other.duration_of_transfers();
 }

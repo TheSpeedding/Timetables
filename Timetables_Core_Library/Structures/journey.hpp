@@ -86,7 +86,7 @@ namespace Timetables {
 			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
-
+			
 			bool operator< (const journey& other) const; // Preferences: Arrival time, duration, number of transfers, number of stops, total duration of transfers,.
 		
 			inline const std::size_t number_of_stops() const { // Total number of stops in the journey.

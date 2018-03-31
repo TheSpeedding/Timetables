@@ -32,9 +32,9 @@ Timetables::Structures::trips::trips(std::istream&& trips, routes_info& routes_i
 
 		trip t(service, route, stoi(tokens[3]));
 
-		auto ptr = route.add_trip(move(t));
+		trip& ptr = route.add_trip(move(t));
 
-		list.push_back(ptr);		
+		list.push_back(&ptr);		
 
 	}
 

@@ -52,13 +52,13 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 			// Check if the departure does not leave before required time.
 			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) &&
 				// Check if the stop-time (trip respectively) is operating in required date.
-				(**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight())) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+				(**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight() % DAY)) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
 				
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
 				
 				if (&(**it).stop() != &((**it).trip().stop_times().cend() - 1)->stop()) {
 
-					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % 86400) // Time of the departure.
+					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % DAY) // Time of the departure.
 						+ departure_date.date(); // Date of the departure.
 
 					found_departures_.push_back(departure(**it // Stop time.

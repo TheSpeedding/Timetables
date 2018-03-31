@@ -48,3 +48,9 @@ void Timetables::Structures::routes::set_stops_for_routes() {
 	}
 
 }
+
+trip& Timetables::Structures::route::add_trip(const trip & trip) {
+	trips_.push_back(trip); 
+	(trips_.end() - 1)->stop_times_.reserve(stops_sequence_.capacity()); 
+	return *(trips_.end() - 1);
+}
