@@ -170,10 +170,11 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			auto target_stop_best_arrival = temp_labels_.cend();
 
-			for (auto&& stop : target_.child_stops())
-				if (temp_labels_.find(stop) != temp_labels_.cend() && (target_stop_best_arrival == temp_labels_.cend() || temp_labels_.find(stop)->second < target_stop_best_arrival->second))
-					target_stop_best_arrival = temp_labels_.find(stop); // 18th row of pseudocode.
-
+			for (auto&& stop : target_.child_stops()) {
+				auto found = temp_labels_.find(stop);
+				if (found != temp_labels_.cend() && (target_stop_best_arrival == temp_labels_.cend() || found->second < target_stop_best_arrival->second))
+					target_stop_best_arrival = found; // 18th row of pseudocode.
+			}
 
 			if ((current_stop_best_arrival == temp_labels_.cend() && target_stop_best_arrival == temp_labels_.cend()) || // Then the minimum is an infinity. Process the if block.
 				(current_stop_best_arrival == temp_labels_.cend() && target_stop_best_arrival != temp_labels_.cend() && new_arrival < target_stop_best_arrival->second) ||
@@ -241,7 +242,7 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 		date_time new_departure_date_time(new_departure_date, st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
 				
-		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
+		if (new_departure_date_time > arrival && st.trip().service().is_operating_in_date(new_departure_date))
 
 			return make_pair(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()));
 

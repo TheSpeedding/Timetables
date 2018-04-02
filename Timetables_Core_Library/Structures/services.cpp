@@ -7,13 +7,14 @@ using namespace Timetables::Structures;
 
 Timetables::Structures::service::service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const date_time& start, const date_time& end) :
 	valid_since_(start), valid_until_(end) {
-	operating_days_[0] = mon;
-	operating_days_[1] = tue;
-	operating_days_[2] = wed;
-	operating_days_[3] = thu;
-	operating_days_[4] = fri;
-	operating_days_[5] = sat;
-	operating_days_[6] = sun;
+	operating_days_ = (days)0;
+	if (mon) operating_days_ = operating_days_ | monday;
+	if (tue) operating_days_ = operating_days_ | tuesday;
+	if (wed) operating_days_ = operating_days_ | wednesday;
+	if (thu) operating_days_ = operating_days_ | thursday;
+	if (fri) operating_days_ = operating_days_ | friday;
+	if (sat) operating_days_ = operating_days_ | saturday;
+	if (sun) operating_days_ = operating_days_ | sunday;
 }
 
 bool Timetables::Structures::service::is_added_in_date(const date_time& date_time) const {
@@ -35,10 +36,32 @@ bool Timetables::Structures::service::is_removed_in_date(const date_time& date_t
 }
 
 bool Timetables::Structures::service::is_operating_in_date(const date_time& date_time) const {
-	if (date_time < valid_since_ || date_time > valid_until_) return false;
-	if (is_added_in_date(date_time.date())) return true;
-	if (is_removed_in_date(date_time.date())) return false;
-	return is_operating_on_day(date_time.day_in_week());
+
+	// Fully optimized for maximal performance.	
+
+	bool operating_on_day_by_default = is_operating_on_day(date_time.day_in_week());
+
+	if (operating_on_day_by_default) {
+		if (is_removed_in_date(date_time.date()))
+			return false;
+		else {
+			if (date_time < valid_since_ || date_time > valid_until_) 
+				return false;
+			else 
+				return true;
+		}
+	}
+
+	else {
+		if (is_added_in_date(date_time.date())) {
+			if (date_time < valid_since_ || date_time > valid_until_)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
 }
 
 Timetables::Structures::services::services(std::istream&& calendar, std::istream&& calendar_dates) {

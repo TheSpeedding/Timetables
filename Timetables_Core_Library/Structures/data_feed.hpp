@@ -1,5 +1,5 @@
-#ifndef GTFS_FEED_HPP
-#define GTFS_FEED_HPP
+#ifndef DATA_FEED_HPP
+#define DATA_FEED_HPP
 
 #include "../Structures/services.hpp"
 #include "../Structures/routes_info.hpp"
@@ -18,11 +18,11 @@ namespace Timetables {
 		// Class collecting information about all the data.
 		class data_feed {
 		private:
-			services services_;
 			routes_info routes_info_;
+			routes routes_;
 			stations stations_;
 			stops stops_;
-			routes routes_;
+			services services_;
 			trips trips_;
 		public:
 			data_feed(const std::string& path) :
@@ -48,4 +48,4 @@ namespace Timetables {
 	}
 }
 
-#endif // !GTFS_FEED_HPP
+#endif // !DATA_FEED_HPP
