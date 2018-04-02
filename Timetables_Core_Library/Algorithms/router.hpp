@@ -8,6 +8,25 @@
 #include <set> // Structure for algorithm
 #include "../Structures/journey.hpp" // Journey.
 #include "../Structures/data_feed.hpp" // Reference to data feed.
+#include <math.h> // Hash function.
+
+namespace std {
+	template<>
+	struct hash<Timetables::Structures::route*> {
+		std::size_t operator() (const Timetables::Structures::route* val) {
+			static const std::size_t shift = (size_t)std::log2(1 + sizeof(Timetables::Structures::route*));
+			return (size_t)(val) >> shift;
+		}
+	};
+
+	template<>
+	struct hash<Timetables::Structures::stop*> {
+		std::size_t operator() (const Timetables::Structures::stop* val) {
+			static const std::size_t shift = (size_t)std::log2(1 + sizeof(Timetables::Structures::stop*));
+			return (size_t)(val) >> shift;
+		}
+	};
+}
 
 namespace Timetables {
 	namespace Algorithms {

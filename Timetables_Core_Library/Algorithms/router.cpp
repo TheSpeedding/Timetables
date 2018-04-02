@@ -295,7 +295,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		// We are also to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
-			if (&footpath.second->parent_station() != &source_ && footpath.first < 300 ) { // Consider the stops in small radius only.
+			if (&footpath.second->parent_station() != &source_ && footpath.first < 300) { // Consider the stops in small radius only.
 				marked_stops_.insert(footpath.second);
 				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first), *stop, *footpath.second, footpath.first, nullptr));
 			}
