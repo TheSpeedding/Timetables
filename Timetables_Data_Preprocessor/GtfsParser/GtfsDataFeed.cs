@@ -85,12 +85,12 @@ namespace Timetables.Preprocessor
             Directory.CreateDirectory(path);
 			
             Trips.Write(new StreamWriter(path + "/trips.tfd")); // This MUST come first because of trip reindexation (based on sorting).
+			Stations.Write(new StreamWriter(path + "/stations.tfd")); // This MUST come first because of stations reindexation (based on sorting).
 
-            Calendar.Write(new StreamWriter(path + "/calendar.tfd"));
+			Calendar.Write(new StreamWriter(path + "/calendar.tfd"));
             CalendarDates.Write(new StreamWriter(path + "/calendar_dates.tfd"));
             RoutesInfo.Write(new StreamWriter(path + "/routes_info.tfd"));
             Stops.Write(new StreamWriter(path + "/stops.tfd"));
-            Stations.Write(new StreamWriter(path + "/stations.tfd"));
             Footpaths.Write(new StreamWriter(path + "/footpaths.tfd"));
             StopTimes.Write(new StreamWriter(path + "/stop_times.tfd"));
             Routes.Write(new StreamWriter(path + "/routes.tfd"));

@@ -9,7 +9,7 @@ namespace Timetables.Preprocessor
 	/// </summary>
 	public abstract class Stations : IEnumerable<Stations.Station>
     {
-        public class Station
+        public class Station : IComparable<Station>
         {
             /// <summary>
             /// ID of the station.
@@ -24,12 +24,19 @@ namespace Timetables.Preprocessor
 			/// </summary>
 			/// <returns></returns>
             public override string ToString() => ID + ";" + Name + ";";
+
+			/// <summary>
+			/// Compares this instance to a specified Station object and returns and indication of their relative values.
+			/// </summary>
+			/// <param name="other">Station to compare.</param>
+			public int CompareTo(Station other) => Name.CompareTo(other.Name);
+
 			/// <summary>
 			/// Initializes object.
 			/// </summary>
 			/// <param name="id">Station ID.</param>
 			/// <param name="name">Name.</param>
-            public Station(int id, string name)
+			public Station(int id, string name)
             {
                 ID = id;
                 Name = name;
@@ -52,6 +59,10 @@ namespace Timetables.Preprocessor
 		/// <param name="stations">Stream that the data should be written in.</param>
 		public void Write(System.IO.StreamWriter stations)
 		{
+			list.Sort();
+			for (int i = 0; i < Count; i++)
+				list[i].ID = i;
+
 			stations.WriteLine(Count);
 			foreach (var item in list)
 				stations.Write(item);

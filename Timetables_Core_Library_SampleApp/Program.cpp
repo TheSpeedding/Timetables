@@ -74,7 +74,7 @@ int main() {
 
 		wcout << "To obtain a journey, use the command R;Source station;Target station;Number of journeys shown;Max transfers number." << endl << L"E.g. R;Malostranské námìstí;Nádraí Hostivaø;5;3." << endl << endl;
 
-		wcout << L"To use a hint for stations name, use the command H;Source Station. E.g. H;Malostran returns Malostranská and Malostranské námìstí." << endl << endl;
+		wcout << L"To use a hint for a station name, use the command H;Source Station. E.g. H;Malostran returns Malostranská and Malostranské námìstí." << endl << endl;
 
 		wcout << "To exit the application, use the command END." << endl << endl;
 
