@@ -53,11 +53,11 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 		default: color = 15; break;
 		}
 
-		SetConsoleTextAttribute(hConsole, color);
-
 
 		if (dep.outdated())
 			cout << "Note that this departure uses outdated timetables, consider updating them." << endl << endl;
+
+		SetConsoleTextAttribute(hConsole, color);
 
 		cout << "Departure at " << dep.departure_time() << " with line " << dep.line().short_name() << " going ahead to "; wcout << dep.headsign(); cout << " station goes via following stops:" << endl;
 		
@@ -158,4 +158,19 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 	}
 
 	SetConsoleTextAttribute(hConsole, 7);	
+}
+
+void Timetables::SampleApp::get_hint(const Timetables::Structures::stations& stations, const std::wstring& name) {
+
+	cout << endl;
+
+	for (size_t i = 0; i < stations.size(); i++) {
+
+		if (stations.at(i).name().find(name) != wstring::npos) {
+			wcout << stations.at(i).name() << endl;
+		}
+
+	}
+
+	cout << endl;
 }

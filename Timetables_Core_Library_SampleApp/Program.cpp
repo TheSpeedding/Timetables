@@ -74,6 +74,8 @@ int main() {
 
 		wcout << "To obtain a journey, use the command R;Source station;Target station;Number of journeys shown;Max transfers number." << endl << L"E.g. R;Malostranské námìstí;Nádraí Hostivaø;5;3." << endl << endl;
 
+		wcout << L"To use a hint for stations name, use the command H;Source Station. E.g. H;Malostran returns Malostranská and Malostranské námìstí." << endl << endl;
+
 		wcout << "To exit the application, use the command END." << endl << endl;
 
 		wstring line;
@@ -85,7 +87,18 @@ int main() {
 			getline(input, token, wchar_t(';'));
 
 			try {
-				if (token == L"DB") { // Departure board. Example: DB;Malostranské námìstí;3
+				if (token == L"H") { // Hint for stations.
+					if (!input.good()) {
+						cout << "Too few arguments." << endl << endl;
+						continue;
+					}
+					wstring station;
+					getline(input, station);
+
+					get_hint(feed.stations(), station);
+				}
+				
+				else if (token == L"DB") { // Departure board. Example: DB;Malostranské námìstí;3
 					if (!input.good()) {
 						cout << "Too few arguments." << endl << endl;
 						continue;

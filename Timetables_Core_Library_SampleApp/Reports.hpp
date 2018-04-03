@@ -12,6 +12,7 @@ namespace Timetables {
 	namespace SampleApp {
 		void get_departure_board_report(const Timetables::Structures::data_feed& feed, const std::wstring& station_name, const Timetables::Structures::date_time& date_time, const size_t count);
 		void get_journeys_report(const Timetables::Structures::data_feed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::date_time& date_time, const size_t count, const size_t max_transfers);
+		void get_hint(const Timetables::Structures::stations& stations, const std::wstring& name);
 	}
 }
 
