@@ -59,7 +59,7 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 
 		SetConsoleTextAttribute(hConsole, color);
 
-		cout << "Departure at " << dep.departure_time() << " with line " << dep.line().short_name() << " going ahead to "; wcout << dep.headsign(); cout << " station goes via following stops:" << endl;
+		cout << "Departure at " << dep.departure_time() << " with line "; wcout << dep.line().short_name(); cout << " going ahead to "; wcout << dep.headsign(); cout << " station goes via following stops:" << endl;
 		
 		auto following_stops = dep.following_stops();
 
@@ -138,7 +138,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 
 				SetConsoleTextAttribute(hConsole, color);
 
-				cout << "Board the line " << it->trip()->route().info().short_name() << " at " << it->departure_from_source() << " at ";
+				cout << "Board the line "; wcout << it->trip()->route().info().short_name(); cout << " at " << it->departure_from_source() << " at ";
 				wcout << it->intermediate_stops().cbegin()->second->name() << " station going ahead to ";
 				wcout << it->trip()->route().headsign() << L" station via following stops:" << endl;
 
@@ -148,7 +148,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 					wcout << L"  " << it1->second->name(); cout << " with arrival at " << Timetables::Structures::date_time(it->departure_from_source(), SECOND * it1->first) << "." << endl;
 				}
 
-				cout << "Get off the line " << it->trip()->route().info().short_name() << " at " << it->arrival_at_target() << " in ";
+				cout << "Get off the line "; wcout << it->trip()->route().info().short_name(); cout << " at " << it->arrival_at_target() << " in ";
 				wcout << (it->intermediate_stops().cend() - 1)->second->name() << " station." << endl << endl;
 
 				previous_stop = (it->intermediate_stops().cend() - 1)->second;
