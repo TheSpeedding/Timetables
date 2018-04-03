@@ -17,9 +17,9 @@ namespace Timetables {
 			friend class route; // We need to reserve some space in vector due to move command and this should not be a part of API.
 		private:
 			const int departure_time_; // Departure from the first stop in the trip. Seconds since midnight.
-			const service& service_; // Reference to the service that give us operating days for the trip.
 			std::vector<stop_time> stop_times_; // List of the stop times included in this trip.
 			const route& route_; // Reference to the route serving this trip.
+			const service& service_; // Reference to the service that give us operating days for the trip.
 		public:
 			trip(const service& service, const route& route, int departure) : service_(service), departure_time_(departure), route_(route) {}
 

@@ -35,7 +35,7 @@ bool Timetables::Structures::service::is_removed_in_date(const date_time& date_t
 	return false;
 }
 
-bool Timetables::Structures::service::is_operating_in_date(const date_time& date_time) const {
+service_state Timetables::Structures::service::is_operating_in_date(const date_time& date_time) const {
 
 	// Fully optimized for maximal performance.	
 
@@ -43,24 +43,20 @@ bool Timetables::Structures::service::is_operating_in_date(const date_time& date
 
 	if (operating_on_day_by_default) {
 		if (is_removed_in_date(date_time))
-			return false;
+			return not_operating;
 		else {
 			if (date_time < valid_since_ || date_time > valid_until_) 
-				return false;
+				return outdated;
 			else 
-				return true;
+				return operating;
 		}
 	}
 
 	else {
-		if (is_added_in_date(date_time)) {
-			if (date_time < valid_since_ || date_time > valid_until_)
-				return true;
-			else
-				return false;
-		}
+		if (is_added_in_date(date_time))
+			return operating;
 		else
-			return false;
+			return not_operating;
 	}
 }
 

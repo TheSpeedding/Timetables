@@ -10,7 +10,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-departure::departure(const Timetables::Structures::stop_time& stop_time, const Timetables::Structures::date_time& dep) : departure_(dep) {	
+departure::departure(const Timetables::Structures::stop_time& stop_time, const Timetables::Structures::date_time& dep, bool outdated) : departure_(dep), outdated_(outdated) {	
 	const vector<Timetables::Structures::stop_time>& stop_times = stop_time.trip().stop_times();
 	trip_begin_ = stop_times.cbegin() + (&stop_time - stop_times.data()); // We can do this ONLY because we hold stop times in trips. So they are stored contiguously in a vector.
 	trip_end_ = stop_times.cend();
@@ -49,10 +49,11 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
 			}
 
+			// Check if the stop-time (trip respectively) is operating in required date.
+			service_state s = (**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight() % DAY); // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+
 			// Check if the departure does not leave before required time.
-			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) &&
-				// Check if the stop-time (trip respectively) is operating in required date.
-				(**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight() % DAY)) // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) && s != not_operating)
 				
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
 				
@@ -62,7 +63,8 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 						+ departure_date.date(); // Date of the departure.
 
 					found_departures_.push_back(departure(**it // Stop time.
-						, dep)); // Date time of the departure.
+						, dep // Date time of the departure.
+						, s == outdated ? true : false));
 
 					counter++;
 				}

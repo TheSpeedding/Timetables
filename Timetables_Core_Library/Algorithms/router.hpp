@@ -9,6 +9,7 @@
 #include "../Structures/journey.hpp" // Journey.
 #include "../Structures/data_feed.hpp" // Reference to data feed.
 #include <math.h> // Hash function.
+#include <tuple> // Return type of earliest trip function.
 
 namespace std {
 	template<>
@@ -53,7 +54,7 @@ namespace Timetables {
 			const Timetables::Structures::journey* obtain_journey(const Timetables::Structures::date_time& departure); // Returns the best journey obtained in this iteration.
 
 			void traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop); // Traverses one route.
-			std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> // Returns pointer to the trip and starting date of the trip.
+			std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> // Returns pointer to the trip and starting date of the trip.
 				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 
 		public:
 			router(const Timetables::Structures::data_feed& feed, const std::size_t source_id, const std::size_t target_id, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers) :

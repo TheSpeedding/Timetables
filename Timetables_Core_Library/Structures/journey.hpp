@@ -26,6 +26,7 @@ namespace Timetables {
 			virtual inline const date_time departure_from_source() const = 0;
 			virtual inline const date_time& arrival_at_target() const = 0;
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const = 0;
+			virtual inline bool outdated() const = 0;
 		};
 
 		// Trip segment.
@@ -34,9 +35,11 @@ namespace Timetables {
 			const Timetables::Structures::trip* trip_; // Trip that serves the trip segment.
 			std::vector<stop_time>::const_iterator source_stop_; // Source stop.
 			std::vector<stop_time>::const_iterator target_stop_; // Target stop.
+			bool outdated_; // Flag that says whether the journey uses outdated timetables.
 		public:
-			trip_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, const stop& target, std::shared_ptr<journey_segment> previous) : trip_(&trip) {
-				arrival_ = arrival; previous_ = previous;
+			trip_segment(const Timetables::Structures::trip& trip, const Timetables::Structures::date_time& arrival, const stop& source, 
+				const stop& target, std::shared_ptr<journey_segment> previous, bool outdated) : trip_(&trip), outdated_(outdated) {
+				arrival_ = arrival; previous_ = previous; 
 				for (std::vector<stop_time>::const_iterator it = trip.stop_times().cbegin(); it != trip.stop_times().cend(); ++it) { // Searches for stops in the trip.
 					if (&it->stop() == &source) source_stop_ = it;
 					if (&it->stop() == &target) target_stop_ = it;
@@ -55,6 +58,7 @@ namespace Timetables {
 					stops.push_back(std::make_pair(it->arrival() - base, &it->stop()));
 				return move(stops);
 			}
+			virtual inline bool outdated() const override { return outdated_; }
 		};
 
 		// Transfer.
@@ -70,9 +74,10 @@ namespace Timetables {
 			virtual inline const Timetables::Structures::trip* trip() const override { return nullptr; } // Trip. Nullptr because this is a transfer.
 			virtual inline const stop& source_stop() const override { return source_stop_; } // Source stop.
 			virtual inline const stop& target_stop() const override { return target_stop_; } // Target stop.
-			virtual inline const date_time departure_from_source() const override { return date_time(arrival_, SECOND * (-1) * duration_); } // Gets departure from source stop.
+			virtual inline const date_time departure_from_source() const override { return date_time(arrival_, (-1) * duration_); } // Gets departure from source stop.
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { return std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>>(); } // Gets intermediate stops between source and target stop.
+			virtual inline bool outdated() const override { return false; }
 		};
 
 		// Class collecting information about one journey.
@@ -101,7 +106,9 @@ namespace Timetables {
 				return number;
 			}
 
-			inline const std::vector<std::shared_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.			
+			inline const std::vector<std::shared_ptr<journey_segment>>& journey_segments() const { return journey_segments_; } // Gets journey segments.	
+
+			inline bool outdated() const { for (auto&& js : journey_segments_) if (js->outdated()) return true; return false; }
 		};
 	}
 }

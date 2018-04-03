@@ -9,17 +9,19 @@ namespace Timetables {
 		// We could use stop_time class, but we will define this one instead to have it more developer friendly.
 		class departure {
 		private:
-			date_time departure_;
+			date_time departure_; // Departure from the station.
+			bool outdated_; // Indicates whether timetables are outdated.
 			std::vector<stop_time>::const_iterator trip_begin_; // Start of the trip from departure stop.
 			std::vector<stop_time>::const_iterator trip_end_; // End of the trip at the end stop.
 		public:
-			departure(const stop_time& stop_time, const date_time& departure);
+			departure(const stop_time& stop_time, const date_time& departure, bool outdated);
 
 			inline const date_time& departure_time() const { return departure_; } // Returns departure date time from the stop.
 			inline const std::wstring& headsign() const { return trip_begin_->trip().route().headsign(); } // Returns headsign of the trip.
 			inline const route_info& line() const { return trip_begin_->trip().route().info(); } // Returns basic information about the line.
-			inline const stop& stop() const { return trip_begin_->stop(); } // Return the stop.
+			inline const stop& stop() const { return trip_begin_->stop(); } // Returns the stop.
 			const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> following_stops() const; // Returns following stops in the trip.
+			inline bool outdated() const { return outdated_; } // Determines whether departure uses outdated timetables or not.
 
 			inline bool operator< (const departure& other) const { return departure_ < other.departure_; }
 			inline bool operator> (const departure& other) const { return departure_ > other.departure_; }

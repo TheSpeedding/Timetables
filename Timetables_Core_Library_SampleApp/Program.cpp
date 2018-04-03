@@ -12,7 +12,7 @@
 #include <locale>
 #include <Windows.h>
 
-#define BENCHMARK true
+#define BENCHMARK false
 
 using namespace std;
 using namespace Timetables::Structures;
@@ -131,7 +131,7 @@ int main() {
 					wstring transfers;
 					getline(input, transfers);
 
-					get_journeys_report(feed, stationA, stationB, date_time(1522454400), stoi(count), stoi(transfers));
+					get_journeys_report(feed, stationA, stationB, date_time::now(), stoi(count), stoi(transfers));
 				}
 
 				else if (token == L"END")

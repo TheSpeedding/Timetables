@@ -55,6 +55,10 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 
 		SetConsoleTextAttribute(hConsole, color);
 
+
+		if (dep.outdated())
+			cout << "Note that this departure uses outdated timetables, consider updating them." << endl << endl;
+
 		cout << "Departure at " << dep.departure_time() << " with line " << dep.line().short_name() << " going ahead to "; wcout << dep.headsign(); cout << " station goes via following stops:" << endl;
 		
 		auto following_stops = dep.following_stops();
@@ -101,6 +105,9 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 		cout << endl << "Showing journey in total duration of " << journey.duration() / 60 << " minutes and " << journey.duration() % 60 << " seconds";
 		cout << " leaving source station at " << journey.departure_time();
 		cout << " and approaching target station at " << journey.arrival_time() << "." << endl << endl;
+
+		if (journey.outdated()) 
+			cout << "Note that this journey uses outdated timetables, consider updating them." << endl << endl;
 
 		const stop* previous_stop = nullptr;
 

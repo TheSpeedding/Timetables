@@ -141,6 +141,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 	const trip* current_trip = nullptr; // 16th row of pseudocode.
 	date_time date_for_current_trip;
+	service_state state;
 	
 	// Find the current stop in route.
 
@@ -186,7 +187,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 				shared_ptr<journey_segment> previous = (journeys_.end() - 2)->find(boarding_stop)->second;
 								
-				(journeys_.end() - 1)->operator[](&current_stop).reset(new trip_segment(*current_trip, new_arrival, *boarding_stop, current_stop, previous)); // 19th row of pseudocode.
+				(journeys_.end() - 1)->operator[](&current_stop).reset(new trip_segment(*current_trip, new_arrival, *boarding_stop, current_stop, previous, state == outdated ? true : false)); // 19th row of pseudocode.
 
 				marked_stops_.insert(&current_stop); // 21st row of pseudocode.
 			}
@@ -199,8 +200,9 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 			if (previous_arrival != (journeys_.end() - 2)->cend() && previous_arrival->second->arrival_at_target() <= date_time(date_for_current_trip, st.departure_since_midnight())) { // 22nd row of pseudocode.
 
 				auto res = find_earliest_trip(current_route, previous_arrival->second->arrival_at_target(), next_stop - current_route.stops().cbegin());
-				current_trip = res.first; // 23rd row of pseudocode.
-				date_for_current_trip = move(res.second);
+				current_trip = get<0>(res); // 23rd row of pseudocode.
+				date_for_current_trip = get<1>(res);
+				state = get<2>(res);
 				boarding_stop = &current_stop; // We have just boarded the trip.
 
 			}
@@ -214,8 +216,9 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 			if (previous_arrival != (journeys_.end() - 2)->cend()) {
 				auto res = find_earliest_trip(current_route, previous_arrival->second->arrival_at_target(), next_stop - current_route.stops().cbegin());
-				current_trip = res.first; // 23rd row of pseudocode.
-				date_for_current_trip = move(res.second);
+				current_trip = get<0>(res); // 23rd row of pseudocode.
+				date_for_current_trip = get<1>(res);
+				state = get<2>(res);
 				boarding_stop = &current_stop; // We have just boarded the trip.
 			}
 		}
@@ -223,7 +226,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 	}
 }
 
-std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time> Timetables::Algorithms::router::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
+std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> Timetables::Algorithms::router::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
 
 	date_time new_departure_date = arrival.date();
 	size_t days = 0;
@@ -242,13 +245,19 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 		date_time new_departure_date_time(new_departure_date, st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
 				
-		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
+		if (new_departure_date_time > arrival) {
 
-			return make_pair(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()));
+			service_state s = st.is_operating_in_date_time(new_departure_date_time);
+
+			if (s != not_operating) 
+				return make_tuple(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()), s);
+
+		}
+
 
 	}
 
-	return make_pair(nullptr, 0);
+	return make_tuple(nullptr, 0, not_operating);
 }
 
 void Timetables::Algorithms::router::obtain_journeys() {

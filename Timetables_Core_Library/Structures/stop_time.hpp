@@ -10,8 +10,8 @@ namespace Timetables {
 		// Class collecting information about one stop time.
 		class stop_time {
 		private:
-			int arrival_; // Arrival to the stop, relative time (in seconds) since trip departure.
-			int departure_; // Departure from the stop, relative time (in seconds) since trip departure.
+			const int arrival_; // Arrival to the stop, relative time (in seconds) since trip departure.
+			const int departure_; // Departure from the stop, relative time (in seconds) since trip departure.
 			const trip& trip_; // Reference to the trip belonging to the stop time.
 			const stop& stop_; // Reference to the stop belonging to the stop time.
 		public:
@@ -26,11 +26,9 @@ namespace Timetables {
 			inline int arrival_since_midnight() const { return arrival_ + trip_.departure(); } // Absolute time, arrival in seconds since midnight.
 			inline int departure_since_midnight() const { return departure_ + trip_.departure(); } // Absolute time, departure in seconds since midnight.
 
-			inline bool is_operating_in_date_time(const date_time& date_time) const { return trip_.service().is_operating_in_date(Timetables::Structures::date_time(date_time, (-1) * departure_since_midnight())); } // Checks whether trip is operating in this datetime.
+			inline service_state is_operating_in_date_time(const date_time& date_time) const { return trip_.service().is_operating_in_date(Timetables::Structures::date_time(date_time, (-1) * departure_since_midnight())); } // Checks whether trip is operating in this datetime.
 
 			inline bool operator< (const stop_time& other) const { return departure_since_midnight() < other.departure_since_midnight(); }
-			inline bool operator> (const stop_time& other) const { return departure_since_midnight() > other.departure_since_midnight(); }
-			inline bool operator==(const stop_time& other) const { return departure_since_midnight() == other.departure_since_midnight(); }
 		};
 	}
 }
