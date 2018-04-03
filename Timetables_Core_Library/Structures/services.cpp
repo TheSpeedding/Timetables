@@ -42,7 +42,7 @@ bool Timetables::Structures::service::is_operating_in_date(const date_time& date
 	bool operating_on_day_by_default = is_operating_on_day(date_time.day_in_week());
 
 	if (operating_on_day_by_default) {
-		if (is_removed_in_date(date_time.date()))
+		if (is_removed_in_date(date_time))
 			return false;
 		else {
 			if (date_time < valid_since_ || date_time > valid_until_) 
@@ -53,7 +53,7 @@ bool Timetables::Structures::service::is_operating_in_date(const date_time& date
 	}
 
 	else {
-		if (is_added_in_date(date_time.date())) {
+		if (is_added_in_date(date_time)) {
 			if (date_time < valid_since_ || date_time > valid_until_)
 				return true;
 			else

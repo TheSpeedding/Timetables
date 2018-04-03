@@ -242,7 +242,7 @@ std::pair<const Timetables::Structures::trip*, Timetables::Structures::date_time
 
 		date_time new_departure_date_time(new_departure_date, st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
 				
-		if (new_departure_date_time > arrival && st.trip().service().is_operating_in_date(new_departure_date))
+		if (new_departure_date_time > arrival && st.is_operating_in_date_time(new_departure_date_time))
 
 			return make_pair(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()));
 
