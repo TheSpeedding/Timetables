@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Data_Preprocesso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Data_Xml", "Timetables_Data_XML\Timetables_Data_Xml.csproj", "{C9787685-580E-413C-99E4-5995400D49D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Desktop_Application", "Timetables_Desktop_Application\Timetables_Desktop_Application.csproj", "{9E33F669-989F-4855-9A62-D3D9F865060C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{C9787685-580E-413C-99E4-5995400D49D4}.Release|x64.Build.0 = Release|Any CPU
 		{C9787685-580E-413C-99E4-5995400D49D4}.Release|x86.ActiveCfg = Release|Any CPU
 		{C9787685-580E-413C-99E4-5995400D49D4}.Release|x86.Build.0 = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|x64.Build.0 = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Debug|x86.Build.0 = Debug|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|x64.ActiveCfg = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|x64.Build.0 = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E33F669-989F-4855-9A62-D3D9F865060C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
