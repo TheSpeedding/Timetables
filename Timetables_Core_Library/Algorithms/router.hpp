@@ -12,6 +12,9 @@
 #include <tuple> // Return type of earliest trip function.
 
 namespace std {
+
+	// These hash functions are faster than the STL ones.
+
 	template<>
 	struct hash<Timetables::Structures::route*> {
 		std::size_t operator() (const Timetables::Structures::route* val) {

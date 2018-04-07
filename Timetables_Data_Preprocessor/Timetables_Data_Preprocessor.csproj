@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="DataFeed.cs" />
     <Compile Include="Downloader.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="GtfsParser\Footpaths.cs" />
     <Compile Include="GtfsParser\GtfsDataFeed.cs" />
     <Compile Include="GtfsParser\Routes.cs" />

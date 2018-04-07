@@ -33,7 +33,7 @@ namespace Timetables.Preprocessor
             double BlonR = B.Location.Item2.DegreesToRadians();
             double u = Math.Sin((BlatR - AlatR) / 2);
             double v = Math.Sin((BlonR - AlonR) / 2);
-            return (int)(2.0 * 6371.0 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * 1.2);
+            return (int)(2 * 6371 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * (1 / GlobalData.AverageWalkingSpeed));
         }
     }
 	/// <summary>
@@ -110,7 +110,7 @@ namespace Timetables.Preprocessor
 				foreach (var B in stopsB)
 				{
 					int walkingTime = A.Value.GetWalkingTime(B.Value);
-					if (walkingTime < 900 && walkingTime > 0) // While moving to another data feed, will consider only the footpaths with walking time lower than 15 mins.
+					if (walkingTime < GlobalData.MaximalDurationOfTransferInSeconds * 1.5 && walkingTime > 0) // While moving to another data feed, will consider only the footpaths with walking time lower than 15 mins by default.
 						list.Add(new Footpath(walkingTime, A.Value, B.Value));
 				}
 		}
@@ -130,7 +130,7 @@ namespace Timetables.Preprocessor
                 foreach (var B in stops)
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
-                    if (walkingTime < 600 && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
+                    if (walkingTime < GlobalData.MaximalDurationOfTransferInSeconds && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
 					{
 						// Lets check if it is a transfer from surface to underground transport. If so, double the walking time.
 
@@ -138,8 +138,8 @@ namespace Timetables.Preprocessor
 						   (A.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway) ||
 						   (A.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway)))
 						{
-							if (2 * walkingTime < 600)
-								list.Add(new Footpath(2 * walkingTime, A.Value, B.Value));
+							if (GlobalData.CoefficientUndergroundToSurfaceTransfer * walkingTime < GlobalData.MaximalDurationOfTransferInSeconds)
+								list.Add(new Footpath((int)GlobalData.CoefficientUndergroundToSurfaceTransfer * walkingTime, A.Value, B.Value));
 
 						}
 
@@ -150,15 +150,15 @@ namespace Timetables.Preprocessor
 														
 							if (A.Value.ThroughgoingRoutes[0].ID == B.Value.ThroughgoingRoutes[0].ID)
 
-							// Transfer to same line usually take less time, multiply it by 0.5. This is because distance is measured from the beginning of the platfrom.
+							// Transfer to same line usually take less time, multiply it by 0.5 by default. This is because distance is measured from the beginning of the platfrom.
 
-								list.Add(new Footpath((int)(0.5 * walkingTime), A.Value, B.Value));
+								list.Add(new Footpath((int)(GlobalData.CoefficientUndergroundTransfersWithinSameLine * walkingTime), A.Value, B.Value));
 
 							else
 
-							// Transfer between two lines usually take more time, multiply it by 1.5.
+							// Transfer between two lines usually take more time, multiply it by 1.5 by default.
 
-								list.Add(new Footpath((int)(1.5 * walkingTime), A.Value, B.Value));
+								list.Add(new Footpath((int)(GlobalData.CoefficientUndergroundTransfersWithinDifferentLines * walkingTime), A.Value, B.Value));
 						}
 
 						else
