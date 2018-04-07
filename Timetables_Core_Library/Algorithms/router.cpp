@@ -187,7 +187,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 
 				shared_ptr<journey_segment> previous = (journeys_.end() - 2)->find(boarding_stop)->second;
 								
-				(journeys_.end() - 1)->operator[](&current_stop).reset(new trip_segment(*current_trip, new_arrival, *boarding_stop, current_stop, previous, state == outdated ? true : false)); // 19th row of pseudocode.
+				(journeys_.end() - 1)->operator[](&current_stop).reset(new trip_segment(*current_trip, new_arrival, *boarding_stop, current_stop, previous, state == outdated)); // 19th row of pseudocode.
 
 				marked_stops_.insert(&current_stop); // 21st row of pseudocode.
 			}

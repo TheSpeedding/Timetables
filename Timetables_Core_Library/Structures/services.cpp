@@ -80,7 +80,7 @@ Timetables::Structures::services::services(std::istream&& calendar, std::istream
 
 		service s(tokens[1] == "1" ? true : false, tokens[2] == "1" ? true : false, tokens[3] == "1" ? true : false,
 			tokens[4] == "1" ? true : false, tokens[5] == "1" ? true : false, tokens[6] == "1" ? true : false,
-			tokens[7] == "1" ? true : false, date_time(tokens[8]), date_time(tokens[9]));
+			tokens[7] == "1" ? true : false, date_time(tokens[8]), date_time(date_time(tokens[9]), DAY - SECOND));
 
 		list.push_back(move(s));
 

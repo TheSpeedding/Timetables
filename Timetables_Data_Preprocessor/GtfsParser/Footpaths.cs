@@ -110,7 +110,7 @@ namespace Timetables.Preprocessor
 				foreach (var B in stopsB)
 				{
 					int walkingTime = A.Value.GetWalkingTime(B.Value);
-					if (walkingTime < GlobalData.MaximalDurationOfTransferInSeconds * 1.5 && walkingTime > 0) // While moving to another data feed, will consider only the footpaths with walking time lower than 15 mins by default.
+					if (walkingTime < GlobalData.MaximalDurationOfTransfer * 1.5 && walkingTime > 0) // While moving to another data feed, will consider only the footpaths with walking time lower than 15 mins by default.
 						list.Add(new Footpath(walkingTime, A.Value, B.Value));
 				}
 		}
@@ -130,7 +130,7 @@ namespace Timetables.Preprocessor
                 foreach (var B in stops)
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
-                    if (walkingTime < GlobalData.MaximalDurationOfTransferInSeconds && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
+                    if (walkingTime < GlobalData.MaximalDurationOfTransfer && walkingTime > 0) // We will consider only the footpaths with walking time lower than 10 mins.
 					{
 						// Lets check if it is a transfer from surface to underground transport. If so, double the walking time.
 
@@ -138,7 +138,7 @@ namespace Timetables.Preprocessor
 						   (A.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway) ||
 						   (A.Value.ThroughgoingRoutes[0].Type != RoutesInfo.RouteInfo.RouteType.Subway && B.Value.ThroughgoingRoutes[0].Type == RoutesInfo.RouteInfo.RouteType.Subway)))
 						{
-							if (GlobalData.CoefficientUndergroundToSurfaceTransfer * walkingTime < GlobalData.MaximalDurationOfTransferInSeconds)
+							if (GlobalData.CoefficientUndergroundToSurfaceTransfer * walkingTime < GlobalData.MaximalDurationOfTransfer)
 								list.Add(new Footpath((int)GlobalData.CoefficientUndergroundToSurfaceTransfer * walkingTime, A.Value, B.Value));
 
 						}

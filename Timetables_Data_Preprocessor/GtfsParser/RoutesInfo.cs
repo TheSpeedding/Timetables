@@ -5,6 +5,18 @@ using System.Collections.Generic;
 namespace Timetables.Preprocessor
 {
 	/// <summary>
+	/// Static class that supplies extensions needed for routes info.
+	/// </summary>
+	public static class RoutesInfoExtension
+	{
+		/// <summary>
+		/// Converts Color object to HEX string representation
+		/// </summary>
+		/// <param name="c">Color.</param>
+		/// <returns>Color in HEX format.</returns>
+		public static string ToHex(this System.Drawing.Color c) => c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+	}
+	/// <summary>
 	/// Abstract class for routes info collecting information about routes info.
 	/// </summary>
 	public abstract class RoutesInfo : IEnumerable<KeyValuePair<string, RoutesInfo.RouteInfo>>
@@ -35,17 +47,17 @@ namespace Timetables.Preprocessor
             /// </summary>
             public RouteType Type { get; }
             /// <summary>
-            /// Color in HEX format that represents the route.
+            /// Color that represents the route.
             /// </summary>
-            public string Color { get; }
+            public System.Drawing.Color Color { get; }
 			/// <summary>
 			/// Route Info ID, Short Name, Long Name, Mean Of The Transport, Color.
 			/// </summary>
-			public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color + ";";
+			public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color.ToHex() + ";";
 			/// <summary>
 			/// Route Info ID, Short Name, Mean Of The Transport, Color.
 			/// </summary>
-			public string ToStringBasic() => ID + ";" + ShortName + ";" + (int)Type + ";" + Color + ";";
+			public string ToStringBasic() => ID + ";" + ShortName + ";" + (int)Type + ";" + Color.ToHex() + ";";
 			/// <summary>
 			/// Initializes object.
 			/// </summary>
@@ -65,32 +77,32 @@ namespace Timetables.Preprocessor
                     switch (type)
                     {
                         case RouteType.Bus:
-                            Color = "00FFFF";
+                            Color = GlobalData.DefaultBusColor;
                             break;
                         case RouteType.CableCar:
                         case RouteType.Funicular:
                         case RouteType.Gondola:
-                            Color = "FF8C00";
+							Color = GlobalData.DefaultCableCarColor;
                             break;
                         case RouteType.Rail:
-                            Color = "006600";
+                            Color = GlobalData.DefaultRailColor;
                             break;
                         case RouteType.Ship:
-                            Color = "0033CC";  
+                            Color = GlobalData.DefaultShipColor;  
                             break;
                         case RouteType.Subway:
-                            Color = "FFFF00";
+							Color = GlobalData.DefaultSubwayColor;
                             break;
                         case RouteType.Tram:
-                            Color = "CC0000";
+                            Color = GlobalData.DefaultTramColor;
                             break;
 						default:
-							Color = "000000";
+							Color = System.Drawing.ColorTranslator.FromHtml("#000000");
 							break;
                     }
 
                 else
-                    Color = color;
+                    Color = System.Drawing.ColorTranslator.FromHtml(color[0] == '#' ? color : "#" + color);
             }
         }
 		protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
