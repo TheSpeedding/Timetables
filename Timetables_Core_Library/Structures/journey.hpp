@@ -27,6 +27,8 @@ namespace Timetables {
 			virtual inline const date_time& arrival_at_target() const = 0;
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const = 0;
 			virtual inline bool outdated() const = 0;
+			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const = 0;
+			inline std::size_t duration() const { return date_time::difference(arrival_at_target(), departure_from_source()); }
 		};
 
 		// Trip segment.
@@ -59,6 +61,7 @@ namespace Timetables {
 				return move(stops);
 			}
 			virtual inline bool outdated() const override { return outdated_; }
+			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const override;
 		};
 
 		// Transfer.
@@ -78,19 +81,22 @@ namespace Timetables {
 			virtual inline const date_time& arrival_at_target() const override { return arrival_; } // Gets arrival at target.
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { return std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>>(); } // Gets intermediate stops between source and target stop.
 			virtual inline bool outdated() const override { return false; }
+			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const override {
+				return std::make_shared<footpath_segment>(latest_arrival, source_stop_, target_stop_, duration_, previous_);
+			}
 		};
 
 		// Class collecting information about one journey.
 		class journey {
 		private:
-			std::vector<std::shared_ptr<journey_segment>> journey_segments_; // Journey consists of multiple segments, we will store them here.
-			bool add_to_journey(std::shared_ptr<journey_segment> js); // Adds trip or footpath segment to the journey.			
+			std::vector<std::shared_ptr<journey_segment>> journey_segments_; // Journey consists of multiple segments, we will store them here.	
 		public:
 			journey(std::shared_ptr<journey_segment> js);						
 
 			inline const date_time departure_time() const { return journey_segments_.cbegin()->get()->departure_from_source(); } // Departure time from source stop.
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
+			inline const std::time_t duration_without_waiting_times() const { std::time_t t = 0; for (auto&& js : journey_segments_) t += js->duration(); return t; } // Total duration of the journey without transfers.
 			
 			bool operator< (const journey& other) const; // Preferences: Arrival time, duration, number of transfers, number of stops, total duration of transfers,.
 		

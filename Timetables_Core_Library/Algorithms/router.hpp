@@ -3,8 +3,7 @@
 
 #include <memory> // Polymorphism.
 #include <vector> // Used in journeys.
-#include <unordered_map> // Structure for algorithm
-#include <unordered_set> // Structure for algorithm
+#include <map> // Structure for algorithm
 #include <set> // Structure for algorithm
 #include "../Structures/journey.hpp" // Journey.
 #include "../Structures/data_feed.hpp" // Reference to data feed.
@@ -37,16 +36,16 @@ namespace Timetables {
 		// Class ensuring functionality of the main algorithm.
 		class router {
 		private:
-			const Timetables::Structures::station& source_; // Source station defined by the user..
+			const Timetables::Structures::station& source_; // Source station defined by the user.
 			const Timetables::Structures::station& target_; // Target station defined by the user.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure defined by the user.
 			const std::size_t max_transfers_; // Maximum number of transfers defined by the user.
 			const std::size_t count_; // Count of journeys to search defined by the user.
 			
 			std::vector<std::unordered_map<const Timetables::Structures::stop*, std::shared_ptr<Timetables::Structures::journey_segment>>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
-			std::unordered_map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
-			std::unordered_set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
-			std::unordered_map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
+			std::map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
+			std::set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
+			std::map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
 
 			std::set<Timetables::Structures::journey> fastest_journeys_; // Fastest journeys found by the router, sorted.
 

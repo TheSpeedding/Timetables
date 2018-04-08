@@ -1,54 +1,25 @@
 #include "journey.hpp"
 
-bool Timetables::Structures::journey::add_to_journey(std::shared_ptr<journey_segment> js) {
-	if (js->arrival_at_target() == js->departure_from_source()) { // Duration 0 secs. No point of adding it. Move to next. This is an initial state.
-		
-		if (js->previous_ == nullptr) { // This is the last segment. Sets the previous one as its successor is nullptr and returns false.
-
-			(journey_segments_.end() - 1)->get()->previous_ = nullptr;
-
-			return false;
-		}
-
-		else // Empty, but not the last one.
-			return add_to_journey(js->previous_);
-	}
-
-	else if (js->previous_ == nullptr) { // End of the journey.
-
-		journey_segments_.push_back(js); // Adds the last segment.
-
-		return false; // The next addition will not be performed.
-	}
-
-	else {
-
-		journey_segments_.push_back(js);
-
-		return true; // Not the last one.
-	}
-}
+using namespace Timetables::Structures;
+using namespace std;
 
 Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
+	
+	journey_segments_.push_back(js); // Initial segment.
+	js = js->previous_;
 
-	add_to_journey(js);
+	while (js != nullptr) { // Something to process.
 
-	while (add_to_journey((journey_segments_.end() - 1)->get()->previous_)); // Something to process.
+		if (js->departure_from_source() == js->arrival_at_target()) { // Duration = 0 seconds.
+			js = js->previous_;
+			continue;
+		}
 
-	(**(journey_segments_.end() - 1)).previous_ = nullptr;
+		journey_segments_.push_back(js->find_later_departure((**(journey_segments_.cend() - 1)).departure_from_source()));
 
-	if ((**(journey_segments_.cend() - 1)).trip() == nullptr) { // Change initial departure time if footpath comes first.
-
-		// "The problem" is the journey segment is immutable.
-
-		const stop& source = (**(journey_segments_.cend() - 1)).source_stop();
-		const stop& target = (**(journey_segments_.cend() - 1)).target_stop();
-		const size_t duration = date_time::difference((**(journey_segments_.cend() - 1)).arrival_at_target(), (**(journey_segments_.cend() - 1)).departure_from_source());
-
-		journey_segments_.pop_back();
-
-		journey_segments_.push_back(std::make_shared<footpath_segment>((**(journey_segments_.cend() - 1)).departure_from_source(), source, target, duration, nullptr));
+		js = js->previous_; // Some kind of linked list.
 	}
+
 
 	std::reverse(journey_segments_.begin(), journey_segments_.end());
 }
@@ -56,12 +27,54 @@ Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
 bool Timetables::Structures::journey::operator< (const Timetables::Structures::journey& other) const {
 	if (arrival_time() != other.arrival_time())
 		return arrival_time() < other.arrival_time();
-	else if (duration() != other.duration())
-		return duration() < other.duration();
+	else if (duration_without_waiting_times() != other.duration_without_waiting_times())
+		return duration_without_waiting_times() < other.duration_without_waiting_times();
 	else if (journey_segments_.size() != other.journey_segments_.size())
 		return journey_segments_.size() < other.journey_segments_.size();
 	else if (number_of_stops() != other.number_of_stops())
 		return number_of_stops() < other.number_of_stops();
 	else 
 		return duration_of_transfers() < other.duration_of_transfers();
+}
+
+std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_later_departure(const Timetables::Structures::date_time& latest_arrival) const {
+	auto new_arrival_date = latest_arrival.date();
+
+	const Timetables::Structures::trip* best_trip = trip_;
+
+	service_state s = outdated_ ? service_state::outdated : service_state::operating;
+
+	size_t stop_index = target_stop_ - trip_->stop_times().cbegin();
+
+	size_t days = 0;
+
+	date_time new_arrival_date_time = arrival_;
+
+	auto it = trip_->route().trips().cbegin();
+
+	while (&*it != trip_)
+		it++;
+
+	for (; days < 7; ++it) {
+
+		if (it == trip_->route().trips().cend()) {
+			it = trip_->route().trips().cbegin();
+			days++;
+			new_arrival_date = date_time(new_arrival_date, DAY);
+		}
+
+		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
+
+		if (date_time(new_arrival_date, st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight()) > latest_arrival)
+			break;
+
+		new_arrival_date_time = date_time(new_arrival_date, st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight());
+		
+		s = st.is_operating_in_date_time(date_time(new_arrival_date_time, st.departure() - st.arrival()));
+
+		if (s != not_operating)
+			best_trip = &*it;
+	}
+
+	return std::make_shared<trip_segment>(*best_trip, new_arrival_date_time, source_stop(), target_stop(), previous_, s == service_state::outdated);
 }
