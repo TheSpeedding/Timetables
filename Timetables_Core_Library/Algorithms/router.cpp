@@ -294,7 +294,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 	active_routes_.clear();
 	journeys_.clear();
 	
-	journeys_.push_back(unordered_map<const stop*, shared_ptr<journey_segment>>());
+	journeys_.push_back(map<const stop*, shared_ptr<journey_segment>>());
 
 	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
 
@@ -314,7 +314,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 
 	for (size_t k = 1; marked_stops_.size() > 0 && k < max_transfers_; k++) { // 6th && 28th && 29th row of pseudocode.
 		
-		journeys_.push_back(unordered_map<const stop*, shared_ptr<journey_segment>>());
+		journeys_.push_back(map<const stop*, shared_ptr<journey_segment>>());
 
 		accumulate_routes();
 		traverse_each_route();

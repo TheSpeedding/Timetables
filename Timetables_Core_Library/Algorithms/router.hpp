@@ -10,27 +10,6 @@
 #include <math.h> // Hash function.
 #include <tuple> // Return type of earliest trip function.
 
-namespace std {
-
-	// These hash functions are faster than the STL ones.
-
-	template<>
-	struct hash<Timetables::Structures::route*> {
-		std::size_t operator() (const Timetables::Structures::route* val) {
-			static const std::size_t shift = (size_t)std::log2(1 + sizeof(Timetables::Structures::route*));
-			return (size_t)(val) >> shift;
-		}
-	};
-
-	template<>
-	struct hash<Timetables::Structures::stop*> {
-		std::size_t operator() (const Timetables::Structures::stop* val) {
-			static const std::size_t shift = (size_t)std::log2(1 + sizeof(Timetables::Structures::stop*));
-			return (size_t)(val) >> shift;
-		}
-	};
-}
-
 namespace Timetables {
 	namespace Algorithms {
 		// Class ensuring functionality of the main algorithm.
@@ -44,7 +23,7 @@ namespace Timetables {
 			
 			const double transfers_coefficient_; // Coefficient by which the duration of transfers are multiplied.
 			
-			std::vector<std::unordered_map<const Timetables::Structures::stop*, std::shared_ptr<Timetables::Structures::journey_segment>>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
+			std::vector<std::map<const Timetables::Structures::stop*, std::shared_ptr<Timetables::Structures::journey_segment>>> journeys_; // The best journey we can get from source stop to a stop using k transfers.
 			std::map<const Timetables::Structures::stop*, Timetables::Structures::date_time> temp_labels_; // The best time we can get to a stop.
 			std::set<const Timetables::Structures::stop*> marked_stops_; // Stops to be processed by the algorithm.
 			std::map<const Timetables::Structures::route*, const Timetables::Structures::stop*> active_routes_; // Routes that will be traversed in current round.
