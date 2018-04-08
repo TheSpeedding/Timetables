@@ -106,11 +106,11 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 			else if (arrival_time_A != (journeys_.cend() - 1)->cend() && (arrival_time_B == (journeys_.cend() - 1)->cend()))
 
-				min = date_time(arrival_time_A->second->arrival_at_target(), duration);
+				min = date_time(arrival_time_A->second->arrival_at_target(), duration * transfers_coefficient_);
 
 			else {
 
-				date_time other(arrival_time_A->second->arrival_at_target(), duration);
+				date_time other(arrival_time_A->second->arrival_at_target(), duration * transfers_coefficient_);
 
 				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
 				
@@ -121,7 +121,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 								
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
 				
-				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, duration, previous));
+				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, duration * transfers_coefficient_, previous));
 
 			}
 
@@ -305,9 +305,9 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		// We are also to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
-			if (&footpath.second->parent_station() != &source_ && footpath.first < 300) { // Consider the stops in small radius only.
+			if (&footpath.second->parent_station() != &source_) {
 				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first), *stop, *footpath.second, footpath.first, nullptr));
+				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first), *stop, *footpath.second, footpath.first * transfers_coefficient_, nullptr));
 			}
 		}
 	}
