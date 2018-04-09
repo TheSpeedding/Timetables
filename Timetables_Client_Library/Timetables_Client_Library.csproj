@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C9787685-580E-413C-99E4-5995400D49D4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Timetables_Data_Xml</RootNamespace>
-    <AssemblyName>Timetables_Data_Xml</AssemblyName>
+    <ProjectGuid>{7D416D6B-719F-44D7-B641-30971B064A76}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Timetables_Client_Library</RootNamespace>
+    <AssemblyName>Timetables_Client_Library</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,23 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ToXmlExtensions.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="DepartureBoard.cs" />
+    <Compile Include="MeanOfTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValidityChecker.cs" />
-    <Compile Include="XmlOutput.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Document Type Definition.dtd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
-      <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
-      <Name>Timetables_Data_Preprocessor</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

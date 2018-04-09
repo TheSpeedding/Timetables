@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9E33F669-989F-4855-9A62-D3D9F865060C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Timetables_Desktop_Application</RootNamespace>
+    <RootNamespace>Timetables.Desktop</RootNamespace>
     <AssemblyName>Timetables_Desktop_Application</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -98,9 +98,17 @@
     <None Include="img\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Timetables_Client_Library\Timetables_Client_Library.csproj">
+      <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
+      <Name>Timetables_Client_Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
       <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
       <Name>Timetables_Data_Preprocessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TImetables_Native_To_Managed_Wrappers\TImetables_Native_To_Managed_Wrappers.vcxproj">
+      <Project>{a799f2e3-64be-4891-b688-81e0693959d8}</Project>
+      <Name>TImetables_Native_To_Managed_Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

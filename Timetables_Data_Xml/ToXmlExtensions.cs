@@ -181,7 +181,7 @@ namespace Timetables.Xml
 			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.CableCar || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Gondola || routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Funicular) result.Append("&cablecar-color;");
 			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Rail) result.Append("&rail-color;");
 			else if (routeInfo.Type == RoutesInfo.RouteInfo.RouteType.Ship) result.Append("&ship-color;");
-			else result.Append(routeInfo.Color);
+			else result.Append(routeInfo.Color.ToHex());
 
 			result.Append($@"""/> <!-- Color of the route used in graphics. -->
 		</route-info>");

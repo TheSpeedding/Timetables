@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 
-namespace Timetables_Desktop_Application
+namespace Timetables.Desktop
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

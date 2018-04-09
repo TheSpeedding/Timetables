@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Timetables_Desktop_Application
+namespace Timetables.Desktop
 {
 	/// <summary>
 	/// Interaction logic for App.xaml

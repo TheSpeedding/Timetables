@@ -12,7 +12,7 @@
 #include <locale>
 #include <Windows.h>
 
-#define BENCHMARK true
+#define BENCHMARK false
 
 using namespace std;
 using namespace Timetables::Structures;
