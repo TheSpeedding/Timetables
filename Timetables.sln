@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{6C73E1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Client_Library", "Timetables_Client_Library\Timetables_Client_Library.csproj", "{7D416D6B-719F-44D7-B641-30971B064A76}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TImetables_Native_To_Managed_Wrappers", "TImetables_Native_To_Managed_Wrappers\TImetables_Native_To_Managed_Wrappers.vcxproj", "{A799F2E3-64BE-4891-B688-81E0693959D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Managed_Wrappers", "Timetables_Managed_Wrappers\Timetables_Managed_Wrappers.vcxproj", "{38537CC2-E538-4F35-AA82-801293139F63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,16 +99,16 @@ Global
 		{7D416D6B-719F-44D7-B641-30971B064A76}.Release|x64.Build.0 = Release|Any CPU
 		{7D416D6B-719F-44D7-B641-30971B064A76}.Release|x86.ActiveCfg = Release|Any CPU
 		{7D416D6B-719F-44D7-B641-30971B064A76}.Release|x86.Build.0 = Release|Any CPU
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Debug|x64.ActiveCfg = Debug|x64
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Debug|x64.Build.0 = Debug|x64
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Debug|x86.ActiveCfg = Debug|Win32
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Debug|x86.Build.0 = Debug|Win32
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Release|Any CPU.ActiveCfg = Release|Win32
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Release|x64.ActiveCfg = Release|x64
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Release|x64.Build.0 = Release|x64
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Release|x86.ActiveCfg = Release|Win32
-		{A799F2E3-64BE-4891-B688-81E0693959D8}.Release|x86.Build.0 = Release|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Debug|x64.ActiveCfg = Debug|x64
+		{38537CC2-E538-4F35-AA82-801293139F63}.Debug|x64.Build.0 = Debug|x64
+		{38537CC2-E538-4F35-AA82-801293139F63}.Debug|x86.ActiveCfg = Debug|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Debug|x86.Build.0 = Debug|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Release|Any CPU.ActiveCfg = Release|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x64.ActiveCfg = Release|x64
+		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x64.Build.0 = Release|x64
+		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x86.ActiveCfg = Release|Win32
+		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,7 +120,7 @@ Global
 		{A21F2EFB-0477-466A-97A8-9118FEACF807} = {55D574EA-BCA1-41FB-B757-F7F111A5ECDD}
 		{9E33F669-989F-4855-9A62-D3D9F865060C} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{7D416D6B-719F-44D7-B641-30971B064A76} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
-		{A799F2E3-64BE-4891-B688-81E0693959D8} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
+		{38537CC2-E538-4F35-AA82-801293139F63} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C024807C-BA27-4F91-8B3F-8160BB2EB961}

@@ -106,9 +106,9 @@
       <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
       <Name>Timetables_Data_Preprocessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TImetables_Native_To_Managed_Wrappers\TImetables_Native_To_Managed_Wrappers.vcxproj">
-      <Project>{a799f2e3-64be-4891-b688-81e0693959d8}</Project>
-      <Name>TImetables_Native_To_Managed_Wrappers</Name>
+    <ProjectReference Include="..\Timetables_Managed_Wrappers\Timetables_Managed_Wrappers.vcxproj">
+      <Project>{38537cc2-e538-4f35-aa82-801293139f63}</Project>
+      <Name>Timetables_Managed_Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
