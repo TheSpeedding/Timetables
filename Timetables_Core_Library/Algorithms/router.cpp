@@ -275,6 +275,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 
+
 		if (fastest_journeys_.size() >= count_ + 1 && *previous_fastest_journey < *current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
 

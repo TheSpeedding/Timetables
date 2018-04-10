@@ -1,5 +1,6 @@
 #include <string>
 #include <msclr/marshal_cppstd.h>
+#include "../Timetables_Core_Library/Structures/stop_time.hpp" // This must be here, otherwise it would not compile (due to forward declaration only).
 #include "../Timetables_Core_Library/Structures/data_feed.hpp"
 #include "DataFeedManaged.hpp"
 

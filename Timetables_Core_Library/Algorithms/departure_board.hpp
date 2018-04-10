@@ -1,8 +1,8 @@
 #ifndef DEPARTURE_BOARD_HPP
 #define DEPARTURE_BOARD_HPP
 
-#include "../Structures/data_feed.hpp" // Reference to data feed.
 #include "../Structures/stop_time.hpp" // Iterator for stop times.
+#include "../Structures/data_feed.hpp" // Reference to data feed.
 
 namespace Timetables {
 	namespace Structures {

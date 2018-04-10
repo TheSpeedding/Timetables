@@ -23,6 +23,10 @@ namespace Timetables.Desktop
 		public MainWindow()
 		{
 			InitializeComponent();
+			using (var feed = new Timetables.Interop.DataFeedManaged())
+			{
+				var x = Timetables.Interop.DepartureBoardManaged.SendRequestAndGetResponse(feed, new Timetables.Client.DepartureBoardRequest(0, DateTime.Now, 10, true));
+			}
 		}		
 	}
 }

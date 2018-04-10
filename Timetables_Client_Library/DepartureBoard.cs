@@ -21,10 +21,10 @@ namespace Timetables.Client
     }
 
 	[Serializable]
-	public class DepartureBoardReply
+	public class DepartureBoardResponse
 	{
 		public List<Departure> Departures { get; }
-		public DepartureBoardReply(List<Departure> departures) => Departures = departures;
+		public DepartureBoardResponse(List<Departure> departures) => Departures = departures;
 	}
 
 	[Serializable]
@@ -37,8 +37,9 @@ namespace Timetables.Client
 		public string LineName { get; }
 		public Color LineColor { get; }
 		public MeanOfTransport MeanOfTransport { get; }
+		public DateTime DepartureDateTime { get; }
 		public List<KeyValuePair<DateTime, uint>> IntermediateStops { get; } // Time of arrival, stop ID.
-		public Departure(uint stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, List<KeyValuePair<ulong, uint>> intStops)
+		public Departure(uint stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, uint>> intStops)
 		{
 			StopID = stopID;
 			Outdated = outdated;
@@ -47,7 +48,8 @@ namespace Timetables.Client
 			LineName = lineName;
 			LineColor = ColorTranslator.FromHtml("#" + lineColor.ToString("X"));
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
-			
+			DepartureDateTime = new DateTime(1970, 1, 1).AddSeconds(departureDateTime);
+
 			IntermediateStops = new List<KeyValuePair<DateTime, uint>>();
 			foreach (var x in intStops)
 				IntermediateStops.Add(new KeyValuePair<DateTime, uint>(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
