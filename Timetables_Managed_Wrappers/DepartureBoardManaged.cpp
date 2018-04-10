@@ -1,3 +1,6 @@
+#include "DataFeedManaged.hpp""
+#include "../Timetables_Core_Library/Algorithms/departure_board.hpp"
+#include "../Timetables_Core_Library/Structures/date_time.hpp"
 #include "DepartureBoardManaged.hpp"
 
 Timetables::Client::DepartureBoardReply^ Timetables::Interop::DepartureBoardManaged::ShowDepartureBoard() {
@@ -14,4 +17,12 @@ Timetables::Client::DepartureBoardReply^ Timetables::Interop::DepartureBoardMana
 			gcnew System::String(departure.line().short_name().data()), gcnew System::String(departure.line().long_name().data()), departure.line().color(), departure.line().type(), intStops));
 	}
 	return gcnew Timetables::Client::DepartureBoardReply(departures);
+}
+
+Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req) {
+	native_departure_board_ = new Timetables::Algorithms::departure_board(feed->Get(), req->StopID, Timetables::Structures::date_time(req->DepartureTime), req->Count, req->TrueIfStation);
+}
+
+void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {
+	native_departure_board_->obtain_departure_board();
 }

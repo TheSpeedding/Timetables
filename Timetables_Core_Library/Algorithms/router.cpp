@@ -1,9 +1,9 @@
 #include "../Algorithms/router.hpp"
-#include <tbb/tbb.h>
+//#include <tbb/tbb.h>
 #include <thread>
 
 using namespace std;
-using namespace tbb;
+//using namespace tbb;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
@@ -115,8 +115,8 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
 				
 			}
-			if (((arrival_time_B == (journeys_.cend() - 1)->cend()) || // We have not arrive to the stop yet. Set new arrival time.
-				(arrival_time_B == (journeys_.cend() - 1)->cend() && min != arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop.
+			if ((arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
+				(arrival_time_B->second->trip() != nullptr && min < arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop and the previous segment is not a footpath.
 				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
 								
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.

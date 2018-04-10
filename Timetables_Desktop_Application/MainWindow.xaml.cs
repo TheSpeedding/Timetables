@@ -23,10 +23,6 @@ namespace Timetables.Desktop
 		public MainWindow()
 		{
 			InitializeComponent();
-			using (var idk = new Timetables.Interop.DataFeedManaged())
-			{
-				
-			}
 		}		
 	}
 }
