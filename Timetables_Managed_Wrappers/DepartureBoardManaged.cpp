@@ -23,15 +23,9 @@ Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardM
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req) {
-	native_departure_board_ = new Timetables::Algorithms::departure_board(feed->Get(), req->StopID, Timetables::Structures::date_time(req->DepartureTime), req->Count, req->TrueIfStation);
+	native_departure_board_ = new Timetables::Algorithms::departure_board(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->IsStation);
 }
 
 void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {
 	native_departure_board_->obtain_departure_board();
-}
-
-Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardManaged::SendRequestAndGetResponse(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req) {
-	auto db = gcnew Timetables::Interop::DepartureBoardManaged(feed, req);
-	db->ObtainDepartureBoard();
-	return db->ShowDepartureBoard();
 }

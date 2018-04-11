@@ -1,5 +1,8 @@
 ﻿namespace Timetables.Client
 {
+	/// <summary>
+	/// Means of transportation.
+	/// </summary>
 	public enum MeanOfTransport
 	{
 		Tram = 0,

@@ -7,7 +7,6 @@
 #include <set> // Structure for algorithm
 #include "../Structures/journey.hpp" // Journey.
 #include "../Structures/data_feed.hpp" // Reference to data feed.
-#include <math.h> // Hash function.
 #include <tuple> // Return type of earliest trip function.
 
 namespace Timetables {

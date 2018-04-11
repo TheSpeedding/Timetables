@@ -25,8 +25,12 @@ namespace Timetables.Desktop
 			InitializeComponent();
 			using (var feed = new Timetables.Interop.DataFeedManaged())
 			{
-				var x = Timetables.Interop.DepartureBoardManaged.SendRequestAndGetResponse(feed, new Timetables.Client.DepartureBoardRequest(0, DateTime.Now, 10, true));
+				using (var router = new Timetables.Interop.RouterManaged(feed, new Client.RouterRequest(0, 69, DateTime.Now, 30, 5, 1)))
+				{
+					router.ObtainJourneys();
+					var x = router.ShowJourneys();
+				}
 			}
-		}		
+		}
 	}
 }

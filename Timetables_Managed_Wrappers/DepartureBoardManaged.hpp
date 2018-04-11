@@ -18,8 +18,6 @@ namespace Timetables {
 			void ObtainDepartureBoard(); // Obtains departure board.
 
 			Timetables::Client::DepartureBoardResponse^ ShowDepartureBoard(); // Constructs managed object as a reply to the request.
-
-			static Timetables::Client::DepartureBoardResponse^ SendRequestAndGetResponse(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req); // Constructor, obtain method and show method in one.
 		};
 	}
 }

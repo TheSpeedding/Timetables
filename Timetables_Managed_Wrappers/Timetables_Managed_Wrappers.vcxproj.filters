@@ -20,12 +20,18 @@
     <ClCompile Include="DepartureBoardManaged.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RouterManaged.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepartureBoardManaged.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DataFeedManaged.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RouterManaged.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -135,11 +135,13 @@
   <ItemGroup>
     <ClInclude Include="DataFeedManaged.hpp" />
     <ClInclude Include="DepartureBoardManaged.hpp" />
+    <ClInclude Include="RouterManaged.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="DataFeedManaged.cpp" />
     <ClCompile Include="DepartureBoardManaged.cpp" />
+    <ClCompile Include="RouterManaged.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Timetables_Client_Library\Timetables_Client_Library.csproj">
