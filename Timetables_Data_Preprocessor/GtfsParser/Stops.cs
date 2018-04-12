@@ -44,11 +44,9 @@ namespace Timetables.Preprocessor
 				System.Text.StringBuilder result = new System.Text.StringBuilder();
 				result.Append(ID + ";" + ParentStation.ID + ";" + Location.Item1.ToString(CultureInfo.InvariantCulture) + ";" + Location.Item2.ToString(CultureInfo.InvariantCulture) + ";");
 				
-
 				foreach (var route in ThroughgoingRoutes)
 					result.Append(route.ID + "`");
-
-
+				
 				result.Append(";");
 				return result.ToString();
 			}

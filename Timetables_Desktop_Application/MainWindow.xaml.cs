@@ -23,12 +23,13 @@ namespace Timetables.Desktop
 		public MainWindow()
 		{
 			InitializeComponent();
+			var x = new Timetables.Structures.Basic.DataFeedBasic();
 			using (var feed = new Timetables.Interop.DataFeedManaged())
 			{
 				using (var router = new Timetables.Interop.RouterManaged(feed, new Client.RouterRequest(0, 69, DateTime.Now, 30, 5, 1)))
 				{
 					router.ObtainJourneys();
-					var x = router.ShowJourneys();
+					var xz = router.ShowJourneys();
 				}
 			}
 		}

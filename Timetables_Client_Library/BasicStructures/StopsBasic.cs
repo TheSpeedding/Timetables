@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Timetables.Structures.Basic
 {
-	public class StopsBasic
+	/// <summary>
+	/// Collection of stops.
+	/// </summary>
+	public class StopsBasic : IEnumerable<StopsBasic.StopBasic>
 	{
+		/// <summary>
+		/// Class collecting basic information about stop.
+		/// </summary>
 		public class StopBasic
 		{
 			/// <summary>
@@ -33,7 +37,45 @@ namespace Timetables.Structures.Basic
 			/// <summary>
 			/// List of all routes that goes through this stop.
 			/// </summary>
-			public List<object> ThroughgoingRoutes { get; }
+			public List<RoutesInfoBasic.RouteInfoBasic> ThroughgoingRoutes { get; }
+			public StopBasic(StationsBasic.StationBasic station, double lat, double lon, List<RoutesInfoBasic.RouteInfoBasic> routes)
+			{
+				ParentStation = station;
+				Latitude = lat;
+				Longitude = lon;
+				ThroughgoingRoutes = routes;
+			}
+		}
+		private List<StopBasic> list = new List<StopBasic>();
+		/// <summary>
+		/// Gets required stop.
+		/// </summary>
+		/// <param name="index">Identificator of the stop.</param>
+		/// <returns>Obtained stop.</returns>
+		public StopBasic this[int index] => list[index];
+		/// <summary>
+		/// Gets the total number of stops.
+		/// </summary>
+		public int Count => list.Count;
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		public IEnumerator<StopBasic> GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
+		public StopsBasic(System.IO.StreamReader sr, StationsBasic stations, RoutesInfoBasic routes)
+		{
+			var count = int.Parse(sr.ReadLine());
+			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
+			for (int i = 0; i < count; i ++)
+			{
+				var r = new List<RoutesInfoBasic.RouteInfoBasic>();
+				foreach (var route in tokens[5 * i + 4].Split('`'))
+					if (route != "")
+						r.Add(routes[int.Parse(route)]);
+				var stop = new StopBasic(stations[int.Parse(tokens[5 * i + 1])], double.Parse(tokens[5 * i + 2], System.Globalization.CultureInfo.InvariantCulture), double.Parse(tokens[5 * i + 3], System.Globalization.CultureInfo.InvariantCulture), r);
+				list.Add(stop);
+				stations[int.Parse(tokens[5 * i + 1])].ChildStops.Add(stop);
+			}
 		}
 	}
 }
