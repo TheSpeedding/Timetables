@@ -4,7 +4,6 @@
 #include <string> // Date time parsing. 
 #include <ctime> // A need for time_t.
 #include <boost/date_time/posix_time/posix_time.hpp> // Using ptime class.
-#include <limits> // Infinity.
 
 #define SECOND 1
 #define MINUTE 60
@@ -40,7 +39,7 @@ namespace Timetables {
 				boost::posix_time::to_time_t(boost::posix_time::ptime(boost::gregorian::date(year, month, day), boost::posix_time::time_duration(hours, mins, secs)))
 			) {}
 
-			date_time() : date_time_(std::numeric_limits<time_t>::max()) {}
+			date_time() : date_time_(-1) {}
 			
 			date_time(const date_time& other, int seconds) : date_time_(other.date_time_ + seconds) {}
 

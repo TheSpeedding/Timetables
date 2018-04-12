@@ -23,7 +23,7 @@ Timetables::Structures::stops::stops(std::istream&& stops, std::istream&& footpa
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: StopID, ParentStationID
+										// Entry format: StopID, ParentStationID
 
 		for (size_t j = 0; j < 2; j++)
 			std::getline(stops, token, ';');
@@ -31,7 +31,7 @@ Timetables::Structures::stops::stops(std::istream&& stops, std::istream&& footpa
 		station& station = stations[stoi(token)];
 
 		stop s(list.size(), station);
-		
+
 		list.push_back(move(s));
 
 		station.add_child_stop(*(list.cend() - 1));
@@ -48,7 +48,7 @@ Timetables::Structures::stops::stops(std::istream&& stops, std::istream&& footpa
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: Duration, FirstStop, SecondStop
+										// Entry format: Duration, FirstStop, SecondStop
 
 		for (size_t j = 0; j < 3; j++)
 			std::getline(footpaths, tokens[j], ';');

@@ -13,7 +13,7 @@ namespace Timetables {
 	namespace Structures {
 		class station; // Forward declaration.
 
-		// Class collecting information about stop.
+					   // Class collecting information about stop.
 		class stop {
 		private:
 			std::size_t id_; // Identificator of the stop, used in the background in GUI applications.
