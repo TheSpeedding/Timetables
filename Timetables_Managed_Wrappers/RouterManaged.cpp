@@ -34,6 +34,9 @@ Timetables::Client::RouterResponse^ Timetables::Interop::RouterManaged::ShowJour
 
 			}
 		}
+
+		journeys->Add(gcnew Timetables::Client::Journey(jss));
+
 	}
 
 	return gcnew Timetables::Client::RouterResponse(journeys);

@@ -16,16 +16,14 @@ namespace Timetables {
 		// Class collecting information about stop.
 		class stop {
 		private:
-			std::size_t id_; // Identificator of the stop, used in the background in GUI applications.
-			const station& parent_station_; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same).
+			station& parent_station_; // Refernece to the parent stations. A need for departure board. Name of the stop can be accessed via parent station (they have to be the same). be better.
 			std::multimap<int, const stop*> footpaths_; // Stops reachable in walking-distance (< 10 min.) from this stop.
 			std::vector<const route*> throughgoing_routes_; // Routes that goes through this stop.
 			std::vector<const stop_time*> departures_; // Sorted by departure times.
 		public:
-			stop(std::size_t id, const station& parent_station) : id_(id), parent_station_(parent_station) {}
+			stop(station& parent_station) : parent_station_(parent_station) {}
 
-			inline std::size_t id() const { return id_; }
-			inline const station& parent_station() const { return parent_station_; } // Parent station for this stop.
+			inline station& parent_station() const { return parent_station_; } // Parent station for this stop.
 			inline const std::wstring& name() const { return parent_station_.name(); } // Name of this stop.
 			inline const std::vector<const route*>& throughgoing_routes() const { return throughgoing_routes_; } // Routes that goes through this stop.
 			inline const std::multimap<int, const stop*>& footpaths() const { return footpaths_; } // Stops reachable in walking-distance (< 10 min.) from this stop.

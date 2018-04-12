@@ -30,7 +30,7 @@ Timetables::Structures::stops::stops(std::istream&& stops, std::istream&& footpa
 
 		station& station = stations[stoi(token)];
 
-		stop s(list.size(), station);
+		stop s(station);
 		
 		list.push_back(move(s));
 
