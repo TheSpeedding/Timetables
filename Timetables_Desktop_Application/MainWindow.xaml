@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Timetables.Desktop"
-        mc:Ignorable="d"
+		xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+		mc:Ignorable="d"
         Title="Timetables" Height="720" Width="1280" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Icon="pack://siteoforigin:,,,/img/icon.ico" MinWidth="640" MinHeight="320" ScrollViewer.VerticalScrollBarVisibility="Disabled">
 	<Grid>
+		<m:Map x:Name="myMap" CredentialsProvider="Mapa" />
 	</Grid>
 </Window>

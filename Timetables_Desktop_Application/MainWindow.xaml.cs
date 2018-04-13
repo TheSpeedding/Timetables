@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using Microsoft.Maps.MapControl.WPF;
 
 namespace Timetables.Desktop
 {
@@ -24,14 +25,11 @@ namespace Timetables.Desktop
 		{
 			InitializeComponent();
 			var x = new Timetables.Structures.Basic.DataFeedBasic();
-			using (var feed = new Timetables.Interop.DataFeedManaged())
-			{
-				using (var router = new Timetables.Interop.RouterManaged(feed, new Client.RouterRequest(0, 69, DateTime.Now, 30, 5, 1)))
+			foreach (var stop in x.Stops)
+				myMap.Children.Add(new Pushpin
 				{
-					router.ObtainJourneys();
-					var xz = router.ShowJourneys();
-				}
-			}
+					Location = new Location(stop.Latitude, stop.Longitude)
+				});
 		}
 	}
 }
