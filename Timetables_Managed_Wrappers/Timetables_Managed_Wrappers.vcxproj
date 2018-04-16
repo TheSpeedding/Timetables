@@ -144,11 +144,11 @@
     <ClCompile Include="RouterManaged.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Timetables_Client_Library\Timetables_Client_Library.csproj">
-      <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Timetables_Core_Library\Timetables_Core_Library.vcxproj">
       <Project>{d08d3d10-4d7a-4f95-a9e0-a7508a96f3f8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Timetables_Managed_Structures\Timetables_Managed_Structures.csproj">
+      <Project>{36816c97-7d07-43f9-b68a-f65622639568}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -77,5 +77,11 @@ namespace Timetables.Structures.Basic
 				stations[int.Parse(tokens[5 * i + 1])].ChildStops.Add(stop);
 			}
 		}
+		/// <summary>
+		/// Finds stop by its coordinates.
+		/// </summary>
+		/// <param name="lat">Latitude.</param>
+		/// <param name="lon">Longitude.</param>
+		public StopBasic FindByCoordinates(double lat, double lon) => list.Find((StopBasic s) => { return s.Latitude == lat && s.Longitude == lon; });
 	}
 }

@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Client_Library",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Managed_Wrappers", "Timetables_Managed_Wrappers\Timetables_Managed_Wrappers.vcxproj", "{38537CC2-E538-4F35-AA82-801293139F63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Managed_Structures", "Timetables_Managed_Structures\Timetables_Managed_Structures.csproj", "{36816C97-7D07-43F9-B68A-F65622639568}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,18 @@ Global
 		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x64.Build.0 = Release|x64
 		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x86.ActiveCfg = Release|Win32
 		{38537CC2-E538-4F35-AA82-801293139F63}.Release|x86.Build.0 = Release|Win32
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|x64.Build.0 = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Debug|x86.Build.0 = Debug|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|x64.ActiveCfg = Release|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|x64.Build.0 = Release|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|x86.ActiveCfg = Release|Any CPU
+		{36816C97-7D07-43F9-B68A-F65622639568}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

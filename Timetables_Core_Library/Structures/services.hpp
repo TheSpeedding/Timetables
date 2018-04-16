@@ -22,7 +22,7 @@ namespace Timetables {
 		private:
 			bool is_added_in_date(const date_time& date_time) const; // Determines whether the service is added in given date.
 			bool is_removed_in_date(const date_time& date_time) const; // Determines whether the service is removed in given date.
-			inline bool is_operating_on_day(std::size_t day) const { return (operating_days_ >> day) & 0x01 == 1; } // Determines whether the service is operating on given day.
+			inline bool is_operating_on_day(std::size_t day) const { return ((operating_days_ >> day) & 0x01) == 1; } // Determines whether the service is operating on given day.
 
 			date_time valid_since_; // Date that the service is valid since.
 			date_time valid_until_; // Date that the service is valid until.
