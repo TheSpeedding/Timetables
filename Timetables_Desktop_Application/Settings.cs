@@ -16,7 +16,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Color theme used in the application.
 		/// </summary>
-		public static WeifenLuo.WinFormsUI.ThemeVS2015.VS2015ThemeBase Theme { get; set; }
+		public static WeifenLuo.WinFormsUI.Docking.ThemeBase Theme { get; set; }
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
