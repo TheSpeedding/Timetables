@@ -16,6 +16,7 @@ namespace Timetables.Application.Desktop
 		public NewDepartureBoardWindow()
 		{
 			InitializeComponent();
+			Settings.Theme.Apply(this);
 		}
 	}
 }

@@ -10,11 +10,14 @@ namespace Timetables.Application.Desktop
 		public SettingsWindow()
 		{
 			InitializeComponent();
+
+			Settings.Theme.Apply(this);
+
 			languageComboBox.SelectedIndex = (int)Settings.Language;
 
-			if (Settings.Theme is  VS2015BlueTheme) themeComboBox.SelectedIndex = 0;
-			if (Settings.Theme is  VS2015DarkTheme) themeComboBox.SelectedIndex = 1;
-			if (Settings.Theme is VS2015LightTheme) themeComboBox.SelectedIndex = 2;
+			if (Settings.Theme is  Themes.BlueTheme) themeComboBox.SelectedIndex = 0;
+			if (Settings.Theme is  Themes.DarkTheme) themeComboBox.SelectedIndex = 1;
+			if (Settings.Theme is Themes.LightTheme) themeComboBox.SelectedIndex = 2;
 
 			languageComboBox.SelectedIndexChanged += new EventHandler(languageComboBox_SelectedIndexChanged);
 			themeComboBox.SelectedIndexChanged += new EventHandler(themeComboBox_SelectedIndexChanged);
@@ -25,13 +28,13 @@ namespace Timetables.Application.Desktop
 			switch((sender as ComboBox).SelectedIndex)
 			{
 				case 0:
-					Settings.Theme = new VS2015BlueTheme();
+					Settings.Theme = new Themes.BlueTheme();
 					break;
 				case 1:
-					Settings.Theme = new VS2015DarkTheme();
+					Settings.Theme = new Themes.DarkTheme();
 					break;
 				case 2:
-					Settings.Theme = new VS2015LightTheme();
+					Settings.Theme = new Themes.LightTheme();
 					break;
 				default:
 					throw new InvalidOperationException();

@@ -16,7 +16,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Color theme used in the application.
 		/// </summary>
-		public static WeifenLuo.WinFormsUI.Docking.ThemeBase Theme { get; set; }
+		public static Themes.Theme Theme { get; set; }
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
@@ -31,13 +31,13 @@ namespace Timetables.Application.Desktop
 				switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
 				{
 					case '0':
-						Theme = new VS2015BlueTheme();
+						Theme = new Themes.BlueTheme();
 						break;
 					case '1':
-						Theme = new VS2015DarkTheme();
+						Theme = new Themes.DarkTheme();
 						break;
 					case '2':
-						Theme = new VS2015LightTheme();
+						Theme = new Themes.LightTheme();
 						break;
 					default:
 						throw new ArgumentException();
@@ -48,7 +48,7 @@ namespace Timetables.Application.Desktop
 			catch
 			{
 				System.Windows.Forms.MessageBox.Show("Problem occured while loading user settings. Using default settings instead.");
-				Theme = new VS2015BlueTheme();
+				Theme = new Themes.BlueTheme();
 				Language = Language.English;
 				Save(true);
 			}
@@ -68,9 +68,9 @@ namespace Timetables.Application.Desktop
 			if (settings.GetElementsByTagName("Theme").Count == 0)
 				settings.DocumentElement.AppendChild(settings.CreateElement("Theme"));
 
-			if (Theme is  VS2015BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
-			if (Theme is  VS2015DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
-			if (Theme is VS2015LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
+			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
+			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
+			if (Theme is Themes.LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
 
 			if (settings.GetElementsByTagName("Language").Count == 0)
 				settings.DocumentElement.AppendChild(settings.CreateElement("Language"));

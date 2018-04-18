@@ -1,13 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
-namespace Timetables.Application.Desktop
+namespace Timetables.Application.Desktop.Themes
 {
+	/// <summary>
+	/// Class defining theme of the application.
+	/// </summary>
+	abstract class Theme
+	{
+		/// <summary>
+		/// Theme used in a panel.
+		/// </summary>
+		public ThemeBase PanelTheme { get; protected set; }
+		/// <summary>
+		/// Theme used in a menu strip.
+		/// </summary>
+		public MenuTheme MenuTheme { get; protected set; }
+		/// <summary>
+		/// Common background color.
+		/// </summary>
+		public Color BackColor => MenuTheme.Palette.DefaultBackColor;
+		/// <summary>
+		/// Common text color.
+		/// </summary>
+		public Color ForeColor => MenuTheme.Palette.TextColor;
+		/// <summary>
+		/// Applies the theme on the form.
+		/// </summary>
+		/// <param name="form">Form.</param>
+		public void Apply(Form form)
+		{
+			form.BackColor = BackColor;
+			form.ForeColor = ForeColor;
+		}
+	}
+
+	/// <summary>
+	/// Dark theme for the application.
+	/// </summary>
+	class DarkTheme : Theme
+	{
+		public DarkTheme()
+		{
+			PanelTheme = new VS2015DarkTheme();
+			MenuTheme = new MenuTheme.DarkTheme();
+		}
+	}
+
+	/// <summary>
+	/// Blue theme for the application.
+	/// </summary>
+	class BlueTheme : Theme
+	{
+		public BlueTheme()
+		{
+			PanelTheme = new VS2015BlueTheme();
+			MenuTheme = new MenuTheme.BlueTheme();
+		}
+	}
+
+	/// <summary>
+	/// Light theme for the application.
+	/// </summary>
+	class LightTheme : Theme
+	{
+		public LightTheme()
+		{
+			PanelTheme = new VS2015LightTheme();
+			MenuTheme = new MenuTheme.LightTheme();
+		}
+	}
+
 	/// <summary>
 	/// Class defining colors for menu strip.
 	/// </summary>
@@ -84,19 +150,55 @@ namespace Timetables.Application.Desktop
 	/// <summary>
 	/// Class defining menu theme.
 	/// </summary>
-	/// <typeparam name="T">Color palette used in menu.</typeparam>
-	class MenuTheme<T> : ToolStripProfessionalRenderer where T : MenuColors, new()
+	abstract class MenuTheme : ToolStripProfessionalRenderer
 	{
-		private static readonly MenuColors palette = new T();
-		public MenuTheme(MenuStrip menuStrip) : base(palette)
+		/// <summary>
+		/// Color palette used in the menu strip.
+		/// </summary>
+		public MenuColors Palette { get; protected set; }
+		/// <summary>
+		/// Rendered used in the menu.
+		/// </summary>
+		public ToolStripProfessionalRenderer Renderer { get; protected set; }
+		/// <summary>
+		/// Applies the theme on the menu strip.
+		/// </summary>
+		/// <param name="menuStrip">Menu strip.</param>
+		public abstract void Apply(MenuStrip menuStrip);
+		protected void Apply<T>(MenuStrip menuStrip) where T : MenuColors, new()
 		{
-			menuStrip.BackColor = palette.DefaultBackColor;
-			menuStrip.ForeColor = palette.TextColor;
+			Palette = new T();
+			Renderer = new ToolStripProfessionalRenderer(Palette);
+			menuStrip.BackColor = Palette.DefaultBackColor;
+			menuStrip.ForeColor = Palette.TextColor;
 
 			foreach (var y in menuStrip.Items)
 				foreach (var x in (y as ToolStripMenuItem).DropDownItems)
 					if (x is ToolStripDropDownItem)
-						((ToolStripDropDownItem)x).ForeColor = palette.TextColor;
+						((ToolStripDropDownItem)x).ForeColor = Palette.TextColor;
+
+			menuStrip.Renderer = Renderer;
+		}
+		/// <summary>
+		/// Dark menu theme.
+		/// </summary>
+		public class DarkTheme : MenuTheme
+		{
+			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.DarkTheme>(menuStrip);
+		}
+		/// <summary>
+		/// Blue menu theme.
+		/// </summary>
+		public class BlueTheme : MenuTheme
+		{
+			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.BlueTheme>(menuStrip);
+		}
+		/// <summary>
+		/// Light menu theme.
+		/// </summary>
+		public class LightTheme : MenuTheme
+		{
+			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.LightTheme>(menuStrip);
 		}
 	}
 }
