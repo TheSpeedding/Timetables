@@ -11,9 +11,9 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
 {
-	public partial class DepartureBoardWindow : DockContent
+	public partial class NewDepartureBoardWindow : DockContent
 	{
-		public DepartureBoardWindow()
+		public NewDepartureBoardWindow()
 		{
 			InitializeComponent();
 		}

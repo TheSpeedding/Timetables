@@ -1,6 +1,6 @@
 ﻿namespace Timetables.Application.Desktop
 {
-	partial class DepartureBoardWindow
+	partial class NewDepartureBoardWindow
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,9 +28,20 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewDepartureBoardWindow));
+			this.SuspendLayout();
+			// 
+			// DepartureBoardWindow
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Text = "DepartureBoardWindow";
+			this.ClientSize = new System.Drawing.Size(704, 441);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(720, 480);
+			this.Name = "DepartureBoardWindow";
+			this.Text = "New departure board";
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

@@ -79,5 +79,5 @@ namespace Timetables.Application.Desktop
 
 			settings.Save(".settings");
 		}
-	}
+	}	
 }
