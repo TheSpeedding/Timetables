@@ -54,7 +54,7 @@ namespace Timetables.Application.Desktop
 		protected override void OnClosed(EventArgs e)
 		{
 			base.OnClosed(e);
-			if (restartNeeded) MessageBox.Show("You have to restart the application to apply the changes.");
+			if (restartNeeded) MessageBox.Show("You have to restart the application to apply the changes.", "Restart needed", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

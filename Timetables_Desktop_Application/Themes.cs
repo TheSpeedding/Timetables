@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Timetables.Application.Desktop
 {
+	/// <summary>
+	/// Class defining colors for menu strip.
+	/// </summary>
 	abstract class MenuColors : ProfessionalColorTable
 	{
 		public Color DefaultBackColor { get; protected set; }
@@ -17,7 +20,7 @@ namespace Timetables.Application.Desktop
 		public Color ItemOnHoverColor { get; protected set; }
 
 
-		public override Color MenuItemSelected => ItemSelectedColor;
+		public override Color MenuItemSelected => OnHoverColor;
 		public override Color MenuItemSelectedGradientBegin => OnHoverColor;
 		public override Color MenuItemSelectedGradientEnd => OnHoverColor;
 		public override Color MenuItemBorder => OnHoverColor;
@@ -32,7 +35,9 @@ namespace Timetables.Application.Desktop
 		public override Color SeparatorDark => ItemOnHoverColor;
 		public override Color SeparatorLight => ItemOnHoverColor;
 
-
+		/// <summary>
+		/// Dark theme colors for menu.
+		/// </summary>
 		public class DarkTheme : MenuColors
 		{
 			public DarkTheme()
@@ -44,13 +49,47 @@ namespace Timetables.Application.Desktop
 				ItemOnHoverColor = Color.FromArgb(51, 51, 55);
 			}
 		}
-	}
-	class ThemeMenu<T> : ToolStripProfessionalRenderer where T : MenuColors, new()
-	{
-		private MenuColors palette = new MenuColors.DarkTheme();
-		public ThemeMenu(MenuStrip menuStrip) : base(new T())
+
+		/// <summary>
+		/// Blue theme colors for menu.
+		/// </summary>
+		public class BlueTheme : MenuColors
 		{
-			var palette = new T();
+			public BlueTheme()
+			{
+				DefaultBackColor = Color.FromArgb(214, 219, 233);
+				TextColor = Color.Black;
+				OnHoverColor = Color.FromArgb(253, 244, 191);
+				ItemSelectedColor = Color.FromArgb(234, 240, 255);
+				ItemOnHoverColor = Color.FromArgb(253, 244, 191);
+			}
+		}
+
+		/// <summary>
+		/// Light theme colors for menu.
+		/// </summary>
+		public class LightTheme : MenuColors
+		{
+			public LightTheme()
+			{
+				DefaultBackColor = Color.FromArgb(238, 238, 242);
+				TextColor = Color.Black;
+				OnHoverColor = Color.FromArgb(201, 222, 245);
+				ItemSelectedColor = Color.FromArgb(246, 246, 246);
+				ItemOnHoverColor = Color.FromArgb(201, 222, 245);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Class defining menu theme.
+	/// </summary>
+	/// <typeparam name="T">Color palette used in menu.</typeparam>
+	class MenuTheme<T> : ToolStripProfessionalRenderer where T : MenuColors, new()
+	{
+		private static readonly MenuColors palette = new T();
+		public MenuTheme(MenuStrip menuStrip) : base(palette)
+		{
 			menuStrip.BackColor = palette.DefaultBackColor;
 			menuStrip.ForeColor = palette.TextColor;
 
