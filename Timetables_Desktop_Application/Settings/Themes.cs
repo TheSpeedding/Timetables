@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop.Themes
 {
+	/// <summary>
+	/// Extension methods for themes.
+	/// </summary>
+	public static class ThemeExtensions
+	{
+		/// <summary>
+		/// Applies selected theme to the dockpanel.
+		/// </summary>
+		public static void Apply(this ThemeBase panelTheme, DockPanel panel) => panel.Theme = panelTheme;
+	}
 	/// <summary>
 	/// Class defining theme of the application.
 	/// </summary>

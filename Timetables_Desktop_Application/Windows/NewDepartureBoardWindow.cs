@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using Timetables.Structures.Basic;
+using Timetables.Client;
 
 namespace Timetables.Application.Desktop
 {
@@ -17,6 +17,12 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
+
+			var stationList = (from StationsBasic.StationBasic station in DataFeedGlobals.Basic.Stations where station.Name.Contains(textBox1.Text) select station.Name).ToArray();
+
+			textBox1.AutoCompleteCustomSource.AddRange(stationList);
+			textBox1.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			textBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 		}
 	}
 }

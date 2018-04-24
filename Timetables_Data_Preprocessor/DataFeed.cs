@@ -44,13 +44,24 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public static event DataProcessingEventHandler DataProcessing;
 		/// <summary>
+		/// Delegate serving information about loading progress.
+		/// </summary>
+		/// <param name="message">Message to be shown.</param>
+		/// <param name="progress">Progress in percent.</param>
+		public delegate void LoadingProgressEventHandler(string message, int progress);
+		/// <summary>
+		/// The event acknowleding user about the progress of loading the data.
+		/// </summary>
+		public static event LoadingProgressEventHandler LoadingProgress;
+		/// <summary>
 		/// Processes one data source.
 		/// </summary>
 		/// <typeparam name="T">Type of data.</typeparam>
 		/// <param name="dataList">List where should data be added.</param>
 		/// <param name="url">URL to data.</param>
 		/// <param name="index">Internal identifier for creating temporary folders.</param>
-		private static void ProcessData<T>(IList<IDataFeed> dataList, string url, int index = 0) where T : IDataFeed
+		/// <param name="urlsLength">Count of data feeds to process.</param>
+		private static void ProcessData<T>(IList<IDataFeed> dataList, string url, int index = 0, int urlsLength = 1) where T : IDataFeed
 		{
 			try
 			{
@@ -58,6 +69,8 @@ namespace Timetables.Preprocessor
 				DataProcessing?.Invoke($"Trying to download data from URL { url }.");
 
 				Downloader.GetDataFeed($"{ index }_temp_data/", url, index);
+				
+				LoadingProgress?.Invoke("Part of the data successfully downloaded.", 20 / urlsLength);
 
 				DataProcessing?.Invoke($"Data from URL { url } downloaded successfully.");
 
@@ -69,6 +82,8 @@ namespace Timetables.Preprocessor
 				{
 					dataList.Add(data);
 				}
+
+				LoadingProgress?.Invoke("Part of the data successfully parsed.", 40 / urlsLength);
 
 				DataProcessing?.Invoke($"The data downloaded from { url } parsed successfully.");
 			}
@@ -100,9 +115,11 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 		/// </summary>
 		public static void GetAndTransformDataFeed<T>(params string[] urls) where T : IDataFeed
         {
+			LoadingProgress?.Invoke("Preparing for the first launch.", 0);
+
 			List<IDataFeed> dataList = new List<IDataFeed>(); // Data are added into the list only if they are (downloaded and) parsed successfully.
 			
-			Parallel.For(0, urls.Length, (int i) => ProcessData<T>(dataList, urls[i], i)); // Try to process the data in parallel mode.
+			Parallel.For(0, urls.Length, (int i) => ProcessData<T>(dataList, urls[i], i, urls.Length)); // Try to process the data in parallel mode.
 						
 			if (dataList.Count == 0)
 			{
@@ -111,8 +128,10 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 			}
 
 			DataProcessing?.Invoke($"Trying to merge the data.");
-
+			
 			IDataFeed mergedData = MergeMultipleDataFeeds(dataList);
+
+			LoadingProgress?.Invoke("Data merged successfully.", 5);
 
 			DataProcessing?.Invoke($"Data merged successfully.");
 			
@@ -121,6 +140,8 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 			mergedData.CreateDataFeed("data/");
 
 			mergedData.CreateBasicData("basic/");
+
+			LoadingProgress?.Invoke($"Data feed created successfully.", 30);
 
 			DataProcessing?.Invoke($"Data feed created successfully.");
 

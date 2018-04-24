@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Windows.Forms;
+using Timetables.Application.Desktop.Themes;
 
 namespace Timetables.Application.Desktop
 {
@@ -11,9 +11,9 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 
-			mainDockPanel.Theme = Settings.Theme.PanelTheme;
+			Settings.Theme.PanelTheme.Apply(mainDockPanel);
 			Settings.Theme.MenuTheme.Apply(mainMenuStrip);
-
+			Settings.Theme.Apply(this);
 		}
 
 		private void settingsToolStripMenuItem_Click(object sender, EventArgs e) => new SettingsWindow().ShowDialog();

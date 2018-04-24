@@ -20,7 +20,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
-		public static Language Language { get; set; }
+		public static Language Language { get; set; }		
 		static Settings()
 		{
 			try
