@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using Timetables.Structures.Basic;
 using Timetables.Client;
 
 namespace Timetables.Application.Desktop
@@ -17,12 +11,42 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
+			
+			foreach (var station in DataFeedGlobals.Basic.Stations)
+				stationComboBox.Items.Add(station);	
+		}
 
-			var stationList = (from StationsBasic.StationBasic station in DataFeedGlobals.Basic.Stations where station.Name.Contains(textBox1.Text) select station.Name).ToArray();
+		private void searchButton_Click(object sender, EventArgs e)
+		{
+			Structures.Basic.StationsBasic.StationBasic station = null;
 
-			textBox1.AutoCompleteCustomSource.AddRange(stationList);
-			textBox1.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			textBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			if (stationComboBox.SelectedItem == null)
+			{
+				station = DataFeedGlobals.Basic.Stations.FindByName(stationComboBox.Text);
+
+				if (station == null)
+				{
+					MessageBox.Show($"Station with name \"{ stationComboBox.Text }\" was not found.", "Station not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+
+				}
+			}
+
+			else
+				station = stationComboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
+
+			Text = $"Departures ({ countNumericUpDown.Value }) - { station.Name } - { departureDateTimePicker.Value.ToShortTimeString() } { departureDateTimePicker.Value.ToShortDateString() }";
+
+			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
+			DepartureBoardResponse dbResponse = null;
+
+			using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedGlobals.Full, dbRequest))
+			{
+				dbProcessing.ObtainDepartureBoard();
+				dbResponse = dbProcessing.ShowDepartureBoard();
+			}
+
+
 		}
 	}
 }

@@ -35,7 +35,8 @@ namespace Timetables.Structures.Basic
 				foreach (var stop in ChildStops)
 					foreach (var routeInfo in stop.ThroughgoingRoutes)
 						yield return routeInfo;
-			} 
+			}
+			public override string ToString() => Name;
 			public StationBasic(uint id, string name)
 			{
 				ChildStops = new List<StopsBasic.StopBasic>();
