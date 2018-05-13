@@ -56,7 +56,7 @@ namespace Timetables {
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const override { // Gets intermediate stops between source and target stop.
 				std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> stops;
 				std::size_t base = source_stop_->departure();
-				for (auto it = source_stop_; it <= target_stop_; ++it)
+				for (auto it = source_stop_ + 1; it < target_stop_; ++it)
 					stops.push_back(std::make_pair(it->arrival() - base, &it->stop()));
 				return move(stops);
 			}

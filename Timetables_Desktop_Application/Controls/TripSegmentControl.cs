@@ -11,25 +11,23 @@ using Timetables.Client;
 
 namespace Timetables.Application.Desktop
 {
-	public partial class DepartureBoardResultControl : UserControl
+	public partial class TripSegmentControl : UserControl
 	{
-		public DepartureBoardResultControl(Departure departure)
+		public TripSegmentControl(TripSegment segment)
 		{
 			InitializeComponent();
 
-			outdatedLabel.Enabled = departure.Outdated;
-		
-			lineColorPictureBox.BackColor = departure.LineColor;
+			lineColorPictureBox.BackColor = segment.LineColor;
 
-			meanOfTransportPictureBox.BackColor = departure.LineColor;
+			meanOfTransportPictureBox.BackColor = segment.LineColor;
 
-			lineDescriptionLabel.BackColor = departure.LineColor;
+			lineDescriptionLabel.BackColor = segment.LineColor;
 
-			lineDescriptionTooltip.SetToolTip(lineDescriptionLabel, departure.LineName);
-			
+			lineDescriptionTooltip.SetToolTip(lineDescriptionLabel, segment.LineName);
+
 			// Icons downloaded from here: https://icons8.com/icon/pack/Transport/windows
 
-			switch (departure.MeanOfTransport)
+			switch (segment.MeanOfTransport)
 			{
 				case MeanOfTransport.Tram:
 					meanOfTransportPictureBox.Image = Properties.Resources.icons8_tram_100;
@@ -54,29 +52,26 @@ namespace Timetables.Application.Desktop
 				case MeanOfTransport.Funicular:
 					goto case MeanOfTransport.CableCar;
 			}
-			
-			lineDescriptionLabel.Text = $"{ departure.LineLabel }  -  { departure.Headsign }";
 
-			departureLabel.Text = $"{ departure.DepartureDateTime.ToShortTimeString() } • { DataFeedGlobals.Basic.Stops.FindByIndex((int)departure.StopID).Name }";
+			lineDescriptionLabel.Text = $"{ segment.LineLabel }  -  { segment.Headsign }";
+
+			departureLabel.Text = $"{ segment.DepartureDateTime.ToShortTimeString() } • { DataFeedGlobals.Basic.Stops.FindByIndex((int)segment.SourceStopID).Name }";
+
+			arrivalLabel.Text = $"{ segment.ArrivalDateTime.ToShortTimeString() } • { DataFeedGlobals.Basic.Stops.FindByIndex((int)segment.TargetStopID).Name }";
 
 			StringBuilder intStops = new StringBuilder();
-			
-			foreach (var stop in departure.IntermediateStops)
+
+			foreach (var stop in segment.IntermediateStops)
 			{
 				intStops.AppendLine($"{ stop.Key.ToShortTimeString() } • { DataFeedGlobals.Basic.Stops.FindByIndex((int)stop.Value).Name }");
 			}
 
 			intStopsLabel.Text = intStops.ToString();
-		}
 
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			base.OnPaint(e);
-			ControlPaint.DrawBorder(e.Graphics, ClientRectangle,
-								  Color.Black, 1, ButtonBorderStyle.Inset,
-								  Color.Black, 1, ButtonBorderStyle.Inset,
-								  Color.Black, 1, ButtonBorderStyle.Inset,
-								  Color.Black, 1, ButtonBorderStyle.Inset);
+			if (segment.IntermediateStops.Count != 0)
+				arrivalLabel.Location = new Point(arrivalLabel.Location.X, intStopsLabel.Location.Y + intStopsLabel.Height + 5);
+
+			intStopsLabel.Enabled = segment.IntermediateStops.Count != 0;
 		}
 	}
 }

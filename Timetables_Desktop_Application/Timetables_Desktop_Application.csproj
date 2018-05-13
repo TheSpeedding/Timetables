@@ -66,6 +66,30 @@
     <Compile Include="Controls\FootpathSegmentControl.Designer.cs">
       <DependentUpon>FootpathSegmentControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TripSegmentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TripSegmentControl.Designer.cs">
+      <DependentUpon>TripSegmentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\JourneyResultControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\JourneyResultControl.Designer.cs">
+      <DependentUpon>JourneyResultControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NewJourneyWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\NewJourneyWindow.Designer.cs">
+      <DependentUpon>NewJourneyWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\JourneyResultsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\JourneyResultsWindow.Designer.cs">
+      <DependentUpon>JourneyResultsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Themes.cs" />
     <Compile Include="Windows\DepartureBoardResultsWindow.cs">
       <SubType>Form</SubType>
@@ -106,11 +130,17 @@
     <EmbeddedResource Include="Controls\FootpathSegmentControl.resx">
       <DependentUpon>FootpathSegmentControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TripSegmentControl.resx">
+      <DependentUpon>TripSegmentControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\DepartureBoardResultsWindow.resx">
       <DependentUpon>DepartureBoardResultsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\InitLoadingWindow.resx">
       <DependentUpon>InitLoadingWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\JourneyResultsWindow.resx">
+      <DependentUpon>JourneyResultsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\NewDepartureBoardWindow.resx">
       <DependentUpon>NewDepartureBoardWindow.cs</DependentUpon>
@@ -128,6 +158,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Windows\NewJourneyWindow.resx">
+      <DependentUpon>NewJourneyWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>

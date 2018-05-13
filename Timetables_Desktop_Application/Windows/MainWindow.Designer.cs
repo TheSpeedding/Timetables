@@ -31,16 +31,16 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.mainDockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
+			this.journeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.findjourneyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.favoritesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.departureBoardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.findDeparturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.listOfstationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.journeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.findjourneyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.favoritesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.actualinfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.extraordinaryEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lockoutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +67,34 @@
 			this.mainMenuStrip.Name = "mainMenuStrip";
 			this.mainMenuStrip.Size = new System.Drawing.Size(1264, 24);
 			this.mainMenuStrip.TabIndex = 5;
+			// 
+			// journeyToolStripMenuItem
+			// 
+			this.journeyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findjourneyToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.favoritesToolStripMenuItem1});
+			this.journeyToolStripMenuItem.Name = "journeyToolStripMenuItem";
+			this.journeyToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+			this.journeyToolStripMenuItem.Text = "&Journey";
+			// 
+			// findjourneyToolStripMenuItem
+			// 
+			this.findjourneyToolStripMenuItem.Name = "findjourneyToolStripMenuItem";
+			this.findjourneyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.findjourneyToolStripMenuItem.Text = "Find &journeys";
+			this.findjourneyToolStripMenuItem.Click += new System.EventHandler(this.findjourneyToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+			// 
+			// favoritesToolStripMenuItem1
+			// 
+			this.favoritesToolStripMenuItem1.Name = "favoritesToolStripMenuItem1";
+			this.favoritesToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.favoritesToolStripMenuItem1.Text = "&Favorites";
 			// 
 			// departureBoardToolStripMenuItem
 			// 
@@ -109,33 +137,6 @@
 			this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
 			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
 			this.favoritesToolStripMenuItem.Text = "&Favorites";
-			// 
-			// journeyToolStripMenuItem
-			// 
-			this.journeyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findjourneyToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.favoritesToolStripMenuItem1});
-			this.journeyToolStripMenuItem.Name = "journeyToolStripMenuItem";
-			this.journeyToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
-			this.journeyToolStripMenuItem.Text = "&Journey";
-			// 
-			// findjourneyToolStripMenuItem
-			// 
-			this.findjourneyToolStripMenuItem.Name = "findjourneyToolStripMenuItem";
-			this.findjourneyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.findjourneyToolStripMenuItem.Text = "Find &journeys";
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
-			// 
-			// favoritesToolStripMenuItem1
-			// 
-			this.favoritesToolStripMenuItem1.Name = "favoritesToolStripMenuItem1";
-			this.favoritesToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-			this.favoritesToolStripMenuItem1.Text = "&Favorites";
 			// 
 			// actualinfoToolStripMenuItem
 			// 
