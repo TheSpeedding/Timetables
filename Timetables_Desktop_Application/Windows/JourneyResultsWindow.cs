@@ -19,7 +19,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
-			Text = $"Departures ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
+			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
 			int yPoint = 0;
 

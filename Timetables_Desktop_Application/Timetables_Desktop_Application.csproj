@@ -130,6 +130,9 @@
     <EmbeddedResource Include="Controls\FootpathSegmentControl.resx">
       <DependentUpon>FootpathSegmentControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\JourneyResultControl.resx">
+      <DependentUpon>JourneyResultControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TripSegmentControl.resx">
       <DependentUpon>TripSegmentControl.cs</DependentUpon>
     </EmbeddedResource>
