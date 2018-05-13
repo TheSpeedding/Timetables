@@ -36,7 +36,7 @@ namespace Timetables.Preprocessor
 				AverageWalkingSpeed = 0.9;
 
 				DefaultBusColor = ColorTranslator.FromHtml("#00FFFF");
-				DefaultTramColor = ColorTranslator.FromHtml("#CC0000");
+				DefaultTramColor = ColorTranslator.FromHtml("#8B4513");
 				DefaultCableCarColor = ColorTranslator.FromHtml("#FF8C00");
 				DefaultRailColor = ColorTranslator.FromHtml("#006600");
 				DefaultSubwayColor = ColorTranslator.FromHtml("#FFFF00");

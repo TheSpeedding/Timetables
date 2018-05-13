@@ -45,16 +45,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.stationComboBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.stationComboBox.FormattingEnabled = true;
-			this.stationComboBox.Location = new System.Drawing.Point(116, 42);
+			this.stationComboBox.Location = new System.Drawing.Point(116, 22);
 			this.stationComboBox.Name = "stationComboBox";
-			this.stationComboBox.Size = new System.Drawing.Size(34, 23);
+			this.stationComboBox.Size = new System.Drawing.Size(146, 23);
 			this.stationComboBox.Sorted = true;
 			this.stationComboBox.TabIndex = 0;
 			// 
 			// stationLabel
 			// 
 			this.stationLabel.Font = new System.Drawing.Font("Calibri", 14F);
-			this.stationLabel.Location = new System.Drawing.Point(12, 29);
+			this.stationLabel.Location = new System.Drawing.Point(12, 9);
 			this.stationLabel.Name = "stationLabel";
 			this.stationLabel.Size = new System.Drawing.Size(98, 42);
 			this.stationLabel.TabIndex = 1;
@@ -64,7 +64,7 @@
 			// departureLabel
 			// 
 			this.departureLabel.Font = new System.Drawing.Font("Calibri", 14F);
-			this.departureLabel.Location = new System.Drawing.Point(12, 71);
+			this.departureLabel.Location = new System.Drawing.Point(12, 51);
 			this.departureLabel.Name = "departureLabel";
 			this.departureLabel.Size = new System.Drawing.Size(98, 42);
 			this.departureLabel.TabIndex = 2;
@@ -76,19 +76,19 @@
 			this.departureDateTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.departureDateTimePicker.CalendarFont = new System.Drawing.Font("Calibri", 10F);
-			this.departureDateTimePicker.CustomFormat = "H:mm     d.MM.yyyy";
+			this.departureDateTimePicker.CustomFormat = "H:mm     dd.MM.yyyy";
 			this.departureDateTimePicker.Font = new System.Drawing.Font("Calibri", 10F);
 			this.departureDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.departureDateTimePicker.Location = new System.Drawing.Point(116, 80);
+			this.departureDateTimePicker.Location = new System.Drawing.Point(116, 60);
 			this.departureDateTimePicker.Name = "departureDateTimePicker";
-			this.departureDateTimePicker.Size = new System.Drawing.Size(34, 24);
+			this.departureDateTimePicker.Size = new System.Drawing.Size(146, 24);
 			this.departureDateTimePicker.TabIndex = 3;
 			// 
 			// searchButton
 			// 
 			this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.searchButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.searchButton.Location = new System.Drawing.Point(16, 158);
+			this.searchButton.Location = new System.Drawing.Point(128, 137);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(134, 31);
 			this.searchButton.TabIndex = 4;
@@ -99,7 +99,7 @@
 			// countLabel
 			// 
 			this.countLabel.Font = new System.Drawing.Font("Calibri", 14F);
-			this.countLabel.Location = new System.Drawing.Point(12, 113);
+			this.countLabel.Location = new System.Drawing.Point(12, 93);
 			this.countLabel.Name = "countLabel";
 			this.countLabel.Size = new System.Drawing.Size(98, 42);
 			this.countLabel.TabIndex = 5;
@@ -111,14 +111,14 @@
 			this.countNumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.countNumericUpDown.Font = new System.Drawing.Font("Calibri", 10F);
-			this.countNumericUpDown.Location = new System.Drawing.Point(116, 125);
+			this.countNumericUpDown.Location = new System.Drawing.Point(116, 105);
 			this.countNumericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
 			this.countNumericUpDown.Name = "countNumericUpDown";
-			this.countNumericUpDown.Size = new System.Drawing.Size(34, 24);
+			this.countNumericUpDown.Size = new System.Drawing.Size(146, 24);
 			this.countNumericUpDown.TabIndex = 6;
 			this.countNumericUpDown.Value = new decimal(new int[] {
             5,
@@ -131,7 +131,7 @@
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(162, 288);
+			this.ClientSize = new System.Drawing.Size(274, 180);
 			this.Controls.Add(this.countNumericUpDown);
 			this.Controls.Add(this.countLabel);
 			this.Controls.Add(this.searchButton);
@@ -140,6 +140,7 @@
 			this.Controls.Add(this.stationLabel);
 			this.Controls.Add(this.stationComboBox);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(276, 219);
 			this.Name = "NewDepartureBoardWindow";
 			this.Text = "New departure board";
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).EndInit();

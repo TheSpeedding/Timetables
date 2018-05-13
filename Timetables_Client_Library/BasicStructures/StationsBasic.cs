@@ -76,7 +76,7 @@ namespace Timetables.Structures.Basic
 		/// Returns station represented by the name.
 		/// </summary>
 		/// <param name="name">Name of the station.</param>
-		public StationBasic FindByName(string name) => list.Find((StationBasic station) => station.Name == name);
+		public StationBasic FindByName(string name) => list.Find((StationBasic station) => StringComparer.CurrentCultureIgnoreCase.Compare(station.Name, name) == 0);
 		/// <summary>
 		/// Returns station represented by the index.
 		/// </summary>

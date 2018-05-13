@@ -26,17 +26,14 @@ namespace Timetables.Application.Desktop
 
 				if (station == null)
 				{
-					MessageBox.Show($"Station with name \"{ stationComboBox.Text }\" was not found.", "Station not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show($"Station with name \"{ stationComboBox.Text }\" was not found.", "Station not found.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
-
 				}
 			}
 
 			else
 				station = stationComboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
-
-			Text = $"Departures ({ countNumericUpDown.Value }) - { station.Name } - { departureDateTimePicker.Value.ToShortTimeString() } { departureDateTimePicker.Value.ToShortDateString() }";
-
+			
 			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
 			DepartureBoardResponse dbResponse = null;
 
@@ -45,8 +42,10 @@ namespace Timetables.Application.Desktop
 				dbProcessing.ObtainDepartureBoard();
 				dbResponse = dbProcessing.ShowDepartureBoard();
 			}
-
-
+			
+			new DepartureBoardResultsWindow(dbResponse, station.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
+			Close();
 		}
+		
 	}
 }

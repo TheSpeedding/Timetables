@@ -78,10 +78,20 @@ namespace Timetables.Structures.Basic
 			}
 		}
 		/// <summary>
+		/// Returns stop represented by the name.
+		/// </summary>
+		/// <param name="name">Name of the stop.</param>
+		public StopBasic FindByName(string name) => list.Find((StopBasic station) => StringComparer.CurrentCultureIgnoreCase.Compare(station.Name, name) == 0);
+		/// <summary>
 		/// Finds stop by its coordinates.
 		/// </summary>
 		/// <param name="lat">Latitude.</param>
 		/// <param name="lon">Longitude.</param>
 		public StopBasic FindByCoordinates(double lat, double lon) => list.Find((StopBasic s) => { return s.Latitude == lat && s.Longitude == lon; });
+		/// <summary>
+		/// Returns stop represented by the index.
+		/// </summary>
+		/// <param name="index">Index of the stop.</param>
+		public StopBasic FindByIndex(int index) => this[index];
 	}
 }

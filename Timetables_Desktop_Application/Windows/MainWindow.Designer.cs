@@ -59,8 +59,8 @@
 			// mainMenuStrip
 			// 
 			this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.departureBoardToolStripMenuItem,
             this.journeyToolStripMenuItem,
+            this.departureBoardToolStripMenuItem,
             this.actualinfoToolStripMenuItem,
             this.settingsToolStripMenuItem});
 			this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
