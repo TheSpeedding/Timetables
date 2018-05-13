@@ -157,5 +157,23 @@
       <Name>Timetables_Managed_Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-bus-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-cable-car-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-subway-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-train-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-tram-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-water-transportation-100.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

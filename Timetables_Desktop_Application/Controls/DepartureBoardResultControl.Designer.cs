@@ -33,6 +33,7 @@
 			this.lineColorPictureBox = new System.Windows.Forms.PictureBox();
 			this.departureLabel = new System.Windows.Forms.Label();
 			this.intStopsLabel = new System.Windows.Forms.Label();
+			this.outdatedLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.meanOfTransportPictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.lineColorPictureBox)).BeginInit();
 			this.SuspendLayout();
@@ -42,6 +43,7 @@
 			this.meanOfTransportPictureBox.Location = new System.Drawing.Point(8, 8);
 			this.meanOfTransportPictureBox.Name = "meanOfTransportPictureBox";
 			this.meanOfTransportPictureBox.Size = new System.Drawing.Size(24, 24);
+			this.meanOfTransportPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.meanOfTransportPictureBox.TabIndex = 0;
 			this.meanOfTransportPictureBox.TabStop = false;
 			// 
@@ -93,11 +95,25 @@
 			this.intStopsLabel.TabIndex = 4;
 			this.intStopsLabel.Text = "Intermediate stops data";
 			// 
+			// outdatedLabel
+			// 
+			this.outdatedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.outdatedLabel.Enabled = false;
+			this.outdatedLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.outdatedLabel.ForeColor = System.Drawing.Color.Red;
+			this.outdatedLabel.Location = new System.Drawing.Point(318, 67);
+			this.outdatedLabel.Name = "outdatedLabel";
+			this.outdatedLabel.Size = new System.Drawing.Size(86, 22);
+			this.outdatedLabel.TabIndex = 5;
+			this.outdatedLabel.Text = "Outdated!";
+			this.outdatedLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
 			// DepartureBoardResultControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.Controls.Add(this.outdatedLabel);
 			this.Controls.Add(this.intStopsLabel);
 			this.Controls.Add(this.departureLabel);
 			this.Controls.Add(this.lineDescriptionLabel);
@@ -120,5 +136,6 @@
 		private System.Windows.Forms.Label lineDescriptionLabel;
 		private System.Windows.Forms.Label departureLabel;
 		private System.Windows.Forms.Label intStopsLabel;
+		private System.Windows.Forms.Label outdatedLabel;
 	}
 }

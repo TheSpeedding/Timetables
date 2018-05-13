@@ -17,30 +17,40 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 
+			outdatedLabel.Enabled = departure.Outdated;
+
 			lineColorPictureBox.BackColor = departure.LineColor;
 
 			meanOfTransportPictureBox.BackColor = departure.LineColor;
 
 			lineDescriptionLabel.BackColor = departure.LineColor;
 
+			// Icons downloaded from here: https://icons8.com/icon/pack/Transport/windows
+
 			switch (departure.MeanOfTransport)
 			{
 				case MeanOfTransport.Tram:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_tram_100;
 					break;
 				case MeanOfTransport.Subway:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_subway_100;
 					break;
 				case MeanOfTransport.Rail:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_train_100;
 					break;
 				case MeanOfTransport.Bus:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_bus_100;
 					break;
 				case MeanOfTransport.Ship:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_water_transportation_100;
 					break;
 				case MeanOfTransport.CableCar:
+					meanOfTransportPictureBox.Image = Properties.Resources.icons8_cable_car_100;
 					break;
 				case MeanOfTransport.Gondola:
-					break;
+					goto case MeanOfTransport.CableCar;
 				case MeanOfTransport.Funicular:
-					break;
+					goto case MeanOfTransport.CableCar;
 			}
 			
 			lineDescriptionLabel.Text = $"{ departure.LineLabel }  -  { departure.Headsign }";
