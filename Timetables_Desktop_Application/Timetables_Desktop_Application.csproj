@@ -60,6 +60,12 @@
     <Compile Include="Controls\DepartureBoardResultControl.Designer.cs">
       <DependentUpon>DepartureBoardResultControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FootpathSegmentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FootpathSegmentControl.Designer.cs">
+      <DependentUpon>FootpathSegmentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Themes.cs" />
     <Compile Include="Windows\DepartureBoardResultsWindow.cs">
       <SubType>Form</SubType>
@@ -96,6 +102,9 @@
     </Compile>
     <EmbeddedResource Include="Controls\DepartureBoardResultControl.resx">
       <DependentUpon>DepartureBoardResultControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FootpathSegmentControl.resx">
+      <DependentUpon>FootpathSegmentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\DepartureBoardResultsWindow.resx">
       <DependentUpon>DepartureBoardResultsWindow.cs</DependentUpon>
@@ -174,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-water-transportation-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\noun_19727_cc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
