@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using Timetables.Client;
 using System.IO;
+using System.Xml;
 
 namespace Timetables.Application.Desktop
 {
@@ -25,8 +26,14 @@ namespace Timetables.Application.Desktop
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			jResponse.Serialize(sw);
 
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(sw.ToString());
+
+			sw = new System.IO.StringWriter();
+			doc.ReplaceStopIdsWithNames().Save(sw);
+
 			Clipboard.SetText(sw.ToString());
-			
+
 		}
 	}
 }

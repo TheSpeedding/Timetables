@@ -54,12 +54,7 @@ namespace Timetables.Client
 		/// Serializes object into the text writer.
 		/// </summary>
 		/// <param name="writer">Text writer.</param>
-		public void Serialize(TextWriter writer)
-		{
-			XmlSerializer xsSubmit = new XmlSerializer(typeof(DepartureBoardResponse));
-
-			xsSubmit.Serialize(writer, this);
-		}
+		public void Serialize(TextWriter writer) => new XmlSerializer(typeof(DepartureBoardResponse)).Serialize(writer, this);
 	}
 	/// <summary>
 	/// Class serving information about one departure.
