@@ -43,7 +43,7 @@ namespace Timetables.Application.Desktop
 			}
 
 			else
-				source = sourceComboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
+				source = comboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
 
 			return source;
 		}

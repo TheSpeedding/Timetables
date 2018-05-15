@@ -20,22 +20,11 @@ namespace Timetables.Application.Desktop
 			Settings.Theme.Apply(this);
 
 			Text = $"Departures ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
-			
-			int yPoint = 0;
 
-			foreach (var departure in dbReponse.Departures)
-			{
-				Control depControl = new DepartureBoardResultControl(departure)
-				{
-					Location = new Point(0, yPoint),
-					Width = resultsPanel.Width,
-					Anchor = AnchorStyles.Top | AnchorStyles.Left // | AnchorStyles.Right
-				};
+			System.IO.StringWriter sw = new System.IO.StringWriter();
+			dbReponse.Serialize(sw);
 
-				resultsPanel.Controls.Add(depControl);
-
-				yPoint += depControl.Height + 10;
-			}
+			Clipboard.SetText(sw.ToString());
 		}
 	}
 }

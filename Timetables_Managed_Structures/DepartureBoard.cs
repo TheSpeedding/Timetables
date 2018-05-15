@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Timetables.Client
 {
@@ -44,8 +47,19 @@ namespace Timetables.Client
 		/// <summary>
 		/// List of departures found by the algorithms.
 		/// </summary>
-		public List<Departure> Departures { get; }
+		public List<Departure> Departures { get; set; }
+		public DepartureBoardResponse() => Departures = new List<Departure>();
 		public DepartureBoardResponse(List<Departure> departures) => Departures = departures;
+		/// <summary>
+		/// Serializes object into the text writer.
+		/// </summary>
+		/// <param name="writer">Text writer.</param>
+		public void Serialize(TextWriter writer)
+		{
+			XmlSerializer xsSubmit = new XmlSerializer(typeof(DepartureBoardResponse));
+
+			xsSubmit.Serialize(writer, this);
+		}
 	}
 	/// <summary>
 	/// Class serving information about one departure.
@@ -56,39 +70,40 @@ namespace Timetables.Client
 		/// <summary>
 		/// Stop identificator.
 		/// </summary>
-		public uint StopID { get; }
+		public uint StopID { get; set; }
 		/// <summary>
 		/// Indicated whether departure uses outdated timetables.
 		/// </summary>
-		public bool Outdated { get; }
+		public bool Outdated { get; set; }
 		/// <summary>
 		/// Headsign of the trip.
 		/// </summary>
-		public string Headsign { get; }
+		public string Headsign { get; set; }
 		/// <summary>
 		/// Short name of the line.
 		/// </summary>
-		public string LineLabel { get; }
+		public string LineLabel { get; set; }
 		/// <summary>
 		/// Long name of the line.
 		/// </summary>
-		public string LineName { get; }
+		public string LineName { get; set; }
 		/// <summary>
 		/// Color of the line used in GUI.
 		/// </summary>
-		public Color LineColor { get; }
+		public Color LineColor { get; set; }
 		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
-		public MeanOfTransport MeanOfTransport { get; }
+		public MeanOfTransport MeanOfTransport { get; set; }
 		/// <summary>
 		/// Date time of departure.
 		/// </summary>
-		public DateTime DepartureDateTime { get; }
+		public DateTime DepartureDateTime { get; set; }
 		/// <summary>
 		/// Following stops in the trip. Departure date time and their identificators.
 		/// </summary>
-		public List<KeyValuePair<DateTime, uint>> IntermediateStops { get; }
+		public List<IntermediateStop> IntermediateStops { get; set; }
+		internal Departure() { }
 		public Departure(uint stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, uint>> intStops)
 		{
 			StopID = stopID;
@@ -100,9 +115,9 @@ namespace Timetables.Client
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
 			DepartureDateTime = new DateTime(1970, 1, 1).AddSeconds(departureDateTime);
 
-			IntermediateStops = new List<KeyValuePair<DateTime, uint>>();
+			IntermediateStops = new List<IntermediateStop>();
 			foreach (var x in intStops)
-				IntermediateStops.Add(new KeyValuePair<DateTime, uint>(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
+				IntermediateStops.Add(new IntermediateStop(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
 		}
 	}
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using Timetables.Client;
+using System.IO;
 
 namespace Timetables.Application.Desktop
 {
@@ -21,21 +22,11 @@ namespace Timetables.Application.Desktop
 
 			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			int yPoint = 0;
+			System.IO.StringWriter sw = new System.IO.StringWriter();
+			jResponse.Serialize(sw);
 
-			foreach (var journey in jResponse.Journeys)
-			{
-				Control jControl = new JourneyResultControl(journey)
-				{
-					Location = new Point(0, yPoint),
-					Width = resultsPanel.Width,
-					Anchor = AnchorStyles.Top | AnchorStyles.Left // | AnchorStyles.Right
-				};
-
-				resultsPanel.Controls.Add(jControl);
-
-				yPoint += jControl.Height + 10;
-			}
+			Clipboard.SetText(sw.ToString());
+			
 		}
 	}
 }

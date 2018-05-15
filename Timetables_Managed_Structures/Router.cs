@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Timetables.Client
 {
@@ -56,7 +59,18 @@ namespace Timetables.Client
 		/// <summary>
 		/// List of journeys found by the algorithms.
 		/// </summary>
-		public List<Journey> Journeys { get; }
+		public List<Journey> Journeys { get; set; }
+		public RouterResponse() => Journeys = new List<Journey>();
 		public RouterResponse(List<Journey> journeys) => Journeys = journeys;
+		/// <summary>
+		/// Serializes object into the text writer.
+		/// </summary>
+		/// <param name="writer">Text writer.</param>
+		public void Serialize(TextWriter writer)
+		{
+			XmlSerializer xsSubmit = new XmlSerializer(typeof(RouterResponse));
+
+			xsSubmit.Serialize(writer, this);
+		}
 	}
 }

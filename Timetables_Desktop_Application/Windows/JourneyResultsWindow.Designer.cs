@@ -29,26 +29,28 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JourneyResultsWindow));
-			this.resultsPanel = new System.Windows.Forms.Panel();
+			this.resultsWebBrowser = new System.Windows.Forms.WebBrowser();
 			this.SuspendLayout();
 			// 
-			// resultsPanel
+			// resultsWebBrowser
 			// 
-			this.resultsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.resultsPanel.AutoScroll = true;
-			this.resultsPanel.Location = new System.Drawing.Point(12, 12);
-			this.resultsPanel.Name = "resultsPanel";
-			this.resultsPanel.Size = new System.Drawing.Size(473, 137);
-			this.resultsPanel.TabIndex = 1;
+			this.resultsWebBrowser.AllowNavigation = false;
+			this.resultsWebBrowser.AllowWebBrowserDrop = false;
+			this.resultsWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.resultsWebBrowser.IsWebBrowserContextMenuEnabled = false;
+			this.resultsWebBrowser.Location = new System.Drawing.Point(0, 0);
+			this.resultsWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+			this.resultsWebBrowser.Name = "resultsWebBrowser";
+			this.resultsWebBrowser.ScriptErrorsSuppressed = true;
+			this.resultsWebBrowser.Size = new System.Drawing.Size(497, 161);
+			this.resultsWebBrowser.TabIndex = 0;
 			// 
 			// JourneyResultsWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(497, 161);
-			this.Controls.Add(this.resultsPanel);
+			this.Controls.Add(this.resultsWebBrowser);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "JourneyResultsWindow";
 			this.Text = "JourneyResultsWindow";
@@ -57,6 +59,7 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.Panel resultsPanel;
+
+		private System.Windows.Forms.WebBrowser resultsWebBrowser;
 	}
 }

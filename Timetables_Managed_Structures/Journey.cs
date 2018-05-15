@@ -1,9 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Timetables.Client
 {
+	/// <summary>
+	/// Class serving information about intermediate stop in trip segment.
+	/// </summary>
+	[Serializable]
+	public class IntermediateStop
+	{
+		/// <summary>
+		/// Arrival to the stop.
+		/// </summary>
+		public DateTime Arrival { get; set; }
+		/// <summary>
+		/// Stop identificator.
+		/// </summary>
+		public uint StopID { get; set; }
+		internal IntermediateStop() { }
+		public IntermediateStop(DateTime arrival, uint stopId)
+		{
+			Arrival = arrival;
+			StopID = stopId;
+		}
+	}
 	/// <summary>
 	/// Class serving information about one journey.
 	/// </summary>
@@ -25,40 +48,38 @@ namespace Timetables.Client
 		/// <summary>
 		/// Indicates whether journey uses outdated timetables.
 		/// </summary>
-		public bool Outdated { get { foreach (var js in JourneySegments) if (js.Outdated) return true; return false; } }
+		public bool Outdated { get { foreach (var js in JourneySegments) if ((js as TripSegment).Outdated) return true; return false; } }
 		/// <summary>
 		/// List of journey segments.
 		/// </summary>
-		public List<JourneySegment> JourneySegments { get; }
+		public List<JourneySegment> JourneySegments { get; set; }
+		internal Journey() { }
 		public Journey(List<JourneySegment> list) => JourneySegments = list;
 	}
 
 	/// <summary>
 	/// Class serving information about one journey segment.
 	/// </summary>
-	[Serializable]
+	[XmlInclude(typeof(TripSegment))]
+	[XmlInclude(typeof(FootpathSegment))]
 	public abstract class JourneySegment
 	{
 		/// <summary>
 		/// Source stop identificator.
 		/// </summary>
-		public uint SourceStopID { get; protected set; }
+		public uint SourceStopID { get; set; }
 		/// <summary>
 		/// Target stop identificator.
 		/// </summary>
-		public uint TargetStopID { get; protected set; }
-		/// <summary>
-		/// Indicates whether segment uses outdated timetables.
-		/// </summary>
-		public bool Outdated { get; protected set; }
+		public uint TargetStopID { get; set; }
 		/// <summary>
 		/// Departure date time from the source stop.
 		/// </summary>
-		public DateTime DepartureDateTime { get; protected set; }
+		public DateTime DepartureDateTime { get; set; }
 		/// <summary>
 		/// Arrival date time at the target top.
 		/// </summary>
-		public DateTime ArrivalDateTime { get; protected set; }
+		public DateTime ArrivalDateTime { get; set; }
 		/// <summary>
 		/// Duration of the segment.
 		/// </summary>
@@ -71,11 +92,11 @@ namespace Timetables.Client
 	[Serializable]
 	public sealed class FootpathSegment : JourneySegment
 	{
-		public FootpathSegment(uint sourceStopID, uint targetStopID, ulong departureFromSource, ulong arrivalAtTarget)
+		internal FootpathSegment() { }
+		public FootpathSegment(uint sourceStopID, uint targetStopID, ulong departureFromSource, ulong arrivalAtTarget) 
 		{
 			SourceStopID = sourceStopID;
 			TargetStopID = targetStopID;
-			Outdated = false;
 			DepartureDateTime = new DateTime(1970, 1, 1).AddSeconds(departureFromSource);
 			ArrivalDateTime = new DateTime(1970, 1, 1).AddSeconds(arrivalAtTarget);
 		}
@@ -90,27 +111,32 @@ namespace Timetables.Client
 		/// <summary>
 		/// Headsign of the trip.
 		/// </summary>
-		public string Headsign { get; }
+		public string Headsign { get; set; }
 		/// <summary>
 		/// Short name of the line.
 		/// </summary>
-		public string LineLabel { get; }
+		public string LineLabel { get; set; }
+		/// <summary>
+		/// Indicates whether segment uses outdated timetables.
+		/// </summary>
+		public bool Outdated { get; set; }
 		/// <summary>
 		/// Long name of the line.
 		/// </summary>
-		public string LineName { get; }
+		public string LineName { get; set; }
 		/// <summary>
 		/// Color of the line used in GUI.
 		/// </summary>
-		public Color LineColor { get; }
+		public Color LineColor { get; set; }
 		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
-		public MeanOfTransport MeanOfTransport { get; }
+		public MeanOfTransport MeanOfTransport { get; set; }
 		/// <summary>
 		/// Intermediate stops in the trip.
 		/// </summary>
-		public List<KeyValuePair<DateTime, uint>> IntermediateStops { get; }
+		public List<IntermediateStop> IntermediateStops { get; set; }
+		internal TripSegment() { }
 		public TripSegment(uint sourceStopID, uint targetStopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, ulong departureFromSource, ulong arrivalAtTarget, List<KeyValuePair<ulong, uint>> intStops)
 		{
 			SourceStopID = sourceStopID;
@@ -124,9 +150,9 @@ namespace Timetables.Client
 			LineName = lineName;
 			LineColor = ColorTranslator.FromHtml("#" + lineColor.ToString("X"));
 
-			IntermediateStops = new List<KeyValuePair<DateTime, uint>>();
+			IntermediateStops = new List<IntermediateStop>();
 			foreach (var x in intStops)
-				IntermediateStops.Add(new KeyValuePair<DateTime, uint>(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
+				IntermediateStops.Add(new IntermediateStop(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
 		}
 	}
 }
