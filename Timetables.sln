@@ -23,6 +23,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Managed_Structur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Desktop_Application", "Timetables_Desktop_Application\Timetables_Desktop_Application.csproj", "{A6145DC6-1961-4E13-B5DD-7482EB41D7E3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Webbrowser_Stuff", "Timetables_Webbrowser_Stuff", "{A16A35E6-3A26-4C26-93B4-9B73648262A8}"
+	ProjectSection(SolutionItems) = preProject
+		Timetables_Webbrowser_Stuff\JourneysSimpleToHtml.xslt = Timetables_Webbrowser_Stuff\JourneysSimpleToHtml.xslt
+		Timetables_Webbrowser_Stuff\TransformationHelperFunctions.js = Timetables_Webbrowser_Stuff\TransformationHelperFunctions.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,6 +142,7 @@ Global
 		{38537CC2-E538-4F35-AA82-801293139F63} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{36816C97-7D07-43F9-B68A-F65622639568} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{A6145DC6-1961-4E13-B5DD-7482EB41D7E3} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
+		{A16A35E6-3A26-4C26-93B4-9B73648262A8} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C024807C-BA27-4F91-8B3F-8160BB2EB961}
