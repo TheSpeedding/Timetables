@@ -20,18 +20,11 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
+			resultsWebBrowser.ObjectForScripting = Timetables.Interop.Scripting.ObjectForScripting;
+
 			Text = $"Departures ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
-
-			System.IO.StringWriter sw = new System.IO.StringWriter();
-			dbReponse.Serialize(sw);
-
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(sw.ToString());
-
-			sw = new System.IO.StringWriter();
-			doc.ReplaceStopIdsWithNames().Save(sw);
-
-			Clipboard.SetText(sw.ToString());
+			
+			resultsWebBrowser.DocumentText = "<html><body><script>javascript: document.write(window.external.TotalTransfersToString(1));</script></body></html>";
 		}
 	}
 }

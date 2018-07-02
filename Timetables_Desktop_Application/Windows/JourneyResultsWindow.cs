@@ -21,19 +21,11 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
+			resultsWebBrowser.ObjectForScripting = Timetables.Interop.Scripting.ObjectForScripting;
+
 			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
-
-			System.IO.StringWriter sw = new System.IO.StringWriter();
-			jResponse.Serialize(sw);
-
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(sw.ToString());
-
-			sw = new System.IO.StringWriter();
-			doc.ReplaceStopIdsWithNames().Save(sw);
-
-			Clipboard.SetText(sw.ToString());
-
+			
+			resultsWebBrowser.DocumentText = jResponse.ConvertObjectToTransformedString("JourneysSimpleToHtml.xslt", true);
 		}
 	}
 }
