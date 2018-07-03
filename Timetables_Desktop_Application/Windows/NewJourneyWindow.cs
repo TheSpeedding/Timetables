@@ -14,6 +14,7 @@ namespace Timetables.Application.Desktop
 {
 	public partial class NewJourneyWindow : DockContent
 	{
+
 		public NewJourneyWindow()
 		{
 			InitializeComponent();

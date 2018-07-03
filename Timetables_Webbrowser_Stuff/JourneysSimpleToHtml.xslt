@@ -8,7 +8,7 @@
 		<html>
 			
 			<head>
-				<script src="TransformationHelperFunctions.js"></script>
+				<link rel="stylesheet" type="text/css" href="JourneysSimpleToHtml.css"/>
 				<title>Journeys (<xsl:value-of select="count(//Journey)"/>) - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 			
@@ -30,16 +30,26 @@
 						</ul>
 						
 						<div class="box">
-							
-							<div class="duration">
-								<script>javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));</script>
-							</div>
+
+							<div class="info">
 								
-							<div class="transfers">
-								<script>javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));</script>
-							</div>
+								<div class="duration">
+									<script>
+										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+									</script>
+								</div>
+
+								<div class="transfers">
+									<script>
+										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
+									</script>
+								</div>
+
+								<div class="outdated">
+									<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">Outdated</xsl:if>
+								</div>
 							
-							<div class="outdated"><xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">Outdated</xsl:if></div>
+							</div>
 								
 							<div class="departure">
 								

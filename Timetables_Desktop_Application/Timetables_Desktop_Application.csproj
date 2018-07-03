@@ -194,4 +194,7 @@
     <None Include="Resources\noun_19727_cc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(ProjectDir)..\Timetables_Webbrowser_Stuff\*" "$(ProjectDir)$(OutDir)"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

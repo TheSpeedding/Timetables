@@ -34,7 +34,7 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="t">Timespan to convert.</param>
 		/// <returns>Timespan as a string.</returns>
-		private string TimeSpanToString(TimeSpan t) => (t.Hours > 0 ? t.Hours + " hours " : "") + t.Minutes + " minutes";
+		private string TimeSpanToString(TimeSpan t) => (t.Hours > 0 ? t.Hours + (t.Hours == 1 ? " hour " : " hours ") : "") + t.Minutes + (t.Minutes == 1 ? " minute " : " minutes ");
 
 		/// <summary>
 		/// Computes difference of two datetimes and returns total duration.
