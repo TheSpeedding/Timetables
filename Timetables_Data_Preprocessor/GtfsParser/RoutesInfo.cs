@@ -192,7 +192,7 @@ namespace Timetables.Preprocessor
 
 				int intType = int.Parse(tokens[dic["route_type"]]);
 
-				if (intType == 800) intType = (int)RouteInfo.RouteType.Bus; // Trolleybus converted to bus (Palmovka - Letňany). TEMPORARY SOLUTION.
+				if (intType == 800) intType = (int)RouteInfo.RouteType.Bus; // Trolleybus converted to bus (Palmovka - Letňany). Temporary solution.
 
 				if (!(intType >= 0 && intType <= 7))
 					throw new FormatException("Invalid mean of transport.");

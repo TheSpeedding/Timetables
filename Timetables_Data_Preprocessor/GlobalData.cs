@@ -35,8 +35,8 @@ namespace Timetables.Preprocessor
 				MaximalDurationOfTransfer = 600; 
 				AverageWalkingSpeed = 0.9;
 
-				DefaultBusColor = ColorTranslator.FromHtml("#00FFFF");
-				DefaultTramColor = ColorTranslator.FromHtml("#8B4513");
+				DefaultBusColor = ColorTranslator.FromHtml("#4A90E2");
+				DefaultTramColor = ColorTranslator.FromHtml("#8B572A");
 				DefaultCableCarColor = ColorTranslator.FromHtml("#FF8C00");
 				DefaultRailColor = ColorTranslator.FromHtml("#006600");
 				DefaultSubwayColor = ColorTranslator.FromHtml("#FFFF00");

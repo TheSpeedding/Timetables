@@ -85,6 +85,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Color of the line used in GUI.
 		/// </summary>
+		[XmlElement(Type = typeof(XmlColor))]
 		public Color LineColor { get; set; }
 		/// <summary>
 		/// Mean of transportation.

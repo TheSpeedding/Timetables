@@ -24,8 +24,10 @@ namespace Timetables.Application.Desktop
 			resultsWebBrowser.ObjectForScripting = Timetables.Interop.Scripting.ObjectForScripting;
 
 			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
-			
-			resultsWebBrowser.DocumentText = jResponse.ConvertObjectToTransformedString("JourneysSimpleToHtml.xslt", true);
+
+			resultsWebBrowser.DocumentText = jResponse.TransformToHtml("JourneysSimpleToHtml.xslt", true);
+
+			Clipboard.SetText(resultsWebBrowser.DocumentText);
 		}
 	}
 }

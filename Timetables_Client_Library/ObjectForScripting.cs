@@ -53,7 +53,7 @@ namespace Timetables.Interop
 		{		
 			TimeSpan diff = DateTime.Parse(iso8601) - DateTime.Now;
 
-			return diff.TotalSeconds < 0 ? TimeSpanToString(diff) + " ago" : "in " + TimeSpanToString(diff); 
+			return diff.TotalSeconds < 0 ? "Left " + TimeSpanToString(diff) + " ago" : "Leaves in " + TimeSpanToString(diff); 
 		}
 
 		/// <summary>
@@ -66,5 +66,12 @@ namespace Timetables.Interop
 			var d = DateTime.Parse(iso8601);
 			return d.Hour + ":" + d.Minute.ToString("00");
 		}
+
+		/// <summary>
+		/// Loads CSS stylesheet from the given file and returns its content.
+		/// </summary>
+		/// <param name="path">Path to the stylesheet.</param>
+		/// <returns>Content of the file.</returns>
+		public string LoadCssStylesheet(string path) => "<style>" + new System.IO.StreamReader(path).ReadToEnd() + "</style>";
 	}
 }

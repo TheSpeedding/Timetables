@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using System.Drawing;
 
 namespace Timetables.Client
 { 
@@ -52,7 +53,7 @@ namespace Timetables.Client
 		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
 		/// <param name="replaceIdsWithNames">Indicates whether the IDs should be replaced with corresponding names.</param>
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
-		public static string ConvertObjectToTransformedString(this object o, string xsltPath, bool replaceIdsWithNames = false)
+		public static string TransformToHtml(this object o, string xsltPath, bool replaceIdsWithNames = false)
 		{
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
