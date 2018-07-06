@@ -14,7 +14,7 @@ namespace Timetables.Interop
 	public class Scripting
 	{
 		public static readonly Scripting ObjectForScripting = new Scripting();
-		private Scripting() { }
+		protected Scripting() { }
 
 		/// <summary>
 		/// Returns total number of transfers in the journey represented as a string.

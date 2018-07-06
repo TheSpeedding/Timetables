@@ -63,6 +63,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scripting.cs" />
     <Compile Include="Windows\NewJourneyWindow.cs">
       <SubType>Form</SubType>
     </Compile>

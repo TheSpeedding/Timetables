@@ -33,7 +33,10 @@
 								<a href="#">Map</a>
 							</li>
 							<li>
-								<a href="#">Detail</a>
+								<a href="#">
+									<xsl:attribute name="onClick">javascript: window.external.GoForward(<xsl:value-of select="position() - 1"/>);</xsl:attribute>
+									<xsl:text>Detail</xsl:text>
+								</a>
 							</li>
 							<li>
 								<a href="#">Print</a>

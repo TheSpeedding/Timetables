@@ -95,9 +95,7 @@
 														<xsl:value-of select="./MeanOfTransport/text()"/>
 													</xsl:attribute>
 
-													<xsl:attribute name="style">
-														background-color: <xsl:value-of select="./LineColor/@Web"/>;
-													</xsl:attribute>
+													<xsl:attribute name="style">background-color: <xsl:value-of select="./LineColor/@Web"/>;</xsl:attribute>
 
 													<xsl:attribute name="title">
 														<xsl:value-of select="./SourceStopName/text()"/>

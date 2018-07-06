@@ -20,7 +20,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
-			resultsWebBrowser.ObjectForScripting = Timetables.Interop.Scripting.ObjectForScripting;
+			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.DepartureBoardScripting(this);
 
 			Text = $"Departures ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 			
