@@ -16,10 +16,14 @@ namespace Timetables.Application.Desktop
 {
 	public partial class JourneyResultsWindow : DockContent
 	{
+		private List<Journey> journeys;
+
 		public JourneyResultsWindow(RouterResponse jResponse, string source, string target, DateTime dateTime)
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
+
+			journeys = jResponse.Journeys;
 
 			resultsWebBrowser.ObjectForScripting = Timetables.Interop.Scripting.ObjectForScripting;
 
