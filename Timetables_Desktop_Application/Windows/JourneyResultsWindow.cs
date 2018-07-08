@@ -18,19 +18,27 @@ namespace Timetables.Application.Desktop
 	{
 		public List<Journey> Journeys { get; set; }
 		public WebBrowser WebBrowser => resultsWebBrowser;
-
-		public JourneyResultsWindow(RouterResponse jResponse, string source, string target, DateTime dateTime)
+		public JourneyResultsWindow()
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-
-			Journeys = jResponse.Journeys;
-
 			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.JourneyScripting(this);
+		}
+		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime) : this()
+		{
+			Journeys = rResponse.Journeys;			
 
-			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
+			Text = $"Journeys ({ rResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = jResponse.TransformToHtml("JourneysSimpleToHtml.xslt", true);
+			resultsWebBrowser.DocumentText = rResponse.TransformToHtml("xslt/JourneysSimpleToHtml.xslt", true);
+		}
+		public JourneyResultsWindow(Journey journey) : this()
+		{
+			Journeys = new List<Journey> { journey };
+
+			Text = $"Journey - { DataFeedGlobals.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeedGlobals.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.ArrivalDateTime.ToShortTimeString() } { journey.ArrivalDateTime.ToShortDateString() }";
+
+			resultsWebBrowser.DocumentText = Journeys[0].TransformToHtml("xslt/JourneyDetailToHtml.xslt", true);
 		}
 	}
 }

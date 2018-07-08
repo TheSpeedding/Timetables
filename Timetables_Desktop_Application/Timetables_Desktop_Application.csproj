@@ -199,6 +199,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy "$(ProjectDir)..\Timetables_Webbrowser_Stuff\*" "$(ProjectDir)$(OutDir)"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

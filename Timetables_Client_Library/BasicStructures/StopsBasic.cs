@@ -92,6 +92,6 @@ namespace Timetables.Structures.Basic
 		/// Returns stop represented by the index.
 		/// </summary>
 		/// <param name="index">Index of the stop.</param>
-		public StopBasic FindByIndex(int index) => this[index];
+		public StopBasic FindByIndex(uint index) => this[(int)index];
 	}
 }

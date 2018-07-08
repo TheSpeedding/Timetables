@@ -16,7 +16,6 @@ namespace Timetables.Interop
 	public class JourneyScripting : Scripting
 	{
 		private JourneyResultsWindow window;
-		private Stack<string> navigation = new Stack<string>();
 
 		/// <summary>
 		/// Initializes the object.
@@ -25,30 +24,10 @@ namespace Timetables.Interop
 		public JourneyScripting(JourneyResultsWindow window) => this.window = window;
 
 		/// <summary>
-		/// Navigates back to the previous content.
-		/// </summary>
-		public void GoBack()
-		{
-			window.WebBrowser.Document.OpenNew(false);
-			window.WebBrowser.Document.Write(navigation.Pop());
-		}
-
-		/// <summary>
-		/// Navigates forward to the following content.
-		/// </summary>
-		/// <param name="content">New string content.</param>
-		public void GoForward(string content)
-		{
-			navigation.Push(window.WebBrowser.DocumentText);
-			window.WebBrowser.Document.OpenNew(false);
-			window.WebBrowser.Document.Write(content);
-		}
-		
-		/// <summary>
-		/// Navigates forward to the following content.
+		/// Shows detail of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		public void ShowJourneyDetail(int index) => GoForward(window.Journeys[index].TransformToHtml("JourneyDetailToHtml.xslt", true));
+		public void ShowJourneyDetail(int index) => new JourneyResultsWindow(window.Journeys[index]).Show(window.DockPanel, window.DockState);
 	}
 
 	/// <summary>

@@ -73,5 +73,12 @@ namespace Timetables.Interop
 		/// <param name="path">Path to the stylesheet.</param>
 		/// <returns>Content of the file.</returns>
 		public string LoadCssStylesheet(string path) => "<style>" + new System.IO.StreamReader(path).ReadToEnd() + "</style>";
+
+		/// <summary>
+		/// Gets absolute path.
+		/// </summary>
+		/// <param name="path">Relative path.</param>
+		/// <returns>A path to the active directory.</returns>
+		public string GetAbsolutePath(string path) => System.IO.Directory.GetCurrentDirectory() + "/" + path;
 	}
 }

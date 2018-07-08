@@ -95,12 +95,15 @@ body {
      box-shadow: 1px 1px 1px 1px #ccc;
 }
  
- .journey .main .segments .Footpath {
+ .journey .main .segments .Footpath {    
      font-size: 70%;
-     margin: 0;
+     padding: 10px 8px 10px 8px; 
+     content: url('img/icons8-walking-32.png');
+     position: relative;
+     top: 3px;
      background-color: grey;
  }
-
+ 
  .journey .main .time {
      margin: 10px 10px 10px 10px;
      text-align: center;
