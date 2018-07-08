@@ -24,7 +24,7 @@ namespace Timetables.Client
 		public static implicit operator XmlColor(Color c) => new XmlColor(c);
 
 		[XmlAttribute]
-		public string Web
+		public string Hex
 		{
 			get { return ColorTranslator.ToHtml(c); }
 			set

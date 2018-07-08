@@ -9,9 +9,9 @@
 			
 			<head>
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-					<script>
-						javascript: document.write(window.external.LoadCssStylesheet('JourneysSimpleToHtml.css'));
-					</script>
+				<script>
+					javascript: document.write(window.external.LoadCssStylesheet('JourneysSimpleToHtml.css'));
+				</script>
 				<title>Journeys (<xsl:value-of select="count(//Journey)"/>) - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 			
@@ -34,7 +34,7 @@
 							</li>
 							<li>
 								<a href="#">
-									<xsl:attribute name="onClick">javascript: window.external.GoForward(<xsl:value-of select="position() - 1"/>);</xsl:attribute>
+									<xsl:attribute name="onClick">javascript: window.external.ShowJourneyDetail(<xsl:value-of select="position() - 1"/>);</xsl:attribute>
 									<xsl:text>Detail</xsl:text>
 								</a>
 							</li>
@@ -81,7 +81,8 @@
 									<xsl:for-each select="./JourneySegments/JourneySegment">
 										<xsl:choose>
 
-											<xsl:when test="not(./MeanOfTransport)">
+											<!-- <xsl:when test="not(./MeanOfTransport)"> -->
+											<xsl:when test="@xsi:type = 'FootpathSegment'">
 												<li class="Footpath">
 													Transfer
 												</li>
@@ -95,7 +96,7 @@
 													</xsl:attribute>
 
 													<xsl:attribute name="style">
-														background-color: <xsl:value-of select="./LineColor/@Web"/>;
+														background-color: <xsl:value-of select="./LineColor/@Hex"/>;
 													</xsl:attribute>
 
 													<xsl:attribute name="title">

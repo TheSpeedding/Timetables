@@ -12,23 +12,21 @@
 				<script>
 					javascript: document.write(window.external.LoadCssStylesheet('JourneyDetailToHtml.css'));
 				</script>
-				<title>
-					Journey - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/>
-				</title>
+				<title>Journey - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 
 			<body>
-				<xsl:for-each select="//Journey">
+				
 					<div class="journey">
 
 						<div class="leaves-in">
-							<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">
+							<xsl:if test="./Journey/JourneySegments/JourneySegment/Outdated[text() = 'true']">
 								<span class="outdated">
 									Outdated!
 								</span>
 							</xsl:if>
 							<script>
-								javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
+								javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
 							</script>
 						</div>
 
@@ -37,10 +35,7 @@
 								<a href="#">Map</a>
 							</li>
 							<li>
-								<a href="#">Detail</a>
-							</li>
-							<li>
-								<a href="#">Print</a>
+								<a href="#" onClick="javascript: window.external.GoBack();">Back</a>
 							</li>
 						</ul>
 
@@ -50,13 +45,13 @@
 
 								<div class="duration">
 									<script>
-										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
 									</script>
 								</div>
 
 								<div class="transfers">
 									<script>
-										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
+										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./Journey/JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
 									</script>
 								</div>
 
@@ -68,18 +63,18 @@
 
 									<div class="time">
 										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
+											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
 										</script>
 									</div>
 
 									<div class="station">
-										<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/>
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/>
 									</div>
 
 								</div>
 
 								<ol class="segments">
-									<xsl:for-each select="./JourneySegments/JourneySegment">
+									<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
 										<xsl:choose>
 
 											<xsl:when test="not(./MeanOfTransport)">
@@ -116,12 +111,12 @@
 
 									<div class="time">
 										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
 										</script>
 									</div>
 
 									<div class="station">
-										<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/>
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/>
 									</div>
 
 								</div>
@@ -129,7 +124,7 @@
 							</div>
 						</div>
 					</div>
-				</xsl:for-each>
+					
 			</body>
 		</html>
 	</xsl:template>

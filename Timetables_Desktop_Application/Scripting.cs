@@ -27,7 +27,11 @@ namespace Timetables.Interop
 		/// <summary>
 		/// Navigates back to the previous content.
 		/// </summary>
-		public void GoBack() => window.resultsWebBrowser.DocumentText = navigation.Pop();
+		public void GoBack()
+		{
+			window.WebBrowser.Document.OpenNew(false);
+			window.WebBrowser.Document.Write(navigation.Pop());
+		}
 
 		/// <summary>
 		/// Navigates forward to the following content.
@@ -35,21 +39,16 @@ namespace Timetables.Interop
 		/// <param name="content">New string content.</param>
 		public void GoForward(string content)
 		{
-			navigation.Push(window.resultsWebBrowser.DocumentText);
-			window.resultsWebBrowser.DocumentText = content;
+			navigation.Push(window.WebBrowser.DocumentText);
+			window.WebBrowser.Document.OpenNew(false);
+			window.WebBrowser.Document.Write(content);
 		}
-
-		/// <summary>
-		/// Navigates forward to the following content.
-		/// </summary>
-		/// <param name="journey">New journey content.</param>
-		public void GoForward(Journey journey) => GoForward(journey.TransformToHtml("JourneyDetailToHtml.xslt", true));
-
+		
 		/// <summary>
 		/// Navigates forward to the following content.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		public void GoForward(int index) => GoForward(window.Journeys[index]);
+		public void ShowJourneyDetail(int index) => GoForward(window.Journeys[index].TransformToHtml("JourneyDetailToHtml.xslt", true));
 	}
 
 	/// <summary>

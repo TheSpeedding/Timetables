@@ -60,6 +60,6 @@
 
 		#endregion
 
-		internal System.Windows.Forms.WebBrowser resultsWebBrowser;
+		private System.Windows.Forms.WebBrowser resultsWebBrowser;
 	}
 }

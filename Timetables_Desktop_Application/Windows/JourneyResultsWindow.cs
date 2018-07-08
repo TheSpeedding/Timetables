@@ -17,6 +17,7 @@ namespace Timetables.Application.Desktop
 	public partial class JourneyResultsWindow : DockContent
 	{
 		public List<Journey> Journeys { get; set; }
+		public WebBrowser WebBrowser => resultsWebBrowser;
 
 		public JourneyResultsWindow(RouterResponse jResponse, string source, string target, DateTime dateTime)
 		{
@@ -30,7 +31,6 @@ namespace Timetables.Application.Desktop
 			Text = $"Journeys ({ jResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = jResponse.TransformToHtml("JourneysSimpleToHtml.xslt", true);
-			Clipboard.SetText(jResponse.TransformToHtml("JourneysSimpleToHtml.xslt", true));
 		}
 	}
 }

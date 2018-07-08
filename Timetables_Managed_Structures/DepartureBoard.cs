@@ -115,5 +115,11 @@ namespace Timetables.Client
 			foreach (var x in intStops)
 				IntermediateStops.Add(new IntermediateStop(new DateTime(1970, 1, 1).AddSeconds(x.Key), x.Value));
 		}
+
+		/// <summary>
+		/// Serializes object into the text writer.
+		/// </summary>
+		/// <param name="writer">Text writer.</param>
+		public void Serialize(TextWriter writer) => new XmlSerializer(typeof(Departure)).Serialize(writer, this);
 	}
 }

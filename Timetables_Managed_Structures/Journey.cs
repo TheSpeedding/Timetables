@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -55,6 +56,12 @@ namespace Timetables.Client
 		public List<JourneySegment> JourneySegments { get; set; }
 		internal Journey() { }
 		public Journey(List<JourneySegment> list) => JourneySegments = list;
+
+		/// <summary>
+		/// Serializes object into the text writer.
+		/// </summary>
+		/// <param name="writer">Text writer.</param>
+		public void Serialize(TextWriter writer) => new XmlSerializer(typeof(Journey)).Serialize(writer, this);
 	}
 
 	/// <summary>
