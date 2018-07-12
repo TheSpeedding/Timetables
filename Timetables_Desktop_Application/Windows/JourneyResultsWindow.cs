@@ -30,7 +30,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"Journeys ({ rResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = rResponse.TransformToHtml("xslt/JourneysSimpleToHtml.xslt", true);
+			resultsWebBrowser.DocumentText = rResponse.TransformToHtml("xslt/JourneysSimpleToHtml.xslt", "css/JourneysSimpleToHtml.css", true);
 		}
 		public JourneyResultsWindow(Journey journey) : this()
 		{
@@ -38,7 +38,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"Journey - { DataFeedGlobals.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeedGlobals.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.ArrivalDateTime.ToShortTimeString() } { journey.ArrivalDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Journeys[0].TransformToHtml("xslt/JourneyDetailToHtml.xslt", true);
+			resultsWebBrowser.DocumentText = Journeys[0].TransformToHtml("xslt/JourneyDetailToHtml.xslt", "css/JourneyDetailToHtml.css", true);
 		}
 	}
 }

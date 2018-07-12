@@ -51,9 +51,10 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="o">Object to serialize.</param>
 		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
-		/// <param name="replaceIdsWithNames">Indicates whether the IDs should be replaced with corresponding names.</param>
+		/// <param name="cssPath">Path to CSS stylesheet.
+		/// <param name="replaceIdsWithNames">Indicates whether the IDs should be replaced with corresponding names.</param></param>
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
-		public static string TransformToHtml(this object o, string xsltPath, bool replaceIdsWithNames = false)
+		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null, bool replaceIdsWithNames = false)
 		{
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
@@ -78,8 +79,8 @@ namespace Timetables.Client
 			sw = new System.IO.StringWriter();
 
 			xsltTrans.Transform(xPathDoc, null, sw);
-
-			return sw.ToString();
+			
+			return (cssPath == null ? "" : "<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>") + sw.ToString();
 		}
 	}
 }

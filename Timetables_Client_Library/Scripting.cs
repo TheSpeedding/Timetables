@@ -34,7 +34,7 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="t">Timespan to convert.</param>
 		/// <returns>Timespan as a string.</returns>
-		private string TimeSpanToString(TimeSpan t) => (t.Hours > 0 ? t.Hours + (t.Hours == 1 ? " hour " : " hours ") : "") + t.Minutes + (t.Minutes == 1 ? " minute " : " minutes ");
+		private string TimeSpanToString(TimeSpan t) => (t.Days > 0 ? t.Days + (t.Days == 1 ? " day " : " days ") : "") + (t.Hours > 0 ? t.Hours + (t.Hours == 1 ? " hour " : " hours ") : "") + t.Minutes + (t.Minutes == 1 ? " minute " : " minutes ");
 
 		/// <summary>
 		/// Computes difference of two datetimes and returns total duration.
@@ -53,7 +53,7 @@ namespace Timetables.Interop
 		{		
 			TimeSpan diff = DateTime.Parse(iso8601) - DateTime.Now;
 
-			return diff.TotalSeconds < 0 ? "Left " + TimeSpanToString(diff) + " ago" : "Leaves in " + TimeSpanToString(diff); 
+			return diff.TotalSeconds < 0 ? "Left " + TimeSpanToString(diff.Negate()) + " ago" : "Leaves in " + TimeSpanToString(diff); 
 		}
 
 		/// <summary>
@@ -65,20 +65,6 @@ namespace Timetables.Interop
 		{
 			var d = DateTime.Parse(iso8601);
 			return d.Hour + ":" + d.Minute.ToString("00");
-		}
-
-		/// <summary>
-		/// Loads CSS stylesheet from the given file and returns its content.
-		/// </summary>
-		/// <param name="path">Path to the stylesheet.</param>
-		/// <returns>Content of the file.</returns>
-		public string LoadCssStylesheet(string path) => "<style>" + new System.IO.StreamReader(path).ReadToEnd() + "</style>";
-
-		/// <summary>
-		/// Gets absolute path.
-		/// </summary>
-		/// <param name="path">Relative path.</param>
-		/// <returns>A path to the active directory.</returns>
-		public string GetAbsolutePath(string path) => System.IO.Directory.GetCurrentDirectory() + "/" + path;
+		}		
 	}
 }

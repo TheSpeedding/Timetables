@@ -9,9 +9,6 @@
 
 			<head>
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-				<script>
-					javascript: document.write(window.external.LoadCssStylesheet('css/JourneyDetailToHtml.css'));
-				</script>
 				<title>Journey - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 
