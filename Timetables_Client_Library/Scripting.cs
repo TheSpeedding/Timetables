@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Timetables.Client;
 
 namespace Timetables.Interop
 {
@@ -66,5 +63,12 @@ namespace Timetables.Interop
 			var d = DateTime.Parse(iso8601);
 			return d.Hour + ":" + d.Minute.ToString("00");
 		}		
+
+		/// <summary>
+		/// Replaces stop ID with coressponding name.
+		/// </summary>
+		/// <param name="id">ID of the stop.</param>
+		/// <returns>Name of the stop.</returns>
+		public string ReplaceIdWithName(uint id) => DataFeedGlobals.Basic.Stops.FindByIndex(id).Name;
 	}
 }

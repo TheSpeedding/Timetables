@@ -23,8 +23,8 @@ namespace Timetables.Application.Desktop
 			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.DepartureBoardScripting(this);
 
 			Text = $"Departures ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
-			
-			resultsWebBrowser.DocumentText = "<html><body><script>javascript: document.write(window.external.TotalTransfersToString(1));</script></body></html>";
+
+			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml("xslt/DepartureBoardToHtml.xslt", "css/DepartureBoardToHtml.css");
 		}
 	}
 }

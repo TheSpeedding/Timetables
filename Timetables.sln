@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Desktop_Applicat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Webbrowser_Stuff", "Timetables_Webbrowser_Stuff", "{A16A35E6-3A26-4C26-93B4-9B73648262A8}"
 	ProjectSection(SolutionItems) = preProject
+		Timetables_Webbrowser_Stuff\DepartureBoardToHtml.css = Timetables_Webbrowser_Stuff\DepartureBoardToHtml.css
+		Timetables_Webbrowser_Stuff\DepartureBoardToHtml.xslt = Timetables_Webbrowser_Stuff\DepartureBoardToHtml.xslt
 		Timetables_Webbrowser_Stuff\JourneyDetailToHtml.css = Timetables_Webbrowser_Stuff\JourneyDetailToHtml.css
 		Timetables_Webbrowser_Stuff\JourneyDetailToHtml.xslt = Timetables_Webbrowser_Stuff\JourneyDetailToHtml.xslt
 		Timetables_Webbrowser_Stuff\JourneysSimpleToHtml.css = Timetables_Webbrowser_Stuff\JourneysSimpleToHtml.css

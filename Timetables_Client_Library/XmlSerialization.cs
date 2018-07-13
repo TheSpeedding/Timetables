@@ -44,6 +44,12 @@ namespace Timetables.Client
 			}
 
 			return newDoc;
+
+			System.IO.StringWriter sw = new System.IO.StringWriter();
+			sw = new System.IO.StringWriter();
+			doc.ReplaceStopIdsWithNames().Save(sw);
+			doc = new XmlDocument();
+			doc.LoadXml(sw.ToString());
 		}
 
 		/// <summary>
@@ -52,9 +58,8 @@ namespace Timetables.Client
 		/// <param name="o">Object to serialize.</param>
 		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
 		/// <param name="cssPath">Path to CSS stylesheet.
-		/// <param name="replaceIdsWithNames">Indicates whether the IDs should be replaced with corresponding names.</param></param>
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
-		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null, bool replaceIdsWithNames = false)
+		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null)
 		{
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
@@ -63,14 +68,6 @@ namespace Timetables.Client
 
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(sw.ToString());
-
-			if (replaceIdsWithNames)
-			{
-				sw = new System.IO.StringWriter();
-				doc.ReplaceStopIdsWithNames().Save(sw);
-				doc = new XmlDocument();
-				doc.LoadXml(sw.ToString());
-			}
 
 			XPathDocument xPathDoc = new XPathDocument(new XmlNodeReader(doc));
 			XslCompiledTransform xsltTrans = new XslCompiledTransform();

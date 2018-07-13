@@ -2,29 +2,30 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="msxsl xsi">
 	
-	<xsl:output method="html" indent="yes"/>
+	<xsl:output method="html" indent="no"/>
 	
 	<xsl:template match="/">
-		<html>
-			
+		<html>			
 			<head>
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-				<title>Journeys (<xsl:value-of select="count(//Journey)"/>) - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="//Journey[position() = 1]/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 			
 			<body>
 				<xsl:for-each select="//Journey">
 					<div class="journey">
 						
-						<div class="leaves-in">							
-								<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">
+						<div class="leaves-in">														
+								<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">			
+									<!-- Indicates whether the journey uses outdated timetables. -->
 									<span class="outdated">
 										Outdated!
 									</span>
 								</xsl:if>
+							<!-- Writes the relative time that the journey leaves in. -->
 							<script>javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));</script>
 						</div>
 						
+						<!-- Links to other windows. -->
 						<ul class="tools">
 							<li>
 								<a href="#">Map</a>
@@ -44,12 +45,14 @@
 
 							<div class="info">
 								
+								<!-- Writes total duration of the journey. -->
 								<div class="duration">
 									<script>
 										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
 									</script>
 								</div>
 
+								<!-- Writes number of transfers. -->
 								<div class="transfers">
 									<script>
 										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
@@ -60,6 +63,7 @@
 
 							<div class="main">
 
+								<!-- Writes info about source station, i.e. leaving time and its name. -->
 								<div class="departure">
 
 									<div class="time">
@@ -69,11 +73,14 @@
 									</div>
 
 									<div class="station">
-										<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/>
+										<script>
+											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>));
+										</script>										
 									</div>
 
 								</div>
 
+								<!-- Writes information about the journey, i.e. its segments. -->
 								<ol class="segments">
 									<xsl:for-each select="./JourneySegments/JourneySegment">
 										<xsl:choose>
@@ -95,12 +102,6 @@
 														background-color: <xsl:value-of select="./LineColor/@Hex"/>;
 													</xsl:attribute>
 
-													<xsl:attribute name="title">
-														<xsl:value-of select="./SourceStopName/text()"/>
-														<xsl:text> - </xsl:text>
-														<xsl:value-of select="./TargetStopName/text()"/>
-													</xsl:attribute>
-
 													<xsl:value-of select="./LineLabel/text()"/>
 
 												</li>
@@ -110,6 +111,7 @@
 									</xsl:for-each>
 								</ol>
 
+								<!-- Writes info about target station, i.e. departure time and its name. -->
 								<div class="arrival">
 
 									<div class="time">
@@ -119,7 +121,9 @@
 									</div>
 
 									<div class="station">
-										<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/>
+										<script>
+											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>));
+										</script>										
 									</div>
 
 								</div>

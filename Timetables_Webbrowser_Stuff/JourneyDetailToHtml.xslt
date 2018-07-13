@@ -2,209 +2,212 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="msxsl xsi">
 
-	<xsl:output method="html" indent="yes"/>
+	<xsl:output method="html" indent="no"/>
 
 	<xsl:template match="/">
 		<html>
-
 			<head>
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-				<title>Journey - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/> - <xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/></title>
 			</head>
 
-			<body>				
-				
-					<div class="journey">
+			<body>
 
-						<div class="leaves-in">
-							<xsl:if test="./Journey/JourneySegments/JourneySegment/Outdated[text() = 'true']">
-								<span class="outdated">
-									Outdated!
-								</span>
-							</xsl:if>
-							<script>
-								javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
-							</script>
+				<div class="journey">
+
+					<div class="leaves-in">
+						<xsl:if test="./Journey/JourneySegments/JourneySegment/Outdated[text() = 'true']">
+							<!-- Indicates whether the journey uses outdated timetables. -->
+							<span class="outdated">
+								Outdated!
+							</span>
+						</xsl:if>
+						<!-- Writes the relative time that the journey leaves in. -->
+						<script>
+							javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
+						</script>
+					</div>
+
+					<!-- Links to other windows. -->
+					<ul class="tools">
+						<li>
+							<a href="#">Map</a>
+						</li>
+						<li>
+							<a href="#">Print</a>
+						</li>
+					</ul>
+
+					<div class="box">
+
+						<div class="info">
+
+							<!-- Writes total duration of the journey. -->
+							<div class="duration">
+								<script>
+									javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+								</script>
+							</div>
+
+							<!-- Writes number of transfers. -->
+							<div class="transfers">
+								<script>
+									javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./Journey/JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
+								</script>
+							</div>
+
 						</div>
 
-						<ul class="tools">
-							<li>
-								<a href="#">Map</a>
-							</li>
-							<li>
-								<a href="#">Print</a>
-							</li>
-						</ul>
-						
-						<!-- Basic info. -->
+						<div class="main">
 
-						<div class="box">
+							<!-- Writes info about source station, i.e. leaving time and its name. -->
+							<div class="departure">
 
-							<div class="info">
-
-								<div class="duration">
+								<div class="time">
 									<script>
-										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+										javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
 									</script>
 								</div>
 
-								<div class="transfers">
+								<div class="station">
 									<script>
-										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./Journey/JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
+										javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>));
 									</script>
 								</div>
 
 							</div>
 
-							<div class="main">
+							<!-- Writes information about the journey, i.e. its segments. -->
+							<ol class="segments">
+								<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
+									<xsl:choose>
 
-								<div class="departure">
+										<xsl:when test="@xsi:type = 'FootpathSegment'">
+											<li class="Footpath">
+												<img width="20" height="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4gcIDykjDbFNcgAAAiFJREFUWMPFlzFoVEEQhv/RM4l3yIkkNkEtRJRTo4WEkEoQRJRoZWG0tAjaiIWdjYKkEOxSi40RVAghEFDEwtIrUmgjYiEIJgp6xhzh4n02e7Cuz+Pu3tvn3+wyOzv/v7uzO+9JKQBUgBdAA6gC48oLQBlY5k/8Aka7ibMphYZjkoYS4p3LS8BAhJhdH8FP/sZonnkwBtSAOvADOK3/AWAXsLWXuYUeyAYkTUk6K6lf0pKkG2ZWz2OlO4D3Cec+lwd5BfjEv3E4JvkJl2jt8CgW+eWAaBFYTRBQB0pZk/cDHzyS20CpzS7MxEi61ns/5WyXEojXvf7eLAXsBtZc4O3O9jRBwD5XiFq4BwxmlfkAX4Gis60H5MvANuBUYK8BT4ByGgHnXbA3QJ87khBLQMH5bwFmEq7rSK/VcMy1nyU1JH1L8HltZhuSZGYNM7si6YCkSUlrzmdP2nJcNTPMrClpOhgbAsw3mFnNzB6aWUlS0czmez2CAnAwsG0G3gVbfCivqnfLtROBgJVwF2IJWAUWXH82EHE3NvlRj+yiu3pfgseoHFPAfY/ssbNdDXahGot8p/vkAmgCE97YfCDiQgwBDzyC761X0Y0NB6X6Y+xyPJLgcy3wmc2KfNBlftMFvtPG96UnoAkcyULAcy/o2w4K14bn/yot+aS3mpVOrhhwPSzTaQTc9H44z3Qx75knYDiNgD7gJLC/y3lF4DhQ6cT/N9dexPM3mnpEAAAAAElFTkSuQmCC"/>
+											</li>
+										</xsl:when>
 
-									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
-										</script>
-									</div>
+										<xsl:otherwise>
+											<li>
 
-									<div class="station">
-										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopName/text()"/>
-									</div>
+												<xsl:attribute name="class">
+													<xsl:value-of select="./MeanOfTransport/text()"/>
+												</xsl:attribute>
 
+												<xsl:attribute name="style">
+													background-color: <xsl:value-of select="./LineColor/@Hex"/>;
+												</xsl:attribute>
+
+												<xsl:value-of select="./LineLabel/text()"/>
+
+											</li>
+										</xsl:otherwise>
+
+									</xsl:choose>
+								</xsl:for-each>
+							</ol>
+
+							<!-- Writes info about target station, i.e. departure time and its name. -->
+							<div class="arrival">
+
+								<div class="time">
+									<script>
+										javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
+									</script>
 								</div>
 
-								<ol class="segments">
-									<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
-										<xsl:choose>
-
-											<xsl:when test="@xsi:type = 'FootpathSegment'">
-												<li class="Footpath">
-													<img width="20" height="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4gcIDykjDbFNcgAAAiFJREFUWMPFlzFoVEEQhv/RM4l3yIkkNkEtRJRTo4WEkEoQRJRoZWG0tAjaiIWdjYKkEOxSi40RVAghEFDEwtIrUmgjYiEIJgp6xhzh4n02e7Cuz+Pu3tvn3+wyOzv/v7uzO+9JKQBUgBdAA6gC48oLQBlY5k/8Aka7ibMphYZjkoYS4p3LS8BAhJhdH8FP/sZonnkwBtSAOvADOK3/AWAXsLWXuYUeyAYkTUk6K6lf0pKkG2ZWz2OlO4D3Cec+lwd5BfjEv3E4JvkJl2jt8CgW+eWAaBFYTRBQB0pZk/cDHzyS20CpzS7MxEi61ns/5WyXEojXvf7eLAXsBtZc4O3O9jRBwD5XiFq4BwxmlfkAX4Gis60H5MvANuBUYK8BT4ByGgHnXbA3QJ87khBLQMH5bwFmEq7rSK/VcMy1nyU1JH1L8HltZhuSZGYNM7si6YCkSUlrzmdP2nJcNTPMrClpOhgbAsw3mFnNzB6aWUlS0czmez2CAnAwsG0G3gVbfCivqnfLtROBgJVwF2IJWAUWXH82EHE3NvlRj+yiu3pfgseoHFPAfY/ssbNdDXahGot8p/vkAmgCE97YfCDiQgwBDzyC761X0Y0NB6X6Y+xyPJLgcy3wmc2KfNBlftMFvtPG96UnoAkcyULAcy/o2w4K14bn/yot+aS3mpVOrhhwPSzTaQTc9H44z3Qx75knYDiNgD7gJLC/y3lF4DhQ6cT/N9dexPM3mnpEAAAAAElFTkSuQmCC"/>
-												</li>
-											</xsl:when>
-
-											<xsl:otherwise>
-												<li>
-
-													<xsl:attribute name="class">
-														<xsl:value-of select="./MeanOfTransport/text()"/>
-													</xsl:attribute>
-
-													<xsl:attribute name="style">background-color: <xsl:value-of select="./LineColor/@Hex"/>;</xsl:attribute>
-
-													<xsl:attribute name="title">
-														<xsl:value-of select="./SourceStopName/text()"/>
-														<xsl:text> - </xsl:text>
-														<xsl:value-of select="./TargetStopName/text()"/>
-													</xsl:attribute>
-
-													<xsl:value-of select="./LineLabel/text()"/>
-
-												</li>
-											</xsl:otherwise>
-
-										</xsl:choose>
-									</xsl:for-each>
-								</ol>
-
-								<div class="arrival">
-
-									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
-										</script>
-									</div>
-
-									<div class="station">
-										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopName/text()"/>
-									</div>
-
+								<div class="station">
+									<script>
+										javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>));
+									</script>
 								</div>
-								
+
 							</div>
+
 						</div>
+					</div>		
+					
+					<!-- Detailed info. -->
 
-						<!-- Detailed info. -->
+					<hr/>
+					<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
 
-						<hr/>
-						<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
-
-							<div class="box detail">
+						<div class="box detail">
 								
-								<xsl:choose>
-									<xsl:when test="@xsi:type = 'FootpathSegment'">
-										<h1>
-											Transfer ·
-											<script>
-												javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./DepartureDateTime/text()"/>', '<xsl:value-of select="./ArrivalDateTime/text()"/>'));
-											</script>
-										</h1>
-									</xsl:when>
-									<xsl:otherwise>		
+							<xsl:choose>
+								<xsl:when test="@xsi:type = 'FootpathSegment'">
+									<h1>
+										Transfer ·
+										<script>
+											javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./DepartureDateTime/text()"/>', '<xsl:value-of select="./ArrivalDateTime/text()"/>'));
+										</script>
+									</h1>
+								</xsl:when>
+								<xsl:otherwise>		
 											
-										<h1>
+									<h1>
 
-											<xsl:attribute name="class">
-												<xsl:value-of select="./MeanOfTransport/text()"/>
-											</xsl:attribute>
+										<xsl:attribute name="class">
+											<xsl:value-of select="./MeanOfTransport/text()"/>
+										</xsl:attribute>
 
-											<xsl:attribute name="style">
-												background-color: <xsl:value-of select="./LineColor/@Hex"/>;
-											</xsl:attribute>
+										<xsl:attribute name="style">
+											background-color: <xsl:value-of select="./LineColor/@Hex"/>;
+										</xsl:attribute>
 
-											<xsl:attribute name="title">
-												<xsl:value-of select="./SourceStopName/text()"/>
-												<xsl:text> - </xsl:text>
-												<xsl:value-of select="./TargetStopName/text()"/>
-											</xsl:attribute>
+										<xsl:value-of select="./LineLabel/text()"/> · <xsl:value-of select="./Headsign/text()"/>
 
-											<xsl:value-of select="./LineLabel/text()"/> · <xsl:value-of select="./Headsign/text()"/>
-
-										</h1>
+									</h1>
 										
-									</xsl:otherwise>
-								</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
 								
 
-								<xsl:if test="@xsi:type = 'TripSegment'">
-									<ol>
-										<li>
+							<xsl:if test="@xsi:type = 'TripSegment'">
+								<ol>
+									<li>
+										<span style="font-weight: bold;">
 											<script>
 												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./DepartureDateTime/text()"/>'));
 											</script> ·
-											<span style="font-weight: bold;">
-												<xsl:value-of select="./SourceStopName/text()"/>
-											</span>
-										</li>
+											<script>
+												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./SourceStopID/text()"/>));
+											</script>
+										</span>
+									</li>
 
-										<xsl:for-each select="./IntermediateStops/IntermediateStop">
-
-											<li>
-												<script>
-													javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Arrival/text()"/>'));
-												</script> ·
-												<xsl:value-of select="./StopName/text()"/>
-											</li>
-
-										</xsl:for-each>
+									<xsl:for-each select="./IntermediateStops/IntermediateStop">
 
 										<li>
 											<script>
+												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Arrival/text()"/>'));
+											</script> ·
+											<script>
+												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./StopID/text()"/>));												
+											</script>
+										</li>
+
+									</xsl:for-each>
+
+									<li>
+										<span style="font-weight: bold;">
+											<script>
 												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./ArrivalDateTime/text()"/>'));
 											</script> ·
-											<span style="font-weight: bold;">
-												<xsl:value-of select="./TargetStopName/text()"/>
-											</span>
-										</li>
-									</ol>
-								</xsl:if>
+											<script>
+												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./TargetStopID/text()"/>));
+											</script>
+										</span>
+									</li>
+								</ol>
+							</xsl:if>
 
-							</div>
+						</div>
 
-						</xsl:for-each>
+					</xsl:for-each>
 
 
-					</div>
-					
+				</div>					
 			</body>
 		</html>
 	</xsl:template>
