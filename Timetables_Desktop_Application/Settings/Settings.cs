@@ -55,17 +55,15 @@ namespace Timetables.Application.Desktop
 
 				Language = (Language)int.Parse(settings.GetElementsByTagName("Language")?[0].InnerText);
 
-				Lockouts = new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
+				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
-				ExtraordinaryEvents = new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
+				ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
 			}
 			catch
 			{
 				System.Windows.Forms.MessageBox.Show("Problem occured while loading user settings. Using default settings instead.");
 				Theme = new Themes.BlueTheme();
 				Language = Language.English;
-				ExtraordinaryEvents = new Uri("");
-				Lockouts = new Uri("");
 				Save(true);
 			}
 		}
@@ -97,9 +95,9 @@ namespace Timetables.Application.Desktop
 
 			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts.AbsoluteUri;
 
-			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = DataFeedGlobals.BasicDataSource == null ? "" : DataFeedGlobals.BasicDataSource.AbsoluteUri;
+			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = DataFeedGlobals.BasicDataSource == null ? string.Empty : DataFeedGlobals.BasicDataSource.AbsoluteUri;
 
-			settings.GetElementsByTagName("FullDataUri")[0].InnerText = DataFeedGlobals.FullDataSource == null ? "" : DataFeedGlobals.FullDataSource.AbsoluteUri;
+			settings.GetElementsByTagName("FullDataUri")[0].InnerText = DataFeedGlobals.FullDataSource == null ? string.Empty : DataFeedGlobals.FullDataSource.AbsoluteUri;
 
 			settings.Save(".settings");
 		}

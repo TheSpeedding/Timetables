@@ -152,12 +152,14 @@
 			this.extraordinaryEventsToolStripMenuItem.Name = "extraordinaryEventsToolStripMenuItem";
 			this.extraordinaryEventsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.extraordinaryEventsToolStripMenuItem.Text = "E&xtraordinary events";
+			this.extraordinaryEventsToolStripMenuItem.Click += new System.EventHandler(this.extraordinaryEventsToolStripMenuItem_Click);
 			// 
 			// lockoutsToolStripMenuItem
 			// 
 			this.lockoutsToolStripMenuItem.Name = "lockoutsToolStripMenuItem";
 			this.lockoutsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.lockoutsToolStripMenuItem.Text = "&Lockouts";
+			this.lockoutsToolStripMenuItem.Click += new System.EventHandler(this.lockoutsToolStripMenuItem_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 

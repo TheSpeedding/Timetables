@@ -21,5 +21,9 @@ namespace Timetables.Application.Desktop
 		private void findDeparturesToolStripMenuItem_Click(object sender, EventArgs e) => new NewDepartureBoardWindow().Show(mainDockPanel, DockState.Document);
 
 		private void findjourneyToolStripMenuItem_Click(object sender, EventArgs e) => new NewJourneyWindow().Show(mainDockPanel, DockState.Document);
+
+		private void extraordinaryEventsToolStripMenuItem_Click(object sender, EventArgs e) => new ExtraEventsWindow().Show(mainDockPanel, DockState.Document);
+
+		private void lockoutsToolStripMenuItem_Click(object sender, EventArgs e) => new LockoutsWindow().Show(mainDockPanel, DockState.Document);
 	}
 }
