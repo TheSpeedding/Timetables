@@ -20,7 +20,15 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
-		public static Language Language { get; set; }		
+		public static Language Language { get; set; }
+		/// <summary>
+		/// Uri to the site that offers RSS feed for extraordinary events in traffic.
+		/// </summary>
+		public static Uri ExtraordinaryEvents { get; private set; }
+		/// <summary>
+		/// Uri to the site that offers RSS feed for lockouts in traffic.
+		/// </summary>
+		public static Uri Lockouts { get; private set; }
 		static Settings()
 		{
 			try
@@ -44,12 +52,18 @@ namespace Timetables.Application.Desktop
 				}
 
 				Language = (Language)int.Parse(settings.GetElementsByTagName("Language")?[0].InnerText);
+
+				Lockouts = new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
+
+				ExtraordinaryEvents = new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
 			}
 			catch
 			{
 				System.Windows.Forms.MessageBox.Show("Problem occured while loading user settings. Using default settings instead.");
 				Theme = new Themes.BlueTheme();
 				Language = Language.English;
+				ExtraordinaryEvents = new Uri("");
+				Lockouts = new Uri("");
 				Save(true);
 			}
 		}

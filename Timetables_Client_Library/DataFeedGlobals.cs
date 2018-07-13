@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using Timetables.Preprocessor;
 
 namespace Timetables.Client
@@ -28,7 +29,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Full data feed.
 		/// </summary>
-		public static Interop.DataFeedManaged Full { get { return fullData ?? throw new NotSupportedException("The application is running in the offline mode. Cannot access data."); } }
+		public static Interop.DataFeedManaged Full => fullData ?? throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
@@ -37,9 +38,18 @@ namespace Timetables.Client
 			Downloaded = false;
 
 			// TO-DO: THIS IS ONLY TEMPORARY SOLUTION.
-			if (!System.IO.Directory.Exists("basic"))
+			if (!System.IO.Directory.Exists("data"))
 			{
-				DataFeed.GetAndTransformDataFeed<GtfsDataFeed>("http://opendata.iprpraha.cz/DPP/JR/jrdata.zip");
+				try
+				{
+					XmlDocument settings = new XmlDocument();
+					settings.Load(".settings");
+					DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(settings.GetElementsByTagName("FullDataUri")[0].InnerText);
+				}
+				catch
+				{
+					throw new ArgumentException("Fatal error. Cannot process the data.");
+				}
 			}
 
 			Downloaded = true;

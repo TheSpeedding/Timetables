@@ -115,7 +115,7 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 		/// </summary>
 		public static void GetAndTransformDataFeed<T>(params string[] urls) where T : IDataFeed
         {
-			LoadingProgress?.Invoke("Preparing for the first launch.", 0);
+			LoadingProgress?.Invoke("Preparing for data download.", 0);
 
 			List<IDataFeed> dataList = new List<IDataFeed>(); // Data are added into the list only if they are (downloaded and) parsed successfully.
 			
