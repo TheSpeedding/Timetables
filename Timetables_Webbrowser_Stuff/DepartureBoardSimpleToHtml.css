@@ -19,6 +19,27 @@ body {
 			font-weight: bold;
 		}
 
+	.departure ul.tools {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		margin: 10px 30px 0 0;
+	}
+
+		.departure ul.tools li {
+			display: inline;
+			margin-left: 10px;
+		}
+
+		.departure ul.tools a {
+			color: grey;
+			text-decoration: none;
+		}
+
+			.departure ul.tools a:hover {
+				color: black;
+			}
+
 	.departure .box {
 		margin: 15px 0 15px 0;
 		position: relative;

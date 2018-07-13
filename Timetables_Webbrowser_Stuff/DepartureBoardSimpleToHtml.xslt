@@ -24,6 +24,24 @@
 							<!-- Writes the relative time that the trip leaves in. -->
 							<script>javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./DepartureDateTime/text()"/>'));</script>
 						</div>
+
+						<!-- Links to other windows. -->
+						<ul class="tools">
+							<li>
+								<a href="#">Map</a>
+							</li>
+							<li>
+								<a href="#">
+									<xsl:attribute name="onClick">
+										javascript: window.external.ShowDepartureDetail(<xsl:value-of select="position() - 1"/>);
+									</xsl:attribute>
+									<xsl:text>Detail</xsl:text>
+								</a>
+							</li>
+							<li>
+								<a href="#">Print</a>
+							</li>
+						</ul>
 						
 						<div class="box">
 

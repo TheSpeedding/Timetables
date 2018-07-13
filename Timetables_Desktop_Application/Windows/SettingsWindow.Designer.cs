@@ -61,7 +61,6 @@
 			// 
 			this.themeComboBox.DropDownHeight = 90;
 			this.themeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.themeComboBox.Enabled = false;
 			this.themeComboBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.themeComboBox.FormattingEnabled = true;
 			this.themeComboBox.IntegralHeight = false;

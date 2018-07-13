@@ -44,5 +44,10 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="window">Window that is relevant for this object.</param>
 		public DepartureBoardScripting(DepartureBoardResultsWindow window) => this.window = window;
+		/// <summary>
+		/// Shows detail of the departure.
+		/// </summary>
+		/// <param name="index">Index of the departure.</param>
+		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Departures[index]).Show(window.DockPanel, window.DockState);
 	}
 }

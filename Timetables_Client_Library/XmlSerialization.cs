@@ -45,11 +45,13 @@ namespace Timetables.Client
 
 			return newDoc;
 
+			/*
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			sw = new System.IO.StringWriter();
 			doc.ReplaceStopIdsWithNames().Save(sw);
 			doc = new XmlDocument();
 			doc.LoadXml(sw.ToString());
+			*/
 		}
 
 		/// <summary>
