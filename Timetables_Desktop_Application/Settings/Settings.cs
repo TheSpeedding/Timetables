@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Xml;
+using Timetables.Client;
+using Timetables.Preprocessor;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
@@ -90,6 +92,14 @@ namespace Timetables.Application.Desktop
 				settings.DocumentElement.AppendChild(settings.CreateElement("Language"));
 
 			settings.GetElementsByTagName("Language")[0].InnerText = ((int)Language).ToString();
+
+			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents.AbsoluteUri;
+
+			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts.AbsoluteUri;
+
+			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = DataFeedGlobals.BasicDataSource == null ? "" : DataFeedGlobals.BasicDataSource.AbsoluteUri;
+
+			settings.GetElementsByTagName("FullDataUri")[0].InnerText = DataFeedGlobals.FullDataSource == null ? "" : DataFeedGlobals.FullDataSource.AbsoluteUri;
 
 			settings.Save(".settings");
 		}

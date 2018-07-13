@@ -1,0 +1,8 @@
+<Timetables>
+  <Theme>0</Theme>
+  <Language>0</Language>
+  <FullDataUri>http://opendata.iprpraha.cz/DPP/JR/jrdata.zip</FullDataUri>
+  <BasicDataUri></BasicDataUri>
+  <ExtraEventsUri>https://pid.cz/feed/rss-mimoradnosti</ExtraEventsUri>
+  <LockoutsUri>https://pid.cz/feed/rss-vyluky</LockoutsUri>
+</Timetables>

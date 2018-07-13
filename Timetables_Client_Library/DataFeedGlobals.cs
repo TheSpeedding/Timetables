@@ -31,20 +31,39 @@ namespace Timetables.Client
 		/// </summary>
 		public static Interop.DataFeedManaged Full => fullData ?? throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
 		/// <summary>
+		/// Path to the data source.
+		/// </summary>
+		public static Uri FullDataSource { get; private set; }
+		public static Uri BasicDataSource { get; private set; }
+		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
 		public static void Load()
 		{
 			Downloaded = false;
 
+			try
+			{
+				XmlDocument settings = new XmlDocument();
+				settings.Load(".settings");
+
+				FullDataSource = OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
+
+				BasicDataSource = string.IsNullOrEmpty(settings.GetElementsByTagName("BasicDataUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("BasicDataUri")[0].InnerText);
+			}
+
+			catch (Exception ex)
+			{
+				throw new ArgumentException("Fatal error. Settings file is corrupted and thus cannot load the data.", ex);
+			}
+
+
 			// TO-DO: THIS IS ONLY TEMPORARY SOLUTION.
 			if (!System.IO.Directory.Exists("data"))
 			{
 				try
 				{
-					XmlDocument settings = new XmlDocument();
-					settings.Load(".settings");
-					DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(settings.GetElementsByTagName("FullDataUri")[0].InnerText);
+					DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource.AbsoluteUri);
 				}
 				catch
 				{
