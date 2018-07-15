@@ -31,15 +31,15 @@ namespace Timetables.Application.Desktop
 
 			await Task.Run(() =>
 			{
-				var loadingThread = new Thread(() => DataFeedGlobals.Load());
+				var loadingThread = new Thread(() => DataFeed.Load());
 
 				loadingThread.Start();
 
 				bool timerStarted = false;
 
-				while (!DataFeedGlobals.Loaded)
+				while (!DataFeed.Loaded)
 				{
-					if (DataFeedGlobals.Downloaded && !timerStarted)
+					if (DataFeed.Downloaded && !timerStarted)
 						timerStarted = true;
 					else if (timerStarted && loadingProgressBar.Value < 100)
 					{

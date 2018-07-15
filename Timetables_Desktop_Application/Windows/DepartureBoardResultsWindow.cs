@@ -28,15 +28,15 @@ namespace Timetables.Application.Desktop
 
 			Text = $"Departures ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml("xslt/DepartureBoardSimpleToHtml.xslt", "css/DepartureBoardSimpleToHtml.css");
+			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml(Settings.DepartureBoardSimpleXslt.FullName, Settings.DepartureBoardSimpleCss.FullName);
 		}
 		public DepartureBoardResultsWindow(Departure departure) : this()
 		{
 			Departures = new List<Departure> { departure };
 
-			Text = $"Departure - {  DataFeedGlobals.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
+			Text = $"Departure - {  DataFeed.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Departures[0].TransformToHtml("xslt/DepartureBoardDetailToHtml.xslt", "css/DepartureBoardDetailToHtml.css");
+			resultsWebBrowser.DocumentText = Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
 		}
 	}
 }

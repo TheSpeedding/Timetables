@@ -12,7 +12,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 			
-			foreach (var station in DataFeedGlobals.Basic.Stations)
+			foreach (var station in DataFeed.Basic.Stations)
 				stationComboBox.Items.Add(station);	
 		}
 
@@ -22,7 +22,7 @@ namespace Timetables.Application.Desktop
 
 			if (stationComboBox.SelectedItem == null)
 			{
-				station = DataFeedGlobals.Basic.Stations.FindByName(stationComboBox.Text);
+				station = DataFeed.Basic.Stations.FindByName(stationComboBox.Text);
 
 				if (station == null)
 				{
@@ -37,7 +37,7 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
 			DepartureBoardResponse dbResponse = null;
 
-			using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedGlobals.Full, dbRequest))
+			using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
 			{
 				dbProcessing.ObtainDepartureBoard();
 				dbResponse = dbProcessing.ShowDepartureBoard();

@@ -7,7 +7,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class offering data feed for GUI applications.
 	/// </summary>
-	public static class DataFeedGlobals
+	public static class DataFeed
 	{
 		private static Interop.DataFeedManaged fullData = null;
 		/// <summary>
@@ -64,7 +64,7 @@ namespace Timetables.Client
 			{
 				try
 				{
-					DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource.AbsoluteUri);
+					Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource.AbsoluteUri);
 				}
 				catch
 				{

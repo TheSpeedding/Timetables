@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using Timetables.Client;
 using Timetables.Preprocessor;
@@ -31,6 +32,38 @@ namespace Timetables.Application.Desktop
 		/// Uri to the site that offers RSS feed for lockouts in traffic.
 		/// </summary>
 		public static Uri Lockouts { get; private set; }
+		/// <summary>
+		/// Path to journey detail XSLT stylesheet.
+		/// </summary>
+		public static FileInfo JourneyDetailXslt => new FileInfo("xslt/JourneyDetailToHtml.xslt");
+		/// <summary>
+		/// Path to journey detail CSS stylesheet.
+		/// </summary>
+		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtml.css");
+		/// <summary>
+		/// Path to journey simple XSLT stylesheet.
+		/// </summary>
+		public static FileInfo JourneySimpleXslt => new FileInfo("xslt/JourneySimpleToHtml.xslt");
+		/// <summary>
+		/// Path to journey simple CSS stylesheet.
+		/// </summary>
+		public static FileInfo JourneySimpleCss => new FileInfo("css/JourneySimpleToHtml.css");
+		/// <summary>
+		/// Path to departure board detail XSLT stylesheet.
+		/// </summary>
+		public static FileInfo DepartureBoardDetailXslt => new FileInfo("xslt/DepartureBoardDetailToHtml.xslt");
+		/// <summary>
+		/// Path to departure board detail CSS stylesheet.
+		/// </summary>
+		public static FileInfo DepartureBoardDetailCss => new FileInfo("css/DepartureBoardDetailToHtml.css");
+		/// <summary>
+		/// Path to departure board simple XSLT stylesheet.
+		/// </summary>
+		public static FileInfo DepartureBoardSimpleXslt => new FileInfo("xslt/DepartureBoardSimpleToHtml.xslt");
+		/// <summary>
+		/// Path to departure board simple CSS stylesheet.
+		/// </summary>
+		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtml.css");
 		static Settings()
 		{
 			try
@@ -95,9 +128,9 @@ namespace Timetables.Application.Desktop
 
 			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts.AbsoluteUri;
 
-			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = DataFeedGlobals.BasicDataSource == null ? string.Empty : DataFeedGlobals.BasicDataSource.AbsoluteUri;
+			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = Client.DataFeed.BasicDataSource == null ? string.Empty : Client.DataFeed.BasicDataSource.AbsoluteUri;
 
-			settings.GetElementsByTagName("FullDataUri")[0].InnerText = DataFeedGlobals.FullDataSource == null ? string.Empty : DataFeedGlobals.FullDataSource.AbsoluteUri;
+			settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
 
 			settings.Save(".settings");
 		}

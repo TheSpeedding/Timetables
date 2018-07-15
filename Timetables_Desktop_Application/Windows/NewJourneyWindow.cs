@@ -20,7 +20,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
-			foreach (var station in DataFeedGlobals.Basic.Stations)
+			foreach (var station in DataFeed.Basic.Stations)
 			{
 				sourceComboBox.Items.Add(station);
 				targetComboBox.Items.Add(station);
@@ -34,7 +34,7 @@ namespace Timetables.Application.Desktop
 
 			if (comboBox.SelectedItem == null)
 			{
-				source = DataFeedGlobals.Basic.Stations.FindByName(comboBox.Text);
+				source = DataFeed.Basic.Stations.FindByName(comboBox.Text);
 
 				if (source == null)
 				{
@@ -61,7 +61,7 @@ namespace Timetables.Application.Desktop
 			var jRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
 			RouterResponse jResponse = null;					
 
-			using (var jProcessing = new Interop.RouterManaged(DataFeedGlobals.Full, jRequest))
+			using (var jProcessing = new Interop.RouterManaged(DataFeed.Full, jRequest))
 			{
 				jProcessing.ObtainJourneys();
 				jResponse = jProcessing.ShowJourneys();

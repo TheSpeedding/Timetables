@@ -69,6 +69,6 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="id">ID of the stop.</param>
 		/// <returns>Name of the stop.</returns>
-		public string ReplaceIdWithName(uint id) => DataFeedGlobals.Basic.Stops.FindByIndex(id).Name;
+		public string ReplaceIdWithName(uint id) => DataFeed.Basic.Stops.FindByIndex(id).Name;
 	}
 }
