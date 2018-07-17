@@ -57,7 +57,7 @@ namespace Timetables.Client
 
 			catch (Exception ex)
 			{
-				throw new ArgumentException("Fatal error. Settings file is corrupted and thus cannot load the data.", ex);
+				// throw new ArgumentException("Fatal error. Settings file is corrupted and thus cannot load the data.", ex);
 			}
 			
 			if (!System.IO.Directory.Exists("data") && OfflineMode)

@@ -76,12 +76,12 @@
 			this.themeComboBox.Size = new System.Drawing.Size(96, 23);
 			this.themeComboBox.Sorted = true;
 			this.themeComboBox.TabIndex = 0;
+			this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.themeComboBox_SelectedIndexChanged);
 			// 
 			// languageComboBox
 			// 
 			this.languageComboBox.DropDownHeight = 90;
 			this.languageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.languageComboBox.Enabled = false;
 			this.languageComboBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.languageComboBox.FormattingEnabled = true;
 			this.languageComboBox.IntegralHeight = false;
@@ -95,6 +95,7 @@
 			this.languageComboBox.Size = new System.Drawing.Size(96, 23);
 			this.languageComboBox.Sorted = true;
 			this.languageComboBox.TabIndex = 1;
+			this.languageComboBox.SelectedIndexChanged += new System.EventHandler(this.languageComboBox_SelectedIndexChanged);
 			// 
 			// SettingsWindow
 			// 

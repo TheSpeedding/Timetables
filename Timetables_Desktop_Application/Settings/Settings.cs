@@ -8,10 +8,6 @@ using WeifenLuo.WinFormsUI.Docking;
 namespace Timetables.Application.Desktop
 {
 	/// <summary>
-	/// Languages used in application.
-	/// </summary>
-	enum Language { English = 0, Czech = 1 }
-	/// <summary>
 	/// Settings for the application.
 	/// </summary>
 	static class Settings
@@ -23,7 +19,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
-		public static Language Language { get; set; }
+		public static Localization Language { get; set; }
 		/// <summary>
 		/// Uri to the site that offers RSS feed for extraordinary events in traffic.
 		/// </summary>
@@ -86,7 +82,7 @@ namespace Timetables.Application.Desktop
 						throw new ArgumentException();
 				}
 
-				Language = (Language)int.Parse(settings.GetElementsByTagName("Language")?[0].InnerText);
+				Language = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
@@ -96,7 +92,7 @@ namespace Timetables.Application.Desktop
 			{
 				System.Windows.Forms.MessageBox.Show("Problem occured while loading user settings. Using default settings instead.");
 				Theme = new Themes.BlueTheme();
-				Language = Language.English;
+				Language = Localization.GetTranslation("English");
 				Save(true);
 			}
 		}
@@ -110,25 +106,37 @@ namespace Timetables.Application.Desktop
 					sw.Write("<Timetables></Timetables>");
 
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");
+			settings.Load(".settings");					
 
-			if (settings.GetElementsByTagName("Theme").Count == 0)
-				settings.DocumentElement.AppendChild(settings.CreateElement("Theme"));
+			void CreateElementIfNotExist(string name)
+			{
+				if (settings.GetElementsByTagName(name).Count == 0)
+					settings.DocumentElement.AppendChild(settings.CreateElement(name));
+			}
+
+			CreateElementIfNotExist("Theme");
 
 			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
 			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
 			if (Theme is Themes.LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
 
-			if (settings.GetElementsByTagName("Language").Count == 0)
-				settings.DocumentElement.AppendChild(settings.CreateElement("Language"));
+			CreateElementIfNotExist("Language");
 
-			settings.GetElementsByTagName("Language")[0].InnerText = ((int)Language).ToString();
+			settings.GetElementsByTagName("Language")[0].InnerText = Language.Language;
 
-			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents.AbsoluteUri;
+			CreateElementIfNotExist("ExtraEventsUri");
 
-			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts.AbsoluteUri;
+			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents == null ? string.Empty : ExtraordinaryEvents.AbsoluteUri;
+
+			CreateElementIfNotExist("LockoutsUri");
+
+			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts == null ? string.Empty : Lockouts.AbsoluteUri;
+
+			CreateElementIfNotExist("BasicDataUri");
 
 			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = Client.DataFeed.BasicDataSource == null ? string.Empty : Client.DataFeed.BasicDataSource.AbsoluteUri;
+
+			CreateElementIfNotExist("FullDataUri");
 
 			settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
 

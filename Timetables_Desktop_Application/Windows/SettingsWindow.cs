@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
@@ -12,15 +14,19 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 
 			Settings.Theme.Apply(this);
-
-			languageComboBox.SelectedIndex = (int)Settings.Language;
-
+			
 			if (Settings.Theme is  Themes.BlueTheme) themeComboBox.SelectedIndex = 0;
 			if (Settings.Theme is  Themes.DarkTheme) themeComboBox.SelectedIndex = 1;
 			if (Settings.Theme is Themes.LightTheme) themeComboBox.SelectedIndex = 2;
 
-			languageComboBox.SelectedIndexChanged += new EventHandler(languageComboBox_SelectedIndexChanged);
-			themeComboBox.SelectedIndexChanged += new EventHandler(themeComboBox_SelectedIndexChanged);
+			languageComboBox.Items.Add("English");
+
+			if (Directory.Exists("loc"))
+				foreach (var file in new DirectoryInfo("loc/").GetFiles())
+					if (Path.GetExtension(file.FullName) == "xml")
+						languageComboBox.Items.Add(file.Name.Split('.')[0]);
+
+			// languageComboBox.SelectedText = from ComboBox.ObjectCollection item in languageComboBox.Items where item.ToString() == languageComboBox.Text select item.ToString();
 		}
 
 		private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -47,7 +53,7 @@ namespace Timetables.Application.Desktop
 
 		private void languageComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Settings.Language = (Language)(sender as ComboBox).SelectedIndex;
+			Settings.Language = Timetables.Client.Localization.GetTranslation((sender as ComboBox).SelectedItem.ToString());
 
 			restartNeeded = true;
 
