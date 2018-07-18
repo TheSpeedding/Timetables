@@ -44,4 +44,8 @@
   <NewDepartureBoard>Nová odjezdová tabule</NewDepartureBoard>
 	<StationNotFound>Stanice nenalezena</StationNotFound>
 	<UnableToFindStation>Nepodařilo se najít stanici s názvem</UnableToFindStation>
+	<Map>Mapa</Map>
+	<Detail>Podrobnosti</Detail>
+	<Print>Tisk</Print>
+	<Transfer>Přestup</Transfer>
 </Localization>

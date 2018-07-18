@@ -126,5 +126,29 @@ namespace Timetables.Interop
 		/// <param name="id">ID of the stop.</param>
 		/// <returns>Name of the stop.</returns>
 		public string ReplaceIdWithName(uint id) => DataFeed.Basic.Stops.FindByIndex(id).Name;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string MapStringConstant() => Settings.Localization.Map;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string DetailStringConstant() => Settings.Localization.Detail;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string PrintStringConstant() => Settings.Localization.Print;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string TransferStringConstant() => Settings.Localization.Transfer;
 	}
 }

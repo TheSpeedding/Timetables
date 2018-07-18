@@ -30,10 +30,14 @@
 					<!-- Links to other windows. -->
 					<ul class="tools">
 						<li>
-							<a href="#">Map</a>
+							<a href="#">
+								<script>javascript: document.write(window.external.MapStringConstant());</script>
+							</a>
 						</li>
 						<li>
-							<a href="#">Print</a>
+							<a href="#">
+								<script>javascript: document.write(window.external.PrintStringConstant());</script>
+							</a>
 						</li>
 					</ul>
 
@@ -137,7 +141,7 @@
 							<xsl:choose>
 								<xsl:when test="@xsi:type = 'FootpathSegment'">
 									<h1>
-										Transfer ·
+										<script>javascript: document.write(window.external.TransferStringConstant());</script> ·
 										<script>
 											javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./DepartureDateTime/text()"/>', '<xsl:value-of select="./ArrivalDateTime/text()"/>'));
 										</script>

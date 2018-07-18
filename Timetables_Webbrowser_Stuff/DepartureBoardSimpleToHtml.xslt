@@ -28,18 +28,22 @@
 						<!-- Links to other windows. -->
 						<ul class="tools">
 							<li>
-								<a href="#">Map</a>
+								<a href="#">
+									<script>javascript: document.write(window.external.MapStringConstant());</script>
+								</a>
 							</li>
 							<li>
 								<a href="#">
 									<xsl:attribute name="onClick">
 										javascript: window.external.ShowDepartureDetail(<xsl:value-of select="position() - 1"/>);
 									</xsl:attribute>
-									<xsl:text>Detail</xsl:text>
+									<script>javascript: document.write(window.external.DetailStringConstant());</script>
 								</a>
 							</li>
 							<li>
-								<a href="#">Print</a>
+								<a href="#">
+									<script>javascript: document.write(window.external.PrintStringConstant());</script>
+								</a>
 							</li>
 						</ul>
 						

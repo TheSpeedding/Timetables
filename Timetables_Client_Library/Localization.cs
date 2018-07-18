@@ -59,6 +59,10 @@ namespace Timetables.Client
 		public string NewJourney { get; set; } = "New journey";
 		public string StationNotFound { get; set; } = "Station not found";
 		public string UnableToFindStation { get; set; } = "Unable to find station with name";
+		public string Map { get; set; } = "Map";
+		public string Detail { get; set; } = "Detail";
+		public string Print { get; set; } = "Print";
+		public string Transfer { get; set; } = "Transfer";
 
 		public override string ToString() => locName;
 		/// <summary>
