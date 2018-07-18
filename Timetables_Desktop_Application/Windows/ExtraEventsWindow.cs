@@ -21,6 +21,8 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
+			Text = Settings.Localization.ExtraordinaryEvents;
+
 			try
 			{
 				if (Settings.ExtraordinaryEvents == null) throw new ArgumentException();

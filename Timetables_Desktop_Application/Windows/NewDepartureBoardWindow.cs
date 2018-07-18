@@ -11,7 +11,13 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-			
+
+			Text = Settings.Localization.NewDepartureBoard;
+
+			countLabel.Text = Settings.Localization.Count;
+			departureLabel.Text = Settings.Localization.LeavingTime;
+			stationLabel.Text = Settings.Localization.Station;
+
 			foreach (var station in DataFeed.Basic.Stations)
 				stationComboBox.Items.Add(station);	
 		}

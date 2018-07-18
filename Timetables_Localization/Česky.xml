@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Journey>Spojení</Journey>
+  <FindJourney>Najít spojení</FindJourney>
+  <DepartureBoard>Odjezdová tabule</DepartureBoard>
+  <FindDepartures>Najít odjezdy</FindDepartures>
+  <Traffic>Doprava</Traffic>
+  <Lockouts>Výluky</Lockouts>
+  <ExtraordinaryEvents>Mimořádné události</ExtraordinaryEvents>
+  <Settings>Nastavení</Settings>
+  <Theme>Motiv</Theme>
+  <DarkTheme>Tmavý</DarkTheme>
+  <LightTheme>Světlý</LightTheme>
+  <BlueTheme>Modrý</BlueTheme>
+  <Language>Jazyk</Language>
+  <ShowMap>Zobrazit mapu</ShowMap>
+  <Favorites>Oblíbené</Favorites>
+  <ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Bude použito původní nastavení.</ProblemWhileLoadingSettings>
+  <RestartNeeded>Nutný restart</RestartNeeded>
+  <RestartToApplyChanges>Změny se projeví po restartu aplikace.</RestartToApplyChanges>
+  <SourceStop>Start</SourceStop>
+  <TargetStop>Cíl</TargetStop>
+  <TransfersCount>Přestupy</TransfersCount>
+  <LeavingTime>Odjezd</LeavingTime>
+  <Count>Počet</Count>
+  <Search>Hledat</Search>
+  <Station>Stanice</Station>
+  <Departure>Odjezd</Departure>
+  <Departures>Odjezdy</Departures>
+  <Journeys>Spojení</Journeys>
+  <NoTransfers>Žádný přestup</NoTransfers>
+  <OneTransfer>1 přestup</OneTransfer>
+  <Transfers>přestupy</Transfers>
+  <Minute>minuta</Minute>
+  <Minutes>minut</Minutes>
+  <Hour>hodina</Hour>
+  <Hours>hodin</Hours>
+  <Day>den</Day>
+  <Days>dny</Days>
+  <Left>Před</Left>
+  <Ago></Ago>
+  <LeavesIn>Za</LeavesIn>
+	<NewJourney>Nové spojení</NewJourney>
+	<NewDepartureBoard>Nová odjezdová tabule</NewDepartureBoard>
+</Localization>

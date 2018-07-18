@@ -20,6 +20,15 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
+			Text = Settings.Localization.NewJourney;
+
+			sourceLabel.Text = Settings.Localization.SourceStop;
+			targetLabel.Text = Settings.Localization.TargetStop;
+			countLabel.Text = Settings.Localization.Count;
+			departureLabel.Text = Settings.Localization.LeavingTime;
+			transfersLabel.Text = Settings.Localization.TransfersCount;
+			searchButton.Text = Settings.Localization.Search;
+
 			foreach (var station in DataFeed.Basic.Stations)
 			{
 				sourceComboBox.Items.Add(station);

@@ -21,6 +21,8 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
+			Text = Settings.Localization.Lockouts;
+		
 			try
 			{
 				if (Settings.Lockouts == null) throw new ArgumentException();

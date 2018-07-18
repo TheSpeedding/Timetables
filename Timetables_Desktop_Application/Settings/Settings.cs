@@ -19,7 +19,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
-		public static Localization Language { get; set; }
+		public static Localization Localization { get; set; }
 		/// <summary>
 		/// Uri to the site that offers RSS feed for extraordinary events in traffic.
 		/// </summary>
@@ -82,7 +82,7 @@ namespace Timetables.Application.Desktop
 						throw new ArgumentException();
 				}
 
-				Language = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
@@ -90,9 +90,9 @@ namespace Timetables.Application.Desktop
 			}
 			catch
 			{
-				System.Windows.Forms.MessageBox.Show("Problem occured while loading user settings. Using default settings instead.");
+				System.Windows.Forms.MessageBox.Show(Localization.ProblemWhileLoadingSettings);
 				Theme = new Themes.BlueTheme();
-				Language = Localization.GetTranslation("English");
+				Localization = Localization.GetTranslation("English");
 				Save(true);
 			}
 		}
@@ -122,7 +122,7 @@ namespace Timetables.Application.Desktop
 
 			CreateElementIfNotExist("Language");
 
-			settings.GetElementsByTagName("Language")[0].InnerText = Language.Language;
+			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 
 			CreateElementIfNotExist("ExtraEventsUri");
 

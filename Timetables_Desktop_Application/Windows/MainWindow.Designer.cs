@@ -38,10 +38,9 @@
 			this.departureBoardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.findDeparturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.listOfstationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.actualinfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.trafficToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.extraordinaryEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lockoutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +60,7 @@
 			this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.journeyToolStripMenuItem,
             this.departureBoardToolStripMenuItem,
-            this.actualinfoToolStripMenuItem,
+            this.trafficToolStripMenuItem,
             this.settingsToolStripMenuItem});
 			this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
 			this.mainMenuStrip.Name = "mainMenuStrip";
@@ -101,7 +100,6 @@
 			this.departureBoardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findDeparturesToolStripMenuItem,
             this.showmapToolStripMenuItem,
-            this.listOfstationsToolStripMenuItem,
             this.toolStripSeparator1,
             this.favoritesToolStripMenuItem});
 			this.departureBoardToolStripMenuItem.Name = "departureBoardToolStripMenuItem";
@@ -121,12 +119,6 @@
 			this.showmapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
 			this.showmapToolStripMenuItem.Text = "Show &map";
 			// 
-			// listOfstationsToolStripMenuItem
-			// 
-			this.listOfstationsToolStripMenuItem.Name = "listOfstationsToolStripMenuItem";
-			this.listOfstationsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-			this.listOfstationsToolStripMenuItem.Text = "List of &stations";
-			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -140,12 +132,12 @@
 			// 
 			// actualinfoToolStripMenuItem
 			// 
-			this.actualinfoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.trafficToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.extraordinaryEventsToolStripMenuItem,
             this.lockoutsToolStripMenuItem});
-			this.actualinfoToolStripMenuItem.Name = "actualinfoToolStripMenuItem";
-			this.actualinfoToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-			this.actualinfoToolStripMenuItem.Text = "&Traffic";
+			this.trafficToolStripMenuItem.Name = "actualinfoToolStripMenuItem";
+			this.trafficToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+			this.trafficToolStripMenuItem.Text = "&Traffic";
 			// 
 			// extraordinaryEventsToolStripMenuItem
 			// 
@@ -196,14 +188,13 @@
 		private System.Windows.Forms.ToolStripMenuItem departureBoardToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem findDeparturesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showmapToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem listOfstationsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem journeyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem findjourneyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem actualinfoToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem trafficToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem extraordinaryEventsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem lockoutsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;

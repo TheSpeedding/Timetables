@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Linq;
+using Timetables.Client;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
@@ -14,7 +15,16 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 
 			Settings.Theme.Apply(this);
-			
+
+			Name = Settings.Localization.Settings;
+
+			languageLabel.Text = Settings.Localization.Language;
+			themeLabel.Text = Settings.Localization.Theme;
+
+			themeComboBox.Items.Add(Settings.Localization.BlueTheme);
+			themeComboBox.Items.Add(Settings.Localization.DarkTheme);
+			themeComboBox.Items.Add(Settings.Localization.LightTheme);
+
 			if (Settings.Theme is  Themes.BlueTheme) themeComboBox.SelectedIndex = 0;
 			if (Settings.Theme is  Themes.DarkTheme) themeComboBox.SelectedIndex = 1;
 			if (Settings.Theme is Themes.LightTheme) themeComboBox.SelectedIndex = 2;
@@ -26,7 +36,7 @@ namespace Timetables.Application.Desktop
 					if (file.Extension == ".xml")
 						languageComboBox.Items.Add(file.Name.Split('.')[0]);
 
-			languageComboBox.SelectedItem = (from object item in languageComboBox.Items where item.ToString() == Settings.Language.Language select item).First();
+			languageComboBox.SelectedItem = (from object item in languageComboBox.Items where item.ToString() == Settings.Localization.ToString() select item).First();
 		}
 
 		private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -53,7 +63,7 @@ namespace Timetables.Application.Desktop
 
 		private void languageComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Settings.Language = Timetables.Client.Localization.GetTranslation((sender as ComboBox).SelectedItem.ToString());
+			Settings.Localization = Timetables.Client.Localization.GetTranslation((sender as ComboBox).SelectedItem.ToString());
 
 			restartNeeded = true;
 
@@ -63,7 +73,7 @@ namespace Timetables.Application.Desktop
 		protected override void OnClosed(EventArgs e)
 		{
 			base.OnClosed(e);
-			if (restartNeeded) MessageBox.Show("You have to restart the application to apply the changes.", "Restart needed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			if (restartNeeded) MessageBox.Show(Settings.Localization.RestartToApplyChanges, Settings.Localization.RestartNeeded, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

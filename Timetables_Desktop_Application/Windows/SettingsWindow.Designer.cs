@@ -65,10 +65,6 @@
 			this.themeComboBox.FormattingEnabled = true;
 			this.themeComboBox.IntegralHeight = false;
 			this.themeComboBox.ItemHeight = 15;
-			this.themeComboBox.Items.AddRange(new object[] {
-            "Blue",
-            "Dark",
-            "Light"});
 			this.themeComboBox.Location = new System.Drawing.Point(134, 22);
 			this.themeComboBox.Margin = new System.Windows.Forms.Padding(5);
 			this.themeComboBox.MaxDropDownItems = 3;

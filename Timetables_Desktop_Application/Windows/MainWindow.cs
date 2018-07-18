@@ -11,6 +11,18 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 
+			extraordinaryEventsToolStripMenuItem.Text = Settings.Localization.ExtraordinaryEvents;
+			lockoutsToolStripMenuItem.Text = Settings.Localization.Lockouts;
+			trafficToolStripMenuItem.Text = Settings.Localization.Traffic;
+			settingsToolStripMenuItem.Text = Settings.Localization.Settings;
+			journeyToolStripMenuItem.Text = Settings.Localization.Journey;
+			departureBoardToolStripMenuItem.Text = Settings.Localization.DepartureBoard;
+			findDeparturesToolStripMenuItem.Text = Settings.Localization.FindDepartures;
+			findjourneyToolStripMenuItem.Text = Settings.Localization.FindJourney;
+			showmapToolStripMenuItem.Text = Settings.Localization.ShowMap;
+			favoritesToolStripMenuItem.Text = Settings.Localization.Favorites;
+			favoritesToolStripMenuItem1.Text = Settings.Localization.Favorites;
+
 			Settings.Theme.PanelTheme.Apply(mainDockPanel);
 			Settings.Theme.MenuTheme.Apply(mainMenuStrip);
 			Settings.Theme.Apply(this);
