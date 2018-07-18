@@ -175,8 +175,6 @@ namespace Timetables.Application.Desktop.Themes
 		public abstract void Apply(MenuStrip menuStrip);
 		protected void Apply<T>(MenuStrip menuStrip) where T : MenuColors, new()
 		{
-			Palette = new T();
-			Renderer = new ToolStripProfessionalRenderer(Palette);
 			menuStrip.BackColor = Palette.DefaultBackColor;
 			menuStrip.ForeColor = Palette.TextColor;
 
@@ -192,6 +190,11 @@ namespace Timetables.Application.Desktop.Themes
 		/// </summary>
 		public class DarkTheme : MenuTheme
 		{
+			public DarkTheme()
+			{
+				Palette = new MenuColors.DarkTheme();
+				new ToolStripProfessionalRenderer(Palette);
+			}
 			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.DarkTheme>(menuStrip);
 		}
 		/// <summary>
@@ -199,6 +202,11 @@ namespace Timetables.Application.Desktop.Themes
 		/// </summary>
 		public class BlueTheme : MenuTheme
 		{
+			public BlueTheme()
+			{
+				Palette = new MenuColors.BlueTheme();
+				new ToolStripProfessionalRenderer(Palette);
+			}
 			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.BlueTheme>(menuStrip);
 		}
 		/// <summary>
@@ -206,6 +214,11 @@ namespace Timetables.Application.Desktop.Themes
 		/// </summary>
 		public class LightTheme : MenuTheme
 		{
+			public LightTheme()
+			{
+				Palette = new MenuColors.LightTheme();
+				new ToolStripProfessionalRenderer(Palette);
+			}
 			public override void Apply(MenuStrip menuStrip) => Apply<MenuColors.LightTheme>(menuStrip);
 		}
 	}

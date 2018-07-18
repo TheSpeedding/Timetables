@@ -86,8 +86,6 @@
 			this.languageComboBox.FormattingEnabled = true;
 			this.languageComboBox.IntegralHeight = false;
 			this.languageComboBox.ItemHeight = 15;
-			this.languageComboBox.Items.AddRange(new object[] {
-            "English"});
 			this.languageComboBox.Location = new System.Drawing.Point(134, 74);
 			this.languageComboBox.Margin = new System.Windows.Forms.Padding(5);
 			this.languageComboBox.MaxDropDownItems = 3;

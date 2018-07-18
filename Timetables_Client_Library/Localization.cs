@@ -14,7 +14,9 @@ namespace Timetables.Client
 	[XmlRoot("Localization")]
 	public class Localization
 	{
-		public string Language { get; set; } = "English";
+		public string Language { get; private set; } = "English";
+
+		public override string ToString() => Language;
 		/// <summary>
 		/// Creates a new instance of Localization class offering string constants in given language.
 		/// </summary>

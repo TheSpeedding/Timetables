@@ -23,10 +23,10 @@ namespace Timetables.Application.Desktop
 
 			if (Directory.Exists("loc"))
 				foreach (var file in new DirectoryInfo("loc/").GetFiles())
-					if (Path.GetExtension(file.FullName) == "xml")
+					if (file.Extension == ".xml")
 						languageComboBox.Items.Add(file.Name.Split('.')[0]);
 
-			// languageComboBox.SelectedText = from ComboBox.ObjectCollection item in languageComboBox.Items where item.ToString() == languageComboBox.Text select item.ToString();
+			languageComboBox.SelectedItem = (from object item in languageComboBox.Items where item.ToString() == Settings.Language.Language select item).First();
 		}
 
 		private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
