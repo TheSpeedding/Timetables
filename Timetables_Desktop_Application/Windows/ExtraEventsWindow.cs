@@ -29,7 +29,8 @@ namespace Timetables.Application.Desktop
 
 				using (var wc = new WebClient())
 				{
-					resultsWebBrowser.DocumentText = wc.DownloadString(Settings.ExtraordinaryEvents);
+					wc.Encoding = Encoding.UTF8;
+					resultsWebBrowser.DocumentText = wc.DownloadString(Settings.ExtraordinaryEvents).TransformToHtml(Settings.ExtraordinaryEventsXslt.FullName, Settings.ExtraordinaryEventsCss.FullName);
 				}
 			}
 

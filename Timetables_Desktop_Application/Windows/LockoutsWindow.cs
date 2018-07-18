@@ -29,7 +29,8 @@ namespace Timetables.Application.Desktop
 
 				using (var wc = new WebClient())
 				{
-					resultsWebBrowser.DocumentText = wc.DownloadString(Settings.Lockouts);
+					wc.Encoding = Encoding.UTF8;
+					resultsWebBrowser.DocumentText = wc.DownloadString(Settings.Lockouts).TransformToHtml(Settings.LockoutsXslt.FullName, Settings.LockoutsCss.FullName);
 				}
 			}
 

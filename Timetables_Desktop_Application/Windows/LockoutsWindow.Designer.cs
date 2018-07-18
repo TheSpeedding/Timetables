@@ -34,7 +34,6 @@ namespace Timetables.Application.Desktop
 			// 
 			// resultsWebBrowser
 			// 
-			this.resultsWebBrowser.AllowNavigation = false;
 			this.resultsWebBrowser.AllowWebBrowserDrop = false;
 			this.resultsWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.resultsWebBrowser.IsWebBrowserContextMenuEnabled = false;

@@ -44,14 +44,6 @@ namespace Timetables.Client
 			}
 
 			return newDoc;
-
-			/*
-			System.IO.StringWriter sw = new System.IO.StringWriter();
-			sw = new System.IO.StringWriter();
-			doc.ReplaceStopIdsWithNames().Save(sw);
-			doc = new XmlDocument();
-			doc.LoadXml(sw.ToString());
-			*/
 		}
 
 		/// <summary>
@@ -68,17 +60,28 @@ namespace Timetables.Client
 
 			o.GetType().GetMethod("Serialize").Invoke(o, new object[] { sw });
 
+			return TransformToHtml(sw.ToString(), xsltPath, cssPath);
+		}
+		/// <summary>
+		/// Converts XML string into the HTML string using given XSLT script.
+		/// </summary>
+		/// <param name="content">XML in string.</param>
+		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
+		/// <param name="cssPath">Path to CSS stylesheet.
+		/// <returns>String representation of transformed XML, usually in HTML.</returns>
+		public static string TransformToHtml(this string content, string xsltPath, string cssPath = null)
+		{
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(sw.ToString());
+			doc.LoadXml(content);
 
 			XPathDocument xPathDoc = new XPathDocument(new XmlNodeReader(doc));
 			XslCompiledTransform xsltTrans = new XslCompiledTransform();
 
 			xsltTrans.Load(xsltPath);
-			sw = new System.IO.StringWriter();
+			var sw = new System.IO.StringWriter();
 
 			xsltTrans.Transform(xPathDoc, null, sw);
-			
+
 			return (cssPath == null ? "" : "<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>") + sw.ToString();
 		}
 	}

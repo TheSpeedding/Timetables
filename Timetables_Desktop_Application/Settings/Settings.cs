@@ -60,6 +60,22 @@ namespace Timetables.Application.Desktop
 		/// Path to departure board simple CSS stylesheet.
 		/// </summary>
 		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtml.css");
+		/// <summary>
+		/// Path to lockouts XSLT stylesheet.
+		/// </summary>
+		public static FileInfo LockoutsXslt => new FileInfo("xslt/LockoutsToHtml.xslt");
+		/// <summary>
+		/// Path to lockouts CSS stylesheet.
+		/// </summary>
+		public static FileInfo LockoutsCss => new FileInfo("css/LockoutsToHtml.css");
+		/// <summary>
+		/// Path to extraordinary event XSLT stylesheet.
+		/// </summary>
+		public static FileInfo ExtraordinaryEventsXslt => new FileInfo("xslt/ExtraordinaryEventsToHtml.xslt");
+		/// <summary>
+		/// Path to extraordinary events CSS stylesheet.
+		/// </summary>
+		public static FileInfo ExtraordinaryEventsCss => new FileInfo("css/ExtraordinaryEventsToHtml.css");
 		static Settings()
 		{
 			try

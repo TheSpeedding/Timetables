@@ -23,10 +23,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Webbrowser_Stuff
 		Timetables_Webbrowser_Stuff\DepartureBoardDetailToHtml.xslt = Timetables_Webbrowser_Stuff\DepartureBoardDetailToHtml.xslt
 		Timetables_Webbrowser_Stuff\DepartureBoardSimpleToHtml.css = Timetables_Webbrowser_Stuff\DepartureBoardSimpleToHtml.css
 		Timetables_Webbrowser_Stuff\DepartureBoardSimpleToHtml.xslt = Timetables_Webbrowser_Stuff\DepartureBoardSimpleToHtml.xslt
+		Timetables_Webbrowser_Stuff\ExtraordinaryEventsToHtml.css = Timetables_Webbrowser_Stuff\ExtraordinaryEventsToHtml.css
+		Timetables_Webbrowser_Stuff\ExtraordinaryEventsToHtml.xslt = Timetables_Webbrowser_Stuff\ExtraordinaryEventsToHtml.xslt
 		Timetables_Webbrowser_Stuff\JourneyDetailToHtml.css = Timetables_Webbrowser_Stuff\JourneyDetailToHtml.css
 		Timetables_Webbrowser_Stuff\JourneyDetailToHtml.xslt = Timetables_Webbrowser_Stuff\JourneyDetailToHtml.xslt
 		Timetables_Webbrowser_Stuff\JourneySimpleToHtml.css = Timetables_Webbrowser_Stuff\JourneySimpleToHtml.css
 		Timetables_Webbrowser_Stuff\JourneySimpleToHtml.xslt = Timetables_Webbrowser_Stuff\JourneySimpleToHtml.xslt
+		Timetables_Webbrowser_Stuff\LockoutsToHtml.css = Timetables_Webbrowser_Stuff\LockoutsToHtml.css
+		Timetables_Webbrowser_Stuff\LockoutsToHtml.xslt = Timetables_Webbrowser_Stuff\LockoutsToHtml.xslt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Localization", "Timetables_Localization", "{BDBB5145-4177-4DA7-9862-9D5390A90C79}"
