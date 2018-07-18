@@ -32,7 +32,7 @@ namespace Timetables.Application.Desktop
 
 				if (station == null)
 				{
-					MessageBox.Show($"Station with name \"{ stationComboBox.Text }\" was not found.", "Station not found.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + stationComboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 			}

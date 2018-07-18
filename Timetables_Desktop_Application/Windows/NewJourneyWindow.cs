@@ -47,7 +47,7 @@ namespace Timetables.Application.Desktop
 
 				if (source == null)
 				{
-					MessageBox.Show($"Station with name \"{ comboBox.Text }\" was not found.", "Station not found.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + comboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return null;
 				}
 			}
@@ -65,7 +65,6 @@ namespace Timetables.Application.Desktop
 
 			if (source == null || target == null)
 				return;
-
 
 			var jRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
 			RouterResponse jResponse = null;					

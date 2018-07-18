@@ -57,6 +57,8 @@ namespace Timetables.Client
 		public string LeavesIn { get; set; } = "Leaves in";
 		public string NewDepartureBoard { get; set; } = "New departure board";
 		public string NewJourney { get; set; } = "New journey";
+		public string StationNotFound { get; set; } = "Station not found";
+		public string UnableToFindStation { get; set; } = "Unable to find station with name";
 
 		public override string ToString() => locName;
 		/// <summary>
@@ -66,8 +68,6 @@ namespace Timetables.Client
 		/// <returns>Localization object.</returns>
 		public static Localization GetTranslation(string language = "English")
 		{
-			// using (var sw = new System.IO.StreamWriter("loc/English.xml")) { new XmlSerializer(typeof(Localization)).Serialize(sw, new Localization()); }
-
 			if (language == "English") return new Localization();
 
 			if (!File.Exists("loc/" + language + ".xml")) throw new ArgumentException($"Translation sheet with language \" { language } \" was not found.");

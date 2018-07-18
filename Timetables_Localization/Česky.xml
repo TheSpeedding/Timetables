@@ -40,6 +40,8 @@
   <Left>Před</Left>
   <Ago></Ago>
   <LeavesIn>Za</LeavesIn>
-	<NewJourney>Nové spojení</NewJourney>
-	<NewDepartureBoard>Nová odjezdová tabule</NewDepartureBoard>
+  <NewJourney>Nové spojení</NewJourney>
+  <NewDepartureBoard>Nová odjezdová tabule</NewDepartureBoard>
+	<StationNotFound>Stanice nenalezena</StationNotFound>
+	<UnableToFindStation>Nepodařilo se najít stanici s názvem</UnableToFindStation>
 </Localization>
