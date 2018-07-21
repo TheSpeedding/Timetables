@@ -41,13 +41,13 @@ namespace Timetables.Client
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
-		public static void Load()
+		public static void Load(bool forceDownload = false)
 		{
 			Downloaded = false;
 			
 			// Offline mode.
 
-			if (!System.IO.Directory.Exists("data") && OfflineMode)
+			if ((!System.IO.Directory.Exists("data") || forceDownload ) && OfflineMode)
 			{
 				try
 				{
@@ -61,7 +61,7 @@ namespace Timetables.Client
 
 			// Online mode.
 
-			else if (!System.IO.Directory.Exists("basic"))
+			else if (!System.IO.Directory.Exists("basic") || forceDownload)
 			{
 				try
 				{
@@ -74,7 +74,7 @@ namespace Timetables.Client
 					if (!System.IO.Directory.Exists("basic"))
 						System.IO.Directory.CreateDirectory("basic");
 
-					System.IO.Compression.ZipFile.ExtractToDirectory($"basic_data_temp.zip", "basic");
+					System.IO.Compression.ZipFile.ExtractToDirectory("basic_data_temp.zip", "basic");
 
 					if (System.IO.File.Exists("basic_data_temp.zip"))
 						System.IO.File.Delete("basic_data_temp.zip");

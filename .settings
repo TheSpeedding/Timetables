@@ -4,6 +4,6 @@
   <OfflineMode>True</OfflineMode>
   <ExtraEventsUri>https://pid.cz/feed/rss-mimoradnosti</ExtraEventsUri>
   <LockoutsUri>https://pid.cz/feed/rss-vyluky</LockoutsUri>
-  <BasicDataUri></BasicDataUri>
+  <BasicDataUri>http://www.ms.mff.cuni.cz/~riedell/basic.zip</BasicDataUri>
   <FullDataUri>http://opendata.iprpraha.cz/DPP/JR/jrdata.zip</FullDataUri>
 </Timetables>
