@@ -140,7 +140,7 @@ namespace Timetables.Application.Desktop
 						settings.DocumentElement.AppendChild(settings.CreateElement(name));
 			}
 
-			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "BasicDataUri", "FullDataUri");
+			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "BasicDataUri", "FullDataUri", "ServerIp", "RouterPort", "DepBoardPort");
 
 			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
 			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";

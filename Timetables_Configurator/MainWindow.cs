@@ -12,9 +12,10 @@ namespace Timetables.Configurator
 {
 	public partial class MainWindow : Form
 	{
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
+		public MainWindow() => InitializeComponent();
+
+		private void serverRadioButton_CheckedChanged(object sender, EventArgs e) { }
+
+		private void clientRadioButton_CheckedChanged(object sender, EventArgs e) => clientUserControl.Visible = clientRadioButton.Checked;
 	}
 }

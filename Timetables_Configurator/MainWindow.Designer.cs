@@ -31,7 +31,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.serverRadioButton = new System.Windows.Forms.RadioButton();
 			this.clientRadioButton = new System.Windows.Forms.RadioButton();
-			this.clientUserControl1 = new Timetables.Configurator.ClientUserControl();
+			this.clientUserControl = new Timetables.Configurator.ClientUserControl();
 			this.SuspendLayout();
 			// 
 			// serverRadioButton
@@ -44,6 +44,7 @@
 			this.serverRadioButton.Text = "Server configuration";
 			this.serverRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.serverRadioButton.UseVisualStyleBackColor = true;
+			this.serverRadioButton.CheckedChanged += new System.EventHandler(this.serverRadioButton_CheckedChanged);
 			// 
 			// clientRadioButton
 			// 
@@ -55,20 +56,22 @@
 			this.clientRadioButton.Text = "Client configuration";
 			this.clientRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.clientRadioButton.UseVisualStyleBackColor = true;
+			this.clientRadioButton.CheckedChanged += new System.EventHandler(this.clientRadioButton_CheckedChanged);
 			// 
-			// clientUserControl1
+			// clientUserControl
 			// 
-			this.clientUserControl1.Location = new System.Drawing.Point(11, 61);
-			this.clientUserControl1.Name = "clientUserControl1";
-			this.clientUserControl1.Size = new System.Drawing.Size(300, 220);
-			this.clientUserControl1.TabIndex = 2;
+			this.clientUserControl.Location = new System.Drawing.Point(12, 62);
+			this.clientUserControl.Name = "clientUserControl";
+			this.clientUserControl.Size = new System.Drawing.Size(300, 376);
+			this.clientUserControl.TabIndex = 2;
+			this.clientUserControl.Visible = false;
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(322, 450);
-			this.Controls.Add(this.clientUserControl1);
+			this.Controls.Add(this.clientUserControl);
 			this.Controls.Add(this.clientRadioButton);
 			this.Controls.Add(this.serverRadioButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -85,7 +88,7 @@
 
 		private System.Windows.Forms.RadioButton serverRadioButton;
 		private System.Windows.Forms.RadioButton clientRadioButton;
-		private ClientUserControl clientUserControl1;
+		private ClientUserControl clientUserControl;
 	}
 }
 
