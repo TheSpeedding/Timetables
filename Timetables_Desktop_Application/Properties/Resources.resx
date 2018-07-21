@@ -121,25 +121,4 @@
   <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icons8_bus_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-bus-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8_cable_car_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-cable-car-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8_subway_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-subway-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8_train_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-train-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8_tram_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-tram-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8_water_transportation_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-water-transportation-100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="noun_19727_cc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\noun_19727_cc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

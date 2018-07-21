@@ -76,7 +76,10 @@ namespace Timetables.Application.Desktop
 		/// Path to extraordinary events CSS stylesheet.
 		/// </summary>
 		public static FileInfo ExtraordinaryEventsCss => new FileInfo("css/ExtraordinaryEventsToHtml.css");
-		static Settings()
+		/// <summary>
+		/// Loads the settings.
+		/// </summary>
+		public static void Load()
 		{
 			try
 			{
@@ -100,6 +103,12 @@ namespace Timetables.Application.Desktop
 
 				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
 
+				Client.DataFeed.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
+
+				Client.DataFeed.FullDataSource = Client.DataFeed.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
+
+				Client.DataFeed.BasicDataSource = Client.DataFeed.OfflineMode ? null : new Uri(settings.GetElementsByTagName("BasicDataUri")[0].InnerText);
+
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
 				ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
@@ -122,37 +131,30 @@ namespace Timetables.Application.Desktop
 					sw.Write("<Timetables></Timetables>");
 
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");					
+			settings.Load(".settings");							
 
-			void CreateElementIfNotExist(string name)
+			void CreateElementIfNotExist(params string[] names)
 			{
-				if (settings.GetElementsByTagName(name).Count == 0)
-					settings.DocumentElement.AppendChild(settings.CreateElement(name));
+				foreach (var name in names)
+					if (settings.GetElementsByTagName(name).Count == 0)
+						settings.DocumentElement.AppendChild(settings.CreateElement(name));
 			}
 
-			CreateElementIfNotExist("Theme");
+			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "BasicDataUri", "FullDataUri");
 
 			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
 			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
 			if (Theme is Themes.LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
 
-			CreateElementIfNotExist("Language");
-
 			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 
-			CreateElementIfNotExist("ExtraEventsUri");
+			settings.GetElementsByTagName("OfflineMode")[0].InnerText = Client.DataFeed.OfflineMode.ToString();
 
 			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents == null ? string.Empty : ExtraordinaryEvents.AbsoluteUri;
 
-			CreateElementIfNotExist("LockoutsUri");
-
 			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts == null ? string.Empty : Lockouts.AbsoluteUri;
 
-			CreateElementIfNotExist("BasicDataUri");
-
 			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = Client.DataFeed.BasicDataSource == null ? string.Empty : Client.DataFeed.BasicDataSource.AbsoluteUri;
-
-			CreateElementIfNotExist("FullDataUri");
 
 			settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
 

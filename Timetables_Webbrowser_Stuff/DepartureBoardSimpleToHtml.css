@@ -17,6 +17,7 @@ body {
 		.departure .leaves-in .outdated {
 			color: red;
 			font-weight: bold;
+			margin-right: 5px;
 		}
 
 	.departure ul.tools {

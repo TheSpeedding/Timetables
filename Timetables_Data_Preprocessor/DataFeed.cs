@@ -110,6 +110,12 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 #endif
 			}
 		}
+
+		/// <summary>
+		/// Downloads and creates data feed.
+		/// </summary>
+		public static void GetAndTransformDataFeed<T>(params Uri[] urls) where T : IDataFeed => GetAndTransformDataFeed<T>((from Uri uri in urls select uri.AbsoluteUri).ToArray());
+
 		/// <summary>
 		/// Downloads and creates data feed.
 		/// </summary>
@@ -147,7 +153,7 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 
 			for (int i = 0; i < urls.Length; i++)
 				Downloader.DeleteTrash($"{ i }_temp_data/");
-        }
+		}
 
 		/// <summary>
 		/// Merges multiple data feeds into one data feed.

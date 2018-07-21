@@ -150,5 +150,11 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <returns>Localized string constant.</returns>
 		public string TransferStringConstant() => Settings.Localization.Transfer;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string OutdatedStringConstant() => Settings.Localization.Outdated;
 	}
 }

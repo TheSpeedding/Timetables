@@ -17,6 +17,7 @@ body {
 		.journey .leaves-in .outdated {
 			color: red;
 			font-weight: bold;
+			margin-right: 5px;
 		}
 
 	.journey ul.tools {

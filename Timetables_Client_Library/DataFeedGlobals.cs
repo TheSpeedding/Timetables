@@ -7,13 +7,9 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class offering data feed for GUI applications.
 	/// </summary>
-	public static class DataFeed
+	public static partial class DataFeed
 	{
 		private static Interop.DataFeedManaged fullData = null;
-		/// <summary>
-		/// Indicates whether application is working in offline mode (desktop application only).
-		/// </summary>
-		public static bool OfflineMode { get; private set; } = true;
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
@@ -33,38 +29,55 @@ namespace Timetables.Client
 		/// <summary>
 		/// Path to the data source.
 		/// </summary>
-		public static Uri FullDataSource { get; private set; }
+		public static Uri FullDataSource { get; set; }
 		/// <summary>
 		/// Path to the data source.
 		/// </summary>
-		public static Uri BasicDataSource { get; private set; }
+		public static Uri BasicDataSource { get; set; }
+		/// <summary>
+		/// Indicates whether application is working in offline mode.
+		/// </summary>
+		public static bool OfflineMode { get; set; }
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
 		public static void Load()
 		{
 			Downloaded = false;
-
-			try
-			{
-				XmlDocument settings = new XmlDocument();
-				settings.Load(".settings");
-
-				FullDataSource = OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
-
-				BasicDataSource = OfflineMode ? null : new Uri(settings.GetElementsByTagName("BasicDataUri")[0].InnerText);
-			}
-
-			catch (Exception ex)
-			{
-				// throw new ArgumentException("Fatal error. Settings file is corrupted and thus cannot load the data.", ex);
-			}
 			
+			// Offline mode.
+
 			if (!System.IO.Directory.Exists("data") && OfflineMode)
 			{
 				try
 				{
-					Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource.AbsoluteUri);
+					Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);
+				}
+				catch
+				{
+					throw new ArgumentException("Fatal error. Cannot process the data.");
+				}
+			}
+
+			// Online mode.
+
+			else if (!System.IO.Directory.Exists("basic"))
+			{
+				try
+				{
+					if (System.IO.File.Exists("basic_data_temp.zip"))
+						System.IO.File.Delete("basic_data_temp.zip");
+
+					using (System.Net.WebClient wc = new System.Net.WebClient())
+						wc.DownloadFile(BasicDataSource, "basic_data_temp.zip");
+
+					if (!System.IO.Directory.Exists("basic"))
+						System.IO.Directory.CreateDirectory("basic");
+
+					System.IO.Compression.ZipFile.ExtractToDirectory($"basic_data_temp.zip", "basic");
+
+					if (System.IO.File.Exists("basic_data_temp.zip"))
+						System.IO.File.Delete("basic_data_temp.zip");
 				}
 				catch
 				{
@@ -73,8 +86,6 @@ namespace Timetables.Client
 			}
 
 			Downloaded = true;
-
-			// TO-DO: Online mode?
 
 			Update();			
 		}

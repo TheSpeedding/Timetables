@@ -63,7 +63,12 @@ namespace Timetables.Client
 		public string Detail { get; set; } = "Detail";
 		public string Print { get; set; } = "Print";
 		public string Transfer { get; set; } = "Transfer";
+		public string Outdated { get; set; } = "Outdated!";
 
+		/// <summary>
+		/// Returns language that is represented by the object.
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString() => locName;
 		/// <summary>
 		/// Creates a new instance of Localization class offering string constants in given language.

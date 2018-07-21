@@ -18,7 +18,7 @@
 						<xsl:if test="./Journey/JourneySegments/JourneySegment/Outdated[text() = 'true']">
 							<!-- Indicates whether the journey uses outdated timetables. -->
 							<span class="outdated">
-								Outdated!
+								<script>javascript: document.write(window.external.OutdatedStringConstant());</script>
 							</span>
 						</xsl:if>
 						<!-- Writes the relative time that the journey leaves in. -->

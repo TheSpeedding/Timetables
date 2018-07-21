@@ -17,7 +17,7 @@
 						<xsl:if test="./Outdated[text() = 'true']">
 							<!-- Indicates whether the trip uses outdated timetables. -->
 							<span class="outdated">
-								Outdated!
+								<script>javascript: document.write(window.external.OutdatedStringConstant());</script>
 							</span>
 						</xsl:if>
 						<!-- Writes the relative time that the trip leaves in. -->

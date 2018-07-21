@@ -32,10 +32,11 @@ namespace Timetables.Server
 		/// </summary>
 		public static event LoggingEventHandler LoggingEvent;
 		/// <summary>
-		/// Adds current timestamp to the message.
+		/// Adds current timestamp to the message and logs it to the textwriter.
 		/// </summary>
 		/// <param name="message">Message of the log.</param>
-		public static string LogWithDateTime(this string message) => DateTime.Now.ToString() + " - " + message;
+		/// <param name="tw">Textwriter.</param>
+		public static void LogWithDateTime(this string message, TextWriter tw) => tw.WriteLine(DateTime.Now.ToString() + " - " + message);
 		/// <summary>
 		/// Fires the event for logging.
 		/// </summary>
