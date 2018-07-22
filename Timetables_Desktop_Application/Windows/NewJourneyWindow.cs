@@ -66,18 +66,18 @@ namespace Timetables.Application.Desktop
 			if (source == null || target == null)
 				return;
 
-			var jRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
-			RouterResponse jResponse = null;
+			var routerRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+			RouterResponse routerResponse = null;
 
 			if (DataFeed.OfflineMode)
 			{
 				searchButton.Enabled = false;
 				await Task.Run(() =>
 				{
-					using (var jProcessing = new Interop.RouterManaged(DataFeed.Full, jRequest))
+					using (var routerProcessing = new Interop.RouterManaged(DataFeed.Full, routerRequest))
 					{
-						jProcessing.ObtainJourneys();
-						jResponse = jProcessing.ShowJourneys();
+						routerProcessing.ObtainJourneys();
+						routerResponse = routerProcessing.ShowJourneys();
 					}
 				});
 				searchButton.Enabled = true;
@@ -88,21 +88,30 @@ namespace Timetables.Application.Desktop
 				searchButton.Enabled = false;
 				await Task.Run(async () =>
 				{
-					using (var jProcessing = new RouterProcessing())
+					using (var routerProcessing = new RouterProcessing())
 					{
-						await jProcessing.ConnectAsync();
+						var connection = routerProcessing.ConnectAsync();
 
-						jProcessing.Send(jRequest);
+						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
+						{
+							routerProcessing.Send(routerRequest);
 
-						jResponse = await Task.Run(() => jProcessing.Receive<RouterResponse>());
+							routerResponse = await Task.Run(() => routerProcessing.Receive<RouterResponse>());
+						}
+
+						else
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				});
 				searchButton.Enabled = true;
 			}
 
+			if (routerResponse != null)
+			{
+				new JourneyResultsWindow(routerResponse, source.Name, target.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
 
-			new JourneyResultsWindow(jResponse, source.Name, target.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
-			Close();
+				Close();
+			}
 		}
 
 	}

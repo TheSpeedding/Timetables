@@ -122,7 +122,7 @@ namespace Timetables.Server
 
 					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
 
-					new RouterProcessing(client).ProcessAsync().Start();
+					new RouterProcessing(client).ProcessAsync();
 				}
 			});
 		}
@@ -165,7 +165,7 @@ namespace Timetables.Server
 
 					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
 
-					new DepartureBoardProcessing(client).ProcessAsync().Start();
+					new DepartureBoardProcessing(client).ProcessAsync();
 				}
 			});
 		}

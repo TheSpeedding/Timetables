@@ -94,9 +94,9 @@ namespace Timetables.Server
 
 				Logging.Log($"Router response to { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } was successfully sent.");
 			}
-			catch
+			catch (Exception ex)
 			{
-				Logging.Log($"Router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed.");
+				Logging.Log($"Router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
 			}
 			Dispose();
 		}
@@ -142,9 +142,9 @@ namespace Timetables.Server
 
 				Logging.Log($"Departure board response to { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } was successfully send.");
 			}
-			catch
+			catch (Exception ex)
 			{
-				Logging.Log($"Departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed.");
+				Logging.Log($"Departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
 			}
 			Dispose();
 		}

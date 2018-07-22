@@ -44,18 +44,49 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
 			DepartureBoardResponse dbResponse = null;
 
-			await Task.Run(() =>
+			if (DataFeed.OfflineMode)
 			{
-				using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+				searchButton.Enabled = false;
+				await Task.Run(() =>
 				{
-					dbProcessing.ObtainDepartureBoard();
-					dbResponse = dbProcessing.ShowDepartureBoard();
-				}
-			});
+					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+					{
+						dbProcessing.ObtainDepartureBoard();
+						dbResponse = dbProcessing.ShowDepartureBoard();
+					}
+				});
+				searchButton.Enabled = true;
+			}
 			
-			new DepartureBoardResultsWindow(dbResponse, station.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
-			Close();
-		}
-		
+			else
+			{
+				searchButton.Enabled = false;
+				await Task.Run(async () =>
+				{
+					using (var dbProcessing = new DepartureBoardProcessing())
+					{
+						var connection = dbProcessing.ConnectAsync();
+
+						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
+						{
+							dbProcessing.Send(dbRequest);
+
+							dbResponse = await Task.Run(() => dbProcessing.Receive<DepartureBoardResponse>());
+						}
+
+						else
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}					
+				});
+				searchButton.Enabled = true;
+			}
+
+			if (dbResponse != null)
+			{
+				new DepartureBoardResultsWindow(dbResponse, station.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
+
+				Close();
+			}
+		}		
 	}
 }

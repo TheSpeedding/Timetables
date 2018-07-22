@@ -69,6 +69,7 @@ namespace Timetables.Client
 	/// </summary>
 	[XmlInclude(typeof(TripSegment))]
 	[XmlInclude(typeof(FootpathSegment))]
+	[Serializable]
 	public abstract class JourneySegment
 	{
 		/// <summary>

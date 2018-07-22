@@ -19,7 +19,7 @@ namespace Timetables.Client
 		private NetworkStream stream;
 		public void Dispose()
 		{
-			stream.Dispose();
+			if (stream != null) stream.Dispose();
 			client.Dispose();
 		}
 		/// <summary>

@@ -49,4 +49,6 @@
 	<Print>Tisk</Print>
 	<Transfer>Přestup</Transfer>
 	<Outdated>Neaktuální!</Outdated>
+	<UnreachableHost>Server je momentálně nedostupný. Může být offline, zkuste to znovu později.</UnreachableHost>
+	<Offline>Offline</Offline>
 </Localization>

@@ -78,6 +78,10 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static FileInfo ExtraordinaryEventsCss => new FileInfo("css/ExtraordinaryEventsToHtml.css");
 		/// <summary>
+		/// Timeout duration while waiting for connection with the server.
+		/// </summary>
+		public static int TimeoutDuration { get; } = 5000;
+		/// <summary>
 		/// Loads the settings.
 		/// </summary>
 		public static void Load()
