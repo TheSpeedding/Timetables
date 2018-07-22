@@ -39,6 +39,18 @@ namespace Timetables.Client
 		/// </summary>
 		public static bool OfflineMode { get; set; }
 		/// <summary>
+		/// Server IP address. Only relevant in online mode.
+		/// </summary>
+		public static System.Net.IPAddress ServerIpAddress { get; set; }
+		/// <summary>
+		/// End point of router server. Only relevant in online mode.
+		/// </summary>
+		public static uint RouterPortNumber { get; set; }
+		/// <summary>
+		/// End point of departure board server. Only relevant in online mode.
+		/// </summary>
+		public static uint DepartureBoardPortNumber { get; set; }
+		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
 		public static void Load(bool forceDownload = false)

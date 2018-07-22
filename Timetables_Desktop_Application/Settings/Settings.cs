@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Xml;
 using Timetables.Client;
 using Timetables.Preprocessor;
@@ -86,6 +87,8 @@ namespace Timetables.Application.Desktop
 				XmlDocument settings = new XmlDocument();
 				settings.Load(".settings");
 
+				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+
 				switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
 				{
 					case '0':
@@ -101,13 +104,17 @@ namespace Timetables.Application.Desktop
 						throw new ArgumentException();
 				}
 
-				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
-
 				Client.DataFeed.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
 
 				Client.DataFeed.FullDataSource = Client.DataFeed.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
 
 				Client.DataFeed.BasicDataSource = Client.DataFeed.OfflineMode ? null : new Uri(settings.GetElementsByTagName("BasicDataUri")[0].InnerText);
+
+				Client.DataFeed.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
+
+				Client.DataFeed.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
+
+				Client.DataFeed.DepartureBoardPortNumber = settings.GetElementsByTagName("DepBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepBoardPort")[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
@@ -115,6 +122,7 @@ namespace Timetables.Application.Desktop
 			}
 			catch
 			{
+				Localization = new Localization();
 				System.Windows.Forms.MessageBox.Show(Localization.ProblemWhileLoadingSettings);
 				Theme = new Themes.BlueTheme();
 				Localization = Localization.GetTranslation("English");

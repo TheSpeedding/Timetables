@@ -58,7 +58,7 @@ namespace Timetables.Application.Desktop
 			return source;
 		}
 
-		private void searchButton_Click(object sender, EventArgs e)
+		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromComboBox(sourceComboBox);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromComboBox(targetComboBox);
@@ -67,13 +67,39 @@ namespace Timetables.Application.Desktop
 				return;
 
 			var jRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
-			RouterResponse jResponse = null;					
+			RouterResponse jResponse = null;
 
-			using (var jProcessing = new Interop.RouterManaged(DataFeed.Full, jRequest))
+			if (DataFeed.OfflineMode)
 			{
-				jProcessing.ObtainJourneys();
-				jResponse = jProcessing.ShowJourneys();
+				searchButton.Enabled = false;
+				await Task.Run(() =>
+				{
+					using (var jProcessing = new Interop.RouterManaged(DataFeed.Full, jRequest))
+					{
+						jProcessing.ObtainJourneys();
+						jResponse = jProcessing.ShowJourneys();
+					}
+				});
+				searchButton.Enabled = true;
 			}
+
+			else
+			{
+				searchButton.Enabled = false;
+				await Task.Run(async () =>
+				{
+					using (var jProcessing = new RouterProcessing())
+					{
+						await jProcessing.ConnectAsync();
+
+						jProcessing.Send(jRequest);
+
+						jResponse = await Task.Run(() => jProcessing.Receive<RouterResponse>());
+					}
+				});
+				searchButton.Enabled = true;
+			}
+
 
 			new JourneyResultsWindow(jResponse, source.Name, target.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
 			Close();

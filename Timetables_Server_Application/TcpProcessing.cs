@@ -19,26 +19,28 @@ namespace Timetables.Server
 	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
-	abstract class TcpProcessing
+	abstract class TcpProcessing : IDisposable
 	{
 		protected TcpClient client;
+		protected NetworkStream stream;
+		public void Dispose()
+		{
+			stream.Dispose();
+			client.Dispose();
+		}
 		/// <summary>
-		/// Abstract class for processing incoming connections.
+		/// Abstract method for processing incoming connections.
 		/// </summary>
-		/// <returns></returns>
 		public abstract Task ProcessAsync();
 		/// <summary>
-		/// Deserializes the object from the network stream using binary formetter.
+		/// Deserializes the object from the network stream using binary formatter.
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
 		public T Receive<T>()
 		{
-			using (NetworkStream stream = client.GetStream())
-			{
-				IFormatter formatter = new BinaryFormatter();
-				return (T)formatter.Deserialize(stream);
-			}
+			IFormatter formatter = new BinaryFormatter();
+			return (T)formatter.Deserialize(stream);
 		}
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
@@ -47,12 +49,8 @@ namespace Timetables.Server
 		/// <param name="item">Object to serialize.</param>
 		public void Send<T>(T item)
 		{
-			using (NetworkStream stream = client.GetStream())
-			{
-				IFormatter formatter = new BinaryFormatter();
-				formatter.Serialize(stream, item);
-
-			}
+			IFormatter formatter = new BinaryFormatter();
+			formatter.Serialize(stream, item);
 		}
 	}
 
@@ -61,12 +59,23 @@ namespace Timetables.Server
 	/// </summary>
 	sealed class RouterProcessing : TcpProcessing
 	{
-		public RouterProcessing(TcpClient client) => this.client = client;
+		/// <summary>
+		/// Initializes the object.
+		/// </summary>
+		/// <param name="client">TCP client.</param>
+		public RouterProcessing(TcpClient client)
+		{
+			this.client = client;
+			stream = client.GetStream();
+		}
+		/// <summary>
+		/// Processes the request async.
+		/// </summary>
 		public async override Task ProcessAsync()
 		{
 			try
 			{
-				var routerReq = Receive<RouterRequest>();
+				RouterRequest routerReq = Receive<RouterRequest>();
 
 				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
 
@@ -89,6 +98,7 @@ namespace Timetables.Server
 			{
 				Logging.Log($"Router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed.");
 			}
+			Dispose();
 		}
 	}
 
@@ -97,7 +107,18 @@ namespace Timetables.Server
 	/// </summary>
 	sealed class DepartureBoardProcessing : TcpProcessing
 	{
-		public DepartureBoardProcessing(TcpClient client) => this.client = client;
+		/// <summary>
+		/// Initializes the object.
+		/// </summary>
+		/// <param name="client">TCP client.</param>
+		public DepartureBoardProcessing(TcpClient client)
+		{
+			this.client = client;
+			stream = client.GetStream();
+		}
+		/// <summary>
+		/// Processes the request async.
+		/// </summary>
 		public async override Task ProcessAsync()
 		{
 			try
@@ -125,6 +146,7 @@ namespace Timetables.Server
 			{
 				Logging.Log($"Departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed.");
 			}
+			Dispose();
 		}
 	}
 }

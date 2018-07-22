@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using Timetables.Client;
+using System.Threading.Tasks;
 
 namespace Timetables.Application.Desktop
 {
@@ -22,7 +23,7 @@ namespace Timetables.Application.Desktop
 				stationComboBox.Items.Add(station);	
 		}
 
-		private void searchButton_Click(object sender, EventArgs e)
+		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			Structures.Basic.StationsBasic.StationBasic station = null;
 
@@ -43,11 +44,14 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
 			DepartureBoardResponse dbResponse = null;
 
-			using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+			await Task.Run(() =>
 			{
-				dbProcessing.ObtainDepartureBoard();
-				dbResponse = dbProcessing.ShowDepartureBoard();
-			}
+				using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+				{
+					dbProcessing.ObtainDepartureBoard();
+					dbResponse = dbProcessing.ShowDepartureBoard();
+				}
+			});
 			
 			new DepartureBoardResultsWindow(dbResponse, station.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
 			Close();
