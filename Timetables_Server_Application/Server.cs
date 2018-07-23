@@ -54,15 +54,15 @@ namespace Timetables.Server
 		/// <param name="dbPort">Departure board server port.</param>
 		public static void Start(IPAddress address, int routerPort, int dbPort)
 		{
+			Logging.Log("The server has started.");
+
 			Router = new RouterServer(address, routerPort);
 			DepartureBoard = new DepartureBoardServer(address, dbPort);
 
-			Router.OperationThread.Start();
-			DepartureBoard.OperationThread.Start();
+			Router.Start();
+			DepartureBoard.Start();
 
 			IsStopped = false;
-
-			Logging.Log("The server has started.");
 		}
 		/// <summary>
 		/// Stops the server.
@@ -91,6 +91,41 @@ namespace Timetables.Server
 						break;
 				}
 		}
+		/// <summary>
+		/// Starts the server.
+		/// </summary>
+		public void Start()
+		{
+			ServerListener.Start();
+			OperationThread.Start();
+
+			Logging.Log($"Listening at { ((IPEndPoint)ServerListener.Server.LocalEndPoint).Address.ToString() }:{ Port }.");
+		}
+		/// <summary>
+		/// Creates customized server.
+		/// </summary>
+		/// <param name="processingAction">Action that should be performed when client is accepted.</param>
+		/// <param name="address">IP address.</param>
+		/// <param name="port">Port number.</param>
+		protected void CreateServer(Action<TcpClient> processingAction, IPAddress address, int port)
+		{
+			ServerListener = new TcpListener(address, port);
+
+			IpAddress = address;
+			Port = port;
+
+			OperationThread = new Thread(async () =>
+			{
+				while (true)
+				{
+					TcpClient client = await ServerListener.AcceptTcpClientAsync();
+
+					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
+
+					processingAction(client);
+				}
+			});
+		}
 		public void Dispose() => Stop();
 	}
 
@@ -104,28 +139,7 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
-		public RouterServer(IPAddress address, int port)
-		{
-			ServerListener = new TcpListener(address, port);
-			ServerListener.Start();
-
-			IpAddress = address;
-			Port = port;
-
-			Logging.Log($"Listening at { ((IPEndPoint)ServerListener.Server.LocalEndPoint).Address.ToString() }:{ Port }.");
-
-			OperationThread = new Thread(async () =>
-			{
-				while (true)
-				{
-					var client = await ServerListener.AcceptTcpClientAsync();
-
-					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
-
-					new RouterProcessing(client).ProcessAsync();
-				}
-			});
-		}
+		public RouterServer(IPAddress address, int port) => CreateServer((TcpClient client) => new RouterProcessing(client).ProcessAsync(), address, port);
 		/// <summary>
 		/// Stops the server.
 		/// </summary>
@@ -147,28 +161,7 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
-		public DepartureBoardServer(IPAddress address, int port)
-		{
-			ServerListener = new TcpListener(address, port);
-			ServerListener.Start();
-
-			IpAddress = address;
-			Port = port;
-
-			Logging.Log($"Listening at { ((IPEndPoint)ServerListener.Server.LocalEndPoint).Address.ToString() }:{ Port }.");
-
-			OperationThread = new Thread(async () =>
-			{
-				while (true)
-				{
-					var client = await ServerListener.AcceptTcpClientAsync();
-
-					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
-
-					new DepartureBoardProcessing(client).ProcessAsync();
-				}
-			});
-		}
+		public DepartureBoardServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DepartureBoardProcessing(client).ProcessAsync(), address, port);
 		/// <summary>
 		/// Stops the server.
 		/// </summary>
