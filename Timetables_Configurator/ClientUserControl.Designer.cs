@@ -140,7 +140,7 @@
 			this.onlineRadioButton.Text = "Online mode";
 			this.onlineRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.onlineRadioButton.UseVisualStyleBackColor = true;
-			this.onlineRadioButton.CheckedChanged += new System.EventHandler(this.onlineRadioButton_CheckedChanged);
+			this.onlineRadioButton.CheckedChanged += new System.EventHandler(this.offlineRadioButton_CheckedChanged);
 			// 
 			// fullDataLabel
 			// 

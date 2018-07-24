@@ -45,18 +45,11 @@ namespace Timetables.Configurator
 
 		private void offlineRadioButton_CheckedChanged(object sender, EventArgs e)
 		{
+			basicDataTextBox.Enabled = !offlineRadioButton.Checked;
 			fullDataTextBox.Enabled = offlineRadioButton.Checked;
-			serverIpTextBox.Enabled = offlineRadioButton.Checked;
-			portRouterTextBox.Enabled = offlineRadioButton.Checked;
-			portDepBoardTextBox.Enabled = offlineRadioButton.Checked;
-		}
-
-		private void onlineRadioButton_CheckedChanged(object sender, EventArgs e)
-		{
-			fullDataTextBox.Enabled = onlineRadioButton.Checked;
-			serverIpTextBox.Enabled = onlineRadioButton.Checked;
-			portRouterTextBox.Enabled = onlineRadioButton.Checked;
-			portDepBoardTextBox.Enabled = onlineRadioButton.Checked;
+			serverIpTextBox.Enabled = !offlineRadioButton.Checked;
+			portRouterTextBox.Enabled = !offlineRadioButton.Checked;
+			portDepBoardTextBox.Enabled = !offlineRadioButton.Checked;
 		}
 
 		private void saveButton_Click(object sender, EventArgs e)
