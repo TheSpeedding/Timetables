@@ -32,19 +32,22 @@
 			this.serverRadioButton = new System.Windows.Forms.RadioButton();
 			this.clientRadioButton = new System.Windows.Forms.RadioButton();
 			this.clientUserControl = new Timetables.Configurator.ClientUserControl();
+			this.serverUserControl = new Timetables.Configurator.ServerUserControl();
 			this.SuspendLayout();
 			// 
 			// serverRadioButton
 			// 
 			this.serverRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.serverRadioButton.Checked = true;
 			this.serverRadioButton.Location = new System.Drawing.Point(12, 12);
 			this.serverRadioButton.Name = "serverRadioButton";
 			this.serverRadioButton.Size = new System.Drawing.Size(115, 43);
 			this.serverRadioButton.TabIndex = 0;
+			this.serverRadioButton.TabStop = true;
 			this.serverRadioButton.Text = "Server configuration";
 			this.serverRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.serverRadioButton.UseVisualStyleBackColor = true;
-			this.serverRadioButton.CheckedChanged += new System.EventHandler(this.serverRadioButton_CheckedChanged);
+			this.serverRadioButton.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
 			// 
 			// clientRadioButton
 			// 
@@ -56,7 +59,7 @@
 			this.clientRadioButton.Text = "Client configuration";
 			this.clientRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.clientRadioButton.UseVisualStyleBackColor = true;
-			this.clientRadioButton.CheckedChanged += new System.EventHandler(this.clientRadioButton_CheckedChanged);
+			this.clientRadioButton.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
 			// 
 			// clientUserControl
 			// 
@@ -66,12 +69,20 @@
 			this.clientUserControl.TabIndex = 2;
 			this.clientUserControl.Visible = false;
 			// 
+			// serverUserControl
+			// 
+			this.serverUserControl.Location = new System.Drawing.Point(12, 62);
+			this.serverUserControl.Name = "serverUserControl";
+			this.serverUserControl.Size = new System.Drawing.Size(300, 300);
+			this.serverUserControl.TabIndex = 3;
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(322, 450);
 			this.Controls.Add(this.clientUserControl);
+			this.Controls.Add(this.serverUserControl);
 			this.Controls.Add(this.clientRadioButton);
 			this.Controls.Add(this.serverRadioButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -88,6 +99,7 @@
 
 		private System.Windows.Forms.RadioButton serverRadioButton;
 		private System.Windows.Forms.RadioButton clientRadioButton;
+		private ServerUserControl serverUserControl;
 		private ClientUserControl clientUserControl;
 	}
 }

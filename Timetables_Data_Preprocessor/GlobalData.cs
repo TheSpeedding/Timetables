@@ -6,7 +6,7 @@ namespace Timetables.Preprocessor
 	/// <summary>
 	/// Global variables.
 	/// </summary>
-	public static partial class GlobalData
+	public static class GlobalData
 	{
 		public static readonly double CoefficientUndergroundTransfersWithinSameLine; // Total duration will be multiplied by this constant.
 		public static readonly double CoefficientUndergroundTransfersWithinDifferentLines; // Total duration will be multiplied by this constant.
@@ -27,6 +27,7 @@ namespace Timetables.Preprocessor
 			{
 				throw new NotImplementedException("TO-DO: Settings in file. Will be used in a server mode.");
 			}
+
 			catch
 			{
 				CoefficientUndergroundTransfersWithinSameLine = 0.5;
