@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Xml;
 
 namespace Timetables.Preprocessor
 {
@@ -25,7 +26,14 @@ namespace Timetables.Preprocessor
 		{
 			try
 			{
-				throw new NotImplementedException("TO-DO: Settings in file. Will be used in a server mode.");
+				XmlDocument settings = new XmlDocument();
+				settings.Load(".settings");
+
+				CoefficientUndergroundTransfersWithinSameLine = double.Parse(settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinSameLine")?[0].InnerText);
+				CoefficientUndergroundTransfersWithinDifferentLines = double.Parse(settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinDifferentLines")?[0].InnerText);
+				CoefficientUndergroundToSurfaceTransfer = double.Parse(settings.GetElementsByTagName("CoefficientUndergroundToSurfaceTransfer")?[0].InnerText);
+				MaximalDurationOfTransfer = int.Parse(settings.GetElementsByTagName("MaximalDurationOfTransfer")?[0].InnerText);
+				AverageWalkingSpeed = double.Parse(settings.GetElementsByTagName("AverageWalkingSpeed")?[0].InnerText);
 			}
 
 			catch
