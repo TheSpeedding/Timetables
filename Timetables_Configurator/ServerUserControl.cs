@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Timetables.Configurator
 {
@@ -8,7 +10,7 @@ namespace Timetables.Configurator
 	/// Represents one feed item in the listbox.
 	/// </summary>
 	[Serializable]
-	internal class FeedItem
+	public class FeedItem
 	{
 		/// <summary>
 		/// Location name.
@@ -44,7 +46,10 @@ namespace Timetables.Configurator
 					cutwdlTextBox.Text = settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinDifferentLines")[0].InnerText;
 					cutstTextBox.Text = settings.GetElementsByTagName("CoefficientUndergroundToSurfaceTransfer")[0].InnerText;
 					maxDurTextBox.Text = settings.GetElementsByTagName("MaximalDurationOfTransfer")[0].InnerText;
-					avgSpeedTextBox.Text = settings.GetElementsByTagName("AverageWalkingSpeed")[0].InnerText;					
+					avgSpeedTextBox.Text = settings.GetElementsByTagName("AverageWalkingSpeed")[0].InnerText;
+
+					foreach (XmlNode feed in settings.GetElementsByTagName("DataFeed"))
+						DataSources.Add(new FeedItem { Name = feed.FirstChild.InnerText, Link = feed.LastChild.InnerText });
 				}
 				catch
 				{
@@ -70,7 +75,7 @@ namespace Timetables.Configurator
 				}
 
 				CreateElementIfNotExist("RouterPort", "DepartureBoardPort", "CoefficientUndergroundTransfersWithinSameLine", "CoefficientUndergroundTransfersWithinDifferentLines",
-					"CoefficientUndergroundToSurfaceTransfer", "MaximalDurationOfTransfer", "AverageWalkingSpeed");
+					"CoefficientUndergroundToSurfaceTransfer", "MaximalDurationOfTransfer", "AverageWalkingSpeed", "DataFeeds");
 				
 				settings.GetElementsByTagName("RouterPort")[0].InnerText = routerPortTextBox.Text;
 				
@@ -86,6 +91,18 @@ namespace Timetables.Configurator
 
 				settings.GetElementsByTagName("AverageWalkingSpeed")[0].InnerText = avgSpeedTextBox.Text;
 				
+				foreach (var feed in DataSources)
+				{
+					var name = settings.CreateElement("Name"); name.InnerText = feed.Name;
+					var link = settings.CreateElement("Link"); link.InnerText = feed.Link;
+
+					var dataFeed = settings.CreateElement("DataFeed");
+					dataFeed.AppendChild(name);
+					dataFeed.AppendChild(link);
+
+					settings.GetElementsByTagName("DataFeeds")[0].AppendChild(dataFeed);
+				}
+
 				settings.Save(settingsSaveFileDialog.FileName);
 
 				MessageBox.Show("Settings file saved sucessfully.", "Saved sucessfully.", MessageBoxButtons.OK, MessageBoxIcon.Information);
