@@ -47,6 +47,8 @@
 			this.saveButton = new System.Windows.Forms.Button();
 			this.clearButton = new System.Windows.Forms.Button();
 			this.settingsSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.sourcesLabel = new System.Windows.Forms.Label();
+			this.sourcesButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// loadFileButton
@@ -177,7 +179,7 @@
 			// 
 			// saveButton
 			// 
-			this.saveButton.Location = new System.Drawing.Point(156, 243);
+			this.saveButton.Location = new System.Drawing.Point(156, 265);
 			this.saveButton.Name = "saveButton";
 			this.saveButton.Size = new System.Drawing.Size(138, 40);
 			this.saveButton.TabIndex = 19;
@@ -187,7 +189,7 @@
 			// 
 			// clearButton
 			// 
-			this.clearButton.Location = new System.Drawing.Point(6, 243);
+			this.clearButton.Location = new System.Drawing.Point(6, 265);
 			this.clearButton.Name = "clearButton";
 			this.clearButton.Size = new System.Drawing.Size(138, 40);
 			this.clearButton.TabIndex = 20;
@@ -201,10 +203,31 @@
 			this.settingsSaveFileDialog.DefaultExt = "settings";
 			this.settingsSaveFileDialog.FileName = ".settings";
 			// 
+			// sourcesLabel
+			// 
+			this.sourcesLabel.Location = new System.Drawing.Point(3, 239);
+			this.sourcesLabel.Name = "sourcesLabel";
+			this.sourcesLabel.Size = new System.Drawing.Size(122, 20);
+			this.sourcesLabel.TabIndex = 21;
+			this.sourcesLabel.Text = "Data sources:";
+			this.sourcesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// sourcesButton
+			// 
+			this.sourcesButton.Location = new System.Drawing.Point(131, 238);
+			this.sourcesButton.Name = "sourcesButton";
+			this.sourcesButton.Size = new System.Drawing.Size(166, 21);
+			this.sourcesButton.TabIndex = 22;
+			this.sourcesButton.Text = "Select...";
+			this.sourcesButton.UseVisualStyleBackColor = true;
+			this.sourcesButton.Click += new System.EventHandler(this.sourcesButton_Click);
+			// 
 			// ServerUserControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.sourcesButton);
+			this.Controls.Add(this.sourcesLabel);
 			this.Controls.Add(this.clearButton);
 			this.Controls.Add(this.saveButton);
 			this.Controls.Add(this.avgSpeedLabel);
@@ -223,7 +246,7 @@
 			this.Controls.Add(this.routerPortTextBox);
 			this.Controls.Add(this.loadFileButton);
 			this.Name = "ServerUserControl";
-			this.Size = new System.Drawing.Size(300, 300);
+			this.Size = new System.Drawing.Size(300, 311);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -250,5 +273,7 @@
 		private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.Button clearButton;
 		private System.Windows.Forms.SaveFileDialog settingsSaveFileDialog;
+		private System.Windows.Forms.Label sourcesLabel;
+		private System.Windows.Forms.Button sourcesButton;
 	}
 }

@@ -4,8 +4,26 @@ using System.Xml;
 
 namespace Timetables.Configurator
 {
+	/// <summary>
+	/// Represents one feed item in the listbox.
+	/// </summary>
+	[Serializable]
+	internal class FeedItem
+	{
+		/// <summary>
+		/// Location name.
+		/// </summary>
+		public string Name { get; set; }
+		/// <summary>
+		/// Link to the data feed.
+		/// </summary>
+		public string Link { get; set; }
+		public override string ToString() => Name;
+	}
 	public partial class ServerUserControl : UserControl
 	{
+		internal System.Collections.Generic.List<FeedItem> DataSources { get; } = new System.Collections.Generic.List<FeedItem>();
+
 		public ServerUserControl()
 		{
 			InitializeComponent();
@@ -84,5 +102,7 @@ namespace Timetables.Configurator
 			cutwslTextBox.Text = string.Empty;
 			dbPortTextBox.Text = string.Empty;
 		}
+
+		private void sourcesButton_Click(object sender, EventArgs e) => new DataSourcesWindow(this).ShowDialog();
 	}
 }

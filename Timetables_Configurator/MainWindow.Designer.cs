@@ -73,7 +73,7 @@
 			// 
 			this.serverUserControl.Location = new System.Drawing.Point(12, 62);
 			this.serverUserControl.Name = "serverUserControl";
-			this.serverUserControl.Size = new System.Drawing.Size(300, 300);
+			this.serverUserControl.Size = new System.Drawing.Size(300, 376);
 			this.serverUserControl.TabIndex = 3;
 			// 
 			// MainWindow

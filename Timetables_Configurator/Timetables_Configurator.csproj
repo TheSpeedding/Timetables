@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,6 +54,12 @@
     <Compile Include="ClientUserControl.Designer.cs">
       <DependentUpon>ClientUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataSourcesWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataSourcesWindow.Designer.cs">
+      <DependentUpon>DataSourcesWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,14 +68,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="ServerUserControl.cs" />
     <Compile Include="ServerUserControl.designer.cs">
       <DependentUpon>ServerUserControl.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ClientUserControl.resx">
       <DependentUpon>ClientUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataSourcesWindow.resx">
+      <DependentUpon>DataSourcesWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -83,6 +93,7 @@
     <EmbeddedResource Include="ServerUserControl.resx">
       <DependentUpon>ServerUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
