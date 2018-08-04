@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B0E2AA0A-FFF4-42F3-9FC7-5A9141C92784}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Timetables_Server_Application</RootNamespace>
+    <RootNamespace>Timetables.Server</RootNamespace>
     <AssemblyName>Timetables_Server_Application</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,16 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFeed.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TcpProcessing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Timetables_Client_Library\Timetables_Client_Library.csproj">
+      <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
+      <Name>Timetables_Client_Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
       <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
       <Name>Timetables_Data_Preprocessor</Name>

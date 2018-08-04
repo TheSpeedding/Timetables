@@ -77,7 +77,7 @@ namespace Timetables.Server
 			Logging.Log("The server has stopped.");
 		}
 		/// <summary>
-		/// Method that serves manipulation with the server while running, block the current thread.
+		/// Method that serves manipulation with the server while running, blocks the current thread.
 		/// </summary>
 		public static void ServerManipulation()
 		{

@@ -11,11 +11,6 @@ using Timetables.Client;
 
 namespace Timetables.Server
 {
-	public static class DataFeed // TEMPORARY
-	{
-		public static Interop.DataFeedManaged Full { get; private set; } = new Interop.DataFeedManaged();
-	}
-
 	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
@@ -77,7 +72,7 @@ namespace Timetables.Server
 			{
 				RouterRequest routerReq = Receive<RouterRequest>();
 
-				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
+				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { DataFeed.Basic.Stations.FindByIndex((int)routerReq.SourceStationID) } - { DataFeed.Basic.Stations.FindByIndex((int)routerReq.TargetStationID) }.");
 
 				RouterResponse routerRes = null;
 
@@ -125,7 +120,7 @@ namespace Timetables.Server
 			{
 				var dbRequest = Receive<DepartureBoardRequest>();
 
-				Logging.Log($"Received departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
+				Logging.Log($"Received departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { DataFeed.Basic.Stations.FindByIndex((int)dbRequest.StopID) }.");
 
 				DepartureBoardResponse dbRes = null;
 

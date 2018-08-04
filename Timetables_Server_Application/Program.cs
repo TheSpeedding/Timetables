@@ -16,7 +16,9 @@ namespace Timetables.Server
 			Logging.LoggingEvent += (string message) => message.LogWithDateTime(Logging.FileForLogging);
 			Logging.LoggingEvent += (string message) => message.LogWithDateTime(Console.Out);
 
-			Server.Start(IPAddress.Any, 24700, 24701);
+			while (!DataFeed.Loaded) ; // Temporary. Actually, this does nothing. Just forces data to be loaded.
+
+			Server.Start(IPAddress.Any, Settings.RouterPort, Settings.DepartureBoardPort);
 
 			Server.ServerManipulation();
 
