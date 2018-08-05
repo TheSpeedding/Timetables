@@ -31,17 +31,23 @@ namespace Timetables.Server
 				XmlDocument settings = new XmlDocument();
 				settings.Load(".settings");
 
+				foreach (XmlNode link in settings.GetElementsByTagName("Link"))
+					try { DataFeedSources.Add(new Uri(link.InnerText)); } catch { /* Invalid URI. Do not process this data source. */ }
+
 				RouterPort = int.Parse(settings.GetElementsByTagName("RouterPort")?[0].InnerText);
 				DepartureBoardPort = int.Parse(settings.GetElementsByTagName("DepartureBoardPort")?[0].InnerText);
-
-				foreach (XmlNode link in settings.GetElementsByTagName("Link"))
-					DataFeedSources.Add(new Uri(link.InnerText));
 			}
 
 			catch
 			{
 				RouterPort = 24700;
 				DepartureBoardPort = 24701;
+
+				if (DataFeedSources.Count == 0)
+				{
+					Console.WriteLine("Enter link to the data source: ");
+					DataFeedSources.Add(new Uri(Console.ReadLine()));
+				}
 			}
 		}
 	}
