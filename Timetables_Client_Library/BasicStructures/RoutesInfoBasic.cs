@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Timetables.Client;
 
 namespace Timetables.Structures.Basic
@@ -9,7 +10,7 @@ namespace Timetables.Structures.Basic
 	/// <summary>
 	/// Collection of routes info.
 	/// </summary>
-	public class RoutesInfoBasic : IEnumerable<RoutesInfoBasic.RouteInfoBasic>
+	public class RoutesInfoBasic : Preprocessor.RoutesInfo, IEnumerable<RoutesInfoBasic.RouteInfoBasic>
 	{
 		/// <summary>
 		/// Class collecting basic information about route info.
@@ -35,7 +36,7 @@ namespace Timetables.Structures.Basic
 				Color = c;
 			}
 		}
-		private List<RouteInfoBasic> list = new List<RouteInfoBasic>();
+		private new List<RouteInfoBasic> list = new List<RouteInfoBasic>();
 		/// <summary>
 		/// Gets required route info.
 		/// </summary>
@@ -45,11 +46,11 @@ namespace Timetables.Structures.Basic
 		/// <summary>
 		/// Gets the total number of routes info.
 		/// </summary>
-		public int Count => list.Count;
+		public new int Count => list.Count;
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		public IEnumerator<RouteInfoBasic> GetEnumerator() => ((IEnumerable<RouteInfoBasic>)list).GetEnumerator();
+		public new IEnumerator<RouteInfoBasic> GetEnumerator() => ((IEnumerable<RouteInfoBasic>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<RouteInfoBasic>)list).GetEnumerator();
 		public RoutesInfoBasic(System.IO.StreamReader sr)
 		{

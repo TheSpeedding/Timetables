@@ -7,7 +7,7 @@ namespace Timetables.Structures.Basic
 	/// <summary>
 	/// Collection of stops.
 	/// </summary>
-	public class StopsBasic : IEnumerable<StopsBasic.StopBasic>
+	public class StopsBasic : Preprocessor.Stops, IEnumerable<StopsBasic.StopBasic>
 	{
 		/// <summary>
 		/// Class collecting basic information about stop.
@@ -46,7 +46,7 @@ namespace Timetables.Structures.Basic
 				ThroughgoingRoutes = routes;
 			}
 		}
-		private List<StopBasic> list = new List<StopBasic>();
+		private new List<StopBasic> list = new List<StopBasic>();
 		/// <summary>
 		/// Gets required stop.
 		/// </summary>
@@ -56,11 +56,11 @@ namespace Timetables.Structures.Basic
 		/// <summary>
 		/// Gets the total number of stops.
 		/// </summary>
-		public int Count => list.Count;
+		public new int Count => list.Count;
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		public IEnumerator<StopBasic> GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
+		public new IEnumerator<StopBasic> GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
 		public StopsBasic(System.IO.StreamReader sr, StationsBasic stations, RoutesInfoBasic routes)
 		{

@@ -8,7 +8,7 @@ namespace Timetables.Structures.Basic
 	/// <summary>
 	/// Collection of stations.
 	/// </summary>
-	public class StationsBasic : IEnumerable<StationsBasic.StationBasic>
+	public class StationsBasic : Preprocessor.Stations, IEnumerable<StationsBasic.StationBasic>
 	{
 		/// <summary>
 		/// Class collecting basic information about station.
@@ -44,21 +44,21 @@ namespace Timetables.Structures.Basic
 				Name = name;
 			}
 		}
-		private List<StationBasic> list = new List<StationBasic>();
+		private new List<StationBasic> list = new List<StationBasic>();
 		/// <summary>
 		/// Gets required station.
 		/// </summary>
 		/// <param name="index">Identificator of the station.</param>
 		/// <returns>Obtained station.</returns>
-		public StationBasic this[int index] => list[index];
+		public new StationBasic this[int index] => list[index];
 		/// <summary>
 		/// Gets the total number of stations.
 		/// </summary>
-		public int Count => list.Count;
+		public new int Count => list.Count;
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		public IEnumerator<StationBasic> GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
+		public new IEnumerator<StationBasic> GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
 		public StationsBasic(System.IO.StreamReader sr)
 		{
@@ -71,7 +71,7 @@ namespace Timetables.Structures.Basic
 		/// Returns collection of stations matching the pattern.
 		/// </summary>
 		/// <param name="name">Part of the name.</param>
-		public IEnumerable<StationBasic> FindByPartOfName(string name) => from station in this where station.Name.Contains(name) select station;
+		public IEnumerable<StationBasic> FindByPartOfName(string name) => from station in list where station.Name.Contains(name) select station;
 		/// <summary>
 		/// Returns station represented by the name.
 		/// </summary>

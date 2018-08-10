@@ -27,4 +27,3 @@ namespace Timetables.Server
 		}
 	}
 }
-14
