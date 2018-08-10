@@ -20,7 +20,7 @@ namespace Timetables.Preprocessor
         StopTimes StopTimes { get; }
         Routes Routes { get; }
 		Footpaths Footpaths { set; get; }
-		string ExpirationDate { set; get; }
+		DateTime ExpirationDate { set; get; }
         void CreateDataFeed(string path);
 		void CreateBasicData(string path);
     }
@@ -191,16 +191,16 @@ Error: { ex.Message } Type of { ex.GetType() }.");
 			dataFeed.Stops.MergeCollections(toBeAdded.Stops);
 			dataFeed.StopTimes.MergeCollections(toBeAdded.StopTimes);
 			dataFeed.Trips.MergeCollections(toBeAdded.Trips);
-			dataFeed.ExpirationDate = int.Parse(dataFeed.ExpirationDate) < int.Parse(toBeAdded.ExpirationDate) ? dataFeed.ExpirationDate : toBeAdded.ExpirationDate;
+			dataFeed.ExpirationDate = dataFeed.ExpirationDate < toBeAdded.ExpirationDate ? dataFeed.ExpirationDate : toBeAdded.ExpirationDate;
 		}
 
 		/// <summary>
 		/// Checks if the data are present.
 		/// </summary>
 		public static bool AreDataPresent => Directory.Exists("data") &&
-            File.Exists("data/calendar.txt") && File.Exists("data/calendar_dates.txt") && File.Exists("data/expires.txt") &&
-            File.Exists("data/footpaths.txt") && File.Exists("data/routes.txt") && File.Exists("data/routes_info.txt") &&
-            File.Exists("data/stations.txt") && File.Exists("data/stop_times.txt") && File.Exists("data/stops.txt") &&
-            File.Exists("data/trips.txt");
+            File.Exists("data/calendar.tfd") && File.Exists("data/calendar_dates.tfd") && File.Exists("data/expires.tfd") &&
+            File.Exists("data/footpaths.tfd") && File.Exists("data/routes.tfd") && File.Exists("data/routes_info.tfd") &&
+            File.Exists("data/stations.tfd") && File.Exists("data/stop_times.tfd") && File.Exists("data/stops.tfd") &&
+            File.Exists("data/trips.tfd");
     }
 }

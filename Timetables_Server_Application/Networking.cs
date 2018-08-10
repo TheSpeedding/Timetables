@@ -14,14 +14,14 @@ namespace Timetables.Server
 	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
-	abstract class TcpProcessing : IDisposable
+	abstract class Networking : IDisposable
 	{
 		protected TcpClient client;
 		protected NetworkStream stream;
 		public void Dispose()
 		{
-			stream.Dispose();
-			client.Dispose();
+			stream?.Dispose();
+			client?.Dispose();
 		}
 		/// <summary>
 		/// Abstract method for processing incoming connections.
@@ -32,27 +32,19 @@ namespace Timetables.Server
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
-		public T Receive<T>()
-		{
-			IFormatter formatter = new BinaryFormatter();
-			return (T)formatter.Deserialize(stream);
-		}
+		public T Receive<T>() => (T)new BinaryFormatter().Deserialize(stream);
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
 		/// </summary>
 		/// <typeparam name="T">Object to serialize.</typeparam>
 		/// <param name="item">Object to serialize.</param>
-		public void Send<T>(T item)
-		{
-			IFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(stream, item);
-		}
+		public void Send<T>(T item) => new BinaryFormatter().Serialize(stream, item);
 	}
 
 	/// <summary>
-	/// Specialized class derived from TcpProcessing for router requests.
+	/// Specialized class derived from Netowrking for router requests.
 	/// </summary>
-	sealed class RouterProcessing : TcpProcessing
+	sealed class RouterProcessing : Networking
 	{
 		/// <summary>
 		/// Initializes the object.
@@ -98,9 +90,9 @@ namespace Timetables.Server
 	}
 
 	/// <summary>
-	/// Specialized class derived from TcpProcessing for departure board requests.
+	/// Specialized class derived from Netowrking for departure board requests.
 	/// </summary>
-	sealed class DepartureBoardProcessing : TcpProcessing
+	sealed class DepartureBoardProcessing : Networking
 	{
 		/// <summary>
 		/// Initializes the object.

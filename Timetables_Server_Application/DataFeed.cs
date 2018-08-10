@@ -57,7 +57,6 @@ namespace Timetables.Server
 				try
 				{
 					Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(Settings.DataFeedSources.ToArray());
-					ZipFile.CreateFromDirectory("basic/", "basic.zip");
 				}
 				catch
 				{

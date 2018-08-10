@@ -13,14 +13,14 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
-	public class TcpProcessing : IDisposable
+	public class Networking : IDisposable
 	{
 		private TcpClient client = new TcpClient();
 		private NetworkStream stream;
 		public void Dispose()
 		{
-			if (stream != null) stream.Dispose();
-			client.Dispose();
+			stream?.Dispose();
+			client?.Dispose();
 		}
 		/// <summary>
 		/// Connects client to the specified host.
@@ -37,27 +37,25 @@ namespace Timetables.Client
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
-		public T Receive<T>()
-		{
-			IFormatter formatter = new BinaryFormatter();
-			return (T)formatter.Deserialize(stream);
-		}
+		public T Receive<T>() => (T)new BinaryFormatter().Deserialize(stream);
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
 		/// </summary>
 		/// <typeparam name="T">Object to serialize.</typeparam>
 		/// <param name="item">Object to serialize.</param>
-		public void Send<T>(T item)
-		{
-			IFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(stream, item);
-		}
+		public void Send<T>(T item) => new BinaryFormatter().Serialize(stream, item);
 	}
-	public class RouterProcessing : TcpProcessing
+	/// <summary>
+	/// Specialized class for router processing.
+	/// </summary>
+	public sealed class RouterProcessing : Networking
 	{
 		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.RouterPortNumber);
 	}
-	public class DepartureBoardProcessing : TcpProcessing
+	/// <summary>
+	/// Specialized class for departure board processing.
+	/// </summary>
+	public sealed class DepartureBoardProcessing : Networking
 	{
 		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.DepartureBoardPortNumber);
 	}

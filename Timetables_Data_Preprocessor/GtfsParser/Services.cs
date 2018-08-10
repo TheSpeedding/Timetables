@@ -99,13 +99,13 @@ namespace Timetables.Preprocessor
         /// Gets the date that the timetables expires in.
         /// </summary>
         /// <returns>Expiration date of the timetables.</returns>
-        public int GetExpirationDate()
+        public DateTime GetExpirationDate()
         {
             int min = int.MaxValue;
             foreach (var item in list)
                 if (item.Value.ValidUntil < min)
                     min = item.Value.ValidUntil;
-            return min;
+            return DateTime.ParseExact(min.ToString(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 		}
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
