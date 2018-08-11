@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Timetables.Structures.Basic
 {
@@ -23,10 +24,6 @@ namespace Timetables.Structures.Basic
 	public class DataFeedBasicResponse
 	{
 		/// <summary>
-		/// Version of the data feed at the server side. The client should refresh this.
-		/// </summary>
-		public string Version { get; set; }
-		/// <summary>
 		/// Basic data.
 		/// </summary>
 		public DataFeedBasic Data { get; set; }
@@ -45,11 +42,14 @@ namespace Timetables.Structures.Basic
 		public StationsBasic Stations { get; set; }
 		public RoutesInfoBasic RoutesInfo { get; set; }
 		public StopsBasic Stops { get; set; }
+		public string Version { get; set; }
 		public DataFeedBasic(string path)
 		{
 			Stations = new StationsBasic(new StreamReader(path + "/stations.tfb"));
 			RoutesInfo = new RoutesInfoBasic(new StreamReader(path + "/routes_info.tfb"));
 			Stops = new StopsBasic(new StreamReader(path + "/stops.tfb"), Stations, RoutesInfo);
+			using (var sr = new System.IO.StreamReader(path + "/.version"))
+				Version = sr.ReadLine();
 		}
 		public DataFeedBasic() : this("basic") { }
 		/// <summary>
@@ -65,6 +65,8 @@ namespace Timetables.Structures.Basic
 			RoutesInfo.WriteBasic(new StreamWriter(folder + "/routes_info.tfb"));
 			Stops.WriteBasic(new StreamWriter(folder + "/stops.tfb"));
 			Stations.WriteBasic(new StreamWriter(folder + "/stations.tfb"));
+			using (var sw = new StreamWriter(folder + "/.version"))
+				sw.WriteLine(Version);
 		}
 	}
 }

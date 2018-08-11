@@ -21,6 +21,9 @@ namespace Timetables.Server
 		/// </summary>
 		public static int DepartureBoardPort { get; }
 		/// <summary>
+		/// Basic data feed port.</summary>
+		public static int BasicDataFeedPort { get; }
+		/// <summary>
 		/// Links to data feed sources.
 		/// </summary>
 		public static List<Uri> DataFeedSources { get; } = new List<Uri>();
@@ -36,12 +39,14 @@ namespace Timetables.Server
 
 				RouterPort = int.Parse(settings.GetElementsByTagName("RouterPort")?[0].InnerText);
 				DepartureBoardPort = int.Parse(settings.GetElementsByTagName("DepartureBoardPort")?[0].InnerText);
+				BasicDataFeedPort = int.Parse(settings.GetElementsByTagName("BasicDataPort")?[0].InnerText);
 			}
 
 			catch
 			{
-				RouterPort = 24700;
-				DepartureBoardPort = 24701;
+				RouterPort = 27000;
+				DepartureBoardPort = 27001;
+				BasicDataFeedPort = 27002;
 
 				if (DataFeedSources.Count == 0)
 				{

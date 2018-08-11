@@ -22,7 +22,6 @@ namespace Timetables.Preprocessor
 			/// <summary>
 			/// Station ID, Name.
 			/// </summary>
-			/// <returns></returns>
             public override string ToString() => ID + ";" + Name + ";";
 
 			/// <summary>

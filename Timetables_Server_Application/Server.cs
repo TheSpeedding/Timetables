@@ -43,6 +43,10 @@ namespace Timetables.Server
 		/// </summary>
 		public static RouterServer Router { get; private set; }
 		/// <summary>
+		/// Object representing basic data server.
+		/// </summary>
+		public static BasicDataFeedServer BasicData { get; private set; }
+		/// <summary>
 		/// Indicates whether the server is stopped.
 		/// </summary>
 		public static bool IsStopped { get; private set; } = true;
@@ -52,15 +56,18 @@ namespace Timetables.Server
 		/// <param name="address">IP address.</param>
 		/// <param name="routerPort">Router server port.</param>
 		/// <param name="dbPort">Departure board server port.</param>
-		public static void Start(IPAddress address, int routerPort, int dbPort)
+		/// <param name="dfPort">Data feed server port.</param>
+		public static void Start(IPAddress address, int routerPort, int dbPort, int dfPort)
 		{
 			Logging.Log("The server has started.");
 
 			Router = new RouterServer(address, routerPort);
 			DepartureBoard = new DepartureBoardServer(address, dbPort);
+			BasicData = new BasicDataFeedServer(address, dfPort);
 
 			Router.Start();
 			DepartureBoard.Start();
+			BasicData.Start();
 
 			IsStopped = false;
 		}
@@ -71,6 +78,7 @@ namespace Timetables.Server
 		{
 			Router.Stop();
 			DepartureBoard.Stop();
+			BasicData.Stop();
 
 			IsStopped = true;
 
@@ -140,6 +148,28 @@ namespace Timetables.Server
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public RouterServer(IPAddress address, int port) => CreateServer((TcpClient client) => new RouterProcessing(client).ProcessAsync(), address, port);
+		/// <summary>
+		/// Stops the server.
+		/// </summary>
+		public new void Stop()
+		{
+			ServerListener.Stop();
+			OperationThread.Abort();
+			OperationThread.Join();
+		}
+	}
+
+	/// <summary>
+	/// Basic data feed server class.
+	/// </summary>
+	public sealed class BasicDataFeedServer : Server
+	{
+		/// <summary>
+		/// Initializes new instance of basic data feed server.
+		/// </summary>
+		/// <param name="address">IP address.</param>
+		/// <param name="port">Port number.</param>
+		public BasicDataFeedServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DataFeedProcessing(client).ProcessAsync(), address, port);
 		/// <summary>
 		/// Stops the server.
 		/// </summary>

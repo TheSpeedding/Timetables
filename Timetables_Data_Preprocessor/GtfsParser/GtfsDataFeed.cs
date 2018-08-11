@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Timetables.Preprocessor
 {
@@ -153,6 +154,12 @@ namespace Timetables.Preprocessor
 			RoutesInfo.WriteBasic(new StreamWriter(path + "/routes_info.tfb"));
 			Stops.WriteBasic(new StreamWriter(path + "/stops.tfb"));
 			Stations.WriteBasic(new StreamWriter(path + "/stations.tfb"));
+
+			Random random = new Random();
+			var version = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10).Select(s => s[random.Next(s.Length)]).ToArray()); // Create a new version stamp if not exists.
+
+			using (var sw = new StreamWriter(path + "/.version"))
+				sw.WriteLine(version);
 		}
 	}
 }

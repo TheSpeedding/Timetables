@@ -53,7 +53,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
-		public static void Load(bool forceDownload = false)
+		public static async void Load(bool forceDownload = false)
 		{
 			Downloaded = false;
 			
@@ -73,17 +73,30 @@ namespace Timetables.Client
 
 			// Online mode.
 
-			else if (!System.IO.Directory.Exists("basic") || forceDownload)
-			{
+			else
 				try
 				{
-					throw new NotImplementedException();
+					Structures.Basic.DataFeedBasicResponse response = null;
+
+					try
+					{
+						using (var sr = new System.IO.StreamReader("basic/.version"))
+							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), 5000);
+					}
+
+					catch // Data does not exist or the version file is corrupted.
+					{
+						response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), 15000);
+					}
+
+					if (response.ShouldBeUpdated)
+						response.Data.Save();
+
 				}
 				catch
 				{
 					throw new ArgumentException("Fatal error. Cannot process the data.");
 				}
-			}
 
 			Downloaded = true;
 

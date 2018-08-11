@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Timetables.Structures.Basic
 {
 	/// <summary>
 	/// Collection of stops.
 	/// </summary>
-	public class StopsBasic : Preprocessor.Stops, IEnumerable<StopsBasic.StopBasic>
+	[Serializable]
+	public class StopsBasic : IEnumerable<StopsBasic.StopBasic>
 	{
 		/// <summary>
 		/// Class collecting basic information about stop.
 		/// </summary>
+		[Serializable]
 		public class StopBasic
 		{
 			/// <summary>
 			/// Stop ID.
 			/// </summary>
-			public uint ID { get; }
+			public uint ID { get; set; }
 			/// <summary>
 			/// Parent station.
 			/// </summary>
@@ -29,15 +32,15 @@ namespace Timetables.Structures.Basic
 			/// <summary>
 			/// Latitude of the stop.
 			/// </summary>
-			public double Latitude { get; }
+			public double Latitude { get; set; }
 			/// <summary>
 			/// Longitude of the stop.
 			/// </summary>
-			public double Longitude { get; }
+			public double Longitude { get; set; }
 			/// <summary>
 			/// List of all routes that goes through this stop.
 			/// </summary>
-			public List<RoutesInfoBasic.RouteInfoBasic> ThroughgoingRoutes { get; }
+			public List<RoutesInfoBasic.RouteInfoBasic> ThroughgoingRoutes { get; set; }
 			public StopBasic(StationsBasic.StationBasic station, double lat, double lon, List<RoutesInfoBasic.RouteInfoBasic> routes)
 			{
 				ParentStation = station;
@@ -45,8 +48,22 @@ namespace Timetables.Structures.Basic
 				Longitude = lon;
 				ThroughgoingRoutes = routes;
 			}
+			/// <summary>
+			/// Stop ID, Parent Station ID, Latitude, Longitude, List Of All Throughgoing Routes (separated by a backtick).
+			/// </summary>
+			public override string ToString()
+			{
+				System.Text.StringBuilder result = new System.Text.StringBuilder();
+				result.Append(ID + ";" + ParentStation.ID + ";" + Latitude.ToString(CultureInfo.InvariantCulture) + ";" + Longitude.ToString(CultureInfo.InvariantCulture) + ";");
+
+				foreach (var route in ThroughgoingRoutes)
+					result.Append(route.ID + "`");
+
+				result.Append(";");
+				return result.ToString();
+			}
 		}
-		private new List<StopBasic> list = new List<StopBasic>();
+		private List<StopBasic> list = new List<StopBasic>();
 		/// <summary>
 		/// Gets required stop.
 		/// </summary>
@@ -56,11 +73,11 @@ namespace Timetables.Structures.Basic
 		/// <summary>
 		/// Gets the total number of stops.
 		/// </summary>
-		public new int Count => list.Count;
+		public int Count => list.Count;
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		public new IEnumerator<StopBasic> GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
+		public IEnumerator<StopBasic> GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StopBasic>)list).GetEnumerator();
 		public StopsBasic(System.IO.StreamReader sr, StationsBasic stations, RoutesInfoBasic routes)
 		{
@@ -93,5 +110,17 @@ namespace Timetables.Structures.Basic
 		/// </summary>
 		/// <param name="index">Index of the stop.</param>
 		public StopBasic FindByIndex(uint index) => this[(int)index];
+		/// <summary>
+		/// Writes basic data into given stream.
+		/// </summary>
+		/// <param name="stops">Stream that the data should be written in.</param>
+		public void WriteBasic(System.IO.StreamWriter stops)
+		{
+			stops.WriteLine(Count);
+			foreach (var item in list)
+				stops.Write(item);
+			stops.Close();
+			stops.Dispose();
+		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Timetables.Client
 	/// </summary>
 	/// <typeparam name="Request">Request type.</typeparam>
 	/// <typeparam name="Response">Response type.</typeparam>
-	public interface IProcessible<Request, Response>
+	public interface IOnlineProcessible<Request, Response>
 	{
 		/// <summary>
 		/// Processes the request asynchronously.
@@ -65,7 +65,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Specialized class for router processing.
 	/// </summary>
-	public sealed class RouterProcessing : Networking, IProcessible<RouterRequest, RouterResponse>
+	public sealed class RouterProcessing : Networking, IOnlineProcessible<RouterRequest, RouterResponse>
 	{
 		/// <summary>
 		/// Connects host to the router server.
@@ -109,7 +109,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Specialized class for departure board processing.
 	/// </summary>
-	public sealed class DepartureBoardProcessing : Networking, IProcessible<DepartureBoardRequest, DepartureBoardResponse>
+	public sealed class DepartureBoardProcessing : Networking, IOnlineProcessible<DepartureBoardRequest, DepartureBoardResponse>
 	{
 		/// <summary>
 		/// Connects host to the departure board server.
@@ -153,7 +153,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Specialized class for basic data downloading.
 	/// </summary>
-	public sealed class BasicDataProcessing : Networking, IProcessible<Structures.Basic.DataFeedBasicRequest, Structures.Basic.DataFeedBasicResponse>
+	public sealed class BasicDataProcessing : Networking, IOnlineProcessible<DataFeedBasicRequest, DataFeedBasicResponse>
 	{
 		/// <summary>
 		/// Connects host to the basic data feed server.

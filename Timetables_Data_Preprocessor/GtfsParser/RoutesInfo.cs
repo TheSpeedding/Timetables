@@ -7,7 +7,7 @@ namespace Timetables.Preprocessor
 	/// <summary>
 	/// Static class that supplies extensions needed for routes info.
 	/// </summary>
-	public static class RoutesInfoExtension
+	public static partial class RoutesInfoExtension
 	{
 		/// <summary>
 		/// Converts Color object to HEX string representation

@@ -88,7 +88,59 @@ namespace Timetables.Server
 			Dispose();
 		}
 	}
+	/// <summary>
+	/// Specialized class derived from Netowrking for data feed requests.
+	/// </summary>
+	sealed class DataFeedProcessing : Networking
+	{
+		/// <summary>
+		/// Initializes the object.
+		/// </summary>
+		/// <param name="client">TCP client.</param>
+		public DataFeedProcessing(TcpClient client)
+		{
+			this.client = client;
+			stream = client.GetStream();
+		}
 
+		/// <summary>
+		/// Processes the request async.
+		/// </summary>
+		public async override Task ProcessAsync()
+		{
+			try
+			{
+				var dfRequest = Receive<Structures.Basic.DataFeedBasicRequest>();
+
+				Logging.Log($"Received data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dfRequest.Version }.");
+
+				Structures.Basic.DataFeedBasicResponse dfRes = null;
+
+				await Task.Run(() =>
+				{
+					if (dfRequest.Version == "ForceDownload" || dfRequest.Version != DataFeed.Basic.Version)
+					{
+						dfRes = new Structures.Basic.DataFeedBasicResponse() { Data = DataFeed.Basic };
+					}
+
+					else
+					{
+						dfRes = new Structures.Basic.DataFeedBasicResponse();
+					}
+				});
+
+				Send(dfRes);
+
+				Logging.Log($"Data feed response to { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } was successfully send.");
+			}
+			catch (Exception ex)
+			{
+				Logging.Log($"Data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
+			}
+			Dispose();
+
+		}
+	}
 	/// <summary>
 	/// Specialized class derived from Netowrking for departure board requests.
 	/// </summary>

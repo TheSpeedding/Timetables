@@ -8,25 +8,27 @@ namespace Timetables.Structures.Basic
 	/// <summary>
 	/// Collection of stations.
 	/// </summary>
-	public class StationsBasic : Preprocessor.Stations, IEnumerable<StationsBasic.StationBasic>
+	[Serializable]
+	public class StationsBasic : IEnumerable<StationsBasic.StationBasic>
 	{
 		/// <summary>
 		/// Class collecting basic information about station.
 		/// </summary>
+		[Serializable]
 		public class StationBasic
 		{
 			/// <summary>
 			/// Station ID.
 			/// </summary>
-			public uint ID { get; }
+			public uint ID { get; set; }
 			/// <summary>
 			/// Name of the station.
 			/// </summary>
-			public string Name { get; }
+			public string Name { get; set; }
 			/// <summary>
 			/// Child stops.
 			/// </summary>
-			public List<StopsBasic.StopBasic> ChildStops { get; }
+			public List<StopsBasic.StopBasic> ChildStops { get; set; }
 			/// <summary>
 			/// Throughgoing routes.
 			/// </summary>
@@ -36,7 +38,10 @@ namespace Timetables.Structures.Basic
 					foreach (var routeInfo in stop.ThroughgoingRoutes)
 						yield return routeInfo;
 			}
-			public override string ToString() => Name;
+			/// <summary>
+			/// Station ID, Name.
+			/// </summary>
+			public override string ToString() => ID + ";" + Name + ";";
 			public StationBasic(uint id, string name)
 			{
 				ChildStops = new List<StopsBasic.StopBasic>();
@@ -44,21 +49,21 @@ namespace Timetables.Structures.Basic
 				Name = name;
 			}
 		}
-		private new List<StationBasic> list = new List<StationBasic>();
+		private List<StationBasic> list = new List<StationBasic>();
 		/// <summary>
 		/// Gets required station.
 		/// </summary>
 		/// <param name="index">Identificator of the station.</param>
 		/// <returns>Obtained station.</returns>
-		public new StationBasic this[int index] => list[index];
+		public StationBasic this[int index] => list[index];
 		/// <summary>
 		/// Gets the total number of stations.
 		/// </summary>
-		public new int Count => list.Count;
+		public int Count => list.Count;
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		public new IEnumerator<StationBasic> GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
+		public IEnumerator<StationBasic> GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<StationBasic>)list).GetEnumerator();
 		public StationsBasic(System.IO.StreamReader sr)
 		{
@@ -82,5 +87,17 @@ namespace Timetables.Structures.Basic
 		/// </summary>
 		/// <param name="index">Index of the station.</param>
 		public StationBasic FindByIndex(int index) => this[index];
+		/// <summary>
+		/// Writes basic data into given stream.
+		/// </summary>
+		/// <param name="stations">Stream that the data should be written in.</param>
+		public void WriteBasic(System.IO.StreamWriter stations)
+		{
+			stations.WriteLine(Count);
+			foreach (var item in list)
+				stations.Write(item);
+			stations.Close();
+			stations.Dispose();
+		}
 	}
 }
