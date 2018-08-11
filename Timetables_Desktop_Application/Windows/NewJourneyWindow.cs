@@ -86,23 +86,19 @@ namespace Timetables.Application.Desktop
 			else
 			{
 				searchButton.Enabled = false;
-				await Task.Run(async () =>
+				
+				using (var routerProcessing = new RouterProcessing())
 				{
-					using (var routerProcessing = new RouterProcessing())
+					try
 					{
-						var connection = routerProcessing.ConnectAsync();
-
-						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
-						{
-							routerProcessing.SendRequest(routerRequest);
-
-							routerResponse = await Task.Run(() => routerProcessing.GetResponse());
-						}
-
-						else
-							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 					}
-				});
+					catch (System.Net.WebException)
+					{
+						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+				
 				searchButton.Enabled = true;
 			}
 

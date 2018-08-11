@@ -45,12 +45,12 @@
   <ItemGroup>
     <Compile Include="BasicStructures\DataFeedBasic.cs" />
     <Compile Include="BasicStructures\RoutesInfoBasic.cs" />
+    <Compile Include="BasicStructures\StationsBasic.cs" />
+    <Compile Include="BasicStructures\StopsBasic.cs" />
     <Compile Include="DataFeedGlobals.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BasicStructures\StationsBasic.cs" />
-    <Compile Include="BasicStructures\StopsBasic.cs" />
     <Compile Include="XmlSerialization.cs" />
   </ItemGroup>
   <ItemGroup>

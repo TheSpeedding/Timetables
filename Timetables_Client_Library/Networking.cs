@@ -7,13 +7,30 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using Timetables.Structures.Basic;
 
 namespace Timetables.Client
 {
 	/// <summary>
+	/// Interface that ensures some kind of requests will be processed asynchronously and some kind of response will be returned.
+	/// </summary>
+	/// <typeparam name="Request">Request type.</typeparam>
+	/// <typeparam name="Response">Response type.</typeparam>
+	public interface IProcessible<Request, Response>
+	{
+		/// <summary>
+		/// Processes the request asynchronously.
+		/// </summary>
+		/// <param name="request">Request.</param>
+		/// <param name="timeout">Timeout, when reached the processing will exit immediately with an exception thrown.</param>
+		/// <returns>Response.</returns>
+		Task<Response> ProcessAsync(Request request, int timeout);
+	}
+
+	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
-	public class Networking : IDisposable
+	public abstract class Networking : IDisposable
 	{
 		private TcpClient client = new TcpClient();
 		private NetworkStream stream;
@@ -48,7 +65,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Specialized class for router processing.
 	/// </summary>
-	public sealed class RouterProcessing : Networking
+	public sealed class RouterProcessing : Networking, IProcessible<RouterRequest, RouterResponse>
 	{
 		/// <summary>
 		/// Connects host to the router server.
@@ -63,13 +80,36 @@ namespace Timetables.Client
 		/// <summary>
 		/// Sends router request.
 		/// </summary>
-		/// <param name="rr">Request.</param>
-		public void SendRequest(RouterRequest rr) => Send(rr);
+		/// <param name="request">Request.</param>
+		public void SendRequest(RouterRequest request) => Send(request);
+		/// <summary>
+		/// Processes the request asynchronously.
+		/// </summary>
+		/// <param name="request">Request.</param>
+		/// <returns>Response.</returns>
+		public async Task<RouterResponse> ProcessAsync(RouterRequest request, int timeout)
+		{
+			RouterResponse response = null;
+
+			var connection = ConnectAsync();
+
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
+			{
+				SendRequest(request);
+
+				response = await Task.Run(() => GetResponse());
+			}
+
+			else
+				throw new WebException();
+
+			return response;
+		}
 	}
 	/// <summary>
 	/// Specialized class for departure board processing.
 	/// </summary>
-	public sealed class DepartureBoardProcessing : Networking
+	public sealed class DepartureBoardProcessing : Networking, IProcessible<DepartureBoardRequest, DepartureBoardResponse>
 	{
 		/// <summary>
 		/// Connects host to the departure board server.
@@ -84,13 +124,36 @@ namespace Timetables.Client
 		/// <summary>
 		/// Sends departure board request.
 		/// </summary>
-		/// <param name="rr">Request.</param>
-		public void SendRequest(DepartureBoardRequest dbr) => Send(dbr);
+		/// <param name="request">Request.</param>
+		public void SendRequest(DepartureBoardRequest request) => Send(request);
+		/// <summary>
+		/// Processes the request asynchronously.
+		/// </summary>
+		/// <param name="request">Request.</param>
+		/// <returns>Response.</returns>
+		public async Task<DepartureBoardResponse> ProcessAsync(DepartureBoardRequest request, int timeout)
+		{
+			DepartureBoardResponse response = null;
+
+			var connection = ConnectAsync();
+
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
+			{
+				SendRequest(request);
+
+				response = await Task.Run(() => GetResponse());
+			}
+
+			else
+				throw new WebException();
+
+			return response;
+		}
 	}
 	/// <summary>
 	/// Specialized class for basic data downloading.
 	/// </summary>
-	public sealed class BasicDataProcessing : Networking
+	public sealed class BasicDataProcessing : Networking, IProcessible<Structures.Basic.DataFeedBasicRequest, Structures.Basic.DataFeedBasicResponse>
 	{
 		/// <summary>
 		/// Connects host to the basic data feed server.
@@ -98,28 +161,28 @@ namespace Timetables.Client
 		/// <returns></returns>
 		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.BasicDataPortNumber);
 		/// <summary>
-		/// Downloads the data from the remote server.
+		/// Processes the request asynchronously.
 		/// </summary>
-		public void DownloadData()
+		/// <param name="request">Request.</param>
+		/// <returns>Response.</returns>
+		public async Task<DataFeedBasicResponse> ProcessAsync(DataFeedBasicRequest request, int timeout)
 		{
-			try
+
+			DataFeedBasicResponse response = null;
+
+			var connection = ConnectAsync();
+
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
 			{
-				using (var sr = new System.IO.StreamReader("basic/.version"))
-					Send(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()));
-			}
-			catch // Forces data to be downloaded.
-			{
-				Send(new Structures.Basic.DataFeedBasicRequest());
+				Send(request);
+
+				response = await Task.Run(() => Receive<Structures.Basic.DataFeedBasicResponse>());
 			}
 
-			var response = Receive<Structures.Basic.DataFeedBasicResponse>();
+			else
+				throw new WebException();
 
-			if (response.ShouldBeUpdated)
-			{
-				response.Data.Save();
-				using (var sw = new System.IO.StreamWriter("basic/.version"))
-					sw.WriteLine(response.Version);
-			}
+			return response;	
 		}
 	}
 }

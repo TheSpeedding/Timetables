@@ -61,23 +61,19 @@ namespace Timetables.Application.Desktop
 			else
 			{
 				searchButton.Enabled = false;
-				await Task.Run(async () =>
+
+				using (var dbProcessing = new DepartureBoardProcessing())
 				{
-					using (var dbProcessing = new DepartureBoardProcessing())
+					try
 					{
-						var connection = dbProcessing.ConnectAsync();
-
-						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
-						{
-							dbProcessing.SendRequest(dbRequest);
-
-							dbResponse = await Task.Run(() => dbProcessing.GetResponse());
-						}
-
-						else
-							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}					
-				});
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+					}
+					catch (System.Net.WebException)
+					{
+						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+				
 				searchButton.Enabled = true;
 			}
 

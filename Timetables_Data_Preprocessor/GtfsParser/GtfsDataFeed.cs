@@ -55,19 +55,19 @@ namespace Timetables.Preprocessor
         /// <param name="path">Path to the folder with feed.</param>
         public GtfsDataFeed(string path)
         {
-            Calendar = new GtfsCalendar(new StreamReader(path + "/calendar.tfd"));
+            Calendar = new GtfsCalendar(new StreamReader(path + "/calendar.txt"));
 
-			if (File.Exists(path + "/calendar_dates.tfd")) // This is fully optional file in GTFS format.
-				CalendarDates = new GtfsCalendarDates(new StreamReader(path + "/calendar_dates.tfd"), Calendar);
+			if (File.Exists(path + "/calendar_dates.txt")) // This is fully optional file in GTFS format.
+				CalendarDates = new GtfsCalendarDates(new StreamReader(path + "/calendar_dates.txt"), Calendar);
 			else
 				CalendarDates = new GtfsCalendarDates(); // No file → no extraordinary events.
 
-            RoutesInfo = new GtfsRoutesInfo(new StreamReader(path + "/routes.tfd"));
-            Stops = new GtfsStops(new StreamReader(path + "/stops.tfd"));
+            RoutesInfo = new GtfsRoutesInfo(new StreamReader(path + "/routes.txt"));
+            Stops = new GtfsStops(new StreamReader(path + "/stops.txt"));
             Stations = new GtfsStations(Stops);
 
-			Trips = new GtfsTrips(new StreamReader(path + "/trips.tfd"), Calendar, RoutesInfo);
-            StopTimes = new GtfsStopTimes(new StreamReader(path + "/stop_times.tfd"), Trips, Stops);
+			Trips = new GtfsTrips(new StreamReader(path + "/trips.txt"), Calendar, RoutesInfo);
+            StopTimes = new GtfsStopTimes(new StreamReader(path + "/stop_times.txt"), Trips, Stops);
             Routes = new GtfsRoutes(Trips, RoutesInfo);
 
 			Footpaths = new GtfsFootpaths(Stops); // Even though walking time is an optional field in GTFS format, we will compute it on our own everytime - even though the data for transfers may exist. It ensures us better consistency.

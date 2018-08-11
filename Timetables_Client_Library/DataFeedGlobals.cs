@@ -77,19 +77,7 @@ namespace Timetables.Client
 			{
 				try
 				{
-					if (System.IO.File.Exists("basic_data_temp.zip"))
-						System.IO.File.Delete("basic_data_temp.zip");
-
-					using (System.Net.WebClient wc = new System.Net.WebClient())
-						wc.DownloadFile(BasicDataSource, "basic_data_temp.zip");
-
-					if (!System.IO.Directory.Exists("basic"))
-						System.IO.Directory.CreateDirectory("basic");
-
-					System.IO.Compression.ZipFile.ExtractToDirectory("basic_data_temp.zip", "basic");
-
-					if (System.IO.File.Exists("basic_data_temp.zip"))
-						System.IO.File.Delete("basic_data_temp.zip");
+					throw new NotImplementedException();
 				}
 				catch
 				{
