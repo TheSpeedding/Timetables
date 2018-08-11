@@ -25,12 +25,12 @@ namespace Timetables.Configurator
 
 					extraEventsTextBox.Text = settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText;
 					lockoutsTextBox.Text = settings.GetElementsByTagName("LockoutsUri")[0].InnerText;
-					basicDataTextBox.Text = settings.GetElementsByTagName("BasicDataUri")[0].InnerText;
 					fullDataTextBox.Text = settings.GetElementsByTagName("FullDataUri")[0].InnerText;
 
 					serverIpTextBox.Text = settings.GetElementsByTagName("ServerIp")[0].InnerText;
-					portDepBoardTextBox.Text = settings.GetElementsByTagName("DepBoardPort")[0].InnerText;
+					portDepBoardTextBox.Text = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText;
 					portRouterTextBox.Text = settings.GetElementsByTagName("RouterPort")[0].InnerText;
+					basicDataTextBox.Text = settings.GetElementsByTagName("BasicDataPort")[0].InnerText;
 
 					bool offline = bool.Parse(settings.GetElementsByTagName("OfflineMode")[0].InnerText);
 					offlineRadioButton.Checked = offline;
@@ -69,7 +69,7 @@ namespace Timetables.Configurator
 							settings.DocumentElement.AppendChild(settings.CreateElement(name));
 				}
 
-				CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "BasicDataUri", "FullDataUri", "ServerIp", "RouterPort", "DepBoardPort");
+				CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "FullDataUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort");
 
 				settings.GetElementsByTagName("Theme")[0].InnerText = "0";
 
@@ -80,16 +80,16 @@ namespace Timetables.Configurator
 				settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = extraEventsTextBox.Text;
 
 				settings.GetElementsByTagName("LockoutsUri")[0].InnerText = lockoutsTextBox.Text;
-
-				settings.GetElementsByTagName("BasicDataUri")[0].InnerText = basicDataTextBox.Text;
-
+				
 				settings.GetElementsByTagName("FullDataUri")[0].InnerText = fullDataTextBox.Text;
 
 				settings.GetElementsByTagName("ServerIp")[0].InnerText = serverIpTextBox.Text;
 
 				settings.GetElementsByTagName("RouterPort")[0].InnerText = portRouterTextBox.Text;
 
-				settings.GetElementsByTagName("DepBoardPort")[0].InnerText = portDepBoardTextBox.Text;
+				settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText = portDepBoardTextBox.Text;
+
+				settings.GetElementsByTagName("BasicDataPort")[0].InnerText = basicDataTextBox.Text;
 
 				settings.Save(settingsSaveFileDialog.FileName);
 

@@ -144,7 +144,7 @@
 			// 
 			// fullDataLabel
 			// 
-			this.fullDataLabel.Location = new System.Drawing.Point(0, 193);
+			this.fullDataLabel.Location = new System.Drawing.Point(0, 167);
 			this.fullDataLabel.Name = "fullDataLabel";
 			this.fullDataLabel.Size = new System.Drawing.Size(122, 20);
 			this.fullDataLabel.TabIndex = 12;
@@ -153,31 +153,31 @@
 			// 
 			// fullDataTextBox
 			// 
-			this.fullDataTextBox.Location = new System.Drawing.Point(128, 193);
+			this.fullDataTextBox.Location = new System.Drawing.Point(128, 167);
 			this.fullDataTextBox.Name = "fullDataTextBox";
 			this.fullDataTextBox.Size = new System.Drawing.Size(166, 20);
 			this.fullDataTextBox.TabIndex = 11;
 			// 
 			// basicDataLabel
 			// 
-			this.basicDataLabel.Location = new System.Drawing.Point(0, 167);
+			this.basicDataLabel.Location = new System.Drawing.Point(0, 271);
 			this.basicDataLabel.Name = "basicDataLabel";
 			this.basicDataLabel.Size = new System.Drawing.Size(122, 20);
 			this.basicDataLabel.TabIndex = 10;
-			this.basicDataLabel.Text = "Basic data URI:";
+			this.basicDataLabel.Text = "Basic data server port:";
 			this.basicDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// basicDataTextBox
 			// 
 			this.basicDataTextBox.Enabled = false;
-			this.basicDataTextBox.Location = new System.Drawing.Point(128, 167);
+			this.basicDataTextBox.Location = new System.Drawing.Point(128, 271);
 			this.basicDataTextBox.Name = "basicDataTextBox";
 			this.basicDataTextBox.Size = new System.Drawing.Size(166, 20);
 			this.basicDataTextBox.TabIndex = 9;
 			// 
 			// portRouterLabel
 			// 
-			this.portRouterLabel.Location = new System.Drawing.Point(0, 245);
+			this.portRouterLabel.Location = new System.Drawing.Point(0, 219);
 			this.portRouterLabel.Name = "portRouterLabel";
 			this.portRouterLabel.Size = new System.Drawing.Size(122, 20);
 			this.portRouterLabel.TabIndex = 16;
@@ -187,14 +187,14 @@
 			// portRouterTextBox
 			// 
 			this.portRouterTextBox.Enabled = false;
-			this.portRouterTextBox.Location = new System.Drawing.Point(128, 245);
+			this.portRouterTextBox.Location = new System.Drawing.Point(128, 219);
 			this.portRouterTextBox.Name = "portRouterTextBox";
 			this.portRouterTextBox.Size = new System.Drawing.Size(166, 20);
 			this.portRouterTextBox.TabIndex = 15;
 			// 
 			// serverIpLabel
 			// 
-			this.serverIpLabel.Location = new System.Drawing.Point(0, 219);
+			this.serverIpLabel.Location = new System.Drawing.Point(0, 193);
 			this.serverIpLabel.Name = "serverIpLabel";
 			this.serverIpLabel.Size = new System.Drawing.Size(122, 20);
 			this.serverIpLabel.TabIndex = 14;
@@ -204,14 +204,14 @@
 			// serverIpTextBox
 			// 
 			this.serverIpTextBox.Enabled = false;
-			this.serverIpTextBox.Location = new System.Drawing.Point(128, 219);
+			this.serverIpTextBox.Location = new System.Drawing.Point(128, 193);
 			this.serverIpTextBox.Name = "serverIpTextBox";
 			this.serverIpTextBox.Size = new System.Drawing.Size(166, 20);
 			this.serverIpTextBox.TabIndex = 13;
 			// 
 			// portDepBoardLabel
 			// 
-			this.portDepBoardLabel.Location = new System.Drawing.Point(0, 271);
+			this.portDepBoardLabel.Location = new System.Drawing.Point(0, 245);
 			this.portDepBoardLabel.Name = "portDepBoardLabel";
 			this.portDepBoardLabel.Size = new System.Drawing.Size(122, 20);
 			this.portDepBoardLabel.TabIndex = 18;
@@ -221,7 +221,7 @@
 			// portDepBoardTextBox
 			// 
 			this.portDepBoardTextBox.Enabled = false;
-			this.portDepBoardTextBox.Location = new System.Drawing.Point(128, 271);
+			this.portDepBoardTextBox.Location = new System.Drawing.Point(128, 245);
 			this.portDepBoardTextBox.Name = "portDepBoardTextBox";
 			this.portDepBoardTextBox.Size = new System.Drawing.Size(166, 20);
 			this.portDepBoardTextBox.TabIndex = 17;
@@ -278,7 +278,7 @@
 			this.Controls.Add(this.languageTextBox);
 			this.Controls.Add(this.loadFileButton);
 			this.Name = "ClientUserControl";
-			this.Size = new System.Drawing.Size(300, 398);
+			this.Size = new System.Drawing.Size(300, 350);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -111,14 +111,14 @@ namespace Timetables.Application.Desktop
 				Client.DataFeed.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
 
 				Client.DataFeed.FullDataSource = Client.DataFeed.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
-
-				Client.DataFeed.BasicDataSource = Client.DataFeed.OfflineMode ? null : new Uri(settings.GetElementsByTagName("BasicDataUri")[0].InnerText);
-
+				
 				Client.DataFeed.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
 
 				Client.DataFeed.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
 
-				Client.DataFeed.DepartureBoardPortNumber = settings.GetElementsByTagName("DepBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepBoardPort")[0].InnerText);
+				Client.DataFeed.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
+
+				Client.DataFeed.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
@@ -152,7 +152,7 @@ namespace Timetables.Application.Desktop
 						settings.DocumentElement.AppendChild(settings.CreateElement(name));
 			}
 
-			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "BasicDataUri", "FullDataUri", "ServerIp", "RouterPort", "DepBoardPort");
+			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "FullDataUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort");
 
 			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
 			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
@@ -165,10 +165,19 @@ namespace Timetables.Application.Desktop
 			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents == null ? string.Empty : ExtraordinaryEvents.AbsoluteUri;
 
 			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts == null ? string.Empty : Lockouts.AbsoluteUri;
+			
+			if (!Client.DataFeed.OfflineMode)
+			{
+				settings.GetElementsByTagName("ServerIp")[0].InnerText = Client.DataFeed.ServerIpAddress.ToString();
+				settings.GetElementsByTagName("RouterPort")[0].InnerText = Client.DataFeed.RouterPortNumber.ToString();
+				settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText = Client.DataFeed.DepartureBoardPortNumber.ToString();
+				settings.GetElementsByTagName("BasicDataPort")[0].InnerText = Client.DataFeed.BasicDataPortNumber.ToString();
+			}
 
-			settings.GetElementsByTagName("BasicDataUri")[0].InnerText = Client.DataFeed.BasicDataSource == null ? string.Empty : Client.DataFeed.BasicDataSource.AbsoluteUri;
-
-			settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
+			else
+			{
+				settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
+			}
 
 			settings.Save(".settings");
 		}

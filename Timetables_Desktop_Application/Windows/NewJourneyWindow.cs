@@ -94,9 +94,9 @@ namespace Timetables.Application.Desktop
 
 						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
 						{
-							routerProcessing.Send(routerRequest);
+							routerProcessing.SendRequest(routerRequest);
 
-							routerResponse = await Task.Run(() => routerProcessing.Receive<RouterResponse>());
+							routerResponse = await Task.Run(() => routerProcessing.GetResponse());
 						}
 
 						else

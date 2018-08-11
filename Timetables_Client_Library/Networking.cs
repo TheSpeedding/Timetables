@@ -37,26 +37,89 @@ namespace Timetables.Client
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
-		public T Receive<T>() => (T)new BinaryFormatter().Deserialize(stream);
+		protected T Receive<T>() => (T)new BinaryFormatter().Deserialize(stream);
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
 		/// </summary>
 		/// <typeparam name="T">Object to serialize.</typeparam>
 		/// <param name="item">Object to serialize.</param>
-		public void Send<T>(T item) => new BinaryFormatter().Serialize(stream, item);
+		protected void Send<T>(T item) => new BinaryFormatter().Serialize(stream, item);
 	}
 	/// <summary>
 	/// Specialized class for router processing.
 	/// </summary>
 	public sealed class RouterProcessing : Networking
 	{
+		/// <summary>
+		/// Connects host to the router server.
+		/// </summary>
+		/// <returns></returns>
 		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.RouterPortNumber);
+		/// <summary>
+		/// Receives router response.
+		/// </summary>
+		/// <returns></returns>
+		public RouterResponse GetResponse() => Receive<RouterResponse>();
+		/// <summary>
+		/// Sends router request.
+		/// </summary>
+		/// <param name="rr">Request.</param>
+		public void SendRequest(RouterRequest rr) => Send(rr);
 	}
 	/// <summary>
 	/// Specialized class for departure board processing.
 	/// </summary>
 	public sealed class DepartureBoardProcessing : Networking
 	{
+		/// <summary>
+		/// Connects host to the departure board server.
+		/// </summary>
+		/// <returns></returns>
 		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.DepartureBoardPortNumber);
+		/// <summary>
+		/// Receives departure board response.
+		/// </summary>
+		/// <returns></returns>
+		public DepartureBoardResponse GetResponse() => Receive<DepartureBoardResponse>();
+		/// <summary>
+		/// Sends departure board request.
+		/// </summary>
+		/// <param name="rr">Request.</param>
+		public void SendRequest(DepartureBoardRequest dbr) => Send(dbr);
+	}
+	/// <summary>
+	/// Specialized class for basic data downloading.
+	/// </summary>
+	public sealed class BasicDataProcessing : Networking
+	{
+		/// <summary>
+		/// Connects host to the basic data feed server.
+		/// </summary>
+		/// <returns></returns>
+		public async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.BasicDataPortNumber);
+		/// <summary>
+		/// Downloads the data from the remote server.
+		/// </summary>
+		public void DownloadData()
+		{
+			try
+			{
+				using (var sr = new System.IO.StreamReader("basic/.version"))
+					Send(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()));
+			}
+			catch // Forces data to be downloaded.
+			{
+				Send(new Structures.Basic.DataFeedBasicRequest());
+			}
+
+			var response = Receive<Structures.Basic.DataFeedBasicResponse>();
+
+			if (response.ShouldBeUpdated)
+			{
+				response.Data.Save();
+				using (var sw = new System.IO.StreamWriter("basic/.version"))
+					sw.WriteLine(response.Version);
+			}
+		}
 	}
 }

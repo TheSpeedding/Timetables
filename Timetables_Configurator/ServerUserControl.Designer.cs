@@ -49,6 +49,8 @@
 			this.settingsSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
 			this.sourcesLabel = new System.Windows.Forms.Label();
 			this.sourcesButton = new System.Windows.Forms.Button();
+			this.dataPortLabel = new System.Windows.Forms.Label();
+			this.dataPortTextBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// loadFileButton
@@ -95,11 +97,11 @@
 			this.dbPortTextBox.Location = new System.Drawing.Point(131, 82);
 			this.dbPortTextBox.Name = "dbPortTextBox";
 			this.dbPortTextBox.Size = new System.Drawing.Size(166, 20);
-			this.dbPortTextBox.TabIndex = 3;
+			this.dbPortTextBox.TabIndex = 2;
 			// 
 			// cutwslLabel
 			// 
-			this.cutwslLabel.Location = new System.Drawing.Point(3, 108);
+			this.cutwslLabel.Location = new System.Drawing.Point(3, 134);
 			this.cutwslLabel.Name = "cutwslLabel";
 			this.cutwslLabel.Size = new System.Drawing.Size(122, 20);
 			this.cutwslLabel.TabIndex = 6;
@@ -108,14 +110,14 @@
 			// 
 			// cutwslTextBox
 			// 
-			this.cutwslTextBox.Location = new System.Drawing.Point(131, 108);
+			this.cutwslTextBox.Location = new System.Drawing.Point(131, 134);
 			this.cutwslTextBox.Name = "cutwslTextBox";
 			this.cutwslTextBox.Size = new System.Drawing.Size(166, 20);
 			this.cutwslTextBox.TabIndex = 5;
 			// 
 			// cutstLabel
 			// 
-			this.cutstLabel.Location = new System.Drawing.Point(3, 160);
+			this.cutstLabel.Location = new System.Drawing.Point(3, 186);
 			this.cutstLabel.Name = "cutstLabel";
 			this.cutstLabel.Size = new System.Drawing.Size(122, 20);
 			this.cutstLabel.TabIndex = 12;
@@ -124,14 +126,14 @@
 			// 
 			// cutstTextBox
 			// 
-			this.cutstTextBox.Location = new System.Drawing.Point(131, 160);
+			this.cutstTextBox.Location = new System.Drawing.Point(131, 186);
 			this.cutstTextBox.Name = "cutstTextBox";
 			this.cutstTextBox.Size = new System.Drawing.Size(166, 20);
 			this.cutstTextBox.TabIndex = 11;
 			// 
 			// cutwdlLabel
 			// 
-			this.cutwdlLabel.Location = new System.Drawing.Point(3, 134);
+			this.cutwdlLabel.Location = new System.Drawing.Point(3, 160);
 			this.cutwdlLabel.Name = "cutwdlLabel";
 			this.cutwdlLabel.Size = new System.Drawing.Size(122, 20);
 			this.cutwdlLabel.TabIndex = 10;
@@ -140,14 +142,14 @@
 			// 
 			// cutwdlTextBox
 			// 
-			this.cutwdlTextBox.Location = new System.Drawing.Point(131, 134);
+			this.cutwdlTextBox.Location = new System.Drawing.Point(131, 160);
 			this.cutwdlTextBox.Name = "cutwdlTextBox";
 			this.cutwdlTextBox.Size = new System.Drawing.Size(166, 20);
 			this.cutwdlTextBox.TabIndex = 9;
 			// 
 			// avgSpeedLabel
 			// 
-			this.avgSpeedLabel.Location = new System.Drawing.Point(3, 212);
+			this.avgSpeedLabel.Location = new System.Drawing.Point(3, 238);
 			this.avgSpeedLabel.Name = "avgSpeedLabel";
 			this.avgSpeedLabel.Size = new System.Drawing.Size(122, 20);
 			this.avgSpeedLabel.TabIndex = 16;
@@ -156,14 +158,14 @@
 			// 
 			// avgSpeedTextBox
 			// 
-			this.avgSpeedTextBox.Location = new System.Drawing.Point(131, 212);
+			this.avgSpeedTextBox.Location = new System.Drawing.Point(131, 238);
 			this.avgSpeedTextBox.Name = "avgSpeedTextBox";
 			this.avgSpeedTextBox.Size = new System.Drawing.Size(166, 20);
 			this.avgSpeedTextBox.TabIndex = 15;
 			// 
 			// maxDurLabel
 			// 
-			this.maxDurLabel.Location = new System.Drawing.Point(3, 186);
+			this.maxDurLabel.Location = new System.Drawing.Point(3, 212);
 			this.maxDurLabel.Name = "maxDurLabel";
 			this.maxDurLabel.Size = new System.Drawing.Size(122, 20);
 			this.maxDurLabel.TabIndex = 14;
@@ -172,14 +174,14 @@
 			// 
 			// maxDurTextBox
 			// 
-			this.maxDurTextBox.Location = new System.Drawing.Point(131, 186);
+			this.maxDurTextBox.Location = new System.Drawing.Point(131, 212);
 			this.maxDurTextBox.Name = "maxDurTextBox";
 			this.maxDurTextBox.Size = new System.Drawing.Size(166, 20);
 			this.maxDurTextBox.TabIndex = 13;
 			// 
 			// saveButton
 			// 
-			this.saveButton.Location = new System.Drawing.Point(156, 265);
+			this.saveButton.Location = new System.Drawing.Point(156, 291);
 			this.saveButton.Name = "saveButton";
 			this.saveButton.Size = new System.Drawing.Size(138, 40);
 			this.saveButton.TabIndex = 19;
@@ -189,7 +191,7 @@
 			// 
 			// clearButton
 			// 
-			this.clearButton.Location = new System.Drawing.Point(6, 265);
+			this.clearButton.Location = new System.Drawing.Point(6, 291);
 			this.clearButton.Name = "clearButton";
 			this.clearButton.Size = new System.Drawing.Size(138, 40);
 			this.clearButton.TabIndex = 20;
@@ -205,7 +207,7 @@
 			// 
 			// sourcesLabel
 			// 
-			this.sourcesLabel.Location = new System.Drawing.Point(3, 239);
+			this.sourcesLabel.Location = new System.Drawing.Point(3, 265);
 			this.sourcesLabel.Name = "sourcesLabel";
 			this.sourcesLabel.Size = new System.Drawing.Size(122, 20);
 			this.sourcesLabel.TabIndex = 21;
@@ -214,7 +216,7 @@
 			// 
 			// sourcesButton
 			// 
-			this.sourcesButton.Location = new System.Drawing.Point(131, 238);
+			this.sourcesButton.Location = new System.Drawing.Point(131, 264);
 			this.sourcesButton.Name = "sourcesButton";
 			this.sourcesButton.Size = new System.Drawing.Size(166, 21);
 			this.sourcesButton.TabIndex = 22;
@@ -222,10 +224,28 @@
 			this.sourcesButton.UseVisualStyleBackColor = true;
 			this.sourcesButton.Click += new System.EventHandler(this.sourcesButton_Click);
 			// 
+			// dataPortLabel
+			// 
+			this.dataPortLabel.Location = new System.Drawing.Point(3, 108);
+			this.dataPortLabel.Name = "dataPortLabel";
+			this.dataPortLabel.Size = new System.Drawing.Size(122, 20);
+			this.dataPortLabel.TabIndex = 24;
+			this.dataPortLabel.Text = "Basic data port:";
+			this.dataPortLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// dataPortTextBox
+			// 
+			this.dataPortTextBox.Location = new System.Drawing.Point(131, 108);
+			this.dataPortTextBox.Name = "dataPortTextBox";
+			this.dataPortTextBox.Size = new System.Drawing.Size(166, 20);
+			this.dataPortTextBox.TabIndex = 3;
+			// 
 			// ServerUserControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.dataPortLabel);
+			this.Controls.Add(this.dataPortTextBox);
 			this.Controls.Add(this.sourcesButton);
 			this.Controls.Add(this.sourcesLabel);
 			this.Controls.Add(this.clearButton);
@@ -246,7 +266,7 @@
 			this.Controls.Add(this.routerPortTextBox);
 			this.Controls.Add(this.loadFileButton);
 			this.Name = "ServerUserControl";
-			this.Size = new System.Drawing.Size(300, 311);
+			this.Size = new System.Drawing.Size(300, 337);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -275,5 +295,7 @@
 		private System.Windows.Forms.SaveFileDialog settingsSaveFileDialog;
 		private System.Windows.Forms.Label sourcesLabel;
 		private System.Windows.Forms.Button sourcesButton;
+		private System.Windows.Forms.Label dataPortLabel;
+		private System.Windows.Forms.TextBox dataPortTextBox;
 	}
 }

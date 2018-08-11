@@ -31,10 +31,6 @@ namespace Timetables.Client
 		/// </summary>
 		public static Uri FullDataSource { get; set; }
 		/// <summary>
-		/// Path to the data source.
-		/// </summary>
-		public static Uri BasicDataSource { get; set; }
-		/// <summary>
 		/// Indicates whether application is working in offline mode.
 		/// </summary>
 		public static bool OfflineMode { get; set; }
@@ -50,6 +46,10 @@ namespace Timetables.Client
 		/// End point of departure board server. Only relevant in online mode.
 		/// </summary>
 		public static uint DepartureBoardPortNumber { get; set; }
+		/// <summary>
+		/// End point of basic data server. Only relevant in online mode.
+		/// </summary>
+		public static uint BasicDataPortNumber { get; set; }
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>

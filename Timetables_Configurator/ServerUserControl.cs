@@ -9,8 +9,7 @@ namespace Timetables.Configurator
 	/// <summary>
 	/// Represents one feed item in the listbox.
 	/// </summary>
-	[Serializable]
-	public class FeedItem
+	public struct FeedItem
 	{
 		/// <summary>
 		/// Location name.
@@ -42,6 +41,7 @@ namespace Timetables.Configurator
 
 					routerPortTextBox.Text = settings.GetElementsByTagName("RouterPort")[0].InnerText;
 					dbPortTextBox.Text = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText;
+					dataPortTextBox.Text = settings.GetElementsByTagName("BasicDataPort")[0].InnerText;
 					cutwslTextBox.Text = settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinSameLine")[0].InnerText;
 					cutwdlTextBox.Text = settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinDifferentLines")[0].InnerText;
 					cutstTextBox.Text = settings.GetElementsByTagName("CoefficientUndergroundToSurfaceTransfer")[0].InnerText;
@@ -74,12 +74,14 @@ namespace Timetables.Configurator
 							settings.DocumentElement.AppendChild(settings.CreateElement(name));
 				}
 
-				CreateElementIfNotExist("RouterPort", "DepartureBoardPort", "CoefficientUndergroundTransfersWithinSameLine", "CoefficientUndergroundTransfersWithinDifferentLines",
+				CreateElementIfNotExist("RouterPort", "DepartureBoardPort", "BasicDataPort", "CoefficientUndergroundTransfersWithinSameLine", "CoefficientUndergroundTransfersWithinDifferentLines",
 					"CoefficientUndergroundToSurfaceTransfer", "MaximalDurationOfTransfer", "AverageWalkingSpeed", "DataFeeds");
 				
 				settings.GetElementsByTagName("RouterPort")[0].InnerText = routerPortTextBox.Text;
-				
+
 				settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText = dbPortTextBox.Text;
+
+				settings.GetElementsByTagName("BasicDataPort")[0].InnerText = dataPortTextBox.Text;
 
 				settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinSameLine")[0].InnerText = cutwslTextBox.Text;
 

@@ -69,9 +69,9 @@ namespace Timetables.Application.Desktop
 
 						if (await Task.WhenAny(connection, Task.Delay(Settings.TimeoutDuration)) == connection)
 						{
-							dbProcessing.Send(dbRequest);
+							dbProcessing.SendRequest(dbRequest);
 
-							dbResponse = await Task.Run(() => dbProcessing.Receive<DepartureBoardResponse>());
+							dbResponse = await Task.Run(() => dbProcessing.GetResponse());
 						}
 
 						else
