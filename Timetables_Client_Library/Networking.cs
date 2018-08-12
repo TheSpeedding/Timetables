@@ -93,7 +93,7 @@ namespace Timetables.Client
 
 			var connection = ConnectAsync();
 
-			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection && connection.Status == TaskStatus.RanToCompletion)
 			{
 				SendRequest(request);
 
@@ -101,7 +101,7 @@ namespace Timetables.Client
 			}
 
 			else
-				throw new WebException();
+				throw new WebException("Server offline.");
 
 			return response;
 		}
@@ -137,7 +137,7 @@ namespace Timetables.Client
 
 			var connection = ConnectAsync();
 
-			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection && connection.Status == TaskStatus.RanToCompletion)
 			{
 				SendRequest(request);
 
@@ -145,7 +145,7 @@ namespace Timetables.Client
 			}
 
 			else
-				throw new WebException();
+				throw new WebException("Server offline.");
 
 			return response;
 		}
@@ -172,15 +172,15 @@ namespace Timetables.Client
 
 			var connection = ConnectAsync();
 
-			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection)
+			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection && connection.Status == TaskStatus.RanToCompletion)
 			{
 				Send(request);
 
-				response = await Task.Run(() => Receive<Structures.Basic.DataFeedBasicResponse>());
+				response = await Task.Run(() => Receive<DataFeedBasicResponse>());
 			}
 
 			else
-				throw new WebException();
+				throw new WebException("Server offline.");
 
 			return response;	
 		}

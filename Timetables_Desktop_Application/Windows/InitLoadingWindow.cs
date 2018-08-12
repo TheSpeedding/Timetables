@@ -8,6 +8,8 @@ namespace Timetables.Application.Desktop
 {
 	public partial class InitLoadingWindow : Form
 	{
+		public bool Faulted { get; private set; } = false;
+
 		public InitLoadingWindow() => InitializeComponent();
 
 		/// <summary>
@@ -28,28 +30,44 @@ namespace Timetables.Application.Desktop
 			System.Windows.Forms.Application.DoEvents();
 
 			Preprocessor.DataFeed.LoadingProgress += LoadingProgressCallback;
-
+			
 			await Task.Run(() =>
 			{
-				var loadingThread = new Thread(() => DataFeed.Load());
-
-				loadingThread.Start();
-
-				bool timerStarted = false;
-
-				while (!DataFeed.Loaded)
+				try
 				{
-					if (DataFeed.Downloaded && !timerStarted)
-						timerStarted = true;
-					else if (timerStarted && loadingProgressBar.Value < 100)
+					var loadingThread = DataFeed.LoadAsync(false, Settings.TimeoutDuration);
+					bool timerStarted = false;
+
+					while (!DataFeed.Loaded)
 					{
-						Thread.Sleep(30);
-						LoadingProgressCallback("The data are being loaded.", 1);
+						if (loadingThread.IsFaulted)
+							throw loadingThread.Exception;
+
+						if ((DataFeed.Downloaded || !DataFeed.OfflineMode) && !timerStarted)
+							timerStarted = true;
+						else if (timerStarted && loadingProgressBar.Value < 100)
+						{
+							Thread.Sleep(30);
+							LoadingProgressCallback("The data are being loaded.", 1);
+						}
 					}
 				}
 
-				loadingThread.Join();
+				catch (AggregateException ex)
+				{
+					foreach (var innerEx in ex.InnerExceptions)
+					{
+						if (innerEx is System.Net.WebException)
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+						else
+							Program.UnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true));
+
+						Faulted = true;
+					}
+				}
 			});
+			
 
 			Preprocessor.DataFeed.LoadingProgress -= LoadingProgressCallback;
 

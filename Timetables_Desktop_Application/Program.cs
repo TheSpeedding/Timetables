@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Permissions;
+using System.Windows.Forms;
 
 namespace Timetables.Application.Desktop
 {
@@ -8,13 +10,23 @@ namespace Timetables.Application.Desktop
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
+		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
 		static void Main()
 		{
+			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallback;
+
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+
 			Settings.Load();
-			System.Windows.Forms.Application.Run(new InitLoadingWindow());
-			System.Windows.Forms.Application.Run(new MainWindow());
+
+			var initWindow = new InitLoadingWindow();
+			System.Windows.Forms.Application.Run(initWindow);
+
+			if (!initWindow.Faulted) // Continue executing only if there was no error while initializing.
+				System.Windows.Forms.Application.Run(new MainWindow());
 		}
+
+		internal static void UnhandledExceptionCallback(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show(((Exception)e.ExceptionObject).Message, ((Exception)e.ExceptionObject).Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
 	}
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using System.Xml;
 using Timetables.Preprocessor;
 
@@ -7,7 +9,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class offering data feed for GUI applications.
 	/// </summary>
-	public static partial class DataFeed
+	public static class DataFeed
 	{
 		private static Interop.DataFeedManaged fullData = null;
 		/// <summary>
@@ -53,7 +55,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
-		public static async void Load(bool forceDownload = false)
+		public static async Task LoadAsync(bool forceDownload = false, int timeout = 5000)
 		{
 			Downloaded = false;
 			
@@ -81,21 +83,31 @@ namespace Timetables.Client
 					try
 					{
 						using (var sr = new System.IO.StreamReader("basic/.version"))
-							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), 5000);
+							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), timeout);
 					}
 
-					catch // Data does not exist or the version file is corrupted.
+					catch (Exception ex) 
 					{
-						response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), 15000);
+						if (ex is WebException) // Server offline.
+							throw;
+
+						else // Data does not exist or the version file is corrupted.
+							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), timeout);
 					}
+
 
 					if (response.ShouldBeUpdated)
 						response.Data.Save();
 
 				}
-				catch
+
+				catch (Exception ex)
 				{
-					throw new ArgumentException("Fatal error. Cannot process the data.");
+					if (ex is WebException) // Server offline.
+						throw;
+
+					else
+						throw new ArgumentException("Fatal error. Cannot process the data.");
 				}
 
 			Downloaded = true;
