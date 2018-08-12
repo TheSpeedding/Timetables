@@ -8,7 +8,10 @@ namespace Timetables.Application.Desktop
 {
 	public partial class InitLoadingWindow : Form
 	{
-		public bool Faulted { get; private set; } = false;
+		/// <summary>
+		/// Indicates whether the init window has faulted.
+		/// </summary>
+		public bool IsFaulted { get; private set; } = false;
 
 		public InitLoadingWindow() => InitializeComponent();
 
@@ -63,7 +66,7 @@ namespace Timetables.Application.Desktop
 						else
 							Program.UnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true));
 
-						Faulted = true;
+						IsFaulted = true;
 					}
 				}
 			});

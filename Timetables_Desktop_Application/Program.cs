@@ -23,10 +23,13 @@ namespace Timetables.Application.Desktop
 			var initWindow = new InitLoadingWindow();
 			System.Windows.Forms.Application.Run(initWindow);
 
-			if (!initWindow.Faulted) // Continue executing only if there was no error while initializing.
+			if (!initWindow.IsFaulted) // Continue executing only if there was no error while initializing.
 				System.Windows.Forms.Application.Run(new MainWindow());
 		}
 
+		/// <summary>
+		/// Callback to handle unhandled exception.
+		/// </summary>
 		internal static void UnhandledExceptionCallback(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show(((Exception)e.ExceptionObject).Message, ((Exception)e.ExceptionObject).Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
 	}
 }

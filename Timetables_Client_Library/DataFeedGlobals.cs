@@ -11,7 +11,8 @@ namespace Timetables.Client
 	/// </summary>
 	public static class DataFeed
 	{
-		private static Interop.DataFeedManaged fullData = null;
+		private volatile static Interop.DataFeedManaged fullData = null;
+		private volatile static Structures.Basic.DataFeedBasic basicData = null;
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
@@ -23,11 +24,18 @@ namespace Timetables.Client
 		/// <summary>
 		/// Basic data feed.
 		/// </summary>
-		public static Structures.Basic.DataFeedBasic Basic { get; private set; }
+		public static Structures.Basic.DataFeedBasic Basic => basicData ?? throw new NullReferenceException("Basic data not initialized correctly.");
 		/// <summary>
 		/// Full data feed.
 		/// </summary>
-		public static Interop.DataFeedManaged Full => fullData ?? throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
+		public static Interop.DataFeedManaged Full
+		{
+			get
+			{
+				if (OfflineMode) throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
+				return fullData ?? throw new NullReferenceException("Basic data not initialized correctly.");
+			}
+		}
 		/// <summary>
 		/// Path to the data source.
 		/// </summary>
@@ -120,12 +128,14 @@ namespace Timetables.Client
 		public static void Update()
 		{
 			Loaded = false;
-
-			Basic = new Structures.Basic.DataFeedBasic();
+						
+			var newBasicData = new Structures.Basic.DataFeedBasic();
+			basicData = newBasicData;
 
 			if (OfflineMode)
 			{
-				fullData = new Interop.DataFeedManaged();
+				var newFullData = new Interop.DataFeedManaged();
+				fullData = newFullData;
 			}
 
 			Loaded = true;
