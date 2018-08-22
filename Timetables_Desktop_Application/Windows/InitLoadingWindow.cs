@@ -38,7 +38,7 @@ namespace Timetables.Application.Desktop
 			{
 				try
 				{
-					var loadingThread = DataFeed.LoadAsync(false, Settings.TimeoutDuration);
+					var loadingThread = DataFeed.DownloadAsync(false, Settings.TimeoutDuration);
 					bool timerStarted = false;
 
 					while (!DataFeed.Loaded)

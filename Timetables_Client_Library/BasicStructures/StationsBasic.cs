@@ -71,6 +71,7 @@ namespace Timetables.Structures.Basic
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
 			for (int i = 0; i < count; i++)
 				list.Add(new StationBasic((uint)Count, tokens[2 * i + 1]));
+			sr.Dispose();
 		}
 		/// <summary>
 		/// Returns collection of stations matching the pattern.

@@ -47,7 +47,7 @@
     <Compile Include="BasicStructures\RoutesInfoBasic.cs" />
     <Compile Include="BasicStructures\StationsBasic.cs" />
     <Compile Include="BasicStructures\StopsBasic.cs" />
-    <Compile Include="DataFeedGlobals.cs" />
+    <Compile Include="DataFeedClient.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

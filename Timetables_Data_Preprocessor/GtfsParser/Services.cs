@@ -103,7 +103,7 @@ namespace Timetables.Preprocessor
         {
             int min = int.MaxValue;
             foreach (var item in list)
-                if (item.Value.ValidUntil < min)
+                if (item.Value.ValidSince != item.Value.ValidUntil && item.Value.ValidUntil < min)
                     min = item.Value.ValidUntil;
             return DateTime.ParseExact(min.ToString(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 		}

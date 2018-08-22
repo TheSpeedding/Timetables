@@ -31,29 +31,20 @@ namespace Timetables.Application.Desktop
 
 			foreach (var station in DataFeed.Basic.Stations)
 			{
-				sourceComboBox.Items.Add(station);
-				targetComboBox.Items.Add(station);
+				sourceComboBox.Items.Add(station.Name);
+				targetComboBox.Items.Add(station.Name);
 			}
 		}
 
 		private Structures.Basic.StationsBasic.StationBasic GetStationFromComboBox(ComboBox comboBox)
 		{
+			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(comboBox.Text);
 
-			Structures.Basic.StationsBasic.StationBasic source = null;
-
-			if (comboBox.SelectedItem == null)
+			if (source == null)
 			{
-				source = DataFeed.Basic.Stations.FindByName(comboBox.Text);
-
-				if (source == null)
-				{
-					MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + comboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					return null;
-				}
+				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + comboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return null;
 			}
-
-			else
-				source = comboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
 
 			return source;
 		}

@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataFeed.cs" />
+    <Compile Include="DataFeedPreprocessor.cs" />
     <Compile Include="Downloader.cs" />
     <Compile Include="GlobalData.cs" />
     <Compile Include="GtfsParser\Footpaths.cs" />

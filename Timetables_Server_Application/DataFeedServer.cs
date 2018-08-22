@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO.Compression;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Timetables.Client;
+using Timetables.Preprocessor;
+
+namespace Timetables.Server
+{
+	/// <summary>
+	/// Class for data feed.
+	/// </summary>
+	public static class DataFeed
+	{
+		/// <summary>
+		/// Thread that ensures auto update of the data.
+		/// </summary>
+		public static Thread AutoUpdateThread { get; } = new Thread(AutoUpdate.AutoUpdateRoutine);
+		/// <summary>
+		/// Full data feed object.
+		/// </summary>
+		public static Interop.DataFeedManaged Full { get; private set; }
+		/// <summary>
+		/// Basic data feed.
+		/// </summary>
+		public static Structures.Basic.DataFeedBasic Basic { get; private set; }
+		/// <summary>
+		/// Indicates whether the data were sucessfully loaded.
+		/// </summary>
+		public static bool Loaded { get; private set; }
+		/// <summary>
+		/// Indicates whether the data are downloaded.
+		/// </summary>
+		public static bool Downloaded { get; private set; }
+		static DataFeed()
+		{
+			Preprocessor.DataFeed.DataProcessing += LoadingProgressCallback;
+
+			AutoUpdate.Update += AutoUpdateCallback;
+
+			Download(true);
+
+			Load();			
+		}
+		/// <summary>
+		/// Callback to log preprocessor actions.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		private static void LoadingProgressCallback(string message) => Logging.Log($"Preprocessor: { message }");
+		/// <summary>
+		/// Callback to log auto-updater actions.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		private static void AutoUpdateCallback(string message) => Logging.Log($"Auto update: { message }");
+
+		/// <summary>
+		/// Loads data while starting the application.
+		/// </summary>
+		public static void Download(bool forceDownload = false)
+		{
+			Downloaded = false;
+
+			if (!System.IO.Directory.Exists("data") || forceDownload)
+			{
+				Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(Settings.DataFeedSources.ToArray());
+			}
+
+			Downloaded = true;
+
+			Load();
+		}
+		/// <summary>
+		/// Updates data feed. Also used in static constructor.
+		/// </summary>
+		public static void Load()
+		{
+			Loaded = false;
+
+			Basic = new Structures.Basic.DataFeedBasic();
+
+			Full = new Interop.DataFeedManaged();
+
+			Loaded = true;
+
+			if (AutoUpdateThread.ThreadState == ThreadState.Unstarted)
+				AutoUpdateThread.Start();
+		}
+	}
+}

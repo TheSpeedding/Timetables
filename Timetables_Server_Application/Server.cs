@@ -17,7 +17,7 @@ namespace Timetables.Server
 		/// <summary>
 		/// Signals that can be used to control server.
 		/// </summary>
-		public enum ServerSignal { Abort }
+		public enum ServerSignal { Abort, ForceUpdate }
 		/// <summary>
 		/// Thread that is operating given server.
 		/// </summary>
@@ -96,6 +96,11 @@ namespace Timetables.Server
 					case ServerSignal.Abort:
 						Logging.Log("The server has been requested to be stopped.");
 						Stop();
+						break;
+					case ServerSignal.ForceUpdate:
+						Logging.Log("Request to force data update received.");
+						DataFeed.Download(true);
+						DataFeed.Load();
 						break;
 				}
 		}

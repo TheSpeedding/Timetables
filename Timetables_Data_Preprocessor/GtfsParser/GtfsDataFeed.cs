@@ -95,6 +95,9 @@ namespace Timetables.Preprocessor
             Footpaths.Write(new StreamWriter(path + "/footpaths.tfd"));
             StopTimes.Write(new StreamWriter(path + "/stop_times.tfd"));
             Routes.Write(new StreamWriter(path + "/routes.tfd"));
+
+			using (var expiration = new StreamWriter(path + "/expires.tfd"))
+				expiration.Write(ExpirationDate.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture));
 		}
 		/// <summary>
 		/// Method that splits string according to GTFS rules which are the same as CSV files.

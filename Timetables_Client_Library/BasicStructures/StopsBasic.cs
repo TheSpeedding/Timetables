@@ -93,6 +93,7 @@ namespace Timetables.Structures.Basic
 				list.Add(stop);
 				stations[int.Parse(tokens[5 * i + 1])].ChildStops.Add(stop);
 			}
+			sr.Dispose();
 		}
 		/// <summary>
 		/// Returns stop represented by the name.
