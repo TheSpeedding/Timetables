@@ -89,16 +89,17 @@ namespace Timetables.Client
 			
 			// Offline mode.
 
-			if ((!System.IO.Directory.Exists("data") || forceDownload || IsUpdateNeeded) && OfflineMode)
+			if (OfflineMode)
 			{
-				try
-				{
-					Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);
-				}
-				catch
-				{
-					throw new ArgumentException("Fatal error. Cannot process the data.");
-				}
+				if ((!System.IO.Directory.Exists("data") || forceDownload || IsUpdateNeeded))
+					try
+					{
+						Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);
+					}
+					catch
+					{
+						throw new ArgumentException("Fatal error. Cannot process the data.");
+					}
 			}
 
 			// Online mode.
