@@ -61,15 +61,35 @@ namespace Timetables.Client
 		/// </summary>
 		public static uint BasicDataPortNumber { get; set; }
 		/// <summary>
+		/// Decides if the data feed should be updated.
+		/// </summary>
+		public static bool IsUpdateNeeded
+		{
+			get
+			{
+				try
+				{
+					using (var sr = new System.IO.StreamReader("data/expires.tfd"))
+						if (DateTime.ParseExact(sr.ReadLine(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now)
+							return true;				
+				}
+				catch
+				{
+					return true;
+				}
+				return false;
+			}
+		}
+		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
-		public static async Task LoadAsync(bool forceDownload = false, int timeout = 5000)
+		public static async Task DownloadAsync(bool forceDownload = false, int timeout = 5000)
 		{
 			Downloaded = false;
 			
 			// Offline mode.
 
-			if ((!System.IO.Directory.Exists("data") || forceDownload ) && OfflineMode)
+			if ((!System.IO.Directory.Exists("data") || forceDownload || IsUpdateNeeded) && OfflineMode)
 			{
 				try
 				{
@@ -120,22 +140,20 @@ namespace Timetables.Client
 
 			Downloaded = true;
 
-			Update();			
+			Load();			
 		}
 		/// <summary>
 		/// Updates data feed. Also used in static constructor.
 		/// </summary>
-		public static void Update()
+		public static void Load()
 		{
 			Loaded = false;
 						
-			var newBasicData = new Structures.Basic.DataFeedBasic();
-			basicData = newBasicData;
+			basicData = new Structures.Basic.DataFeedBasic();
 
 			if (OfflineMode)
 			{
-				var newFullData = new Interop.DataFeedManaged();
-				fullData = newFullData;
+				fullData = new Interop.DataFeedManaged();
 			}
 
 			Loaded = true;

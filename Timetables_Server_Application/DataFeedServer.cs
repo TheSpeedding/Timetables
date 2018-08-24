@@ -35,13 +35,36 @@ namespace Timetables.Server
 		/// Indicates whether the data are downloaded.
 		/// </summary>
 		public static bool Downloaded { get; private set; }
+		/// <summary>
+		/// Decides if the data feed should be updated.
+		/// </summary>
+		public static bool IsUpdateNeeded
+		{
+			get
+			{
+				try
+				{
+					using (var sr = new System.IO.StreamReader("data/expires.tfd"))
+						if (DateTime.ParseExact(sr.ReadLine(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now)
+							return true;
+				}
+				catch
+				{
+					return true;
+				}
+				return false;
+			}
+		}
 		static DataFeed()
 		{
 			Preprocessor.DataFeed.DataProcessing += LoadingProgressCallback;
 
 			AutoUpdate.Update += AutoUpdateCallback;
 
-			Download(true);
+			if (IsUpdateNeeded)
+				Download(IsUpdateNeeded);
+			else
+				Logging.Log("Data feed is up to date.");
 
 			Load();			
 		}
