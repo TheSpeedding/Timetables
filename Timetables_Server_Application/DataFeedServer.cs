@@ -63,10 +63,12 @@ namespace Timetables.Server
 
 			if (IsUpdateNeeded)
 				Download(IsUpdateNeeded);
-			else
-				Logging.Log("Data feed is up to date.");
 
-			Load();			
+			else
+			{
+				Logging.Log("Data feed is up to date.");
+				Load();
+			}
 		}
 		/// <summary>
 		/// Callback to log preprocessor actions.

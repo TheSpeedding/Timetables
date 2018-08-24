@@ -32,7 +32,7 @@ namespace Timetables.Client
 		{
 			get
 			{
-				if (OfflineMode) throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
+				if (!OfflineMode) throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
 				return fullData ?? throw new NullReferenceException("Basic data not initialized correctly.");
 			}
 		}
