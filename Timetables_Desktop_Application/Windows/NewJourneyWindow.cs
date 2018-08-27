@@ -36,34 +36,30 @@ namespace Timetables.Application.Desktop
 			}
 		}
 
-		public NewJourneyWindow(string source, string target) : this()
-		{
-			sourceComboBox.Text = source;
-			targetComboBox.Text = target;
-		}
+		public NewJourneyWindow(DockPanel panel) : this() => DockPanel = panel;
 
-		private Structures.Basic.StationsBasic.StationBasic GetStationFromComboBox(ComboBox comboBox)
+		private Structures.Basic.StationsBasic.StationBasic GetStationFromString(string name)
 		{
-			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(comboBox.Text);
+			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(name);
 
 			if (source == null)
 			{
-				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + comboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + name, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return null;
 			}
 
 			return source;
 		}
 
-		private async void searchButton_Click(object sender, EventArgs e)
+		internal async Task<JourneyResultsWindow> SendRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient) 
 		{
-			Structures.Basic.StationsBasic.StationBasic source = GetStationFromComboBox(sourceComboBox);
-			Structures.Basic.StationsBasic.StationBasic target = GetStationFromComboBox(targetComboBox);
+			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
+			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
 
 			if (source == null || target == null)
-				return;
+				return null;
 
-			var routerRequest = new RouterRequest(source.ID, target.ID, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient);
 			RouterResponse routerResponse = null;
 
 			if (DataFeed.OfflineMode)
@@ -83,7 +79,7 @@ namespace Timetables.Application.Desktop
 			else
 			{
 				searchButton.Enabled = false;
-				
+
 				using (var routerProcessing = new RouterProcessing())
 				{
 					try
@@ -95,17 +91,24 @@ namespace Timetables.Application.Desktop
 						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
-				
+
 				searchButton.Enabled = true;
 			}
 
-			if (routerResponse != null)
-			{
-				new JourneyResultsWindow(routerResponse, source.Name, target.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
 
+			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, departureDateTimePicker.Value);
+
+		}
+
+		private async void searchButton_Click(object sender, EventArgs e)
+		{
+			var window = await SendRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+
+			if (window != null)
+			{
+				window.Show(DockPanel, DockState);
 				Close();
 			}
 		}
-
 	}
 }
