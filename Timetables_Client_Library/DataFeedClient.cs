@@ -71,13 +71,14 @@ namespace Timetables.Client
 				{
 					using (var sr = new System.IO.StreamReader("data/expires.tfd"))
 						if (DateTime.ParseExact(sr.ReadLine(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now)
-							return true;				
+							return true;
+						else
+							return false;
 				}
 				catch
 				{
 					return true;
 				}
-				return false;
 			}
 		}
 		/// <summary>

@@ -51,4 +51,7 @@
   <Outdated>Neaktuální!</Outdated>
   <UnreachableHost>Server je momentálně nedostupný. Může být offline, zkuste to znovu později.</UnreachableHost>
   <Offline>Offline</Offline>
+  <Add>Přidat</Add>
+  <Remove>Odebrat</Remove>
+	<Find>Najít</Find>
 </Localization>

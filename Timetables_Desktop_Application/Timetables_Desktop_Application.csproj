@@ -75,6 +75,12 @@
     <Compile Include="Windows\ExtraEventsWindow.designer.cs">
       <DependentUpon>ExtraEventsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FavoriteJourneysWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\FavoriteJourneysWindow.designer.cs">
+      <DependentUpon>FavoriteJourneysWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\LockoutsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\ExtraEventsWindow.resx">
       <DependentUpon>ExtraEventsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\FavoriteJourneysWindow.resx">
+      <DependentUpon>FavoriteJourneysWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\InitLoadingWindow.resx">
       <DependentUpon>InitLoadingWindow.cs</DependentUpon>

@@ -80,20 +80,21 @@
 			// findjourneyToolStripMenuItem
 			// 
 			this.findjourneyToolStripMenuItem.Name = "findjourneyToolStripMenuItem";
-			this.findjourneyToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+			this.findjourneyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.findjourneyToolStripMenuItem.Text = "Find &journeys";
 			this.findjourneyToolStripMenuItem.Click += new System.EventHandler(this.findjourneyToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(142, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// favoritesToolStripMenuItem1
 			// 
 			this.favoritesToolStripMenuItem1.Name = "favoritesToolStripMenuItem1";
-			this.favoritesToolStripMenuItem1.Size = new System.Drawing.Size(145, 22);
+			this.favoritesToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
 			this.favoritesToolStripMenuItem1.Text = "&Favorites";
+			this.favoritesToolStripMenuItem1.Click += new System.EventHandler(this.favoritesToolStripMenuItem1_Click);
 			// 
 			// departureBoardToolStripMenuItem
 			// 
@@ -130,12 +131,12 @@
 			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
 			this.favoritesToolStripMenuItem.Text = "&Favorites";
 			// 
-			// actualinfoToolStripMenuItem
+			// trafficToolStripMenuItem
 			// 
 			this.trafficToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.extraordinaryEventsToolStripMenuItem,
             this.lockoutsToolStripMenuItem});
-			this.trafficToolStripMenuItem.Name = "actualinfoToolStripMenuItem";
+			this.trafficToolStripMenuItem.Name = "trafficToolStripMenuItem";
 			this.trafficToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
 			this.trafficToolStripMenuItem.Text = "&Traffic";
 			// 

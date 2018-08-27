@@ -66,6 +66,9 @@ namespace Timetables.Client
 		public string Outdated { get; set; } = "Outdated!";
 		public string UnreachableHost { get; set; } = "The server is unreachable. It might be offline, try again later.";
 		public string Offline { get; set; } = "Offline";
+		public string Add { get; set; } = "Add";
+		public string Remove { get; set; } = "Remove";
+		public string Find { get; set; } = "Find";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

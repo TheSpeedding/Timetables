@@ -254,7 +254,6 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 
 		}
 
-
 	}
 
 	return make_tuple(nullptr, 0, not_operating);

@@ -36,6 +36,12 @@ namespace Timetables.Application.Desktop
 			}
 		}
 
+		public NewJourneyWindow(string source, string target) : this()
+		{
+			sourceComboBox.Text = source;
+			targetComboBox.Text = target;
+		}
+
 		private Structures.Basic.StationsBasic.StationBasic GetStationFromComboBox(ComboBox comboBox)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(comboBox.Text);
