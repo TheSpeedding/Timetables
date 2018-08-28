@@ -101,8 +101,8 @@ namespace Timetables.Application.Desktop
 
 		private void favoriteJourneysWindow_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			using (FileStream fileStream = new FileStream("journeys.fav", FileMode.OpenOrCreate))
-				new XmlSerializer(typeof(FavoriteJourneys)).Serialize(fileStream, favorites);
+			using (StreamWriter sw = new StreamWriter("journeys.fav"))
+				new XmlSerializer(typeof(FavoriteJourneys)).Serialize(sw, favorites);
 		}
 
 		private void removeButton_Click(object sender, EventArgs e)

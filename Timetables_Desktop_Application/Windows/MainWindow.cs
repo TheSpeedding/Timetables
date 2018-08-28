@@ -45,7 +45,7 @@ namespace Timetables.Application.Desktop
 
 			if (window.journeysToFind != null)
 				foreach (var journey in window.journeysToFind.Favorites)
-					(await new NewJourneyWindow(mainDockPanel).SendRequestAsync(journey.Source, journey.Target, DateTime.Now, int.MaxValue, 5, 1)).Show(mainDockPanel, DockState.Document);
+					(await Requests.SendRouterRequestAsync(journey.Source, journey.Target, DateTime.Now, int.MaxValue, 5, 1)).Show(mainDockPanel, DockState.Document);
 		}
 	}
 }

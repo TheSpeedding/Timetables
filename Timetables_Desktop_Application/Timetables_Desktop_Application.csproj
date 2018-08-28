@@ -68,6 +68,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Requests.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="Windows\ExtraEventsWindow.cs">
       <SubType>Form</SubType>

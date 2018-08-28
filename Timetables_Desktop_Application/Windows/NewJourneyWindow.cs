@@ -31,78 +31,16 @@ namespace Timetables.Application.Desktop
 
 			foreach (var station in DataFeed.Basic.Stations)
 			{
-				sourceComboBox.Items.Add(station.Name);
-				targetComboBox.Items.Add(station.Name);
+				sourceComboBox.Items.Add(station);
+				targetComboBox.Items.Add(station);
 			}
 		}
-
-		public NewJourneyWindow(DockPanel panel) : this() => DockPanel = panel;
-
-		private Structures.Basic.StationsBasic.StationBasic GetStationFromString(string name)
-		{
-			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(name);
-
-			if (source == null)
-			{
-				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + name, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return null;
-			}
-
-			return source;
-		}
-
-		internal async Task<JourneyResultsWindow> SendRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient) 
-		{
-			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
-			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
-
-			if (source == null || target == null)
-				return null;
-
-			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient);
-			RouterResponse routerResponse = null;
-
-			if (DataFeed.OfflineMode)
-			{
-				searchButton.Enabled = false;
-				await Task.Run(() =>
-				{
-					using (var routerProcessing = new Interop.RouterManaged(DataFeed.Full, routerRequest))
-					{
-						routerProcessing.ObtainJourneys();
-						routerResponse = routerProcessing.ShowJourneys();
-					}
-				});
-				searchButton.Enabled = true;
-			}
-
-			else
-			{
-				searchButton.Enabled = false;
-
-				using (var routerProcessing = new RouterProcessing())
-				{
-					try
-					{
-						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
-					}
-					catch (System.Net.WebException)
-					{
-						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}
-
-				searchButton.Enabled = true;
-			}
-
-
-			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, departureDateTimePicker.Value);
-
-		}
-
+				
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
-			var window = await SendRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+			searchButton.Enabled = false;
+			var window = await Requests.SendRouterRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+			searchButton.Enabled = true;
 
 			if (window != null)
 			{
