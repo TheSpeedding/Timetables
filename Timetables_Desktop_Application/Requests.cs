@@ -81,5 +81,96 @@ namespace Timetables.Application.Desktop
 
 			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt);
 		}
+
+		/// <summary>
+		/// Tries to obtain departures and return window with results
+		/// </summary>
+		/// <param name="stationName">Station name.</param>
+		/// <param name="dt">Datetime.</param>
+		/// <param name="count">Number of departures.</param>
+		/// <param name="isStation">Indicates whether it is station or stop.</param>
+		/// <returns>Window with results.</returns>
+		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation)
+		{
+			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
+
+			if (station == null)
+				return null;
+
+			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation);
+			DepartureBoardResponse dbResponse = null;
+
+			if (DataFeed.OfflineMode)
+			{
+				await Task.Run(() =>
+				{
+					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+					{
+						dbProcessing.ObtainDepartureBoard();
+						dbResponse = dbProcessing.ShowDepartureBoard();
+					}
+				});
+			}
+
+			else
+			{
+				using (var dbProcessing = new DepartureBoardProcessing())
+				{
+					try
+					{
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+					}
+					catch (System.Net.WebException)
+					{
+						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
+
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, stationName, dt);
+		}
+
+		/// <summary>
+		/// Returns loading HTML string with customized text.
+		/// </summary>
+		/// <param name="text">Customized text.</param>
+		/// <returns>HTML document.</returns>
+		public static string LoadingHtml(string text) => @"<!DOCTYPE html>
+<html>
+<head>
+<meta name=""viewport"" content=""width=device-width, initial-scale=1"">
+<meta http-equiv=""X-UA-Compatible"" content=""IE=edge,chrome=1""/>
+<style>
+body {
+  text-align: center;
+  margin-top: 10%;
+  color: grey;
+}
+.loader {
+  display: inline-block;
+  margin-bottom: 5%;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; 
+  animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class=""loader""></div>
+<h2>" + text + @"</h2>
+</body>
+</html>";
 	}
 }

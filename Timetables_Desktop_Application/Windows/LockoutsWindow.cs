@@ -22,7 +22,14 @@ namespace Timetables.Application.Desktop
 			Settings.Theme.Apply(this);
 
 			Text = Settings.Localization.Lockouts;
-		
+
+			resultsWebBrowser.DocumentText = Requests.LoadingHtml(Settings.Localization.PleaseWaitDownloading);
+
+			LoadContent();
+		}
+
+		private async void LoadContent()
+		{
 			try
 			{
 				if (Settings.Lockouts == null) throw new ArgumentException();
@@ -30,7 +37,13 @@ namespace Timetables.Application.Desktop
 				using (var wc = new WebClient())
 				{
 					wc.Encoding = Encoding.UTF8;
-					resultsWebBrowser.DocumentText = wc.DownloadString(Settings.Lockouts).TransformToHtml(Settings.LockoutsXslt.FullName, Settings.LockoutsCss.FullName);
+
+					var downloading = wc.DownloadStringTaskAsync(Settings.Lockouts);
+
+					if (await Task.WhenAny(downloading, Task.Delay(Settings.TimeoutDuration)) == downloading && downloading.Status == TaskStatus.RanToCompletion)
+						resultsWebBrowser.DocumentText = downloading.Result.TransformToHtml(Settings.LockoutsXslt.FullName, Settings.LockoutsCss.FullName);
+					else
+						throw new WebException();
 				}
 			}
 
@@ -43,7 +56,6 @@ namespace Timetables.Application.Desktop
 			{
 				resultsWebBrowser.DocumentText = "Error while getting information from remote server. Check your internet connection or try again later.";
 			}
-			
 		}
 	}
 }

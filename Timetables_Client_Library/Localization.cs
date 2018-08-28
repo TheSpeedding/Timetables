@@ -69,6 +69,7 @@ namespace Timetables.Client
 		public string Add { get; set; } = "Add";
 		public string Remove { get; set; } = "Remove";
 		public string Find { get; set; } = "Find";
+		public string PleaseWaitDownloading { get; set; } = "Please wait while data are just being downloaded.";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

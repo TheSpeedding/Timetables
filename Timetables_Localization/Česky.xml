@@ -54,4 +54,5 @@
   <Add>Přidat</Add>
   <Remove>Odebrat</Remove>
 	<Find>Najít</Find>
+	<PleaseWaitDownloading>Data se stahují, počkejte prosím.</PleaseWaitDownloading>
 </Localization>

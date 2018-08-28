@@ -41,7 +41,7 @@ namespace Timetables.Application.Desktop
 				internal FavoriteJourney() { }
 			}
 			/// <summary>
-			/// List of favorite journeys (sources and targets).
+			/// List of favorite journeys.
 			/// </summary>
 			public List<FavoriteJourney> Favorites { get; set; } = new List<FavoriteJourney>();
 

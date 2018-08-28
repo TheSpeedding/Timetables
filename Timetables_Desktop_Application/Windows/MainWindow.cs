@@ -47,5 +47,15 @@ namespace Timetables.Application.Desktop
 				foreach (var journey in window.journeysToFind.Favorites)
 					(await Requests.SendRouterRequestAsync(journey.Source, journey.Target, DateTime.Now, int.MaxValue, 5, 1)).Show(mainDockPanel, DockState.Document);
 		}
+
+		private async void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var window = new FavoriteDeparturesWindow();
+			window.ShowDialog();
+
+			if (window.departuresToFind != null)
+				foreach (var departure in window.departuresToFind.Favorites)
+					(await Requests.SendDepartureBoardRequestAsync(departure.Station, DateTime.Now, 5, true)).Show(mainDockPanel, DockState.Document);
+		}
 	}
 }

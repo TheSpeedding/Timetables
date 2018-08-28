@@ -25,62 +25,13 @@ namespace Timetables.Application.Desktop
 
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
-			Structures.Basic.StationsBasic.StationBasic station = null;
+			searchButton.Enabled = false;
+			var window = await Requests.SendDepartureBoardRequestAsync(stationComboBox.Text, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
+			searchButton.Enabled = true;
 
-			if (stationComboBox.SelectedItem == null)
+			if (window != null)
 			{
-				station = DataFeed.Basic.Stations.FindByName(stationComboBox.Text);
-
-				if (station == null)
-				{
-					MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + stationComboBox.Text, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					return;
-				}
-			}
-
-			else
-				station = stationComboBox.SelectedItem as Structures.Basic.StationsBasic.StationBasic;
-			
-			var dbRequest = new DepartureBoardRequest(station.ID, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true);
-			DepartureBoardResponse dbResponse = null;
-
-			if (DataFeed.OfflineMode)
-			{
-				searchButton.Enabled = false;
-				await Task.Run(() =>
-				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
-					{
-						dbProcessing.ObtainDepartureBoard();
-						dbResponse = dbProcessing.ShowDepartureBoard();
-					}
-				});
-				searchButton.Enabled = true;
-			}
-			
-			else
-			{
-				searchButton.Enabled = false;
-
-				using (var dbProcessing = new DepartureBoardProcessing())
-				{
-					try
-					{
-						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
-					}
-					catch (System.Net.WebException)
-					{
-						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}
-				
-				searchButton.Enabled = true;
-			}
-
-			if (dbResponse != null)
-			{
-				new DepartureBoardResultsWindow(dbResponse, station.Name, departureDateTimePicker.Value).Show(DockPanel, DockState);
-
+				window.Show(DockPanel, DockState);
 				Close();
 			}
 		}		
