@@ -64,7 +64,7 @@ namespace Timetables.Application.Desktop
 							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 						else
-							Program.UnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true));
+							Program.ShowUnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true));
 
 						IsFaulted = true;
 					}

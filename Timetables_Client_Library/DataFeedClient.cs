@@ -82,6 +82,22 @@ namespace Timetables.Client
 			}
 		}
 		/// <summary>
+		/// Decides whether the computer is connected to the Internet.
+		/// </summary>
+		private static bool IsConnected()
+		{
+			try
+			{
+				using (var client = new System.Net.WebClient())
+				using (client.OpenRead("http://clients3.google.com/generate_204"))
+					return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
 		public static async Task DownloadAsync(bool forceDownload = false, int timeout = 5000)
@@ -92,7 +108,7 @@ namespace Timetables.Client
 
 			if (OfflineMode)
 			{
-				if ((!System.IO.Directory.Exists("data") || forceDownload || IsUpdateNeeded))
+				if ((!System.IO.Directory.Exists("data") || forceDownload || (IsUpdateNeeded && IsConnected())))
 					try
 					{
 						Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);

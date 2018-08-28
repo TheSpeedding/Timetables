@@ -11,6 +11,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class offering localized string constants.
 	/// </summary>
+	[Serializable]
 	public class Localization
 	{
 		[XmlIgnore]
@@ -89,9 +90,16 @@ namespace Timetables.Client
 			
 			using (FileStream fileStream = new FileStream("loc/" + language + ".xml", FileMode.Open))
 			{
-				var loc = (Localization)new XmlSerializer(typeof(Localization)).Deserialize(fileStream);
-				loc.locName = language;
-				return loc;
+				try
+				{
+					var loc = (Localization)new XmlSerializer(typeof(Localization)).Deserialize(fileStream);
+					loc.locName = language;
+					return loc;
+				}
+				catch
+				{
+					return new Localization();
+				}
 			}
 		}
 	}

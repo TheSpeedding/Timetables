@@ -13,7 +13,8 @@ namespace Timetables.Application.Desktop
 		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
 		static void Main()
 		{
-			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallback;
+			AppDomain.CurrentDomain.UnhandledException += ShowUnhandledExceptionCallback;
+			AppDomain.CurrentDomain.UnhandledException += LogUnhandledExceptionCallback;
 
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
@@ -30,6 +31,55 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Callback to handle unhandled exception.
 		/// </summary>
-		internal static void UnhandledExceptionCallback(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show(((Exception)e.ExceptionObject).Message, ((Exception)e.ExceptionObject).Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+		internal static void ShowUnhandledExceptionCallback(object sender, UnhandledExceptionEventArgs e)
+		{
+			if (MessageBox.Show(((Exception)e.ExceptionObject).Message + Environment.NewLine + "Do you wish to send a report?", 
+				((Exception)e.ExceptionObject).Message, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+			{
+				string messageText = ((Exception)e.ExceptionObject).Message;
+
+				try
+
+				{
+					using (var sr = new System.IO.StreamReader(".settings"))
+						messageText += Environment.NewLine + sr.ReadToEnd();
+				}
+				catch
+				{
+
+				}
+
+
+				System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+				message.To.Add("thespeedding@gmail.com");
+				message.Subject = "Timetables Desktop Application - Unhandled exception";
+				message.From = new System.Net.Mail.MailAddress("exceptions@timetables.cz");
+				message.Body = messageText;
+				System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.gmail.com");
+				smtp.Send(message);
+			}
+		}
+
+		/// <summary>
+		/// Callback to handle unhandled exception.
+		/// </summary>
+		internal static void LogUnhandledExceptionCallback(object sender, UnhandledExceptionEventArgs e)
+		{
+			using (var sw = new System.IO.StreamWriter("exceptions.txt", true))
+			{
+				sw.WriteLine(DateTime.Now);
+				sw.WriteLine(((Exception)e.ExceptionObject).Message);
+				try
+				{
+					using (var sr = new System.IO.StreamReader(".settings"))
+						sw.WriteLine(sr.ReadToEnd());
+				}
+				catch
+				{
+
+				}
+				sw.WriteLine();
+			}
+		}
 	}
 }
