@@ -39,7 +39,7 @@ namespace Timetables.Application.Desktop
 					
 					var downloading = wc.DownloadStringTaskAsync(Settings.ExtraordinaryEvents);
 
-					if (await Task.WhenAny(downloading, Task.Delay(Settings.TimeoutDuration)) == downloading && downloading.Status == TaskStatus.RanToCompletion)
+					if (await Task.WhenAny(downloading, Task.Delay(Settings.TimeoutDuration)) == downloading)
 						resultsWebBrowser.DocumentText = downloading.Result.TransformToHtml(Settings.ExtraordinaryEventsXslt.FullName, Settings.ExtraordinaryEventsCss.FullName);
 					else
 						throw new WebException();

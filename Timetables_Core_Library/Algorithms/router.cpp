@@ -275,7 +275,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 			break;
 
 
-		if (fastest_journeys_.size() >= count_ + 1 && *previous_fastest_journey < *current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
 
 		previous_fastest_journey = current_fastest_journey;
@@ -335,7 +335,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 
 				auto inserted = fastest_journeys_.insert(journey(res->second));
 
-				if (fastest_journey == nullptr || res->second->arrival_at_target() < fastest_journey->arrival_time())
+				if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
 					fastest_journey = &*inserted.first; // Insert only if unique.
 			}
 
