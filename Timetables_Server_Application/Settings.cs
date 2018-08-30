@@ -10,7 +10,7 @@ namespace Timetables.Server
 	/// <summary>
 	/// Settings for the server.
 	/// </summary>
-	class Settings
+	static class Settings
 	{
 		/// <summary>
 		/// Router port.

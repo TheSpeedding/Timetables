@@ -40,7 +40,12 @@ namespace Timetables.Server
 					Update?.Invoke($"Another auto update is scheduled to be in { autoUpdateDateTime }.");
 
 					Thread.Sleep(autoUpdateDateTime - DateTime.Now);
+
+					DataFeed.Download(true);
+
+					DataFeed.Load();
 				}
+
 				catch (Exception ex)
 				{
 					if (ex is System.IO.FileNotFoundException)
@@ -52,13 +57,9 @@ namespace Timetables.Server
 
 					if (!firstLoop)
 						Thread.Sleep(new TimeSpan(6, 0, 0)); // File with expiration date does not exist or there was some other problem. Try to update the data in 6 hours.
-					else
-						firstLoop = false;
 				}
 
-				DataFeed.Download(true);
-
-				DataFeed.Load();
+				firstLoop = false;
 			}
 		}
 	}
