@@ -45,7 +45,9 @@ service_state Timetables::Structures::service::is_operating_in_date(const date_t
 		if (is_removed_in_date(date_time.date()))
 			return not_operating;
 		else {
-			if (date_time < valid_since_ || date_time > valid_until_) 
+			if (date_time < valid_since_)
+				return not_operating;
+			else if (date_time > valid_until_)
 				return outdated;
 			else 
 				return operating;

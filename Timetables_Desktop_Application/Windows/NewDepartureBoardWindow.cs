@@ -20,7 +20,7 @@ namespace Timetables.Application.Desktop
 			stationLabel.Text = Settings.Localization.Station;
 
 			foreach (var station in DataFeed.Basic.Stations)
-				stationComboBox.Items.Add(station);	
+				stationComboBox.Items.Add(station.Name);	
 		}
 
 		private async void searchButton_Click(object sender, EventArgs e)

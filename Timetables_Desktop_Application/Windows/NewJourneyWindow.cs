@@ -31,8 +31,8 @@ namespace Timetables.Application.Desktop
 
 			foreach (var station in DataFeed.Basic.Stations)
 			{
-				sourceComboBox.Items.Add(station);
-				targetComboBox.Items.Add(station);
+				sourceComboBox.Items.Add(station.Name);
+				targetComboBox.Items.Add(station.Name);
 			}
 		}
 				

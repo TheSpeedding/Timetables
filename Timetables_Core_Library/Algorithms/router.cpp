@@ -116,7 +116,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 				
 			}
 			if ((arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
-				(arrival_time_B->second->trip() != nullptr && min < arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop and the previous segment is not a footpath.
+				(arrival_time_A->second->trip() != nullptr && min < arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop and the previous segment is not a footpath.
 				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
 								
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
@@ -269,7 +269,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		return;		
 
 	for (int i = 1; i < count_; i++) {
-		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), 1));
+		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
