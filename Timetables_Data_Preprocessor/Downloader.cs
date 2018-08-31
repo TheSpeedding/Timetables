@@ -21,6 +21,7 @@ namespace Timetables.Preprocessor
 			
 			using (WebClient client = new WebClient())
 			{
+				client.Headers.Add("User-Agent: Other");
 				client.DownloadFile(uri, $"{ index }_data.zip");
 			}
 

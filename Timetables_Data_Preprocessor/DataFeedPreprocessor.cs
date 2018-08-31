@@ -104,10 +104,8 @@ namespace Timetables.Preprocessor
 				else
 					DataProcessing?.Invoke($@"Parsing of data located in { url } ended with an unknown error.
 Error: { ex.Message } Type of { ex.GetType() }.");
-#else
-					else
-						throw;
 #endif
+				throw;
 			}
 		}
 

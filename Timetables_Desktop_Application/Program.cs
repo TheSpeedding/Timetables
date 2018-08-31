@@ -39,7 +39,6 @@ namespace Timetables.Application.Desktop
 				string messageText = ((Exception)e.ExceptionObject).Message;
 
 				try
-
 				{
 					using (var sr = new System.IO.StreamReader(".settings"))
 						messageText += Environment.NewLine + sr.ReadToEnd();
@@ -50,6 +49,7 @@ namespace Timetables.Application.Desktop
 				}
 
 
+				/*
 				System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 				message.To.Add("thespeedding@gmail.com");
 				message.Subject = "Timetables Desktop Application - Unhandled exception";
@@ -57,6 +57,7 @@ namespace Timetables.Application.Desktop
 				message.Body = messageText;
 				System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.gmail.com");
 				smtp.Send(message);
+				*/
 			}
 		}
 

@@ -152,7 +152,7 @@ namespace Timetables.Preprocessor
 			{
 				IList<string> tokens = GtfsDataFeed.SplitGtfs(stops.ReadLine());
 
-				if (!containsLocationType || (containsLocationType && tokens[dic["location_type"]] == "0"))
+				if (!containsLocationType || (containsLocationType && (tokens[dic["location_type"]] == "0" || tokens[dic["location_type"]] == string.Empty)))
 				{
 					Stop stop = new Stop(Count, tokens[dic["stop_name"]], double.Parse(tokens[dic["stop_lat"]], CultureInfo.InvariantCulture), double.Parse(tokens[dic["stop_lon"]], CultureInfo.InvariantCulture));
 
