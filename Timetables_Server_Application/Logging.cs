@@ -13,15 +13,9 @@ namespace Timetables.Server
 	public static class Logging
 	{
 		/// <summary>
-		/// File that is the server logging into.
+		/// Writer that is the server logging into.
 		/// </summary>
-		public static StreamWriter FileForLogging { get; }
-		static Logging()
-		{
-			FileForLogging = new StreamWriter(".log", true);
-			FileForLogging.AutoFlush = true;
-		}
-
+		public static TextWriter FileForLogging { get; } = new StreamWriter(".log", true) { AutoFlush = true };
 		/// <summary>
 		/// Delegate used to log some information.
 		/// </summary>

@@ -15,7 +15,7 @@ namespace Timetables.Server
 		{
 			Logging.LoggingEvent += (string message) => message.LogWithDateTime(Logging.FileForLogging);
 			Logging.LoggingEvent += (string message) => message.LogWithDateTime(Console.Out);
-
+			
 			try
 			{
 				while (!DataFeed.Loaded) ; // Temporary. Actually, this does nothing. Just forces data to be loaded (static class constructor).
@@ -23,6 +23,7 @@ namespace Timetables.Server
 			catch
 			{
 				Logging.Log("Fatal error. Data could not be processed.");
+				return;
 			}
 
 			Server.Start(IPAddress.Any, Settings.RouterPort, Settings.DepartureBoardPort, Settings.BasicDataFeedPort);

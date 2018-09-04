@@ -144,8 +144,20 @@ namespace Timetables.Preprocessor
 				if (trip.StopTimes.Count == 0) // Set departure time of the trip.
 					trip.DepartureTime = ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]);
 
+				Stops.Stop stop = null; 
+
+				try
+				{
+					stop = stops[tokens[dic["stop_id"]]];
+				}
+
+				catch // Stop does not exist, a problem with data validity. Skip this stoptime.
+				{
+					continue;
+				}
+
 				StopTime st = new StopTime(trip, ConvertTimeToSecondsSinceMidnight(tokens[dic["arrival_time"]]) - trip.DepartureTime,
-					ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]) - trip.DepartureTime, stops[tokens[dic["stop_id"]]]);
+					ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]) - trip.DepartureTime, stop);
 				
 				st.Trip.StopTimes.Add(st);
 
