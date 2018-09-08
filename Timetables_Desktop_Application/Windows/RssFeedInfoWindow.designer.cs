@@ -1,6 +1,6 @@
 namespace Timetables.Application.Desktop
 {
-	partial class ExtraEventsWindow
+	partial class RssFeedInfoWindow
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExtraEventsWindow));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RssFeedInfoWindow));
 			this.resultsWebBrowser = new System.Windows.Forms.WebBrowser();
 			this.SuspendLayout();
 			// 
@@ -45,15 +45,14 @@ namespace Timetables.Application.Desktop
 			this.resultsWebBrowser.Size = new System.Drawing.Size(497, 161);
 			this.resultsWebBrowser.TabIndex = 1;
 			// 
-			// ExtraEventsWindow
+			// RssFeedInfoWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(497, 161);
 			this.Controls.Add(this.resultsWebBrowser);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "ExtraEventsWindow";
-			this.Text = "Extraordinary events";
+			this.Name = "RssFeedInfoWindow";
 			this.ResumeLayout(false);
 
 		}
