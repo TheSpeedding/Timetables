@@ -15,7 +15,7 @@ namespace Timetables.Application.Desktop
 {
 	public partial class DepartureBoardResultsWindow : DockContent
 	{
-		public List<Departure> Departures { get; set; }
+		public DepartureBoardResponse Results { get; set; }
 		private DepartureBoardResultsWindow()
 		{
 			InitializeComponent();
@@ -24,7 +24,7 @@ namespace Timetables.Application.Desktop
 		}
 		public DepartureBoardResultsWindow(DepartureBoardResponse dbReponse, string stationName, DateTime dateTime) : this()
 		{
-			Departures = dbReponse.Departures;
+			Results = dbReponse;
 
 			Text = $"{ Settings.Localization.Departures } ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
@@ -32,12 +32,11 @@ namespace Timetables.Application.Desktop
 		}
 		public DepartureBoardResultsWindow(Departure departure) : this()
 		{
-			Departures = new List<Departure> { departure };
+			Results = new DepartureBoardResponse(new List<Departure> { departure });
 
 			Text = $"{ Settings.Localization.Departure } - {  DataFeed.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
+			resultsWebBrowser.DocumentText = Results.Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
 		}
-		public void PrintWebbrowserContent() => resultsWebBrowser.ShowPrintDialog();
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timetables.Application.Desktop;
 using Timetables.Client;
 
@@ -27,8 +28,22 @@ namespace Timetables.Interop
 		/// Shows detail of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		public void ShowJourneyDetail(int index) => new JourneyResultsWindow(window.Journeys[index]).Show(window.DockPanel, window.DockState);
-		public void PrintJourneyDetail() => window.PrintWebbrowserContent();
+		public void ShowJourneyDetail(int index) => new JourneyResultsWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
+		/// <summary>
+		/// Shows journey printing dialog.
+		/// </summary>
+		/// <param name="index">Index of the journey.</param>
+		public void PrintJourneyDetail(int index = 0)
+		{
+			var wb = new WebBrowser
+			{
+				ObjectForScripting = new JourneyScripting(window),
+				ScriptErrorsSuppressed = true,
+				DocumentText = window.Results.Journeys[index].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
+			};
+
+			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
+		}
 	}
 
 	/// <summary>
@@ -49,8 +64,22 @@ namespace Timetables.Interop
 		/// Shows detail of the departure.
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
-		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Departures[index]).Show(window.DockPanel, window.DockState);
-		public void PrintDepartureDetail() => window.PrintWebbrowserContent();
+		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
+		/// <summary>
+		/// Shows departure printing dialog.
+		/// </summary>
+		/// <param name="index">Index of the departure.</param>
+		public void PrintDepartureDetail(int index = 0)
+		{
+			var wb = new WebBrowser
+			{
+				ObjectForScripting = new DepartureBoardScripting(window),
+				ScriptErrorsSuppressed = true,
+				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName)
+			};
+
+			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
+		}
 	}
 }
 

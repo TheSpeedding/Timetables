@@ -127,7 +127,7 @@ namespace Timetables.Application.Desktop
 				}
 			}
 
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, stationName, dt);
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt);
 		}
 
 		/// <summary>

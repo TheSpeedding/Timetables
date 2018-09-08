@@ -16,7 +16,7 @@ namespace Timetables.Application.Desktop
 {
 	public partial class JourneyResultsWindow : DockContent
 	{
-		public List<Journey> Journeys { get; set; }
+		public RouterResponse Results { get; set; }
 		private JourneyResultsWindow()
 		{
 			InitializeComponent();
@@ -25,7 +25,7 @@ namespace Timetables.Application.Desktop
 		}
 		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime) : this()
 		{
-			Journeys = rResponse.Journeys;			
+			Results = rResponse;	
 
 			Text = $"{ Settings.Localization.Journeys } ({ rResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
@@ -33,12 +33,11 @@ namespace Timetables.Application.Desktop
 		}
 		public JourneyResultsWindow(Journey journey) : this()
 		{
-			Journeys = new List<Journey> { journey };
+			Results = new RouterResponse(new List<Journey> { journey });
 
 			Text = $"{ Settings.Localization.Journey } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
+			resultsWebBrowser.DocumentText = Results.Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
 		}
-		public void PrintWebbrowserContent() => resultsWebBrowser.ShowPrintDialog();
 	}
 }

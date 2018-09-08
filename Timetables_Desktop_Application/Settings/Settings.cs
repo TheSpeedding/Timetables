@@ -38,6 +38,10 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtml.css");
 		/// <summary>
+		/// Path to journey detail CSS stylesheet for printing.
+		/// </summary>
+		public static FileInfo JourneyDetailPrintCss => new FileInfo("css/JourneyDetailPrintToHtml.css");
+		/// <summary>
 		/// Path to journey simple XSLT stylesheet.
 		/// </summary>
 		public static FileInfo JourneySimpleXslt => new FileInfo("xslt/JourneySimpleToHtml.xslt");
@@ -53,6 +57,10 @@ namespace Timetables.Application.Desktop
 		/// Path to departure board detail CSS stylesheet.
 		/// </summary>
 		public static FileInfo DepartureBoardDetailCss => new FileInfo("css/DepartureBoardDetailToHtml.css");
+		/// <summary>
+		/// Path to departure board detail CSS stylesheet for printing.
+		/// </summary>
+		public static FileInfo DepartureBoardDetailPrintCss => new FileInfo("css/DepartureBoardDetailPrintToHtml.css");
 		/// <summary>
 		/// Path to departure board simple XSLT stylesheet.
 		/// </summary>
