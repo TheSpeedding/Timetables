@@ -78,7 +78,7 @@ namespace Timetables.Preprocessor
 
 				IDataFeed data = (T)Activator.CreateInstance(typeof(T), (string)$"{ index }_temp_data/");
 
-				lock (dataList)
+				lock(dataList)
 				{
 					dataList.Add(data);
 				}
@@ -104,10 +104,8 @@ namespace Timetables.Preprocessor
 				else
 					DataProcessing?.Invoke($@"Parsing of data located in { url } ended with an unknown error.
 Error: { ex.Message } Type of { ex.GetType() }.");
-#else
-					else
-						throw;
 #endif
+				throw;
 			}
 		}
 
@@ -123,7 +121,7 @@ Error: { ex.Message } Type of { ex.GetType() }.");
         {
 			LoadingProgress?.Invoke("Preparing for data download.", 0);
 
-			List<IDataFeed> dataList = new List<IDataFeed>(); // Data are added into the list only if they are (downloaded and) parsed successfully.
+			List<IDataFeed> dataList = new List<IDataFeed>(urls.Length); // Data are added into the list only if they are (downloaded and) parsed successfully.
 			
 			Parallel.For(0, urls.Length, (int i) => ProcessData<T>(dataList, urls[i], i, urls.Length)); // Try to process the data in parallel mode.
 						

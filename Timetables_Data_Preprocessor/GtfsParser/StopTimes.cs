@@ -73,7 +73,9 @@ namespace Timetables.Preprocessor
 		{
 			// Default format: HH:MM:SS or H:MM:SS
 
-			if (time.Length != 7 && time.Length != 8)
+			if (time.Length > 0 && time[0] == ':')
+				return 0;
+			else if (time.Length != 7 && time.Length != 8)
 				throw new FormatException("Invalid time format.");
 
 			int hours = int.Parse(time.Length == 7 ? time.Substring(0, 1) : time.Substring(0, 2));
@@ -127,13 +129,35 @@ namespace Timetables.Preprocessor
 			{
 				IList<string> tokens = GtfsDataFeed.SplitGtfs(stopTimes.ReadLine());
 
-				Trips.Trip trip = trips[tokens[dic["trip_id"]]];
+				Trips.Trip trip = null;
+
+				try
+				{
+					trip = trips[tokens[dic["trip_id"]]];
+				}
+
+				catch // Trip does not exist, a problem with data validity. Skip this stoptime.
+				{
+					continue;
+				}
 
 				if (trip.StopTimes.Count == 0) // Set departure time of the trip.
 					trip.DepartureTime = ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]);
 
+				Stops.Stop stop = null; 
+
+				try
+				{
+					stop = stops[tokens[dic["stop_id"]]];
+				}
+
+				catch // Stop does not exist, a problem with data validity. Skip this stoptime.
+				{
+					continue;
+				}
+
 				StopTime st = new StopTime(trip, ConvertTimeToSecondsSinceMidnight(tokens[dic["arrival_time"]]) - trip.DepartureTime,
-					ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]) - trip.DepartureTime, stops[tokens[dic["stop_id"]]]);
+					ConvertTimeToSecondsSinceMidnight(tokens[dic["departure_time"]]) - trip.DepartureTime, stop);
 				
 				st.Trip.StopTimes.Add(st);
 
