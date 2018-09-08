@@ -38,5 +38,6 @@ namespace Timetables.Application.Desktop
 
 			resultsWebBrowser.DocumentText = Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
 		}
+		public void PrintWebbrowserContent() => resultsWebBrowser.ShowPrintDialog();
 	}
 }

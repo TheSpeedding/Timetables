@@ -35,6 +35,7 @@
 						</li>
 						<li>
 							<a href="#">
+								<xsl:attribute name="onClick">javascript: window.external.PrintDepartureDetail();</xsl:attribute>
 								<script>javascript: document.write(window.external.PrintStringConstant());</script>
 							</a>
 						</li>

@@ -29,18 +29,8 @@
 						<ul class="tools">
 							<li>
 								<a href="#">
-									<script>javascript: document.write(window.external.MapStringConstant());</script>
-								</a>
-							</li>
-							<li>
-								<a href="#">
 									<xsl:attribute name="onClick">javascript: window.external.ShowJourneyDetail(<xsl:value-of select="position() - 1"/>);</xsl:attribute>
 									<script>javascript: document.write(window.external.DetailStringConstant());</script>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<script>javascript: document.write(window.external.PrintStringConstant());</script>
 								</a>
 							</li>
 						</ul>

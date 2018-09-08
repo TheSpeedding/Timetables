@@ -28,6 +28,7 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
 		public void ShowJourneyDetail(int index) => new JourneyResultsWindow(window.Journeys[index]).Show(window.DockPanel, window.DockState);
+		public void PrintJourneyDetail() => window.PrintWebbrowserContent();
 	}
 
 	/// <summary>
@@ -49,6 +50,7 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
 		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Departures[index]).Show(window.DockPanel, window.DockState);
+		public void PrintDepartureDetail() => window.PrintWebbrowserContent();
 	}
 }
 

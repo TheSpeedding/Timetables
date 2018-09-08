@@ -39,5 +39,6 @@ namespace Timetables.Application.Desktop
 
 			resultsWebBrowser.DocumentText = Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
 		}
+		public void PrintWebbrowserContent() => resultsWebBrowser.ShowPrintDialog();
 	}
 }
