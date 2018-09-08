@@ -27,7 +27,11 @@ namespace Timetables.Application.Desktop
 			countLabel.Text = Settings.Localization.Count;
 			departureLabel.Text = Settings.Localization.LeavingTime;
 			transfersLabel.Text = Settings.Localization.TransfersCount;
+			walkingSpeedLabel.Text = Settings.Localization.WalkingSpeed;
 			searchButton.Text = Settings.Localization.Search;
+			slowButton.Text = Settings.Localization.SlowSpeed;
+			mediumButton.Text = Settings.Localization.MediumSpeed;
+			fastButton.Text = Settings.Localization.FastSpeed;
 
 			foreach (var station in DataFeed.Basic.Stations)
 			{
@@ -39,7 +43,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, 1);
+			var window = await Requests.SendRouterRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient());
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -47,6 +51,20 @@ namespace Timetables.Application.Desktop
 				window.Show(DockPanel, DockState);
 				Close();
 			}
+		}
+
+		private double GetTransferCoefficient()
+		{
+			if (slowButton.Checked)
+				return 0.5;
+
+			if (mediumButton.Checked)
+				return 1;
+
+			if (fastButton.Checked)
+				return 1.5;
+
+			throw new InvalidOperationException();
 		}
 	}
 }

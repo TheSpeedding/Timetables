@@ -55,4 +55,8 @@
   <Remove>Odebrat</Remove>
 	<Find>Najít</Find>
 	<PleaseWaitDownloading>Data se stahují, počkejte prosím.</PleaseWaitDownloading>
+	<WalkingSpeed>Chůze</WalkingSpeed>
+	<SlowSpeed>Pomalá</SlowSpeed>
+  <MediumSpeed>Střední</MediumSpeed>
+	<FastSpeed>Rychlá</FastSpeed>
 </Localization>
