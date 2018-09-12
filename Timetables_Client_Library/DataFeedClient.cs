@@ -16,11 +16,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
-		public static bool Loaded { get; private set; }
+		public static bool Loaded { get; private set; } = false;
 		/// <summary>
 		/// Indicates whether the data are downloaded.
 		/// </summary>
-		public static bool Downloaded { get; private set; }
+		public static bool Downloaded { get; private set; } = false;
 		/// <summary>
 		/// Basic data feed.
 		/// </summary>
@@ -103,7 +103,9 @@ namespace Timetables.Client
 		public static async Task DownloadAsync(bool forceDownload = false, int timeout = 5000)
 		{
 			Downloaded = false;
-			
+
+			await Task.Delay(10); // This is temporary "bugfix". There is some race condition in Timetables.Application.Desktop.InitLoadingWindow.
+
 			// Offline mode.
 
 			if (OfflineMode)
@@ -122,6 +124,7 @@ namespace Timetables.Client
 			// Online mode.
 
 			else
+			{
 				try
 				{
 					Structures.Basic.DataFeedBasicResponse response = null;
@@ -132,7 +135,7 @@ namespace Timetables.Client
 							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), timeout);
 					}
 
-					catch (Exception ex) 
+					catch (Exception ex)
 					{
 						if (ex is WebException) // Server offline.
 							throw;
@@ -144,7 +147,6 @@ namespace Timetables.Client
 
 					if (response.ShouldBeUpdated)
 						response.Data.Save();
-
 				}
 
 				catch (Exception ex)
@@ -155,13 +157,14 @@ namespace Timetables.Client
 					else
 						throw new ArgumentException("Fatal error. Cannot process the data.");
 				}
+			}
 
 			Downloaded = true;
 
 			Load();			
 		}
 		/// <summary>
-		/// Updates data feed. Also used in static constructor.
+		/// Updates data feed.
 		/// </summary>
 		public static void Load()
 		{

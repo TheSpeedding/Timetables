@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 			if (MessageBox.Show(((Exception)e.ExceptionObject).Message + Environment.NewLine + "Do you wish to send a report?", 
 				((Exception)e.ExceptionObject).Message, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
 			{
-				string messageText = ((Exception)e.ExceptionObject).Message;
+				string messageText = ((Exception)e.ExceptionObject).Message + Environment.NewLine + ((Exception)e.ExceptionObject).StackTrace;
 
 				try
 				{
@@ -47,7 +47,6 @@ namespace Timetables.Application.Desktop
 				{
 
 				}
-
 
 				/*
 				System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
@@ -70,6 +69,7 @@ namespace Timetables.Application.Desktop
 			{
 				sw.WriteLine(DateTime.Now);
 				sw.WriteLine(((Exception)e.ExceptionObject).Message);
+				sw.WriteLine(((Exception)e.ExceptionObject).StackTrace);
 				try
 				{
 					using (var sr = new System.IO.StreamReader(".settings"))

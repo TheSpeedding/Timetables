@@ -34,26 +34,31 @@ namespace Timetables.Application.Desktop
 
 			Preprocessor.DataFeed.LoadingProgress += LoadingProgressCallback;
 			
-			await Task.Run(() =>
+			await Task.Run(async () =>
 			{
+				var loadingThread = DataFeed.DownloadAsync(false, Settings.TimeoutDuration);
+				bool timerStarted = false;
+
 				try
 				{
-					var loadingThread = DataFeed.DownloadAsync(false, Settings.TimeoutDuration);
-					bool timerStarted = false;
-
-					while (!DataFeed.Loaded)
+					do
 					{
 						if (loadingThread.IsFaulted)
 							throw loadingThread.Exception;
 
-						if ((DataFeed.Downloaded || !DataFeed.OfflineMode) && !timerStarted)
+						if (!timerStarted && (DataFeed.Downloaded || !DataFeed.OfflineMode))
 							timerStarted = true;
+
+						else if (timerStarted && loadingProgressBar.Value > 95)
+							break;
+
 						else if (timerStarted && loadingProgressBar.Value < 100)
 						{
 							Thread.Sleep(30);
 							LoadingProgressCallback("The data are being loaded.", 1);
 						}
 					}
+					while (!DataFeed.Loaded);
 				}
 
 				catch (AggregateException ex)
@@ -64,9 +69,22 @@ namespace Timetables.Application.Desktop
 							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 						else
-							Program.ShowUnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true));
+							Program.ShowUnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true)); // Appdomain.UnhandledException only works for exceptions thrown on UI thread. This is a background thread.
 
 						IsFaulted = true;
+					}
+				}
+
+				finally
+				{
+					await loadingThread;
+					
+					// Just for an effect :-)
+
+					while (loadingProgressBar.Value < 100)
+					{
+						Thread.Sleep(30);
+						LoadingProgressCallback("The data are being loaded.", 1);
 					}
 				}
 			});
