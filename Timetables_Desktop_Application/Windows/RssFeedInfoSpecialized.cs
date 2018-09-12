@@ -13,6 +13,7 @@ namespace Timetables.Application.Desktop
 	{
 		public ExtraEventsWindow()
 		{
+			Initialize();
 			Text = Settings.Localization.ExtraordinaryEvents;
 			Load += (object sender, EventArgs e) => LoadContent(Settings.ExtraordinaryEvents, Settings.ExtraordinaryEventsXslt, Settings.ExtraordinaryEventsCss);
 		}
@@ -24,6 +25,7 @@ namespace Timetables.Application.Desktop
 	{
 		public LockoutsWindow()
 		{
+			Initialize();
 			Text = Settings.Localization.Lockouts;
 			Load += (object sender, EventArgs e) => LoadContent(Settings.Lockouts, Settings.LockoutsXslt, Settings.LockoutsCss);
 		}

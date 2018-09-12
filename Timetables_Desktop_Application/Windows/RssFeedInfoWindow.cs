@@ -14,9 +14,9 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
 {
-	public partial class RssFeedInfoWindow : DockContent
+	public abstract partial class RssFeedInfoWindow : DockContent
 	{
-		public RssFeedInfoWindow()
+		protected void Initialize()
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
