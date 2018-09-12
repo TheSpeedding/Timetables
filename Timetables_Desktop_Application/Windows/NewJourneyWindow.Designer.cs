@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewJourneyWindow));
-			this.sourceComboBox = new System.Windows.Forms.ComboBox();
 			this.sourceLabel = new System.Windows.Forms.Label();
 			this.departureLabel = new System.Windows.Forms.Label();
 			this.departureDateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -37,28 +36,17 @@
 			this.countLabel = new System.Windows.Forms.Label();
 			this.countNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.targetLabel = new System.Windows.Forms.Label();
-			this.targetComboBox = new System.Windows.Forms.ComboBox();
 			this.transfersNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.transfersLabel = new System.Windows.Forms.Label();
 			this.walkingSpeedLabel = new System.Windows.Forms.Label();
 			this.slowButton = new System.Windows.Forms.RadioButton();
 			this.mediumButton = new System.Windows.Forms.RadioButton();
 			this.fastButton = new System.Windows.Forms.RadioButton();
+			this.sourceTextBox = new System.Windows.Forms.TextBox();
+			this.targetTextBox = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// sourceComboBox
-			// 
-			this.sourceComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.sourceComboBox.Font = new System.Drawing.Font("Calibri", 10F);
-			this.sourceComboBox.FormattingEnabled = true;
-			this.sourceComboBox.Location = new System.Drawing.Point(116, 22);
-			this.sourceComboBox.Name = "sourceComboBox";
-			this.sourceComboBox.Size = new System.Drawing.Size(285, 23);
-			this.sourceComboBox.Sorted = true;
-			this.sourceComboBox.TabIndex = 0;
 			// 
 			// sourceLabel
 			// 
@@ -145,18 +133,6 @@
 			this.targetLabel.Text = "Target:";
 			this.targetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// targetComboBox
-			// 
-			this.targetComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.targetComboBox.Font = new System.Drawing.Font("Calibri", 10F);
-			this.targetComboBox.FormattingEnabled = true;
-			this.targetComboBox.Location = new System.Drawing.Point(116, 64);
-			this.targetComboBox.Name = "targetComboBox";
-			this.targetComboBox.Size = new System.Drawing.Size(285, 23);
-			this.targetComboBox.Sorted = true;
-			this.targetComboBox.TabIndex = 1;
-			// 
 			// transfersNumericUpDown
 			// 
 			this.transfersNumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -237,12 +213,34 @@
 			this.fastButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.fastButton.UseVisualStyleBackColor = true;
 			// 
+			// sourceTextBox
+			// 
+			this.sourceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.sourceTextBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.sourceTextBox.Location = new System.Drawing.Point(116, 18);
+			this.sourceTextBox.Name = "sourceTextBox";
+			this.sourceTextBox.Size = new System.Drawing.Size(285, 24);
+			this.sourceTextBox.TabIndex = 0;
+			// 
+			// targetTextBox
+			// 
+			this.targetTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.targetTextBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.targetTextBox.Location = new System.Drawing.Point(116, 61);
+			this.targetTextBox.Name = "targetTextBox";
+			this.targetTextBox.Size = new System.Drawing.Size(285, 24);
+			this.targetTextBox.TabIndex = 1;
+			// 
 			// NewJourneyWindow
 			// 
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(413, 303);
+			this.Controls.Add(this.targetTextBox);
+			this.Controls.Add(this.sourceTextBox);
 			this.Controls.Add(this.fastButton);
 			this.Controls.Add(this.mediumButton);
 			this.Controls.Add(this.slowButton);
@@ -250,27 +248,25 @@
 			this.Controls.Add(this.transfersNumericUpDown);
 			this.Controls.Add(this.transfersLabel);
 			this.Controls.Add(this.targetLabel);
-			this.Controls.Add(this.targetComboBox);
 			this.Controls.Add(this.countNumericUpDown);
 			this.Controls.Add(this.countLabel);
 			this.Controls.Add(this.searchButton);
 			this.Controls.Add(this.departureDateTimePicker);
 			this.Controls.Add(this.departureLabel);
 			this.Controls.Add(this.sourceLabel);
-			this.Controls.Add(this.sourceComboBox);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(276, 296);
 			this.Name = "NewJourneyWindow";
 			this.Text = "New journey";
+			this.Load += new System.EventHandler(this.NewJourneyWindow_Load);
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.ComboBox sourceComboBox;
 		private System.Windows.Forms.Label sourceLabel;
 		private System.Windows.Forms.Label departureLabel;
 		private System.Windows.Forms.DateTimePicker departureDateTimePicker;
@@ -278,12 +274,13 @@
 		private System.Windows.Forms.Label countLabel;
 		private System.Windows.Forms.NumericUpDown countNumericUpDown;
 		private System.Windows.Forms.Label targetLabel;
-		private System.Windows.Forms.ComboBox targetComboBox;
 		private System.Windows.Forms.NumericUpDown transfersNumericUpDown;
 		private System.Windows.Forms.Label transfersLabel;
 		private System.Windows.Forms.Label walkingSpeedLabel;
 		private System.Windows.Forms.RadioButton slowButton;
 		private System.Windows.Forms.RadioButton mediumButton;
 		private System.Windows.Forms.RadioButton fastButton;
+		private System.Windows.Forms.TextBox sourceTextBox;
+		private System.Windows.Forms.TextBox targetTextBox;
 	}
 }

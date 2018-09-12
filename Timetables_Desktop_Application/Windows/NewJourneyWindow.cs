@@ -32,18 +32,12 @@ namespace Timetables.Application.Desktop
 			slowButton.Text = Settings.Localization.SlowSpeed;
 			mediumButton.Text = Settings.Localization.MediumSpeed;
 			fastButton.Text = Settings.Localization.FastSpeed;
-
-			foreach (var station in DataFeed.Basic.Stations)
-			{
-				sourceComboBox.Items.Add(station.Name);
-				targetComboBox.Items.Add(station.Name);
-			}
 		}
 				
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceComboBox.Text, targetComboBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient());
+			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient());
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -65,6 +59,12 @@ namespace Timetables.Application.Desktop
 				return 1.5;
 
 			throw new InvalidOperationException();
+		}
+
+		private void NewJourneyWindow_Load(object sender, EventArgs e)
+		{
+			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeed.Basic.Stations);
 		}
 	}
 }

@@ -32,8 +32,8 @@ namespace Timetables.Application.Desktop
 			this.favoritesListBox = new System.Windows.Forms.CheckedListBox();
 			this.addButton = new System.Windows.Forms.Button();
 			this.removeButton = new System.Windows.Forms.Button();
-			this.stationComboBox = new System.Windows.Forms.ComboBox();
 			this.findButton = new System.Windows.Forms.Button();
+			this.stationTextBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// favoritesListBox
@@ -67,15 +67,6 @@ namespace Timetables.Application.Desktop
 			this.removeButton.UseVisualStyleBackColor = true;
 			this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
 			// 
-			// stationComboBox
-			// 
-			this.stationComboBox.FormattingEnabled = true;
-			this.stationComboBox.Location = new System.Drawing.Point(12, 347);
-			this.stationComboBox.Name = "stationComboBox";
-			this.stationComboBox.Size = new System.Drawing.Size(240, 21);
-			this.stationComboBox.TabIndex = 5;
-			this.stationComboBox.Text = "Station";
-			// 
 			// findButton
 			// 
 			this.findButton.Location = new System.Drawing.Point(177, 374);
@@ -86,13 +77,24 @@ namespace Timetables.Application.Desktop
 			this.findButton.UseVisualStyleBackColor = true;
 			this.findButton.Click += new System.EventHandler(this.findButton_Click);
 			// 
+			// stationTextBox
+			// 
+			this.stationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.stationTextBox.Font = new System.Drawing.Font("Calibri", 8.25F);
+			this.stationTextBox.Location = new System.Drawing.Point(12, 347);
+			this.stationTextBox.Name = "stationTextBox";
+			this.stationTextBox.Size = new System.Drawing.Size(240, 21);
+			this.stationTextBox.TabIndex = 0;
+			this.stationTextBox.Text = "Station";
+			// 
 			// FavoriteDeparturesWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(264, 401);
+			this.Controls.Add(this.stationTextBox);
 			this.Controls.Add(this.findButton);
-			this.Controls.Add(this.stationComboBox);
 			this.Controls.Add(this.removeButton);
 			this.Controls.Add(this.addButton);
 			this.Controls.Add(this.favoritesListBox);
@@ -100,7 +102,9 @@ namespace Timetables.Application.Desktop
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FavoriteDeparturesWindow";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FavoriteDeparturesWindow_FormClosing);
+			this.Load += new System.EventHandler(this.FavoriteDeparturesWindow_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -109,7 +113,7 @@ namespace Timetables.Application.Desktop
 		private System.Windows.Forms.CheckedListBox favoritesListBox;
 		private System.Windows.Forms.Button addButton;
 		private System.Windows.Forms.Button removeButton;
-		private System.Windows.Forms.ComboBox stationComboBox;
 		private System.Windows.Forms.Button findButton;
+		private System.Windows.Forms.TextBox stationTextBox;
 	}
 }

@@ -55,7 +55,7 @@ namespace Timetables.Application.Desktop
 
 			if (window.departuresToFind != null)
 				foreach (var departure in window.departuresToFind.Favorites)
-					(await Requests.SendDepartureBoardRequestAsync(departure.Station, DateTime.Now, 5, true)).Show(mainDockPanel, DockState.Document);
+					(await Requests.SendDepartureBoardRequestAsync(departure.Station, DateTime.Now, 5, true, null)).Show(mainDockPanel, DockState.Document);
 		}
 	}
 }

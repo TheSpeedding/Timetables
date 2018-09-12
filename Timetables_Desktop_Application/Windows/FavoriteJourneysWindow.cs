@@ -64,17 +64,14 @@ namespace Timetables.Application.Desktop
 
 			Settings.Theme.Apply(this);
 
-			sourceComboBox.Text = Settings.Localization.SourceStop;
-			targetComboBox.Text = Settings.Localization.TargetStop;
+			sourceTextBox.Text = Settings.Localization.SourceStop;
+			targetTextBox.Text = Settings.Localization.TargetStop;
 			addButton.Text = Settings.Localization.Add;
 			removeButton.Text = Settings.Localization.Remove;
 			findButton.Text = Settings.Localization.Find;
 
-			foreach (var station in DataFeed.Basic.Stations)
-			{
-				sourceComboBox.Items.Add(station.Name);
-				targetComboBox.Items.Add(station.Name);
-			}
+			//sourceComboBox.Items.AddRange(DataFeed.Basic.Stations);
+			//targetComboBox.Items.AddRange(DataFeed.Basic.Stations);
 
 			// Try to load file with favorites, if exists.
 
@@ -94,7 +91,7 @@ namespace Timetables.Application.Desktop
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			var fav = new FavoriteJourneys.FavoriteJourney(sourceComboBox.Text, targetComboBox.Text);
+			var fav = new FavoriteJourneys.FavoriteJourney(sourceTextBox.Text, targetTextBox.Text);
 			favoritesListBox.Items.Add(fav);
 			favorites.Favorites.Add(fav);
 		}
@@ -123,6 +120,12 @@ namespace Timetables.Application.Desktop
 				journeysToFind.Favorites.Add(journey);
 
 			Close();
+		}
+
+		private void FavoriteJourneysWindow_Load(object sender, EventArgs e)
+		{
+			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeed.Basic.Stations);
 		}
 	}
 }

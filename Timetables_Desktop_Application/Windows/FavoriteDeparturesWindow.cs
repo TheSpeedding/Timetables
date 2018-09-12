@@ -55,15 +55,12 @@ namespace Timetables.Application.Desktop
 
 			Settings.Theme.Apply(this);
 
-			stationComboBox.Text = Settings.Localization.Station;
+			stationTextBox.Text = Settings.Localization.Station;
 			addButton.Text = Settings.Localization.Add;
 			removeButton.Text = Settings.Localization.Remove;
 			findButton.Text = Settings.Localization.Find;
 
-			foreach (var station in DataFeed.Basic.Stations)
-			{
-				stationComboBox.Items.Add(station.Name);
-			}
+			//stationComboBox.Items.AddRange(DataFeed.Basic.Stations);
 
 			// Try to load file with favorites, if exists.
 
@@ -83,7 +80,7 @@ namespace Timetables.Application.Desktop
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			var fav = new FavoriteDepartures.FavoriteDeparture(stationComboBox.Text);
+			var fav = new FavoriteDepartures.FavoriteDeparture(stationTextBox.Text);
 			favoritesListBox.Items.Add(fav);
 			favorites.Favorites.Add(fav);
 		}
@@ -112,6 +109,11 @@ namespace Timetables.Application.Desktop
 				departuresToFind.Favorites.Add(departure);
 
 			Close();
+		}
+
+		private void FavoriteDeparturesWindow_Load(object sender, EventArgs e)
+		{
+			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeed.Basic.Stations);
 		}
 	}
 }

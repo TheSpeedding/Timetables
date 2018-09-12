@@ -108,7 +108,7 @@ namespace Timetables.Client
 
 			if (OfflineMode)
 			{
-				if ((!System.IO.Directory.Exists("data") || forceDownload || (IsUpdateNeeded && IsConnected())))
+				if ((!System.IO.Directory.Exists("data") || !System.IO.Directory.Exists("basic") || forceDownload || (IsUpdateNeeded && IsConnected())))
 					try
 					{
 						Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);

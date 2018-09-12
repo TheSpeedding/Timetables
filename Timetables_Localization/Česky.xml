@@ -59,4 +59,7 @@
 	<SlowSpeed>Pomalá</SlowSpeed>
   <MediumSpeed>Střední</MediumSpeed>
 	<FastSpeed>Rychlá</FastSpeed>
+	<UnableToFindRouteInfo>Nepodařilo se najít linku s označením</UnableToFindRouteInfo>
+	<RouteInfoNotFound>Linka nenalezena</RouteInfoNotFound>
+	<Line>Linka</Line>
 </Localization>

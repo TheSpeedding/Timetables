@@ -32,9 +32,9 @@ namespace Timetables.Application.Desktop
 			this.favoritesListBox = new System.Windows.Forms.CheckedListBox();
 			this.addButton = new System.Windows.Forms.Button();
 			this.removeButton = new System.Windows.Forms.Button();
-			this.sourceComboBox = new System.Windows.Forms.ComboBox();
-			this.targetComboBox = new System.Windows.Forms.ComboBox();
 			this.findButton = new System.Windows.Forms.Button();
+			this.targetTextBox = new System.Windows.Forms.TextBox();
+			this.sourceTextBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// favoritesListBox
@@ -68,24 +68,6 @@ namespace Timetables.Application.Desktop
 			this.removeButton.UseVisualStyleBackColor = true;
 			this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
 			// 
-			// sourceComboBox
-			// 
-			this.sourceComboBox.FormattingEnabled = true;
-			this.sourceComboBox.Location = new System.Drawing.Point(12, 347);
-			this.sourceComboBox.Name = "sourceComboBox";
-			this.sourceComboBox.Size = new System.Drawing.Size(240, 21);
-			this.sourceComboBox.TabIndex = 5;
-			this.sourceComboBox.Text = "Source";
-			// 
-			// targetComboBox
-			// 
-			this.targetComboBox.FormattingEnabled = true;
-			this.targetComboBox.Location = new System.Drawing.Point(12, 374);
-			this.targetComboBox.Name = "targetComboBox";
-			this.targetComboBox.Size = new System.Drawing.Size(240, 21);
-			this.targetComboBox.TabIndex = 6;
-			this.targetComboBox.Text = "Target";
-			// 
 			// findButton
 			// 
 			this.findButton.Location = new System.Drawing.Point(177, 401);
@@ -96,14 +78,36 @@ namespace Timetables.Application.Desktop
 			this.findButton.UseVisualStyleBackColor = true;
 			this.findButton.Click += new System.EventHandler(this.findButton_Click);
 			// 
+			// targetTextBox
+			// 
+			this.targetTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.targetTextBox.Font = new System.Drawing.Font("Calibri", 8.25F);
+			this.targetTextBox.Location = new System.Drawing.Point(12, 374);
+			this.targetTextBox.Name = "targetTextBox";
+			this.targetTextBox.Size = new System.Drawing.Size(240, 21);
+			this.targetTextBox.TabIndex = 1;
+			this.targetTextBox.Text = "Target";
+			// 
+			// sourceTextBox
+			// 
+			this.sourceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.sourceTextBox.Font = new System.Drawing.Font("Calibri", 8.25F);
+			this.sourceTextBox.Location = new System.Drawing.Point(12, 347);
+			this.sourceTextBox.Name = "sourceTextBox";
+			this.sourceTextBox.Size = new System.Drawing.Size(240, 21);
+			this.sourceTextBox.TabIndex = 0;
+			this.sourceTextBox.Text = "Source";
+			// 
 			// FavoriteJourneysWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(264, 428);
+			this.Controls.Add(this.sourceTextBox);
+			this.Controls.Add(this.targetTextBox);
 			this.Controls.Add(this.findButton);
-			this.Controls.Add(this.targetComboBox);
-			this.Controls.Add(this.sourceComboBox);
 			this.Controls.Add(this.removeButton);
 			this.Controls.Add(this.addButton);
 			this.Controls.Add(this.favoritesListBox);
@@ -111,7 +115,9 @@ namespace Timetables.Application.Desktop
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FavoriteJourneysWindow";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.favoriteJourneysWindow_FormClosing);
+			this.Load += new System.EventHandler(this.FavoriteJourneysWindow_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -120,8 +126,8 @@ namespace Timetables.Application.Desktop
 		private System.Windows.Forms.CheckedListBox favoritesListBox;
 		private System.Windows.Forms.Button addButton;
 		private System.Windows.Forms.Button removeButton;
-		private System.Windows.Forms.ComboBox sourceComboBox;
-		private System.Windows.Forms.ComboBox targetComboBox;
 		private System.Windows.Forms.Button findButton;
+		private System.Windows.Forms.TextBox targetTextBox;
+		private System.Windows.Forms.TextBox sourceTextBox;
 	}
 }

@@ -75,6 +75,9 @@ namespace Timetables.Client
 		public string SlowSpeed { get; set; } = "Slow";
 		public string MediumSpeed { get; set; } = "Medium";
 		public string FastSpeed { get; set; } = "Fast";
+		public string UnableToFindRouteInfo { get; set; } = "Unable to find route with label";
+		public string RouteInfoNotFound { get; set; } = "Route not found";
+		public string Line { get; set; } = "Line";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

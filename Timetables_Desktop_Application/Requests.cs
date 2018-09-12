@@ -14,21 +14,49 @@ namespace Timetables.Application.Desktop
 	static class Requests
 	{
 		/// <summary>
+		/// Gets everything ready for textbox auto-completion.
+		/// </summary>
+		/// <param name="tb">Textbox.</param>
+		/// <param name="content">Content.</param>
+		public static void AutoCompleteTextBox(TextBox tb, string[] content)
+		{
+			tb.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			tb.AutoCompleteCustomSource.AddRange(content);
+			tb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		}
+		/// <summary>
 		/// Returns station object with given name. If not found, returns error message within MessageBox.
 		/// </summary>
 		/// <param name="name">Name of the station.</param>
 		/// <returns>Station object.</returns>
 		public static Structures.Basic.StationsBasic.StationBasic GetStationFromString(string name)
 		{
+			if (name == null)
+				return null;
+
 			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(name);
 
 			if (source == null)
-			{
 				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + name, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return null;
-			}
 
 			return source;
+		}
+		/// <summary>
+		/// Returns route info object with given name. If not found, returns error message within MessageBox.	
+		/// </summary>
+		/// <param name="label">Route label.</param>
+		/// <returns>Route info object.</returns>
+		public static Structures.Basic.RoutesInfoBasic.RouteInfoBasic GetRouteInfoFromLabel(string label)
+		{
+			if (label == null || string.IsNullOrWhiteSpace(label))
+				return null;
+
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeed.Basic.RoutesInfo.FindByLabel(label);
+
+			if (route == null)
+				MessageBox.Show(Settings.Localization.UnableToFindRouteInfo + ": " + label, Settings.Localization.RouteInfoNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+			return route;
 		}
 
 		/// <summary>
@@ -89,15 +117,17 @@ namespace Timetables.Application.Desktop
 		/// <param name="dt">Datetime.</param>
 		/// <param name="count">Number of departures.</param>
 		/// <param name="isStation">Indicates whether it is station or stop.</param>
+		/// <param name="routeLabel">Route label.</param>
 		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation)
+		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation, string routeLabel)
 		{
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
 			if (station == null)
 				return null;
 
-			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation);
+			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
 			DepartureBoardResponse dbResponse = null;
 
 			if (DataFeed.OfflineMode)
