@@ -70,9 +70,6 @@ namespace Timetables.Application.Desktop
 			removeButton.Text = Settings.Localization.Remove;
 			findButton.Text = Settings.Localization.Find;
 
-			//sourceComboBox.Items.AddRange(DataFeed.Basic.Stations);
-			//targetComboBox.Items.AddRange(DataFeed.Basic.Stations);
-
 			// Try to load file with favorites, if exists.
 
 			try
@@ -110,6 +107,9 @@ namespace Timetables.Application.Desktop
 			favoritesListBox.Items.Clear();
 			foreach (var journey in favorites.Favorites)
 				favoritesListBox.Items.Add(journey);
+
+			removeButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
+			findButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
 		}
 
 		private void findButton_Click(object sender, EventArgs e)
@@ -126,6 +126,12 @@ namespace Timetables.Application.Desktop
 		{
 			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeed.Basic.Stations);
 			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeed.Basic.Stations);
+		}
+
+		private void favoritesListBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			removeButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
+			findButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
 		}
 	}
 }

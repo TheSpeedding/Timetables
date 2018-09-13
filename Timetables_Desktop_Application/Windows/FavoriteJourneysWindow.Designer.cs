@@ -42,11 +42,13 @@ namespace Timetables.Application.Desktop
 			this.favoritesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.favoritesListBox.CheckOnClick = true;
 			this.favoritesListBox.FormattingEnabled = true;
 			this.favoritesListBox.Location = new System.Drawing.Point(12, 12);
 			this.favoritesListBox.Name = "favoritesListBox";
 			this.favoritesListBox.Size = new System.Drawing.Size(240, 319);
 			this.favoritesListBox.TabIndex = 0;
+			this.favoritesListBox.SelectedIndexChanged += new System.EventHandler(this.favoritesListBox_SelectedIndexChanged);
 			// 
 			// addButton
 			// 
@@ -60,6 +62,7 @@ namespace Timetables.Application.Desktop
 			// 
 			// removeButton
 			// 
+			this.removeButton.Enabled = false;
 			this.removeButton.Location = new System.Drawing.Point(95, 401);
 			this.removeButton.Name = "removeButton";
 			this.removeButton.Size = new System.Drawing.Size(75, 20);
@@ -70,6 +73,7 @@ namespace Timetables.Application.Desktop
 			// 
 			// findButton
 			// 
+			this.findButton.Enabled = false;
 			this.findButton.Location = new System.Drawing.Point(177, 401);
 			this.findButton.Name = "findButton";
 			this.findButton.Size = new System.Drawing.Size(75, 20);
