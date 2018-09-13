@@ -78,6 +78,11 @@ namespace Timetables.Client
 		public string UnableToFindRouteInfo { get; set; } = "Unable to find route with label";
 		public string RouteInfoNotFound { get; set; } = "Route not found";
 		public string Line { get; set; } = "Line";
+		public string Sort { get; set; } = "Sort";
+		public string DepartureTimeAscending { get; set; } = "By departure time ascending";
+		public string ArrivalTimeAscending { get; set; } = "By arrival time ascending";
+		public string TransfersCountAscending { get; set; } = "By transfers count ascending";
+		public string WaitingTimesAscending { get; set; } = "By waiting times ascending";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

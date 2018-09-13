@@ -62,4 +62,9 @@
 	<UnableToFindRouteInfo>Nepodařilo se najít linku s označením</UnableToFindRouteInfo>
 	<RouteInfoNotFound>Linka nenalezena</RouteInfoNotFound>
 	<Line>Linka</Line>
+	<Sort>Třídit</Sort>
+	<DepartureTimeAscending>Podle času odjezdu vzestupně</DepartureTimeAscending>
+	<ArrivalTimeAscending>Podle času příjezdu vzestupně</ArrivalTimeAscending>
+	<TransfersCountAscending>Podle počtu přestupů vzestupně</TransfersCountAscending>
+	<WaitingTimesAscending>Podle doby čekání na přípoje vzestupně</WaitingTimesAscending>
 </Localization>

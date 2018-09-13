@@ -9,11 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timetables.Client;
 using WeifenLuo.WinFormsUI.Docking;
+using static Timetables.Client.Journey;
 
 namespace Timetables.Application.Desktop
 {
 	public partial class NewJourneyWindow : DockContent
 	{
+		private class CustomJourneyComparer
+		{
+			private string name;
+			public IComparer<Journey> Comparer { get; }
+			public CustomJourneyComparer(IComparer<Journey> comp, string name)
+			{
+				Comparer = comp;
+				this.name = name;
+			}
+			public override string ToString() => name;
+		}
+
+		private IComparer<Journey> CurrentComparer { get { return ((CustomJourneyComparer)sortComboBox.SelectedItem).Comparer; } }
 
 		public NewJourneyWindow()
 		{
@@ -32,18 +46,30 @@ namespace Timetables.Application.Desktop
 			slowButton.Text = Settings.Localization.SlowSpeed;
 			mediumButton.Text = Settings.Localization.MediumSpeed;
 			fastButton.Text = Settings.Localization.FastSpeed;
+
+			sortLabel.Text = Settings.Localization.Sort;
+
+			var defaultComparer = new CustomJourneyComparer(new ArrivalTimeComparer(), Settings.Localization.ArrivalTimeAscending);
+
+			sortComboBox.Items.Add(defaultComparer);
+			sortComboBox.Items.Add(new CustomJourneyComparer(new DepartureTimeComparer(), Settings.Localization.DepartureTimeAscending));
+			sortComboBox.Items.Add(new CustomJourneyComparer(new WaitingTimesComparer(), Settings.Localization.WaitingTimesAscending));
+			sortComboBox.Items.Add(new CustomJourneyComparer(new TransfersCountComparer(), Settings.Localization.TransfersCountAscending));
+
+			sortComboBox.SelectedItem = defaultComparer;
+			sortComboBox.Text = sortComboBox.SelectedItem.ToString();
 		}
 				
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient());
+			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient(), CurrentComparer);
 			searchButton.Enabled = true;
 
 			if (window != null)
 			{
 				window.Show(DockPanel, DockState);
-				Close();
+				Hide();
 			}
 		}
 

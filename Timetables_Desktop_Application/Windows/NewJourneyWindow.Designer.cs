@@ -44,6 +44,8 @@
 			this.fastButton = new System.Windows.Forms.RadioButton();
 			this.sourceTextBox = new System.Windows.Forms.TextBox();
 			this.targetTextBox = new System.Windows.Forms.TextBox();
+			this.sortLabel = new System.Windows.Forms.Label();
+			this.sortComboBox = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).BeginInit();
 			this.SuspendLayout();
@@ -85,7 +87,7 @@
 			// 
 			this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.searchButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.searchButton.Location = new System.Drawing.Point(267, 265);
+			this.searchButton.Location = new System.Drawing.Point(267, 307);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(134, 31);
 			this.searchButton.TabIndex = 8;
@@ -161,7 +163,7 @@
 			// walkingSpeedLabel
 			// 
 			this.walkingSpeedLabel.Font = new System.Drawing.Font("Calibri", 14F);
-			this.walkingSpeedLabel.Location = new System.Drawing.Point(12, 217);
+			this.walkingSpeedLabel.Location = new System.Drawing.Point(12, 259);
 			this.walkingSpeedLabel.Name = "walkingSpeedLabel";
 			this.walkingSpeedLabel.Size = new System.Drawing.Size(98, 42);
 			this.walkingSpeedLabel.TabIndex = 10;
@@ -174,7 +176,7 @@
 			this.slowButton.FlatAppearance.BorderSize = 0;
 			this.slowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.slowButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.slowButton.Location = new System.Drawing.Point(116, 218);
+			this.slowButton.Location = new System.Drawing.Point(117, 260);
 			this.slowButton.Name = "slowButton";
 			this.slowButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.slowButton.Size = new System.Drawing.Size(90, 42);
@@ -190,7 +192,7 @@
 			this.mediumButton.FlatAppearance.BorderSize = 0;
 			this.mediumButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mediumButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.mediumButton.Location = new System.Drawing.Point(212, 218);
+			this.mediumButton.Location = new System.Drawing.Point(213, 260);
 			this.mediumButton.Name = "mediumButton";
 			this.mediumButton.Size = new System.Drawing.Size(90, 42);
 			this.mediumButton.TabIndex = 6;
@@ -205,7 +207,7 @@
 			this.fastButton.FlatAppearance.BorderSize = 0;
 			this.fastButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.fastButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.fastButton.Location = new System.Drawing.Point(308, 218);
+			this.fastButton.Location = new System.Drawing.Point(309, 260);
 			this.fastButton.Name = "fastButton";
 			this.fastButton.Size = new System.Drawing.Size(90, 42);
 			this.fastButton.TabIndex = 7;
@@ -233,12 +235,36 @@
 			this.targetTextBox.Size = new System.Drawing.Size(285, 24);
 			this.targetTextBox.TabIndex = 1;
 			// 
+			// sortLabel
+			// 
+			this.sortLabel.Font = new System.Drawing.Font("Calibri", 14F);
+			this.sortLabel.Location = new System.Drawing.Point(12, 217);
+			this.sortLabel.Name = "sortLabel";
+			this.sortLabel.Size = new System.Drawing.Size(98, 42);
+			this.sortLabel.TabIndex = 110;
+			this.sortLabel.Text = "Sort:";
+			this.sortLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// sortComboBox
+			// 
+			this.sortComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.sortComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.sortComboBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.sortComboBox.FormattingEnabled = true;
+			this.sortComboBox.Location = new System.Drawing.Point(116, 227);
+			this.sortComboBox.Name = "sortComboBox";
+			this.sortComboBox.Size = new System.Drawing.Size(285, 23);
+			this.sortComboBox.TabIndex = 111;
+			// 
 			// NewJourneyWindow
 			// 
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(413, 303);
+			this.ClientSize = new System.Drawing.Size(413, 463);
+			this.Controls.Add(this.sortComboBox);
+			this.Controls.Add(this.sortLabel);
 			this.Controls.Add(this.targetTextBox);
 			this.Controls.Add(this.sourceTextBox);
 			this.Controls.Add(this.fastButton);
@@ -282,5 +308,7 @@
 		private System.Windows.Forms.RadioButton fastButton;
 		private System.Windows.Forms.TextBox sourceTextBox;
 		private System.Windows.Forms.TextBox targetTextBox;
+		private System.Windows.Forms.Label sortLabel;
+		private System.Windows.Forms.ComboBox sortComboBox;
 	}
 }

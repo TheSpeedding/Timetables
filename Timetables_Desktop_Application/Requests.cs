@@ -62,8 +62,9 @@ namespace Timetables.Application.Desktop
 		/// <param name="transfers">Max transfers.</param>
 		/// <param name="count">Number of journeys.</param>
 		/// <param name="coefficient">Coefficient for the footpaths.</param>
+		/// <param name="comp">Comparer for journeys.</param>
 		/// <returns>Window with results</returns>
-		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient)
+		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, IComparer<Journey> comp = null)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
@@ -100,6 +101,9 @@ namespace Timetables.Application.Desktop
 					}
 				}
 			}
+
+			if (comp != null)
+				routerResponse.Journeys.Sort(comp);
 
 			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt);
 		}

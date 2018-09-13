@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -32,7 +33,7 @@ namespace Timetables.Client
 	/// Class serving information about one journey.
 	/// </summary>
 	[Serializable]
-	public class Journey
+	public partial class Journey
 	{
 		/// <summary>
 		/// Duration of the journey.
@@ -51,6 +52,35 @@ namespace Timetables.Client
 		/// </summary>
 		public bool Outdated { get { foreach (var js in JourneySegments) if ((js as TripSegment).Outdated) return true; return false; } }
 		/// <summary>
+		/// Returns number of transfers.
+		/// </summary>
+		public uint TransfersCount { get { return (uint)(JourneySegments.Count <= 1 ? 0 : JourneySegments.Select(j => j is TripSegment).Count() - 1); } }
+		/// <summary>
+		/// Returns total waiting time between trip segments.
+		/// </summary>
+		public TimeSpan GetWaitingTime()
+		{
+			TripSegment previous = null;
+			TimeSpan sum = TimeSpan.Zero;
+
+			foreach (var js in JourneySegments)
+			{
+				if (js is TripSegment)
+				{
+					if (previous == null)
+						previous = (TripSegment)js;
+
+					else
+					{
+						sum += ((TripSegment)js).DepartureDateTime - previous.ArrivalDateTime;
+						previous = (TripSegment)js;
+					}
+				}
+			}
+
+			return sum;
+		}
+		/// <summary>
 		/// List of journey segments.
 		/// </summary>
 		public List<JourneySegment> JourneySegments { get; set; }
@@ -62,6 +92,35 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="writer">Text writer.</param>
 		public void Serialize(TextWriter writer) => new XmlSerializer(typeof(Journey)).Serialize(writer, this);
+
+		/// <summary>
+		/// Comparer class that compares journey according to their departure times.
+		/// </summary>
+		public class DepartureTimeComparer : IComparer<Journey>
+		{
+			public int Compare(Journey x, Journey y) => x.DepartureDateTime.CompareTo(y.DepartureDateTime);
+		}
+		/// <summary>
+		/// Comparer class that compares journey according to their arrival times.
+		/// </summary>
+		public class ArrivalTimeComparer : IComparer<Journey>
+		{
+			public int Compare(Journey x, Journey y) => x.ArrivalDateTime.CompareTo(y.ArrivalDateTime);
+		}
+		/// <summary>
+		/// Comparer that compares journey according to their transfers count.
+		/// </summary>
+		public class TransfersCountComparer : IComparer<Journey>
+		{
+			public int Compare(Journey x, Journey y) => x.TransfersCount.CompareTo(y.TransfersCount);
+		}
+		/// <summary>
+		/// Comparer that compares journey according to their waiting times.
+		/// </summary>
+		public class WaitingTimesComparer : IComparer<Journey>
+		{
+			public int Compare(Journey x, Journey y) => x.TransfersCount.CompareTo(y.TransfersCount);
+		}
 	}
 
 	/// <summary>

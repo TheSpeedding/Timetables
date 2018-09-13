@@ -31,7 +31,7 @@ namespace Timetables.Application.Desktop
 			if (window != null)
 			{
 				window.Show(DockPanel, DockState);
-				Close();
+				Hide();
 			}
 		}
 

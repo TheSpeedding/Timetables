@@ -25,7 +25,7 @@ namespace Timetables.Application.Desktop
 		}
 		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime) : this()
 		{
-			Results = rResponse;	
+			Results = rResponse;
 
 			Text = $"{ Settings.Localization.Journeys } ({ rResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
