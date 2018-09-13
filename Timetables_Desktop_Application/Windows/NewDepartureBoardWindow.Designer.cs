@@ -81,7 +81,7 @@
 			this.searchButton.Location = new System.Drawing.Point(128, 179);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(134, 31);
-			this.searchButton.TabIndex = 4;
+			this.searchButton.TabIndex = 6;
 			this.searchButton.Text = "Search";
 			this.searchButton.UseVisualStyleBackColor = true;
 			this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
@@ -92,7 +92,7 @@
 			this.countLabel.Location = new System.Drawing.Point(12, 135);
 			this.countLabel.Name = "countLabel";
 			this.countLabel.Size = new System.Drawing.Size(98, 42);
-			this.countLabel.TabIndex = 5;
+			this.countLabel.TabIndex = 50;
 			this.countLabel.Text = "Count:";
 			this.countLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -122,7 +122,7 @@
 			this.lineLabel.Location = new System.Drawing.Point(12, 93);
 			this.lineLabel.Name = "lineLabel";
 			this.lineLabel.Size = new System.Drawing.Size(98, 42);
-			this.lineLabel.TabIndex = 7;
+			this.lineLabel.TabIndex = 70;
 			this.lineLabel.Text = "Line:";
 			this.lineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -136,7 +136,7 @@
 			this.lineComboBox.Name = "lineComboBox";
 			this.lineComboBox.Size = new System.Drawing.Size(146, 23);
 			this.lineComboBox.Sorted = true;
-			this.lineComboBox.TabIndex = 8;
+			this.lineComboBox.TabIndex = 4;
 			this.lineComboBox.DropDown += new System.EventHandler(this.lineComboBox_DropDown);
 			// 
 			// stationTextBox

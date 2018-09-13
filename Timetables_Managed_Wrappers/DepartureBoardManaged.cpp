@@ -23,7 +23,7 @@ Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardM
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req) {
-	native_departure_board_ = new Timetables::Algorithms::departure_board(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->IsStation);
+	native_departure_board_ = new Timetables::Algorithms::departure_board(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID, req->IsStation);
 }
 
 void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {

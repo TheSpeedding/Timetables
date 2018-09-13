@@ -31,9 +31,6 @@ namespace Timetables.Application.Desktop
 		/// <returns>Station object.</returns>
 		public static Structures.Basic.StationsBasic.StationBasic GetStationFromString(string name)
 		{
-			if (name == null)
-				return null;
-
 			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(name);
 
 			if (source == null)
@@ -48,9 +45,6 @@ namespace Timetables.Application.Desktop
 		/// <returns>Route info object.</returns>
 		public static Structures.Basic.RoutesInfoBasic.RouteInfoBasic GetRouteInfoFromLabel(string label)
 		{
-			if (label == null || string.IsNullOrWhiteSpace(label))
-				return null;
-
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeed.Basic.RoutesInfo.FindByLabel(label);
 
 			if (route == null)
@@ -124,7 +118,7 @@ namespace Timetables.Application.Desktop
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
-			if (station == null)
+			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel)))
 				return null;
 
 			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);

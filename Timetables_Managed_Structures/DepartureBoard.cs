@@ -32,15 +32,14 @@ namespace Timetables.Client
 		/// <summary>
 		/// Route identificator.
 		/// </summary>
-		public int RouteID { get; }
-		public bool ShowAllTheLines => RouteID == -1;
+		public int RouteInfoID { get; }
 		public DepartureBoardRequest(uint stopID, DateTime departureTime, uint count, bool station, int routeID = -1)
 		{
 			StopID = stopID;
 			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			Count = count;
 			IsStation = station;
-			RouteID = routeID;
+			RouteInfoID = routeID;
 		}
     }
 

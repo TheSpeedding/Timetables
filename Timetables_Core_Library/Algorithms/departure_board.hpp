@@ -37,9 +37,11 @@ namespace Timetables {
 			std::vector<const Timetables::Structures::stop*> stops_; // Stops of origin.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
+			const Timetables::Structures::route_info* route_to_show_; // Nullptr if a user wants to show all the lines.
 		public:
 			departure_board(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
-				const size_t count, bool true_if_station) : earliest_departure_(earliest_departure), count_(count) {
+				const size_t count, const std::size_t route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count), 
+				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)){
 				
 				if (true_if_station)
 						stops_ = feed.stations().at(station_or_stop_id).child_stops();

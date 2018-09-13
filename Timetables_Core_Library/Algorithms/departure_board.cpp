@@ -57,7 +57,7 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 				
 				// Check if this stop is not the last stop in the trip (meaning to have no successors).
 				
-				if (&(**it).stop() != &((**it).trip().stop_times().cend() - 1)->stop()) {
+				if (&(**it).stop() != &((**it).trip().stop_times().cend() - 1)->stop() && (route_to_show_ == nullptr || route_to_show_ == &(**it).trip().route().info())) {
 
 					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % DAY) // Time of the departure.
 						+ departure_date.date(); // Date of the departure.

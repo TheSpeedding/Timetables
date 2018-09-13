@@ -52,6 +52,7 @@ namespace Timetables.Structures.Basic
 			public Color Color { get; set; }
 			public RouteInfoBasic(int id, string label, MeanOfTransport type, Color c)
 			{
+				ID = id;
 				Label = label;
 				MeanOfTransport = type;
 				Color = c;
