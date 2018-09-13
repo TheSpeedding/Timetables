@@ -29,7 +29,7 @@ namespace Timetables.Application.Desktop
 
 		private IComparer<Journey> CurrentComparer { get { return ((CustomJourneyComparer)sortComboBox.SelectedItem).Comparer; } }
 
-		public NewJourneyWindow()
+		public NewJourneyWindow(string source = "", string target = "")
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
@@ -58,6 +58,9 @@ namespace Timetables.Application.Desktop
 
 			sortComboBox.SelectedItem = defaultComparer;
 			sortComboBox.Text = sortComboBox.SelectedItem.ToString();
+
+			sourceTextBox.Text = source;
+			targetTextBox.Text = target;
 		}
 				
 		private async void searchButton_Click(object sender, EventArgs e)

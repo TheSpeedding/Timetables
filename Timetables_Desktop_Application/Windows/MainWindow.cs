@@ -38,24 +38,24 @@ namespace Timetables.Application.Desktop
 
 		private void lockoutsToolStripMenuItem_Click(object sender, EventArgs e) => new LockoutsWindow().Show(mainDockPanel, DockState.Document);
 
-		private async void favoritesToolStripMenuItem1_Click(object sender, EventArgs e)
+		private void favoritesToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			var window = new FavoriteJourneysWindow();
 			window.ShowDialog();
 
 			if (window.journeysToFind != null)
 				foreach (var journey in window.journeysToFind.Favorites)
-					(await Requests.SendRouterRequestAsync(journey.Source, journey.Target, DateTime.Now, int.MaxValue, 5, 1)).Show(mainDockPanel, DockState.Document);
+					new NewJourneyWindow(journey.Source, journey.Target).Show(mainDockPanel, DockState.Document);
 		}
 
-		private async void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
+		private void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			var window = new FavoriteDeparturesWindow();
 			window.ShowDialog();
 
 			if (window.departuresToFind != null)
 				foreach (var departure in window.departuresToFind.Favorites)
-					(await Requests.SendDepartureBoardRequestAsync(departure.Station, DateTime.Now, 5, true, null)).Show(mainDockPanel, DockState.Document);
+					new NewDepartureBoardWindow(departure.Station).Show(mainDockPanel, DockState.Document);
 		}
 	}
 }

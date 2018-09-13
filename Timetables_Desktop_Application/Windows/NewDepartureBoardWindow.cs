@@ -9,7 +9,7 @@ namespace Timetables.Application.Desktop
 {
 	public partial class NewDepartureBoardWindow : DockContent
 	{
-		public NewDepartureBoardWindow()
+		public NewDepartureBoardWindow(string station = "")
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
@@ -19,7 +19,9 @@ namespace Timetables.Application.Desktop
 			countLabel.Text = Settings.Localization.Count;
 			departureLabel.Text = Settings.Localization.LeavingTime;
 			stationLabel.Text = Settings.Localization.Station;
-			lineLabel.Text = Settings.Localization.Line;		
+			lineLabel.Text = Settings.Localization.Line;
+
+			stationTextBox.Text = station;
 		}
 
 		private async void searchButton_Click(object sender, EventArgs e)
