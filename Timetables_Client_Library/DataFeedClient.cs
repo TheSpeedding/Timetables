@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Device.Location;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
@@ -13,6 +14,10 @@ namespace Timetables.Client
 	{
 		private volatile static Interop.DataFeedManaged fullData = null;
 		private volatile static Structures.Basic.DataFeedBasic basicData = null;
+		/// <summary>
+		/// Geowatcher to retrieve current location.
+		/// </summary>
+		public static GeoCoordinateWatcher GeoWatcher { get; } = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
@@ -103,6 +108,8 @@ namespace Timetables.Client
 		public static async Task DownloadAsync(bool forceDownload = false, int timeout = 5000)
 		{
 			Downloaded = false;
+
+			GeoWatcher.TryStart(false, TimeSpan.FromSeconds(5));
 
 			await Task.Delay(10); // This is temporary "bugfix". There is some race condition in Timetables.Application.Desktop.InitLoadingWindow.
 

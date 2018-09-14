@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -49,7 +50,9 @@
     <Compile Include="BasicStructures\StationsBasic.cs" />
     <Compile Include="BasicStructures\StopsBasic.cs" />
     <Compile Include="DataFeedClient.cs" />
-    <Compile Include="GoogleMapsExtensions.cs" />
+    <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsExtensions.cs" />
+    <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsIntegration.cs" />
+    <Compile Include="GoogleMapsJavascriptAPI\JavascriptHelperClasses.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

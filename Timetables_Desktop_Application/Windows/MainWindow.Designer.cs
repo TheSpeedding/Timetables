@@ -110,25 +110,26 @@
 			// findDeparturesToolStripMenuItem
 			// 
 			this.findDeparturesToolStripMenuItem.Name = "findDeparturesToolStripMenuItem";
-			this.findDeparturesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.findDeparturesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.findDeparturesToolStripMenuItem.Text = "Find &departures";
 			this.findDeparturesToolStripMenuItem.Click += new System.EventHandler(this.findDeparturesToolStripMenuItem_Click);
 			// 
 			// showmapToolStripMenuItem
 			// 
 			this.showmapToolStripMenuItem.Name = "showmapToolStripMenuItem";
-			this.showmapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.showmapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.showmapToolStripMenuItem.Text = "Show &map";
+			this.showmapToolStripMenuItem.Click += new System.EventHandler(this.showmapToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
 			// 
 			// favoritesToolStripMenuItem
 			// 
 			this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
-			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.favoritesToolStripMenuItem.Text = "&Favorites";
 			this.favoritesToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem_Click);
 			// 

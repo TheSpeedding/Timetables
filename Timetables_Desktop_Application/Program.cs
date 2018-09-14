@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Timetables.Application.Desktop
 {
@@ -15,6 +16,8 @@ namespace Timetables.Application.Desktop
 		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
 		static void Main()
 		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
 			AppDomain.CurrentDomain.UnhandledException += ShowUnhandledExceptionCallback;
 			AppDomain.CurrentDomain.UnhandledException += LogUnhandledExceptionCallback;
 			AppDomain.CurrentDomain.UnhandledException += (sender, e) => Environment.Exit(0); // End application immediately and don't wait for exception to be arisen from .NET environment.

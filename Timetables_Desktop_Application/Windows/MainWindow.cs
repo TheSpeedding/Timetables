@@ -57,5 +57,7 @@ namespace Timetables.Application.Desktop
 				foreach (var departure in window.departuresToFind.Favorites)
 					new NewDepartureBoardWindow(departure.Station).Show(mainDockPanel, DockState.Document);
 		}
+
+		private void showmapToolStripMenuItem_Click(object sender, EventArgs e) => new ShowMapWindow().Show(mainDockPanel, DockState.Document);
 	}
 }

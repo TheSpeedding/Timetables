@@ -14,7 +14,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
 {
-	public abstract partial class RssFeedInfoWindow : DockContent
+	public abstract partial class AbstractInfoWindow : DockContent
 	{
 		protected void Initialize()
 		{
@@ -23,6 +23,8 @@ namespace Timetables.Application.Desktop
 			
 			resultsWebBrowser.DocumentText = Requests.LoadingHtml(Settings.Localization.PleaseWaitDownloading);
 		}
+
+		protected void SetWebbrowserContent(string content) => resultsWebBrowser.DocumentText = content;
 
 		protected async void LoadContent(Uri uri, System.IO.FileInfo xslt, System.IO.FileInfo css)
 		{
