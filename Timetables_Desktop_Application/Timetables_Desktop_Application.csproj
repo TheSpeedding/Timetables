@@ -152,11 +152,11 @@
     <Compile Include="Windows\InfoWindowsSpecialized.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\AbstractInfoWindow.cs">
+    <Compile Include="Windows\InfoWindowAbstract.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\AbstractInfoWindow.designer.cs">
-      <DependentUpon>AbstractInfoWindow.cs</DependentUpon>
+    <Compile Include="Windows\InfoWindowAbstract.designer.cs">
+      <DependentUpon>InfoWindowAbstract.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\SettingsWindow.cs">
       <SubType>Form</SubType>
@@ -193,8 +193,8 @@
     <EmbeddedResource Include="Windows\NewJourneyWindow.resx">
       <DependentUpon>NewJourneyWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\AbstractInfoWindow.resx">
-      <DependentUpon>AbstractInfoWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\InfoWindowAbstract.resx">
+      <DependentUpon>InfoWindowAbstract.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>

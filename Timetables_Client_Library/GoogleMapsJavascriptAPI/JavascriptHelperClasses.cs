@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Timetables.Client
 {
+	public class JavascriptString
+	{
+		private string content;
+		public override string ToString() => content;
+		public JavascriptString(string content) => this.content = "'" + content + "'";
+	}
 	public class JavascriptArray<T> : List<T>
 	{
 		public JavascriptArray() : base() { }
@@ -27,6 +33,7 @@ namespace Timetables.Client
 		public override string ToString() => Name;
 		public string VariableAssignment() => $"var { Name } = { Content.ToString() };";
 		public string VariableReassignment() => $"{ Name } = { Content.ToString() };";
+		public string Call(JavascriptFunction.Call fn) => $"{ Name }.{ fn.ToString() }";
 	}
 	public class JavascriptAnonymousObject
 	{
@@ -67,7 +74,7 @@ namespace Timetables.Client
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("{");
 			foreach (var instruction in Instructions) sb.AppendLine(instruction());
-			sb.AppendLine("}");
+			sb.Append("}");
 			return sb.ToString();
 		}
 	}
@@ -91,14 +98,19 @@ namespace Timetables.Client
 				FunctionParameters = new List<object>(parameters);
 			}
 			public void AddInstruction(Func<string> action) => Instructions.Add(action);
+			public static implicit operator Call (Definition fn) => new Call(fn.FunctionName, fn.FunctionParameters.ToArray());
 			public override string ToString()
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine($"function { base.ToString() } {{");
 				foreach (var instruction in Instructions) sb.AppendLine(instruction());
-				sb.AppendLine("}");
+				sb.Append("}");
 				return sb.ToString();
 			}
+		}
+		public class Anonymous : Definition
+		{
+			public Anonymous(params object[] parameters) : base(string.Empty, parameters) { }
 		}
 		public string FunctionName { get; protected set; }
 		public List<object> FunctionParameters { get; protected set; }

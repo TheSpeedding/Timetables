@@ -32,7 +32,8 @@ namespace Timetables.Client
 
 			var map = stops.CreateMap("map", lat, lon, zoom);
 			var initMap = new JavascriptFunction.Definition("initMap");
-			
+
+
 			initMap.AddInstruction(map.VariableAssignment);
 			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
 

@@ -1,6 +1,6 @@
 namespace Timetables.Application.Desktop
 {
-	partial class AbstractInfoWindow
+	partial class InfoWindowAbstract
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AbstractInfoWindow));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoWindowAbstract));
 			this.resultsWebBrowser = new System.Windows.Forms.WebBrowser();
 			this.SuspendLayout();
 			// 
@@ -45,14 +45,14 @@ namespace Timetables.Application.Desktop
 			this.resultsWebBrowser.Size = new System.Drawing.Size(497, 161);
 			this.resultsWebBrowser.TabIndex = 1;
 			// 
-			// AbstractInfoWindow
+			// InfoWindowAbstract
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(497, 161);
 			this.Controls.Add(this.resultsWebBrowser);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "AbstractInfoWindow";
+			this.Name = "InfoWindowAbstract";
 			this.ResumeLayout(false);
 
 		}

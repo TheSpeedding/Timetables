@@ -9,7 +9,7 @@ namespace Timetables.Application.Desktop
 	/// <summary>
 	/// Specialized window for extraordinary events.
 	/// </summary>
-	public class ExtraEventsWindow : AbstractInfoWindow
+	public class ExtraEventsWindow : InfoWindowAbstract
 	{
 		public ExtraEventsWindow()
 		{
@@ -21,7 +21,7 @@ namespace Timetables.Application.Desktop
 	/// <summary>
 	/// Specialized window for lockouts.
 	/// </summary>
-	public class LockoutsWindow : AbstractInfoWindow
+	public class LockoutsWindow : InfoWindowAbstract
 	{
 		public LockoutsWindow()
 		{
@@ -31,15 +31,14 @@ namespace Timetables.Application.Desktop
 		}
 	}
 
-	public class ShowMapWindow : AbstractInfoWindow
+	public class ShowMapWindow : InfoWindowAbstract
 	{
 		public ShowMapWindow()
 		{
 			Initialize();
 			Text = Settings.Localization.Map;
 			Load += (object sender, EventArgs e) => SetWebbrowserContent(Client.GoogleMaps.GetMapWithMarkers(Client.DataFeed.Basic.Stops));
-
-			System.Windows.Forms.Clipboard.SetText(Timetables.Client.GoogleMaps.GetMapWithMarkers(Timetables.Client.DataFeed.Basic.Stops));
+			System.Windows.Forms.Clipboard.SetText(Client.GoogleMaps.GetMapWithMarkers(Client.DataFeed.Basic.Stops));
 		}
 	}
 }

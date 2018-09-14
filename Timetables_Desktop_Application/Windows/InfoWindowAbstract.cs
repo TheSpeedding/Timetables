@@ -14,7 +14,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Timetables.Application.Desktop
 {
-	public abstract partial class AbstractInfoWindow : DockContent
+	public abstract partial class InfoWindowAbstract : DockContent
 	{
 		protected void Initialize()
 		{
