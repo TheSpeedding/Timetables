@@ -331,11 +331,13 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 			
 			auto res = journeys_[i].find(stop);
 
-			if (res != journeys_[i].cend()) {
+			auto j = journey(res->second); 
 
-				auto inserted = fastest_journeys_.insert(journey(res->second));
+			if (res != journeys_[i].cend() && j.departure_time() > earliest_departure_) { // That second condition is temporary "bugfix".
 
-				if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
+				auto inserted = fastest_journeys_.insert(j);
+
+				if (fastest_journey == nullptr || (inserted.second && *inserted.first < *fastest_journey))
 					fastest_journey = &*inserted.first; // Insert only if unique.
 			}
 

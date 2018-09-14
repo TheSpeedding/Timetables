@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mail;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -6,6 +7,7 @@ namespace Timetables.Application.Desktop
 {
 	static class Program
 	{
+		private static MailAddress UnhandledExceptionMailSendTo { get; } = new MailAddress("thespeedding@gmail.com");
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
@@ -15,7 +17,8 @@ namespace Timetables.Application.Desktop
 		{
 			AppDomain.CurrentDomain.UnhandledException += ShowUnhandledExceptionCallback;
 			AppDomain.CurrentDomain.UnhandledException += LogUnhandledExceptionCallback;
-
+			AppDomain.CurrentDomain.UnhandledException += (sender, e) => Environment.Exit(0); // End application immediately and don't wait for exception to be arisen from .NET environment.
+			
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
@@ -48,15 +51,21 @@ namespace Timetables.Application.Desktop
 
 				}
 
-				/*
-				System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
-				message.To.Add("thespeedding@gmail.com");
-				message.Subject = "Timetables Desktop Application - Unhandled exception";
-				message.From = new System.Net.Mail.MailAddress("exceptions@timetables.cz");
-				message.Body = messageText;
-				System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.gmail.com");
-				smtp.Send(message);
-				*/
+				SmtpClient client = new SmtpClient
+				{
+					Port = 25,
+					DeliveryMethod = SmtpDeliveryMethod.Network,
+					UseDefaultCredentials = false,
+					Host = "smtp.gmail.com"
+				};
+
+				MailMessage mail = new MailMessage(UnhandledExceptionMailSendTo, UnhandledExceptionMailSendTo)
+				{
+					Subject = "Timetables Desktop Application - Unhandled exception",
+					Body = messageText
+				};
+
+				client.Send(mail);				
 			}
 		}
 

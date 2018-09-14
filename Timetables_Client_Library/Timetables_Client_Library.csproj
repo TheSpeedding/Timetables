@@ -49,6 +49,7 @@
     <Compile Include="BasicStructures\StationsBasic.cs" />
     <Compile Include="BasicStructures\StopsBasic.cs" />
     <Compile Include="DataFeedClient.cs" />
+    <Compile Include="GoogleMapsExtensions.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
