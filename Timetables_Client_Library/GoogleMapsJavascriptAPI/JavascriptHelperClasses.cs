@@ -35,15 +35,15 @@ namespace Timetables.Client
 		public string VariableReassignment() => $"{ Name } = { Content.ToString() };";
 		public string Call(JavascriptFunction.Call fn) => $"{ Name }.{ fn.ToString() }";
 	}
-	public class JavascriptAnonymousObject
-	{
-		public List<KeyValuePair<string, object>> ConstructorParameters { get; set; }
-		public JavascriptAnonymousObject(params KeyValuePair<string, object>[] parameters) => ConstructorParameters = new List<KeyValuePair<string, object>>(parameters);
-		public override string ToString() => "{ " + string.Join(", ", ConstructorParameters.Select(p => p.Key + ": " + p.Value)) + " }";
-
-	}
 	public class JavascriptObject
 	{
+		public class Anonymous
+		{
+			public List<KeyValuePair<string, object>> ConstructorParameters { get; set; }
+			public Anonymous(params KeyValuePair<string, object>[] parameters) => ConstructorParameters = new List<KeyValuePair<string, object>>(parameters);
+			public override string ToString() => "{ " + string.Join(", ", ConstructorParameters.Select(p => p.Key + ": " + p.Value)) + " }";
+
+		}
 		public string ClassName { get; }
 		public List<object> ConstructorParameters { get; }
 		public JavascriptObject(string name, params object[] parameters)
@@ -110,7 +110,19 @@ namespace Timetables.Client
 		}
 		public class Anonymous : Definition
 		{
+			public class Application : Call
+			{
+				public Anonymous Function { get; }
+				public Application(Anonymous fn, params object[] parameters) : base("", parameters) => Function = fn;
+				public override string ToString() => "(" + Function.ToString() + ")(" + string.Join(", ", FunctionParameters) + ")";
+			}
 			public Anonymous(params object[] parameters) : base(string.Empty, parameters) { }
+		}
+		public class Return<T>
+		{
+			public T Result { get; }
+			public Return(T result) => Result = result;
+			public override string ToString() => "return " + Result.ToString();
 		}
 		public string FunctionName { get; protected set; }
 		public List<object> FunctionParameters { get; protected set; }
