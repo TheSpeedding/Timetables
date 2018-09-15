@@ -9,6 +9,19 @@ using Timetables.Client;
 
 namespace Timetables.Interop
 {
+
+	[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+	[System.Runtime.InteropServices.ComVisible(true)]
+	public class GoogleMapsScripting : Scripting
+	{
+		private ShowMapWindow window;
+		/// <summary>
+		/// Initializes the object.
+		/// </summary>
+		/// <param name="window">Window that is relevant for this object.</param>
+		public GoogleMapsScripting(ShowMapWindow window) => this.window = window;
+		public string ShowDepartures(uint stopId, )
+	}
 	/// <summary>
 	/// Offers scripting for journeys window.
 	/// </summary>
@@ -17,7 +30,6 @@ namespace Timetables.Interop
 	public class JourneyScripting : Scripting
 	{
 		private JourneyResultsWindow window;
-
 		/// <summary>
 		/// Initializes the object.
 		/// </summary>

@@ -37,11 +37,12 @@ namespace Timetables.Client
 						new JavascriptObject.Anonymous(
 							new KeyValuePair<string, object>("lat", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][1]"),
 							new KeyValuePair<string, object>("lng", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][2]"))),
+					new KeyValuePair<string, object>("zIndex", cycle.ControlVariable.Name),
 					new KeyValuePair<string, object>("map", map.Name))));			
 			
 			var popupWindow = new JavascriptVariable<JavascriptObject>("popupWindow", new JavascriptObject("google.maps.InfoWindow"));
 
-			var content = new JavascriptVariable<JavascriptString>("content", new JavascriptString("SEM VLOŽIT TEN DEBILNÍ KÓD, STEJNÝ PRO VŠECHNY MARKERY"));
+			var content = new JavascriptVariable<string>("content", "marker.getZIndex().toString()");
 
 			var innerFn = new JavascriptFunction.Anonymous();
 			innerFn.AddInstruction(popupWindow.Call(new JavascriptFunction.Call("setContent", content.Name)).ToString);
@@ -57,8 +58,8 @@ namespace Timetables.Client
 				);
 
 			cycle.AddInstruction(popupWindow.VariableAssignment);
-			cycle.AddInstruction(content.VariableAssignment);
 			cycle.AddInstruction(marker.VariableAssignment);
+			cycle.AddInstruction(content.VariableAssignment);
 			cycle.AddInstruction(onClickListener.ToString);
 
 			return markersInfo.VariableAssignment() + Environment.NewLine + cycle.ToString();
