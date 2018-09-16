@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -152,6 +152,12 @@
     <Compile Include="Windows\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ShowMapWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\ShowMapWindow.designer.cs">
+      <DependentUpon>ShowMapWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Windows\DepartureBoardResultsWindow.resx">
       <DependentUpon>DepartureBoardResultsWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\ShowMapWindow.resx">
+      <DependentUpon>ShowMapWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -45,6 +45,9 @@ namespace Timetables.Application.Desktop
 		/// <returns>Route info object.</returns>
 		public static Structures.Basic.RoutesInfoBasic.RouteInfoBasic GetRouteInfoFromLabel(string label)
 		{
+			if (string.IsNullOrEmpty(label))
+				return null;
+
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeed.Basic.RoutesInfo.FindByLabel(label);
 
 			if (route == null)
@@ -73,6 +76,16 @@ namespace Timetables.Application.Desktop
 				return null;
 
 			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient);
+			var routerResponse = await SendRouterRequestAsync(routerRequest);
+
+			if (comp != null)
+				routerResponse.Journeys.Sort(comp);
+
+			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt);
+		}
+
+		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
+		{
 			RouterResponse routerResponse = null;
 
 			if (DataFeed.OfflineMode)
@@ -102,10 +115,7 @@ namespace Timetables.Application.Desktop
 				}
 			}
 
-			if (comp != null)
-				routerResponse.Journeys.Sort(comp);
-
-			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt);
+			return routerResponse;
 		}
 
 		/// <summary>
@@ -126,6 +136,13 @@ namespace Timetables.Application.Desktop
 				return null;
 
 			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
+			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
+
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt);
+		}
+
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		{
 			DepartureBoardResponse dbResponse = null;
 
 			if (DataFeed.OfflineMode)
@@ -154,8 +171,7 @@ namespace Timetables.Application.Desktop
 					}
 				}
 			}
-
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt);
+			return dbResponse;
 		}
 
 		/// <summary>

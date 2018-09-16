@@ -45,7 +45,8 @@ namespace Timetables.Client
 			var content = new JavascriptVariable<string>("content", "marker.getZIndex().toString()");
 
 			var innerFn = new JavascriptFunction.Anonymous();
-			innerFn.AddInstruction(popupWindow.Call(new JavascriptFunction.Call("setContent", content.Name)).ToString);
+			innerFn.AddInstruction(popupWindow.Call(new JavascriptFunction.Call("setContent", 
+				new JavascriptFunction.Call("window.external.ShowDepartures", content.Name))).ToString);
 			innerFn.AddInstruction(popupWindow.Call(new JavascriptFunction.Call("open", map.Name, marker.Name)).ToString);
 
 			var onClickAnonymousFn = new JavascriptFunction.Anonymous(marker.Name, content.Name, popupWindow.Name);

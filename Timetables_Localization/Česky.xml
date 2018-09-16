@@ -67,4 +67,6 @@
 	<ArrivalTimeAscending>Podle času příjezdu vzestupně</ArrivalTimeAscending>
 	<TransfersCountAscending>Podle počtu přestupů vzestupně</TransfersCountAscending>
 	<WaitingTimesAscending>Podle doby čekání na přípoje vzestupně</WaitingTimesAscending>
+	<ArrivalAt>Příjezd v</ArrivalAt>
+	<NoDeparturesFromThisStop>Žádné odjezdy z této zastávky.</NoDeparturesFromThisStop>
 </Localization>

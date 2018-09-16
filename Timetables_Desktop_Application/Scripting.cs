@@ -12,19 +12,64 @@ namespace Timetables.Interop
 
 	[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
 	[System.Runtime.InteropServices.ComVisible(true)]
-	public class GoogleMapsScripting : Scripting
+	public abstract class GoogleMapsScripting : Scripting
 	{
-		private ShowMapWindow window;
-		/// <summary>
-		/// Initializes the object.
-		/// </summary>
-		/// <param name="window">Window that is relevant for this object.</param>
-		public GoogleMapsScripting(ShowMapWindow window) => this.window = window;
-		public string ShowDepartures(uint stopId, )
+		[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+		[System.Runtime.InteropServices.ComVisible(true)]
+		public sealed class General : GoogleMapsScripting
+		{
+			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => DateTime.Now;
+			public override string ShowArrivalTime(uint stopId) => string.Empty;
+			public override string ShowArrivalConstant() => string.Empty;
+		}
+		[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+		[System.Runtime.InteropServices.ComVisible(true)]
+		public sealed class Journey : GoogleMapsScripting
+		{
+			private Client.Journey journey;
+
+			protected override DateTime GetEarliestDepartureDateTime(uint stopId)
+			{
+				foreach (var js in journey.JourneySegments)
+				{
+					if (js.SourceStopID == stopId) return js.DepartureDateTime;
+
+					foreach (var @is in (js as TripSegment).IntermediateStops)
+					{
+						if (@is.StopID == stopId) return @is.Arrival;
+					}
+
+					if (js.TargetStopID == stopId) return js.ArrivalDateTime;
+				}
+
+				throw new ArgumentException("Stop ID not in the journey.");
+			}
+		}
+		[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+		[System.Runtime.InteropServices.ComVisible(true)]
+		public sealed class Departure : GoogleMapsScripting
+		{
+			private Client.Departure departure;
+
+			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => stopId == departure.StopID ? 
+				departure.DepartureDateTime : departure.IntermediateStops.TakeWhile(s => s.StopID == stopId).Last().Arrival;
+		}
+		protected abstract DateTime GetEarliestDepartureDateTime(uint stopId);
+		public string ShowDepartures(uint stopId)
+		{
+			DateTime dt = GetEarliestDepartureDateTime(stopId);			
+
+			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new DepartureBoardRequest(stopId, dt, 5, false)));
+
+			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName).RenderJavascriptToHtml(this);
+		}
+		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
+		public virtual string ShowArrivalTime(uint stopId) => GetEarliestDepartureDateTime(stopId).ToShortTimeString();
+		public string NoDepartures() => Settings.Localization.NoDeparturesFromThisStop;
 	}
 	/// <summary>
 	/// Offers scripting for journeys window.
-	/// </summary>
+	/// </summary>ž
 	[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	public class JourneyScripting : Scripting

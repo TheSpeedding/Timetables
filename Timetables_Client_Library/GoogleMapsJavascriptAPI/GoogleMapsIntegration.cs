@@ -20,13 +20,13 @@ namespace Timetables.Client
 			{
 				lat = stops.GetAverageLatitude();
 				lon = stops.GetAverageLongitude();
-				zoom = 12;
+				zoom = 15;
 			}
 			else
 			{
 				lat = DataFeed.GeoWatcher.Position.Location.Latitude;
 				lon = DataFeed.GeoWatcher.Position.Location.Longitude;
-				zoom = 15;
+				zoom = 17;
 			}
 
 

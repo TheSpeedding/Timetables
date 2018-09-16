@@ -30,15 +30,4 @@ namespace Timetables.Application.Desktop
 			Load += (object sender, EventArgs e) => LoadContent(Settings.Lockouts, Settings.LockoutsXslt, Settings.LockoutsCss);
 		}
 	}
-
-	public class ShowMapWindow : InfoWindowAbstract
-	{
-		public ShowMapWindow()
-		{
-			Initialize();
-			Text = Settings.Localization.Map;
-			Load += (object sender, EventArgs e) => SetWebbrowserContent(Client.GoogleMaps.GetMapWithMarkers(Client.DataFeed.Basic.Stops));
-			System.Windows.Forms.Clipboard.SetText(Client.GoogleMaps.GetMapWithMarkers(Client.DataFeed.Basic.Stops));
-		}
-	}
 }

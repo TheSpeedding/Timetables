@@ -83,6 +83,8 @@ namespace Timetables.Client
 		public string ArrivalTimeAscending { get; set; } = "By arrival time ascending";
 		public string TransfersCountAscending { get; set; } = "By transfers count ascending";
 		public string WaitingTimesAscending { get; set; } = "By waiting times ascending";
+		public string ArrivalAt { get; set; } = "Arrival at";
+		public string NoDeparturesFromThisStop { get; set; } = "There are no departures from this stop.";
 
 		/// <summary>
 		/// Returns language that is represented by the object.
