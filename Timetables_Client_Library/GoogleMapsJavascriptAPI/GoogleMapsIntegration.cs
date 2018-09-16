@@ -17,14 +17,65 @@ namespace Timetables.Client
 			foreach (var @is in departure.IntermediateStops)
 				yield return DataFeed.Basic.Stops.FindByIndex(@is.StopID);
 		}
+		private static IEnumerable<StopsBasic.StopBasic> GetStops(this TripSegment ts)
+		{
+			yield return DataFeed.Basic.Stops.FindByIndex(ts.SourceStopID);
+			foreach (var @is in ts.IntermediateStops)
+				yield return DataFeed.Basic.Stops.FindByIndex(@is.StopID);
+			yield return DataFeed.Basic.Stops.FindByIndex(ts.TargetStopID);
+		}
+		private static IEnumerable<StopsBasic.StopBasic> GetStops(this FootpathSegment fs)
+		{
+			yield return DataFeed.Basic.Stops.FindByIndex(fs.SourceStopID);
+			yield return DataFeed.Basic.Stops.FindByIndex(fs.TargetStopID);
+		}
+		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Journey journey)
+		{
+			foreach (var js in journey.JourneySegments)
+			{
+				if (js is TripSegment)
+					foreach (var nestedJs in ((TripSegment)js).GetStops())
+						yield return nestedJs;
+				else
+					foreach (var nestedJs in ((FootpathSegment)js).GetStops())
+						yield return nestedJs;
+			}
+		}
 		public static string GetMapWithMarkersAndPolylines(Departure departure)
 		{
-			var stops = departure.GetStops();		
+			var stops = departure.GetStops();
 			var map = stops.CreateMap("map", stops.GetAverageLatitude(), stops.GetAverageLongitude(), 13);
 
 			var initMap = new JavascriptFunction.Definition("initMap");
+
 			initMap.AddInstruction(map.VariableAssignment);
 			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
+			initMap.AddInstruction(stops.CreateSimplePolyline(map, 4.0, departure.LineColor).ToString);
+
+			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
+		}
+		public static string GetMapWithMarkersAndPolylines(Journey journey)
+		{
+			var stops = journey.GetStops();
+			var map = stops.CreateMap("map", stops.GetAverageLatitude(), stops.GetAverageLongitude(), 13);
+
+			var initMap = new JavascriptFunction.Definition("initMap");
+
+			initMap.AddInstruction(map.VariableAssignment);
+			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
+
+			for (int i = 0; i < journey.JourneySegments.Count; i++)
+			{
+				var js = journey.JourneySegments[i];
+				
+				if (js is TripSegment)
+					initMap.AddInstruction(((TripSegment)js).GetStops().CreateSimplePolyline(map, 4.0, ((TripSegment)js).LineColor, false, i).ToString);
+
+				else
+					initMap.AddInstruction(((FootpathSegment)js).GetStops().CreateSimplePolyline(map, 4.0, System.Drawing.Color.Gray, true, i).ToString);
+			}
+
+			System.Windows.Forms.Clipboard.SetText(GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName));
 
 			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
 		}

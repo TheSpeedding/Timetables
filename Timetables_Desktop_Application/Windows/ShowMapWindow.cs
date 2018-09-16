@@ -38,6 +38,7 @@ namespace Timetables.Application.Desktop
 			Settings.Theme.Apply(this);
 			Text = $"{ Settings.Localization.Map } - { Settings.Localization.Journey } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 			resultsWebBrowser.ObjectForScripting = new Interop.GoogleMapsScripting.Journey(journey);
+			resultsWebBrowser.DocumentText = GoogleMaps.GetMapWithMarkersAndPolylines(journey);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,43 @@ namespace Timetables.Client
 							new KeyValuePair<string, object>("lat", lat),
 							new KeyValuePair<string, object>("lng", lon))))));
 
+		public static string CreateSimplePolyline(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map, double strokeWeight, Color strokeColor, bool strokeDashed = false, int index = 0)
+		{
+			var arr = new JavascriptArray<JavascriptObject.Anonymous>(stops.Select(s => new JavascriptObject.Anonymous(
+				new KeyValuePair<string, object>("lat", s.Latitude),
+				new KeyValuePair<string, object>("lng", s.Longitude))));
+
+			var coordinates = new JavascriptVariable<JavascriptArray<JavascriptObject.Anonymous>>($"coordinates{ index }", arr);
+
+			var lineSymbol = new JavascriptVariable<JavascriptObject.Anonymous>($"lineSymbol{ index }", new JavascriptObject.Anonymous(
+				new KeyValuePair<string, object>("path", new JavascriptString("M 0,-1 0,1")),
+				new KeyValuePair<string, object>("strokeOpacity", 1),
+				new KeyValuePair<string, object>("scale", 4)));
+
+			var polyline = strokeDashed ? new JavascriptVariable<JavascriptObject>($"polyline{ index }", new JavascriptObject("google.maps.Polyline",
+				new JavascriptObject.Anonymous(
+					new KeyValuePair<string, object>("path", coordinates.Name),
+					new KeyValuePair<string, object>("strokeColor", new JavascriptString("#" + strokeColor.R.ToString("X2") + strokeColor.G.ToString("X2") + strokeColor.B.ToString("X2"))),
+					new KeyValuePair<string, object>("strokeOpacity", 0),
+					new KeyValuePair<string, object>("icons", new JavascriptArray<JavascriptObject.Anonymous> { new JavascriptObject.Anonymous(
+						new KeyValuePair<string, object>("icon", lineSymbol.Name),
+						new KeyValuePair<string, object>("offset", new JavascriptString("0")),
+						new KeyValuePair<string, object>("repeat", new JavascriptString("20px"))) }))))
+					:
+					new JavascriptVariable<JavascriptObject>($"polyline{ index }", new JavascriptObject("google.maps.Polyline",
+				new JavascriptObject.Anonymous(
+					new KeyValuePair<string, object>("path", coordinates.Name),
+					new KeyValuePair<string, object>("strokeColor", new JavascriptString("#" + strokeColor.R.ToString("X2") + strokeColor.G.ToString("X2") + strokeColor.B.ToString("X2"))),
+					new KeyValuePair<string, object>("strokeOpacity", 1.0),
+					new KeyValuePair<string, object>("strokeWeight", strokeWeight))));
+
+			return coordinates.VariableAssignment() + Environment.NewLine + (strokeDashed ? (lineSymbol.VariableAssignment() + Environment.NewLine) : string.Empty) + 
+				polyline.VariableAssignment() + Environment.NewLine + polyline.Call(new JavascriptFunction.Call("setMap", map.Name));
+		}
+
 		public static string CreateMarkers(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map)
 		{
-			var markersInfo =
-				new JavascriptVariable<JavascriptArray<JavascriptArray<object>>>("markersInfo", 
+			var markersInfo = new JavascriptVariable<JavascriptArray<JavascriptArray<object>>>("markersInfo", 
 					new JavascriptArray<JavascriptArray<object>>(stops.Select(stop => new JavascriptArray<object> { "'" + stop.Name + "'", stop.Latitude, stop.Longitude, stop.ID })));
 			
 			var cycle = new JavascriptControlStructures.For(new JavascriptVariable<uint>("i", 0), (uint)markersInfo.Content.Count);
