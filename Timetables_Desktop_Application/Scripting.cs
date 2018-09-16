@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timetables.Application.Desktop;
 using Timetables.Client;
+using Timetables.Structures.Basic;
 
 namespace Timetables.Interop
 {
@@ -18,7 +19,7 @@ namespace Timetables.Interop
 		[System.Runtime.InteropServices.ComVisible(true)]
 		public sealed class General : GoogleMapsScripting
 		{
-			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => DateTime.Now;
+			protected override DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop) => DateTime.Now;
 			public override string ShowArrivalTime(uint stopId) => string.Empty;
 			public override string ShowArrivalConstant() => string.Empty;
 			protected override bool ShowDeparturesFromStation() => false;
@@ -29,19 +30,19 @@ namespace Timetables.Interop
 		{
 			private Client.Journey journey;
 			public Journey(Client.Journey journey) => this.journey = journey;
-			protected override DateTime GetEarliestDepartureDateTime(uint stopId)
+			protected override DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop)
 			{
 				foreach (var js in journey.JourneySegments)
 				{
-					if (js.SourceStopID == stopId) return js.DepartureDateTime;
+					if (DataFeed.Basic.Stops.FindByIndex(js.SourceStopID).ParentStation.ID == stop.ParentStation.ID) return js.DepartureDateTime;
 
 					if (js is TripSegment)
 						foreach (var @is in (js as TripSegment).IntermediateStops)
 						{
-							if (@is.StopID == stopId) return @is.Arrival;
+							if (DataFeed.Basic.Stops.FindByIndex(@is.StopID).ParentStation.ID == stop.ParentStation.ID) return @is.Arrival;
 						}
 
-					if (js.TargetStopID == stopId) return js.ArrivalDateTime;
+					if (DataFeed.Basic.Stops.FindByIndex(js.TargetStopID).ParentStation.ID == stop.ParentStation.ID) return js.ArrivalDateTime;
 				}
 
 				throw new ArgumentException("Stop ID not found in the journey.");
@@ -53,12 +54,18 @@ namespace Timetables.Interop
 		{
 			private Client.Departure departure;
 			public Departure(Client.Departure departure) => this.departure = departure;
-			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => stopId == departure.StopID ? departure.DepartureDateTime : departure.IntermediateStops.Find(s => s.StopID == stopId).Arrival;
+			protected override DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop)
+			{
+				if (stop.ParentStation.ID == DataFeed.Basic.Stops.FindByIndex(departure.StopID).ParentStation.ID)
+					return departure.DepartureDateTime;
+				else
+					return departure.IntermediateStops.Find(s => DataFeed.Basic.Stops.FindByIndex(s.StopID).ParentStation.ID == stop.ParentStation.ID).Arrival;
+			}
 		}
-		protected abstract DateTime GetEarliestDepartureDateTime(uint stopId);
+		protected abstract DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop);		
 		public string ShowDepartures(uint stopId)
 		{
-			DateTime dt = GetEarliestDepartureDateTime(stopId);
+			DateTime dt = GetEarliestDepartureDateTime(DataFeed.Basic.Stops.FindByIndex(stopId));
 
 			bool isStation = ShowDeparturesFromStation();
 			uint newId = isStation ? DataFeed.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
@@ -69,7 +76,7 @@ namespace Timetables.Interop
 		}
 		protected virtual bool ShowDeparturesFromStation() => true;
 		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
-		public virtual string ShowArrivalTime(uint stopId) => GetEarliestDepartureDateTime(stopId).ToShortTimeString();
+		public virtual string ShowArrivalTime(uint stopId) => GetEarliestDepartureDateTime(DataFeed.Basic.Stops.FindByIndex(stopId)).ToShortTimeString();
 		public string NoDepartures() => Settings.Localization.NoDeparturesFromThisStop;
 	}
 	/// <summary>

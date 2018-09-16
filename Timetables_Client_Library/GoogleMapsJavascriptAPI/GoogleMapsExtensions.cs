@@ -71,12 +71,11 @@ namespace Timetables.Client
 						new JavascriptObject.Anonymous(
 							new KeyValuePair<string, object>("lat", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][1]"),
 							new KeyValuePair<string, object>("lng", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][2]"))),
-					new KeyValuePair<string, object>("zIndex", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][3]"),
 					new KeyValuePair<string, object>("map", map.Name))));			
 			
 			var popupWindow = new JavascriptVariable<JavascriptObject>("popupWindow", new JavascriptObject("google.maps.InfoWindow"));
 
-			var content = new JavascriptVariable<string>("content", "marker.getZIndex().toString()");
+			var content = new JavascriptVariable<string>("content", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][3]");
 
 			var innerFn = new JavascriptFunction.Anonymous();
 			innerFn.AddInstruction(popupWindow.Call(new JavascriptFunction.Call("setContent", 
@@ -89,12 +88,11 @@ namespace Timetables.Client
 			var onClickListener = new JavascriptFunction.Call("google.maps.event.addListener",
 				marker.Name,
 				new JavascriptString("click"),
-				new JavascriptFunction.Anonymous.Application(onClickAnonymousFn, marker.Name, content.Name, popupWindow.Name)
+				new JavascriptFunction.Anonymous.Application(onClickAnonymousFn, marker.Name, content.Content, popupWindow.Name)
 				);
 
 			cycle.AddInstruction(popupWindow.VariableAssignment);
 			cycle.AddInstruction(marker.VariableAssignment);
-			cycle.AddInstruction(content.VariableAssignment);
 			cycle.AddInstruction(onClickListener.ToString);
 
 			return markersInfo.VariableAssignment() + Environment.NewLine + cycle.ToString();

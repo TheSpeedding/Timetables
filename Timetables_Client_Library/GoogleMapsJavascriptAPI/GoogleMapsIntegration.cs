@@ -51,7 +51,7 @@ namespace Timetables.Client
 			initMap.AddInstruction(map.VariableAssignment);
 			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
 			initMap.AddInstruction(stops.CreateSimplePolyline(map, 4.0, departure.LineColor).ToString);
-
+			System.Windows.Forms.Clipboard.SetText(GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName));
 			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
 		}
 		public static string GetMapWithMarkersAndPolylines(Journey journey)
@@ -74,8 +74,6 @@ namespace Timetables.Client
 				else
 					initMap.AddInstruction(((FootpathSegment)js).GetStops().CreateSimplePolyline(map, 4.0, System.Drawing.Color.Gray, true, i).ToString);
 			}
-
-			System.Windows.Forms.Clipboard.SetText(GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName));
 
 			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
 		}
