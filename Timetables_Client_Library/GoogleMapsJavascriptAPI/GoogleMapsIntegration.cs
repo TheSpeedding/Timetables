@@ -11,6 +11,23 @@ namespace Timetables.Client
 	public static class GoogleMaps
 	{
 		private static readonly string GoogleMapsApiKey = "AIzaSyB05TDGoGzSk_jzTvWYocWD_k1CiLuCgoY";
+		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Departure departure)
+		{
+			yield return DataFeed.Basic.Stops.FindByIndex(departure.StopID);
+			foreach (var @is in departure.IntermediateStops)
+				yield return DataFeed.Basic.Stops.FindByIndex(@is.StopID);
+		}
+		public static string GetMapWithMarkersAndPolylines(Departure departure)
+		{
+			var stops = departure.GetStops();		
+			var map = stops.CreateMap("map", stops.GetAverageLatitude(), stops.GetAverageLongitude(), 13);
+
+			var initMap = new JavascriptFunction.Definition("initMap");
+			initMap.AddInstruction(map.VariableAssignment);
+			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
+
+			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
+		}
 		public static string GetMapWithMarkers(this IEnumerable<StopsBasic.StopBasic> stops)
 		{	
 			double lat, lon;
@@ -37,7 +54,10 @@ namespace Timetables.Client
 			initMap.AddInstruction(map.VariableAssignment);
 			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
 
-			return $@"<!DOCTYPE html>
+			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
+		}
+
+		private static string GetHtmlStringConstant(string customScriptCode, string functionName) => $@"<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv=""X-UA-Compatible"" content=""IE=edge,chrome=1""/>
@@ -57,13 +77,12 @@ namespace Timetables.Client
   <body>
     <div id=""map""></div>
     <script>
-	{ initMap.ToString() }
+	{ customScriptCode }
     </script>
     <script async defer
-    src=""https://maps.googleapis.com/maps/api/js?key={ GoogleMapsApiKey }&callback=initMap"">
+    src=""https://maps.googleapis.com/maps/api/js?key={ GoogleMapsApiKey }&callback={ functionName }"">
     </script>
   </body>
 </html>";
-		}
 	}
 }

@@ -26,7 +26,7 @@ namespace Timetables.Client
 		{
 			var markersInfo =
 				new JavascriptVariable<JavascriptArray<JavascriptArray<object>>>("markersInfo", 
-					new JavascriptArray<JavascriptArray<object>>(stops.Select(stop => new JavascriptArray<object> { "'" + stop.Name + "'", stop.Latitude, stop.Longitude })));
+					new JavascriptArray<JavascriptArray<object>>(stops.Select(stop => new JavascriptArray<object> { "'" + stop.Name + "'", stop.Latitude, stop.Longitude, stop.ID })));
 			
 			var cycle = new JavascriptControlStructures.For(new JavascriptVariable<uint>("i", 0), (uint)markersInfo.Content.Count);
 
@@ -37,7 +37,7 @@ namespace Timetables.Client
 						new JavascriptObject.Anonymous(
 							new KeyValuePair<string, object>("lat", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][1]"),
 							new KeyValuePair<string, object>("lng", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][2]"))),
-					new KeyValuePair<string, object>("zIndex", cycle.ControlVariable.Name),
+					new KeyValuePair<string, object>("zIndex", $"{ markersInfo.Name }[{ cycle.ControlVariable.Name }][3]"),
 					new KeyValuePair<string, object>("map", map.Name))));			
 			
 			var popupWindow = new JavascriptVariable<JavascriptObject>("popupWindow", new JavascriptObject("google.maps.InfoWindow"));

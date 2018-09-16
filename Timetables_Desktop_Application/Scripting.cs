@@ -21,28 +21,30 @@ namespace Timetables.Interop
 			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => DateTime.Now;
 			public override string ShowArrivalTime(uint stopId) => string.Empty;
 			public override string ShowArrivalConstant() => string.Empty;
+			protected override bool ShowDeparturesFromStation() => false;
 		}
 		[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
 		[System.Runtime.InteropServices.ComVisible(true)]
 		public sealed class Journey : GoogleMapsScripting
 		{
 			private Client.Journey journey;
-
+			public Journey(Client.Journey journey) => this.journey = journey;
 			protected override DateTime GetEarliestDepartureDateTime(uint stopId)
 			{
 				foreach (var js in journey.JourneySegments)
 				{
 					if (js.SourceStopID == stopId) return js.DepartureDateTime;
 
-					foreach (var @is in (js as TripSegment).IntermediateStops)
-					{
-						if (@is.StopID == stopId) return @is.Arrival;
-					}
+					if (js is TripSegment)
+						foreach (var @is in (js as TripSegment).IntermediateStops)
+						{
+							if (@is.StopID == stopId) return @is.Arrival;
+						}
 
 					if (js.TargetStopID == stopId) return js.ArrivalDateTime;
 				}
 
-				throw new ArgumentException("Stop ID not in the journey.");
+				throw new ArgumentException("Stop ID not found in the journey.");
 			}
 		}
 		[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
@@ -50,19 +52,22 @@ namespace Timetables.Interop
 		public sealed class Departure : GoogleMapsScripting
 		{
 			private Client.Departure departure;
-
-			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => stopId == departure.StopID ? 
-				departure.DepartureDateTime : departure.IntermediateStops.TakeWhile(s => s.StopID == stopId).Last().Arrival;
+			public Departure(Client.Departure departure) => this.departure = departure;
+			protected override DateTime GetEarliestDepartureDateTime(uint stopId) => stopId == departure.StopID ? departure.DepartureDateTime : departure.IntermediateStops.Find(s => s.StopID == stopId).Arrival;
 		}
 		protected abstract DateTime GetEarliestDepartureDateTime(uint stopId);
 		public string ShowDepartures(uint stopId)
 		{
-			DateTime dt = GetEarliestDepartureDateTime(stopId);			
+			DateTime dt = GetEarliestDepartureDateTime(stopId);
 
-			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new DepartureBoardRequest(stopId, dt, 5, false)));
+			bool isStation = ShowDeparturesFromStation();
+			uint newId = isStation ? DataFeed.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
+
+			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new DepartureBoardRequest(newId, dt, 5, isStation)));
 
 			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName).RenderJavascriptToHtml(this);
 		}
+		protected virtual bool ShowDeparturesFromStation() => true;
 		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
 		public virtual string ShowArrivalTime(uint stopId) => GetEarliestDepartureDateTime(stopId).ToShortTimeString();
 		public string NoDepartures() => Settings.Localization.NoDeparturesFromThisStop;
@@ -80,12 +85,16 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="window">Window that is relevant for this object.</param>
 		public JourneyScripting(JourneyResultsWindow window) => this.window = window;
-
 		/// <summary>
 		/// Shows detail of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
 		public void ShowJourneyDetail(int index) => new JourneyResultsWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
+		/// <summary>
+		/// Shows map of the journey.
+		/// </summary>
+		/// <param name="index">Index of the journey.</param>
+		public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
 		/// <summary>
 		/// Shows journey printing dialog.
 		/// </summary>
@@ -122,6 +131,11 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
 		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
+		/// <summary>
+		/// Shows map of the departure.
+		/// </summary>
+		/// <param name="index">Index of the departure.</param>
+		public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
 		/// <summary>
 		/// Shows departure printing dialog.
 		/// </summary>

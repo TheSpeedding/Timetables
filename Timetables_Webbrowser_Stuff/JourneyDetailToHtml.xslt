@@ -31,6 +31,7 @@
 					<ul class="tools">
 						<li>
 							<a href="#">
+								<xsl:attribute name="onClick">javascript: window.external.ShowMap();</xsl:attribute>
 								<script>javascript: document.write(window.external.MapStringConstant());</script>
 							</a>
 						</li>
