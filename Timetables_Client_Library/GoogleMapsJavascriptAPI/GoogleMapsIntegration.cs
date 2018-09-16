@@ -57,7 +57,7 @@ namespace Timetables.Client
 		public static string GetMapWithMarkersAndPolylines(Journey journey)
 		{
 			var stops = journey.GetStops();
-			var map = stops.CreateMap("map", stops.GetAverageLatitude(), stops.GetAverageLongitude(), 13);
+			var map = stops.CreateMap("map", stops.GetAverageLatitude(), stops.GetAverageLongitude(), 15);
 
 			var initMap = new JavascriptFunction.Definition("initMap");
 
@@ -101,7 +101,7 @@ namespace Timetables.Client
 
 
 			initMap.AddInstruction(map.VariableAssignment);
-			initMap.AddInstruction(stops.CreateMarkers(map).ToString);
+			initMap.AddInstruction(stops.CreateMarkers(map, true).ToString);
 
 			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);
 		}

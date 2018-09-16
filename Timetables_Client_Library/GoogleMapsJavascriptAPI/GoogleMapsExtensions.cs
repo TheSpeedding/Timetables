@@ -57,11 +57,13 @@ namespace Timetables.Client
 				polyline.VariableAssignment() + Environment.NewLine + polyline.Call(new JavascriptFunction.Call("setMap", map.Name));
 		}
 
-		public static string CreateMarkers(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map)
+		public static string CreateMarkers(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map, bool zoomToCurrentPosition = false)
 		{
 			var markersInfo = new JavascriptVariable<JavascriptArray<JavascriptArray<object>>>("markersInfo", 
 					new JavascriptArray<JavascriptArray<object>>(stops.Select(stop => new JavascriptArray<object> { "'" + stop.Name + "'", stop.Latitude, stop.Longitude, stop.ID })));
-			
+
+			var bounds = new JavascriptVariable<JavascriptObject>("bounds", new JavascriptObject("google.maps.LatLngBounds"));
+
 			var cycle = new JavascriptControlStructures.For(new JavascriptVariable<uint>("i", 0), (uint)markersInfo.Content.Count);
 
 			var marker = new JavascriptVariable<JavascriptObject>("marker", new JavascriptObject("google.maps.Marker",
@@ -94,8 +96,12 @@ namespace Timetables.Client
 			cycle.AddInstruction(popupWindow.VariableAssignment);
 			cycle.AddInstruction(marker.VariableAssignment);
 			cycle.AddInstruction(onClickListener.ToString);
+			if (!zoomToCurrentPosition)
+				cycle.AddInstruction(bounds.Call(new JavascriptFunction.Call("extend", marker.Call(new JavascriptFunction.Call("getPosition")))).ToString);
 
-			return markersInfo.VariableAssignment() + Environment.NewLine + cycle.ToString();
+			return zoomToCurrentPosition ? 
+				markersInfo.VariableAssignment() + Environment.NewLine + cycle.ToString() : 
+				markersInfo.VariableAssignment() + Environment.NewLine + bounds.VariableAssignment() + Environment.NewLine + cycle.ToString() + Environment.NewLine + map.Call(new JavascriptFunction.Call("fitBounds", bounds.Name));
 		}
 
 		public static double GetAverageLatitude(this IEnumerable<StopsBasic.StopBasic> stops) => stops.Select(s => s.Latitude).Average();
