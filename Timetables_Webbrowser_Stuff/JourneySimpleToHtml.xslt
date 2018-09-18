@@ -11,6 +11,25 @@
 			</head>
 			
 			<body>
+				<ul class="tools">
+					<li>
+						<a href="#">
+							<xsl:attribute name="onClick">
+								javascript: window.external.EditJourneysParameters();
+							</xsl:attribute>
+							<script>javascript: document.write(window.external.EditParametersStringConstant());</script>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<xsl:attribute name="onClick">
+								javascript: window.external.PrintJourneyList();
+							</xsl:attribute>
+							<script>javascript: document.write(window.external.PrintListStringConstant());</script>
+						</a>
+					</li>
+				</ul>
+				
 				<xsl:for-each select="//Journey">
 					<div class="journey">
 						

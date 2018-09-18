@@ -16,14 +16,16 @@ namespace Timetables.Application.Desktop
 {
 	public partial class JourneyResultsWindow : DockContent
 	{
+		private NewJourneyWindow requestWindow;
 		public RouterResponse Results { get; set; }
-		private JourneyResultsWindow()
+		private JourneyResultsWindow(NewJourneyWindow win = null)
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.JourneyScripting(this);
+			requestWindow = win;
 		}
-		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime) : this()
+		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime, NewJourneyWindow win = null) : this(win)
 		{
 			Results = rResponse;
 
@@ -31,13 +33,18 @@ namespace Timetables.Application.Desktop
 
 			resultsWebBrowser.DocumentText = rResponse.TransformToHtml(Settings.JourneySimpleXslt.FullName,  Settings.JourneySimpleCss.FullName);
 		}
-		public JourneyResultsWindow(Journey journey) : this()
+		public JourneyResultsWindow(Journey journey, NewJourneyWindow win = null) : this(win)
 		{
 			Results = new RouterResponse(new List<Journey> { journey });
 
 			Text = $"{ Settings.Localization.Journey } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = Results.Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
+		}
+		public void CloseThisAndReopenPrevious()
+		{
+			requestWindow?.Show(DockPanel, DockState);
+			Close();
 		}
 	}
 }

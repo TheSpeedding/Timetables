@@ -3,6 +3,21 @@ body {
 	background-color: #F1F4F6;
 }
 
+ul.tools li {
+	display: inline;
+	margin-right: 20px;
+}
+
+ul.tools a {
+	color: grey;
+	text-decoration: none;
+}
+
+	ul.tools a:hover {
+		color: black;
+	}
+
+
 .journey {
 	position: relative;
 	padding: 10px 10px 10px 10px;
@@ -30,16 +45,8 @@ body {
 		.journey ul.tools li {
 			display: inline;
 			margin-left: 10px;
+			margin-right: 0px;
 		}
-
-		.journey ul.tools a {
-			color: grey;
-			text-decoration: none;
-		}
-
-			.journey ul.tools a:hover {
-				color: black;
-			}
 
 	.journey .box {
 		margin: 15px 0 15px 0;

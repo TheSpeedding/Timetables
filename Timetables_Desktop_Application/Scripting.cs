@@ -112,11 +112,23 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new JourneyScripting(window),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.Journeys[index].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
+				DocumentText = window.Results.Journeys[index].TransformToHtml(Settings.JourneyDetailPrintXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
 		}
+		public void PrintJourneyList()
+		{
+			var wb = new WebBrowser
+			{
+				ObjectForScripting = new JourneyScripting(window),
+				ScriptErrorsSuppressed = true,
+				DocumentText = window.Results.TransformToHtml(Settings.JourneyDetailPrintXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
+			};
+
+			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
+		}
+		public void EditJourneysParameters() => window.CloseThisAndReopenPrevious();
 	}
 
 	/// <summary>
@@ -153,11 +165,23 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new DepartureBoardScripting(window),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName)
+				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailPrintXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
 		}
+		public void PrintDepartureBoardList()
+		{
+			var wb = new WebBrowser
+			{
+				ObjectForScripting = new DepartureBoardScripting(window),
+				ScriptErrorsSuppressed = true,
+				DocumentText = window.Results.TransformToHtml(Settings.DepartureBoardSimplePrintXslt.FullName, Settings.DepartureBoardSimplePrintCss.FullName)
+			};
+
+			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
+		}
+		public void EditDeparturesParameters() => window.CloseThisAndReopenPrevious();
 	}
 }
 
@@ -265,5 +289,17 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <returns>Localized string constant.</returns>
 		public string OutdatedStringConstant() => Settings.Localization.Outdated;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string EditParametersStringConstant() => Settings.Localization.EditParameters;
+
+		/// <summary>
+		/// Returns localized string constant.
+		/// </summary>
+		/// <returns>Localized string constant.</returns>
+		public string PrintListStringConstant() => Settings.Localization.PrintList;
 	}
 }

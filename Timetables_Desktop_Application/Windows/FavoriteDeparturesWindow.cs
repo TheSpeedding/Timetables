@@ -42,7 +42,7 @@ namespace Timetables.Application.Desktop
 			/// </summary>
 			/// <param name="station">Source stop.</param>
 			public void Remove(string station) => Favorites.RemoveAll((FavoriteDeparture dep) => dep.Station == station);
-			public void Remove(FavoriteDeparture dep) => Remove(dep);
+			public void Remove(FavoriteDeparture dep) => Remove(dep.Station);
 		}
 
 		private FavoriteDepartures favorites;

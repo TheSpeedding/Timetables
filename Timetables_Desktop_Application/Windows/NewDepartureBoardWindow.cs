@@ -20,6 +20,7 @@ namespace Timetables.Application.Desktop
 			departureLabel.Text = Settings.Localization.LeavingTime;
 			stationLabel.Text = Settings.Localization.Station;
 			lineLabel.Text = Settings.Localization.Line;
+			searchButton.Text = Settings.Localization.Search;
 
 			stationTextBox.Text = station;
 		}
@@ -27,7 +28,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendDepartureBoardRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true, lineComboBox.Text);
+			var window = await Requests.SendDepartureBoardRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true, lineComboBox.Text, this);
 			searchButton.Enabled = true;
 
 			if (window != null)

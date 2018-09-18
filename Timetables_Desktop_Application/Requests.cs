@@ -65,9 +65,10 @@ namespace Timetables.Application.Desktop
 		/// <param name="transfers">Max transfers.</param>
 		/// <param name="count">Number of journeys.</param>
 		/// <param name="coefficient">Coefficient for the footpaths.</param>
+		/// <param name="win">Window with request.</param>
 		/// <param name="comp">Comparer for journeys.</param>
 		/// <returns>Window with results</returns>
-		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, IComparer<Journey> comp = null)
+		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
@@ -81,7 +82,7 @@ namespace Timetables.Application.Desktop
 			if (comp != null)
 				routerResponse.Journeys.Sort(comp);
 
-			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt);
+			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt, win);
 		}
 
 		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
@@ -126,8 +127,9 @@ namespace Timetables.Application.Desktop
 		/// <param name="count">Number of departures.</param>
 		/// <param name="isStation">Indicates whether it is station or stop.</param>
 		/// <param name="routeLabel">Route label.</param>
+		/// <param name="win">Window with request.</param>
 		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation, string routeLabel)
+		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation, string routeLabel, NewDepartureBoardWindow win)
 		{
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
@@ -138,7 +140,7 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
 			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
 
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt);
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, win);
 		}
 
 		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)

@@ -42,6 +42,10 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static FileInfo JourneyDetailPrintCss => new FileInfo("css/JourneyDetailPrintToHtml.css");
 		/// <summary>
+		/// Path to journey detail XSLT stylesheet for printing.
+		/// </summary>
+		public static FileInfo JourneyDetailPrintXslt => new FileInfo("xslt/JourneyDetailPrintToHtml.xslt");
+		/// <summary>
 		/// Path to journey simple XSLT stylesheet.
 		/// </summary>
 		public static FileInfo JourneySimpleXslt => new FileInfo("xslt/JourneySimpleToHtml.xslt");
@@ -61,6 +65,10 @@ namespace Timetables.Application.Desktop
 		/// Path to departure board detail CSS stylesheet for printing.
 		/// </summary>
 		public static FileInfo DepartureBoardDetailPrintCss => new FileInfo("css/DepartureBoardDetailPrintToHtml.css");
+		/// <summary>
+		/// Path to departure board detail XSLT stylesheet for printing.
+		/// </summary>
+		public static FileInfo DepartureBoardDetailPrintXslt => new FileInfo("xslt/DepartureBoardDetailPrintToHtml.xslt");
 		/// <summary>
 		/// Path to departure board simple XSLT stylesheet.
 		/// </summary>
@@ -93,6 +101,22 @@ namespace Timetables.Application.Desktop
 		/// Path to extraordinary events CSS stylesheet.
 		/// </summary>
 		public static FileInfo ExtraordinaryEventsCss => new FileInfo("css/ExtraordinaryEventsToHtml.css");
+		/// <summary>
+		/// Path to departure board list CSS stylesheet for printing.
+		/// </summary>
+		public static FileInfo DepartureBoardSimplePrintCss => new FileInfo("css/DepartureBoardSimplePrintToHtml.css");
+		/// <summary>
+		/// Path to departure board list XSLT stylesheet for printing.
+		/// </summary>
+		public static FileInfo DepartureBoardSimplePrintXslt => new FileInfo("xslt/DepartureBoardSimplePrintToHtml.xslt");
+		/// <summary>
+		/// Path to journey list CSS stylesheet for printing.
+		/// </summary>
+		public static FileInfo JourneySimplePrintCss => new FileInfo("css/JourneySimplePrintToHtml.css");
+		/// <summary>
+		/// Path to journey list XSLT stylesheet for printing.
+		/// </summary>
+		public static FileInfo JourneyPrintXslt => new FileInfo("xslt/JourneySimplePrintToHtml.xslt");
 		/// <summary>
 		/// Timeout duration while waiting for connection with the server.
 		/// </summary>

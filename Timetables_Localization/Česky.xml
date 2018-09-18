@@ -69,4 +69,6 @@
 	<WaitingTimesAscending>Podle doby čekání na přípoje vzestupně</WaitingTimesAscending>
 	<ArrivalAt>Příjezd v</ArrivalAt>
 	<NoDeparturesFromThisStop>Žádné odjezdy z této zastávky.</NoDeparturesFromThisStop>
+	<EditParameters>Upravit parametry</EditParameters>
+	<PrintList>Tisknout seznam</PrintList>
 </Localization>

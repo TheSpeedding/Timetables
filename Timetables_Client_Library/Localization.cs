@@ -85,6 +85,8 @@ namespace Timetables.Client
 		public string WaitingTimesAscending { get; set; } = "By waiting times ascending";
 		public string ArrivalAt { get; set; } = "Arrival at";
 		public string NoDeparturesFromThisStop { get; set; } = "There are no departures from this stop.";
+		public string EditParameters { get; set; } = "Edit parameters";
+		public string PrintList { get; set; } = "Print list";
 
 		/// <summary>
 		/// Returns language that is represented by the object.
