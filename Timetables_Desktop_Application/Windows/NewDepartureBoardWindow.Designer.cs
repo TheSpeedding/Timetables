@@ -130,6 +130,8 @@
 			// 
 			this.lineComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lineComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.lineComboBox.Enabled = false;
 			this.lineComboBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.lineComboBox.FormattingEnabled = true;
 			this.lineComboBox.Location = new System.Drawing.Point(116, 103);
@@ -148,6 +150,7 @@
 			this.stationTextBox.Name = "stationTextBox";
 			this.stationTextBox.Size = new System.Drawing.Size(146, 24);
 			this.stationTextBox.TabIndex = 0;
+			this.stationTextBox.TextChanged += new System.EventHandler(this.stationTextBox_TextChanged);
 			// 
 			// NewDepartureBoardWindow
 			// 

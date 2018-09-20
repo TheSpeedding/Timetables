@@ -27,7 +27,7 @@ namespace Timetables.Application.Desktop
 			public override string ToString() => name;
 		}
 
-		private IComparer<Journey> CurrentComparer { get { return ((CustomJourneyComparer)sortComboBox.SelectedItem).Comparer; } }
+		private IComparer<Journey> CurrentComparer => ((CustomJourneyComparer)sortComboBox.SelectedItem).Comparer; 
 
 		public NewJourneyWindow(string source = "", string target = "")
 		{

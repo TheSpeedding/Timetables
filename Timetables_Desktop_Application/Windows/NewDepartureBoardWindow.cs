@@ -50,5 +50,12 @@ namespace Timetables.Application.Desktop
 		{
 			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeed.Basic.Stations);
 		}
+
+		private void stationTextBox_TextChanged(object sender, EventArgs e)
+		{
+			lineComboBox.Items.Clear();
+			lineComboBox.Text = string.Empty;
+			lineComboBox.Enabled = DataFeed.Basic.Stations.FindByName(stationTextBox.Text) != null;
+		}
 	}
 }

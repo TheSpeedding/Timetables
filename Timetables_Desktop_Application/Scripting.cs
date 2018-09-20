@@ -129,6 +129,7 @@ namespace Timetables.Interop
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
 		}
 		public void EditJourneysParameters() => window.CloseThisAndReopenPrevious();
+		public string ShowJourneyText() => window.Text;
 	}
 
 	/// <summary>
@@ -182,6 +183,7 @@ namespace Timetables.Interop
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
 		}
 		public void EditDeparturesParameters() => window.CloseThisAndReopenPrevious();
+		public string ShowDepartureText() => window.Text;
 	}
 }
 
