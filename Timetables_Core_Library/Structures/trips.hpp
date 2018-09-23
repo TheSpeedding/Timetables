@@ -27,6 +27,9 @@ namespace Timetables {
 			inline const route& route() const { return route_; } // Gets information about route.
 			inline const service& service() const { return service_; } // Gets service for this trip.
 			inline const int departure() const { return departure_time_; } // Gets departure from the first stop of the trip, seconds since midnight.
+
+			bool contains_station(const station& s) const;
+			date_time find_departure_time_from_station(const station& s) const;
 			
 			inline void add_to_trip(const stop_time& stop_time) { stop_times_.push_back(stop_time); } // Adds stop time into the trip. Used in initialization.
 		};

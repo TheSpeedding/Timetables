@@ -1,9 +1,10 @@
 #include "../Algorithms/router.hpp"
-//#include <tbb/tbb.h>
+// #include <tbb/tbb.h>
 #include <thread>
 
+#define PARALLEL_VERSION false
+
 using namespace std;
-//using namespace tbb;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
@@ -44,42 +45,15 @@ void Timetables::Algorithms::router::accumulate_routes() {
 
 void Timetables::Algorithms::router::traverse_each_route() {
 
+#if PARALLEL_VERSION
+	// This cannot be used at the moment because of data races in containers.
+	tbb::parallel_for(active_routes_.begin(), active_routes_.end(), [&](decltype(active_routes_)::iterator it) {
+		traverse_route(*it->first, *it->second);
+}, auto_partitioner());
+#else	
 	for (auto&& item : active_routes_)
 		traverse_route(*item.first, *item.second);
-
-	/*
-	int available_cores = std::thread::hardware_concurrency();
-
-	int threads_to_start = active_routes_.size() / 10 + 1;
-
-	if (threads_to_start > available_cores)
-	threads_to_start = available_cores;
-
-	vector<vector<pair<const route*, const stop*>>> buckets;
-
-	for (size_t i = 0; i < threads_to_start; i++)
-	buckets.push_back(vector<pair<const route*, const stop*>>());
-
-	size_t i = 0;
-
-	for (auto&& item : active_routes_) {
-
-	buckets[i % threads_to_start].push_back(item); // Divide items into buckets equally so multiple threads can process it in parallel.
-
-	i++;
-	}
-
-	task_group g;
-
-	for (auto task = buckets.begin(); task != buckets.end(); ++task) {
-	g.run([=] {
-	for (auto&& item : *task) // 15th row of pseudocode.
-	traverse_route(*item.first, *item.second);
-	});
-	}
-
-	g.wait();
-	*/
+#endif
 }
 
 void Timetables::Algorithms::router::look_at_footpaths() {
@@ -274,9 +248,8 @@ void Timetables::Algorithms::router::obtain_journeys() {
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 
-
-		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
-			break;
+		// if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			// break;
 
 		previous_fastest_journey = current_fastest_journey;
 	}
@@ -330,13 +303,19 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		for (auto&& stop : target_.child_stops()) {
 
 			auto res = journeys_[i].find(stop);
-
+			
 			if (res != journeys_[i].cend()) {
 
-				auto inserted = fastest_journeys_.insert(journey(res->second));
+				auto j = journey(res->second);
 
-				if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
-					fastest_journey = &*inserted.first; // Insert only if unique.
+				if (!j.contains_redundant_footpath()) {
+
+					auto inserted = fastest_journeys_.insert(j);
+
+					if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
+						fastest_journey = &*inserted.first; // Insert only if unique.
+
+				}
 			}
 
 		}

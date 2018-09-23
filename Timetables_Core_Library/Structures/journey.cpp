@@ -24,6 +24,35 @@ Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
 	std::reverse(journey_segments_.begin(), journey_segments_.end());
 }
 
+bool Timetables::Structures::journey::contains_redundant_footpath() const {
+
+	const footpath_segment* previous_footpath = nullptr;
+
+	for (auto it = journey_segments_.cbegin(); it != journey_segments_.cend(); ++it) {
+
+		if ((**it).trip() == nullptr) { // Footpath.
+
+			previous_footpath = static_cast<const footpath_segment*>(&(**it));
+
+			if (&previous_footpath->source_stop().parent_station() == &previous_footpath->target_stop().parent_station()) // Transfer within a station. This is not a redundant footpath.
+				previous_footpath = nullptr;
+		}
+
+		else if (previous_footpath != nullptr) { // Trip.
+			const trip_segment* current_trip = static_cast<const trip_segment*>(&(**it));
+
+			if (current_trip->trip()->contains_station(previous_footpath->source_stop().parent_station()) &&
+				previous_footpath->departure_from_source().time() <= current_trip->trip()->find_departure_time_from_station(previous_footpath->source_stop().parent_station())) // Current trip contains source station from the previous footpath. The trip can be extended to this stop. Therefore, this footpath is redundant.
+				return true;
+
+			previous_footpath = nullptr;
+		}
+
+	}
+
+	return false;
+}
+
 bool Timetables::Structures::journey::operator< (const Timetables::Structures::journey& other) const {
 	if (arrival_time() != other.arrival_time())
 		return arrival_time() < other.arrival_time();

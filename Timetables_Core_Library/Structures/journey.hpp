@@ -29,6 +29,14 @@ namespace Timetables {
 			virtual inline bool outdated() const = 0;
 			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const = 0;
 			inline std::size_t duration() const { return date_time::difference(arrival_at_target(), departure_from_source()); }
+
+			inline bool operator== (const journey_segment& other) const { 
+				return trip() == other.trip() && &source_stop() == &other.source_stop() && &target_stop() == &other.target_stop() &&
+					departure_from_source().timestamp() == other.departure_from_source().timestamp() && arrival_at_target().timestamp() == other.arrival_at_target().timestamp();
+			}
+			inline bool operator!= (const journey_segment& other) const {
+				return !(*this == other);
+			}
 		};
 
 		// Trip segment.
@@ -97,7 +105,8 @@ namespace Timetables {
 			inline const date_time& arrival_time() const { return (journey_segments_.cend() - 1)->get()->arrival_at_target(); } // Arrival time at target stop.
 			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 			inline const std::time_t duration_without_waiting_times() const { std::time_t t = 0; for (auto&& js : journey_segments_) t += js->duration(); return t; } // Total duration of the journey without transfers.
-			
+			bool contains_redundant_footpath() const;
+
 			bool operator< (const journey& other) const; // Preferences: Arrival time, duration, number of transfers, number of stops, total duration of transfers,.
 		
 			inline const std::size_t number_of_stops() const { // Total number of stops in the journey.

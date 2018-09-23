@@ -20,8 +20,8 @@ namespace Timetables {
 		// Class collecting information about service.
 		class service {
 		private:
-			bool is_added_in_date(const date_time& date_time) const; // Determines whether the service is added in given date.
-			bool is_removed_in_date(const date_time& date_time) const; // Determines whether the service is removed in given date.
+			bool is_added_in_date(const date_time& date) const; // Determines whether the service is added in given date.
+			bool is_removed_in_date(const date_time& date) const; // Determines whether the service is removed in given date.
 			inline bool is_operating_on_day(std::size_t day) const { return ((operating_days_ >> day) & 0x01) == 1; } // Determines whether the service is operating on given day.
 
 			date_time valid_since_; // Date that the service is valid since.
@@ -31,8 +31,8 @@ namespace Timetables {
 		public:
 			service(bool mon, bool tue, bool wed, bool thu, bool fri, bool sat, bool sun, const date_time& start, const date_time& end);
 
-			inline void add_extraordinary_event(const date_time& date_time, bool type) { exceptions_.insert(std::make_pair(date_time, type)); } // Adds an exception.
-			service_state is_operating_in_date(const date_time& date_time) const; // Determines whether the service is operating in given date.
+			inline void add_extraordinary_event(const date_time& date, bool type) { exceptions_.insert(std::make_pair(date, type)); } // Adds an exception.
+			service_state is_operating_in_date(const date_time& date) const; // Determines whether the service is operating in given date.
 		};
 
 		// Class collecting information about collection of the services.

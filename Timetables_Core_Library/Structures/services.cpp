@@ -17,8 +17,8 @@ Timetables::Structures::service::service(bool mon, bool tue, bool wed, bool thu,
 	if (sun) operating_days_ = operating_days_ | sunday;
 }
 
-bool Timetables::Structures::service::is_added_in_date(const date_time& date_time) const {
-	auto entry = exceptions_.find(date_time);
+bool Timetables::Structures::service::is_added_in_date(const date_time& date) const {
+	auto entry = exceptions_.find(date);
 	if (entry == exceptions_.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this date.
 	else if (entry->second == true) // Found. Service IS operating in this Date. Returns true.
@@ -26,8 +26,8 @@ bool Timetables::Structures::service::is_added_in_date(const date_time& date_tim
 	return false;
 }
 
-bool Timetables::Structures::service::is_removed_in_date(const date_time& date_time) const {
-	auto entry = exceptions_.find(date_time);
+bool Timetables::Structures::service::is_removed_in_date(const date_time& date) const {
+	auto entry = exceptions_.find(date);
 	if (entry == exceptions_.cend())
 		return false; // Not found. It means that the serivce has any extraordinary event in this date.
 	else if (entry->second == false) // Found. Service IS NOT operating in this Date. Returns true.
@@ -35,19 +35,19 @@ bool Timetables::Structures::service::is_removed_in_date(const date_time& date_t
 	return false;
 }
 
-service_state Timetables::Structures::service::is_operating_in_date(const date_time& date_time) const {
+service_state Timetables::Structures::service::is_operating_in_date(const date_time& date) const {
 
 	// Fully optimized for maximal performance.	
 
-	bool operating_on_day_by_default = is_operating_on_day(date_time.day_in_week());
+	bool operating_on_day_by_default = is_operating_on_day(date.day_in_week());
 
 	if (operating_on_day_by_default) {
-		if (is_removed_in_date(date_time.date()))
+		if (is_removed_in_date(date))
 			return not_operating;
 		else {
-			if (date_time < valid_since_)
+			if (date < valid_since_)
 				return not_operating;
-			else if (date_time > valid_until_)
+			else if (date > valid_until_)
 				return outdated;
 			else 
 				return operating;
@@ -55,7 +55,7 @@ service_state Timetables::Structures::service::is_operating_in_date(const date_t
 	}
 
 	else {
-		if (is_added_in_date(date_time.date()))
+		if (is_added_in_date(date))
 			return operating;
 		else
 			return not_operating;

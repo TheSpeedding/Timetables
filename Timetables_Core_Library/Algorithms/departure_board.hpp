@@ -40,7 +40,7 @@ namespace Timetables {
 			const Timetables::Structures::route_info* route_to_show_; // Nullptr if a user wants to show all the lines.
 		public:
 			departure_board(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
-				const size_t count, const std::size_t route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count), 
+				const size_t count, int route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count), 
 				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)){
 				
 				if (true_if_station)
