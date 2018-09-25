@@ -123,7 +123,7 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new JourneyScripting(window),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.TransformToHtml(Settings.JourneyDetailPrintXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
+				DocumentText = window.Results.TransformToHtml(Settings.JourneySimplePrintCss.FullName, Settings.JourneySimplePrintCss.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
