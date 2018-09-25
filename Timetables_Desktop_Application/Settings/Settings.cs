@@ -116,7 +116,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to journey list XSLT stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneyPrintXslt => new FileInfo("xslt/JourneySimplePrintToHtml.xslt");
+		public static FileInfo JourneySimplePrintXslt => new FileInfo("xslt/JourneySimplePrintToHtml.xslt");
 		/// <summary>
 		/// Timeout duration while waiting for connection with the server.
 		/// </summary>

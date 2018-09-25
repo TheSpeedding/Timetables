@@ -14,70 +14,10 @@
 				<script>
 					javascript: document.write(window.external.ShowJourneyText());
 				</script>
-				
-				<ul class="tools">
-					<li>
-						<a href="#">
-							<xsl:attribute name="onClick">
-								javascript: window.external.EditJourneysParameters();
-							</xsl:attribute>
-							<script>javascript: document.write(window.external.EditParametersStringConstant());</script>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<xsl:attribute name="onClick">
-								javascript: window.external.PrintJourneyList();
-							</xsl:attribute>
-							<script>javascript: document.write(window.external.PrintListStringConstant());</script>
-						</a>
-					</li>
-				</ul>
-				
-				<xsl:for-each select="//Journey">
-					<div class="journey">
-						
-						<div class="leaves-in">														
-								<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">			
-									<!-- Indicates whether the journey uses outdated timetables. -->
-									<span class="outdated">
-										<script>javascript: document.write(window.external.OutdatedStringConstant());</script>
-									</span>
-								</xsl:if>
-							<!-- Writes the relative time that the journey leaves in. -->
-							<script>javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));</script>
-						</div>
-						
-						<!-- Links to other windows. -->
-						<ul class="tools">
-							<li>
-								<a href="#">
-									<xsl:attribute name="onClick">javascript: window.external.ShowJourneyDetail(<xsl:value-of select="position() - 1"/>);</xsl:attribute>
-									<script>javascript: document.write(window.external.DetailStringConstant());</script>
-								</a>
-							</li>
-						</ul>
-						
-						<div class="box">
-
-							<div class="info">
 								
-								<!-- Writes total duration of the journey. -->
-								<div class="duration">
-									<script>
-										javascript: document.write(window.external.TotalDurationToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>', '<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
-									</script>
-								</div>
-
-								<!-- Writes number of transfers. -->
-								<div class="transfers">
-									<script>
-										javascript: document.write(window.external.TotalTransfersToString(<xsl:value-of select="count(./JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>));
-									</script>
-								</div>
-							
-							</div>
-
+				<xsl:for-each select="//Journey">
+					<div class="journey">						
+						<div class="box">
 							<div class="main">
 
 								<!-- Writes info about source station, i.e. leaving time and its name. -->
@@ -103,9 +43,6 @@
 										<xsl:choose>
 
 											<xsl:when test="@xsi:type = 'FootpathSegment'">
-												<li class="Footpath">
-													<img width="20" height="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4gcIDykjDbFNcgAAAiFJREFUWMPFlzFoVEEQhv/RM4l3yIkkNkEtRJRTo4WEkEoQRJRoZWG0tAjaiIWdjYKkEOxSi40RVAghEFDEwtIrUmgjYiEIJgp6xhzh4n02e7Cuz+Pu3tvn3+wyOzv/v7uzO+9JKQBUgBdAA6gC48oLQBlY5k/8Aka7ibMphYZjkoYS4p3LS8BAhJhdH8FP/sZonnkwBtSAOvADOK3/AWAXsLWXuYUeyAYkTUk6K6lf0pKkG2ZWz2OlO4D3Cec+lwd5BfjEv3E4JvkJl2jt8CgW+eWAaBFYTRBQB0pZk/cDHzyS20CpzS7MxEi61ns/5WyXEojXvf7eLAXsBtZc4O3O9jRBwD5XiFq4BwxmlfkAX4Gis60H5MvANuBUYK8BT4ByGgHnXbA3QJ87khBLQMH5bwFmEq7rSK/VcMy1nyU1JH1L8HltZhuSZGYNM7si6YCkSUlrzmdP2nJcNTPMrClpOhgbAsw3mFnNzB6aWUlS0czmez2CAnAwsG0G3gVbfCivqnfLtROBgJVwF2IJWAUWXH82EHE3NvlRj+yiu3pfgseoHFPAfY/ssbNdDXahGot8p/vkAmgCE97YfCDiQgwBDzyC761X0Y0NB6X6Y+xyPJLgcy3wmc2KfNBlftMFvtPG96UnoAkcyULAcy/o2w4K14bn/yot+aS3mpVOrhhwPSzTaQTc9H44z3Qx75knYDiNgD7gJLC/y3lF4DhQ6cT/N9dexPM3mnpEAAAAAElFTkSuQmCC"/>
-												</li>
 											</xsl:when>
 
 											<xsl:otherwise>

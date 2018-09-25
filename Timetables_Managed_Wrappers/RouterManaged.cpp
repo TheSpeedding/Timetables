@@ -1,5 +1,5 @@
 #include "DataFeedManaged.hpp"
-#include "../Timetables_Core_Library/Algorithms/router.hpp"
+#include "../Timetables_Core_Library/Algorithms/router_raptor.hpp"
 #include "../Timetables_Core_Library/Structures/date_time.hpp"
 #include "RouterManaged.hpp"
 

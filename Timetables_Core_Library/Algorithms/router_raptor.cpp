@@ -1,7 +1,5 @@
 #include "../Algorithms/router_raptor.hpp"
 // #include <tbb/tbb.h>
-#include <thread>
-
 #define PARALLEL_VERSION false
 
 using namespace std;
@@ -248,8 +246,8 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 
-		// if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
-		// break;
+		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			break;
 
 		previous_fastest_journey = current_fastest_journey;
 	}
@@ -308,7 +306,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 				auto j = journey(res->second);
 
-				if (!j.contains_redundant_footpath()) {
+				if (/*!j.contains_redundant_footpath()*/ true) {
 
 					auto inserted = fastest_journeys_.insert(j);
 

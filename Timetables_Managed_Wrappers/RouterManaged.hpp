@@ -2,7 +2,7 @@
 
 namespace Timetables {
 	namespace Algorithms {
-		class router;
+		class router_raptor;
 	}
 	namespace Interop {
 		ref class DataFeedManaged;
