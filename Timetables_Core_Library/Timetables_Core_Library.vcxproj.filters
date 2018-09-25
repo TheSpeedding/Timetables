@@ -30,9 +30,6 @@
     <ClInclude Include="Algorithms/departure_board.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithms/router.hpp">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="Structures/data_feed.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
@@ -63,12 +60,15 @@
     <ClInclude Include="Structures/journey.hpp">
       <Filter>Header Files\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="Algorithms\router_raptor.hpp">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithms\router_base.hpp">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms/departure_board.cpp">
-      <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
-    <ClCompile Include="Algorithms/router.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
     <ClCompile Include="Structures/trips.cpp">
@@ -91,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Structures\journey.cpp">
       <Filter>Source Files\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithms\router_raptor.cpp">
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

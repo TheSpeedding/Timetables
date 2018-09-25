@@ -1,4 +1,4 @@
-#include "../Algorithms/router.hpp"
+#include "../Algorithms/router_raptor.hpp"
 // #include <tbb/tbb.h>
 #include <thread>
 
@@ -8,7 +8,7 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
-void Timetables::Algorithms::router::accumulate_routes() {
+void Timetables::Algorithms::router_raptor::accumulate_routes() {
 
 	// Accumulate routes serving marked stops from previous round.
 
@@ -43,20 +43,20 @@ void Timetables::Algorithms::router::accumulate_routes() {
 }
 
 
-void Timetables::Algorithms::router::traverse_each_route() {
+void Timetables::Algorithms::router_raptor::traverse_each_route() {
 
 #if PARALLEL_VERSION
 	// This cannot be used at the moment because of data races in containers.
 	tbb::parallel_for(active_routes_.begin(), active_routes_.end(), [&](decltype(active_routes_)::iterator it) {
 		traverse_route(*it->first, *it->second);
-}, auto_partitioner());
+	}, auto_partitioner());
 #else	
 	for (auto&& item : active_routes_)
 		traverse_route(*item.first, *item.second);
 #endif
 }
 
-void Timetables::Algorithms::router::look_at_footpaths() {
+void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 	vector<const stop*> temp_marked;
 
@@ -111,7 +111,7 @@ void Timetables::Algorithms::router::look_at_footpaths() {
 
 }
 
-void Timetables::Algorithms::router::traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop) {
+void Timetables::Algorithms::router_raptor::traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop) {
 
 	const trip* current_trip = nullptr; // 16th row of pseudocode.
 	date_time date_for_current_trip;
@@ -200,7 +200,7 @@ void Timetables::Algorithms::router::traverse_route(const Timetables::Structures
 	}
 }
 
-std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> Timetables::Algorithms::router::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
+std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> Timetables::Algorithms::router_raptor::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
 
 	date_time new_departure_date = arrival.date();
 	size_t days = 0;
@@ -233,7 +233,7 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 	return make_tuple(nullptr, 0, not_operating);
 }
 
-void Timetables::Algorithms::router::obtain_journeys() {
+void Timetables::Algorithms::router_raptor::obtain_journeys() {
 
 	const journey* previous_fastest_journey = obtain_journey(earliest_departure_);
 
@@ -249,7 +249,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 			break;
 
 		// if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
-			// break;
+		// break;
 
 		previous_fastest_journey = current_fastest_journey;
 	}
@@ -260,7 +260,7 @@ void Timetables::Algorithms::router::obtain_journeys() {
 	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
 }
 
-const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_journey(const Timetables::Structures::date_time& departure) {
+const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::obtain_journey(const Timetables::Structures::date_time& departure) {
 
 	temp_labels_.clear();
 	marked_stops_.clear();
@@ -303,7 +303,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 		for (auto&& stop : target_.child_stops()) {
 
 			auto res = journeys_[i].find(stop);
-			
+
 			if (res != journeys_[i].cend()) {
 
 				auto j = journey(res->second);
@@ -322,4 +322,3 @@ const Timetables::Structures::journey* Timetables::Algorithms::router::obtain_jo
 
 	return fastest_journey;
 }
-

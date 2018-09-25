@@ -43,7 +43,7 @@ Timetables::Client::RouterResponse^ Timetables::Interop::RouterManaged::ShowJour
 }
 
 Timetables::Interop::RouterManaged::RouterManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::RouterRequest^ req) {
-	native_router_ = new Timetables::Algorithms::router(feed->Get(), req->SourceStationID, req->TargetStationID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->MaxTransfers, req->TransfersDurationCoefficient);
+	native_router_ = new Timetables::Algorithms::router_raptor(feed->Get(), req->SourceStationID, req->TargetStationID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->MaxTransfers, req->TransfersDurationCoefficient);
 }
 
 void Timetables::Interop::RouterManaged::ObtainJourneys() {

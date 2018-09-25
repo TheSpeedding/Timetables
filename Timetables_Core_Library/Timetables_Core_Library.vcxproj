@@ -20,9 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms/departure_board.hpp" />
+    <ClInclude Include="Algorithms\router_base.hpp" />
     <ClInclude Include="Structures/journey.hpp" />
     <ClInclude Include="Structures/data_feed.hpp" />
-    <ClInclude Include="Algorithms/router.hpp" />
+    <ClInclude Include="Algorithms\router_raptor.hpp" />
     <ClInclude Include="Structures/routes.hpp" />
     <ClInclude Include="Structures/routes_info.hpp" />
     <ClInclude Include="Structures/services.hpp" />
@@ -34,7 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms/departure_board.cpp" />
-    <ClCompile Include="Algorithms/router.cpp" />
+    <ClCompile Include="Algorithms\router_raptor.cpp" />
     <ClCompile Include="Structures/routes.cpp" />
     <ClCompile Include="Structures/routes_info.cpp" />
     <ClCompile Include="Structures/services.cpp" />

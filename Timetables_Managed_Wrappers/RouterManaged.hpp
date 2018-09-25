@@ -9,7 +9,7 @@ namespace Timetables {
 		// Wrapper from native class to the managed one.
 		public ref class RouterManaged {
 		private:
-			Timetables::Algorithms::router* native_router_; // Pointer to C++ heap where the native object has it place.
+			Timetables::Algorithms::router_raptor* native_router_; // Pointer to C++ heap where the native object has it place.
 		public:
 			RouterManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::RouterRequest^ req);
 			~RouterManaged() { this->!RouterManaged(); }
