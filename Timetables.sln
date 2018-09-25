@@ -52,7 +52,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Server_Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Configurator", "Timetables_Configurator\Timetables_Configurator.csproj", "{B97F2CEA-A78F-427A-8D98-9F4E1C4D7948}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Core_Library_SampleApp", "Timetables_Core_Library_SampleApp\Timetables_Core_SampleApp.vcxproj", "{43C1DC23-1628-46E4-ADC1-DFF758A83215}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Core_Library_Benchmarks", "Timetables_Core_Library_Benchmarks\Timetables_Core_Benchmarks.vcxproj", "{43C1DC23-1628-46E4-ADC1-DFF758A83215}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
