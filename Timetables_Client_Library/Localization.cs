@@ -87,6 +87,13 @@ namespace Timetables.Client
 		public string NoDeparturesFromThisStop { get; set; } = "There are no departures from this stop.";
 		public string EditParameters { get; set; } = "Edit parameters";
 		public string PrintList { get; set; } = "Print list";
+		public string MeanOfTransport { get; set; } = "Type";
+		public string Subway { get; set; } = "Subway";
+		public string Tram { get; set; } = "Tram";
+		public string Bus { get; set; } = "Bus";
+		public string Train { get; set; } = "Train";
+		public string Cablecar { get; set; } = "Cablecar";
+		public string Ship { get; set; } = "Ship";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

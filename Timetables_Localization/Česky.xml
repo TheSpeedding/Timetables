@@ -71,4 +71,11 @@
 	<NoDeparturesFromThisStop>Žádné odjezdy z této zastávky.</NoDeparturesFromThisStop>
 	<EditParameters>Upravit parametry</EditParameters>
 	<PrintList>Tisknout seznam</PrintList>
+	<MeanOfTransport>Zahrnout</MeanOfTransport>
+	<Subway>Metro</Subway>
+	<Tram>Tramvaj</Tram>
+	<Train>Vlak</Train>
+	<Cablecar>Lanovka</Cablecar>
+	<Ship>Loď</Ship>
+	<Bus>Autobus</Bus>
 </Localization>

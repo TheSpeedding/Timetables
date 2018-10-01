@@ -29,7 +29,7 @@ namespace Timetables.Preprocessor
 			/// <summary>
 			/// Type of the route.
 			/// </summary>
-            public enum RouteType { Tram = 0, Subway = 1, Rail = 2, Bus = 3, Ship = 4, CableCar = 5, Gondola = 6, Funicular = 7 }
+            public enum RouteType { Tram = 1, Subway = 2, Rail = 4, Bus = 8, Ship = 16, CableCar = 32, Gondola = 64, Funicular = 128 }
             /// <summary>
             /// ID of the route info.
             /// </summary>

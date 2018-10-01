@@ -46,6 +46,13 @@ namespace Timetables.Application.Desktop
 			slowButton.Text = Settings.Localization.SlowSpeed;
 			mediumButton.Text = Settings.Localization.MediumSpeed;
 			fastButton.Text = Settings.Localization.FastSpeed;
+			busCheckBox.Text = Settings.Localization.Bus;
+			cablecarCheckBox.Text = Settings.Localization.Cablecar;
+			shipCheckBox.Text = Settings.Localization.Ship;
+			subwayCheckBox.Text = Settings.Localization.Subway;
+			trainCheckBox.Text = Settings.Localization.Train;
+			tramCheckBox.Text = Settings.Localization.Tram;
+			motLabel.Text = Settings.Localization.MeanOfTransport;
 
 			sortLabel.Text = Settings.Localization.Sort;
 
@@ -66,7 +73,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient(), (MeanOfTransport)255, this, CurrentComparer);
+			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -74,6 +81,17 @@ namespace Timetables.Application.Desktop
 				window.Show(DockPanel, DockState);
 				Hide();
 			}
+		}
+
+		private MeanOfTransport GetMeanOfTransport()
+		{
+			MeanOfTransport mot = 0;
+			if (subwayCheckBox.Checked) mot |= MeanOfTransport.Subway;
+			if (tramCheckBox.Checked) mot |= MeanOfTransport.Tram;
+			if (trainCheckBox.Checked) mot |= MeanOfTransport.Rail;
+			if (shipCheckBox.Checked) mot |= MeanOfTransport.Ship;
+			if (cablecarCheckBox.Checked) mot |= MeanOfTransport.CableCar | MeanOfTransport.Funicular | MeanOfTransport.Gondola;
+			return mot;
 		}
 
 		private double GetTransferCoefficient()

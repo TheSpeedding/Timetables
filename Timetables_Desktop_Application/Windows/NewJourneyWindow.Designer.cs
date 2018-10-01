@@ -46,6 +46,13 @@
 			this.targetTextBox = new System.Windows.Forms.TextBox();
 			this.sortLabel = new System.Windows.Forms.Label();
 			this.sortComboBox = new System.Windows.Forms.ComboBox();
+			this.motLabel = new System.Windows.Forms.Label();
+			this.subwayCheckBox = new System.Windows.Forms.CheckBox();
+			this.tramCheckBox = new System.Windows.Forms.CheckBox();
+			this.busCheckBox = new System.Windows.Forms.CheckBox();
+			this.trainCheckBox = new System.Windows.Forms.CheckBox();
+			this.shipCheckBox = new System.Windows.Forms.CheckBox();
+			this.cablecarCheckBox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).BeginInit();
 			this.SuspendLayout();
@@ -80,14 +87,14 @@
 			this.departureDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.departureDateTimePicker.Location = new System.Drawing.Point(116, 102);
 			this.departureDateTimePicker.Name = "departureDateTimePicker";
-			this.departureDateTimePicker.Size = new System.Drawing.Size(285, 24);
+			this.departureDateTimePicker.Size = new System.Drawing.Size(514, 24);
 			this.departureDateTimePicker.TabIndex = 2;
 			// 
 			// searchButton
 			// 
 			this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.searchButton.Font = new System.Drawing.Font("Calibri", 12F);
-			this.searchButton.Location = new System.Drawing.Point(267, 307);
+			this.searchButton.Location = new System.Drawing.Point(496, 364);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(134, 31);
 			this.searchButton.TabIndex = 8;
@@ -117,7 +124,7 @@
             0,
             0});
 			this.countNumericUpDown.Name = "countNumericUpDown";
-			this.countNumericUpDown.Size = new System.Drawing.Size(285, 24);
+			this.countNumericUpDown.Size = new System.Drawing.Size(514, 24);
 			this.countNumericUpDown.TabIndex = 4;
 			this.countNumericUpDown.Value = new decimal(new int[] {
             5,
@@ -142,7 +149,7 @@
 			this.transfersNumericUpDown.Font = new System.Drawing.Font("Calibri", 10F);
 			this.transfersNumericUpDown.Location = new System.Drawing.Point(116, 145);
 			this.transfersNumericUpDown.Name = "transfersNumericUpDown";
-			this.transfersNumericUpDown.Size = new System.Drawing.Size(285, 24);
+			this.transfersNumericUpDown.Size = new System.Drawing.Size(514, 24);
 			this.transfersNumericUpDown.TabIndex = 3;
 			this.transfersNumericUpDown.Value = new decimal(new int[] {
             5,
@@ -163,7 +170,7 @@
 			// walkingSpeedLabel
 			// 
 			this.walkingSpeedLabel.Font = new System.Drawing.Font("Calibri", 14F);
-			this.walkingSpeedLabel.Location = new System.Drawing.Point(12, 259);
+			this.walkingSpeedLabel.Location = new System.Drawing.Point(12, 260);
 			this.walkingSpeedLabel.Name = "walkingSpeedLabel";
 			this.walkingSpeedLabel.Size = new System.Drawing.Size(98, 42);
 			this.walkingSpeedLabel.TabIndex = 10;
@@ -180,7 +187,7 @@
 			this.slowButton.Name = "slowButton";
 			this.slowButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.slowButton.Size = new System.Drawing.Size(90, 42);
-			this.slowButton.TabIndex = 5;
+			this.slowButton.TabIndex = 6;
 			this.slowButton.Text = "Slow";
 			this.slowButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.slowButton.UseVisualStyleBackColor = true;
@@ -195,7 +202,7 @@
 			this.mediumButton.Location = new System.Drawing.Point(213, 260);
 			this.mediumButton.Name = "mediumButton";
 			this.mediumButton.Size = new System.Drawing.Size(90, 42);
-			this.mediumButton.TabIndex = 6;
+			this.mediumButton.TabIndex = 7;
 			this.mediumButton.TabStop = true;
 			this.mediumButton.Text = "Medium";
 			this.mediumButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -210,7 +217,7 @@
 			this.fastButton.Location = new System.Drawing.Point(309, 260);
 			this.fastButton.Name = "fastButton";
 			this.fastButton.Size = new System.Drawing.Size(90, 42);
-			this.fastButton.TabIndex = 7;
+			this.fastButton.TabIndex = 8;
 			this.fastButton.Text = "Fast";
 			this.fastButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.fastButton.UseVisualStyleBackColor = true;
@@ -222,7 +229,7 @@
 			this.sourceTextBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.sourceTextBox.Location = new System.Drawing.Point(116, 18);
 			this.sourceTextBox.Name = "sourceTextBox";
-			this.sourceTextBox.Size = new System.Drawing.Size(285, 24);
+			this.sourceTextBox.Size = new System.Drawing.Size(514, 24);
 			this.sourceTextBox.TabIndex = 0;
 			// 
 			// targetTextBox
@@ -232,7 +239,7 @@
 			this.targetTextBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.targetTextBox.Location = new System.Drawing.Point(116, 61);
 			this.targetTextBox.Name = "targetTextBox";
-			this.targetTextBox.Size = new System.Drawing.Size(285, 24);
+			this.targetTextBox.Size = new System.Drawing.Size(514, 24);
 			this.targetTextBox.TabIndex = 1;
 			// 
 			// sortLabel
@@ -254,15 +261,128 @@
 			this.sortComboBox.FormattingEnabled = true;
 			this.sortComboBox.Location = new System.Drawing.Point(116, 227);
 			this.sortComboBox.Name = "sortComboBox";
-			this.sortComboBox.Size = new System.Drawing.Size(285, 23);
-			this.sortComboBox.TabIndex = 111;
+			this.sortComboBox.Size = new System.Drawing.Size(514, 23);
+			this.sortComboBox.TabIndex = 5;
+			// 
+			// motLabel
+			// 
+			this.motLabel.Font = new System.Drawing.Font("Calibri", 14F);
+			this.motLabel.Location = new System.Drawing.Point(12, 312);
+			this.motLabel.Name = "motLabel";
+			this.motLabel.Size = new System.Drawing.Size(98, 42);
+			this.motLabel.TabIndex = 112;
+			this.motLabel.Text = "M. of T.:";
+			this.motLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// subwayCheckBox
+			// 
+			this.subwayCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.subwayCheckBox.Checked = true;
+			this.subwayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.subwayCheckBox.FlatAppearance.BorderSize = 0;
+			this.subwayCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.subwayCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.subwayCheckBox.Location = new System.Drawing.Point(117, 312);
+			this.subwayCheckBox.Name = "subwayCheckBox";
+			this.subwayCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.subwayCheckBox.TabIndex = 113;
+			this.subwayCheckBox.Text = "Subway";
+			this.subwayCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.subwayCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// tramCheckBox
+			// 
+			this.tramCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.tramCheckBox.Checked = true;
+			this.tramCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.tramCheckBox.FlatAppearance.BorderSize = 0;
+			this.tramCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.tramCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.tramCheckBox.Location = new System.Drawing.Point(203, 312);
+			this.tramCheckBox.Name = "tramCheckBox";
+			this.tramCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.tramCheckBox.TabIndex = 114;
+			this.tramCheckBox.Text = "Tram";
+			this.tramCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.tramCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// busCheckBox
+			// 
+			this.busCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.busCheckBox.Checked = true;
+			this.busCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.busCheckBox.FlatAppearance.BorderSize = 0;
+			this.busCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.busCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.busCheckBox.Location = new System.Drawing.Point(289, 312);
+			this.busCheckBox.Name = "busCheckBox";
+			this.busCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.busCheckBox.TabIndex = 115;
+			this.busCheckBox.Text = "Bus";
+			this.busCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.busCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// trainCheckBox
+			// 
+			this.trainCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.trainCheckBox.Checked = true;
+			this.trainCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.trainCheckBox.FlatAppearance.BorderSize = 0;
+			this.trainCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.trainCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.trainCheckBox.Location = new System.Drawing.Point(375, 312);
+			this.trainCheckBox.Name = "trainCheckBox";
+			this.trainCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.trainCheckBox.TabIndex = 116;
+			this.trainCheckBox.Text = "Train";
+			this.trainCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.trainCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// shipCheckBox
+			// 
+			this.shipCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.shipCheckBox.Checked = true;
+			this.shipCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.shipCheckBox.FlatAppearance.BorderSize = 0;
+			this.shipCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.shipCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.shipCheckBox.Location = new System.Drawing.Point(461, 312);
+			this.shipCheckBox.Name = "shipCheckBox";
+			this.shipCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.shipCheckBox.TabIndex = 117;
+			this.shipCheckBox.Text = "Ship";
+			this.shipCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.shipCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// cablecarCheckBox
+			// 
+			this.cablecarCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+			this.cablecarCheckBox.Checked = true;
+			this.cablecarCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cablecarCheckBox.FlatAppearance.BorderSize = 0;
+			this.cablecarCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cablecarCheckBox.Font = new System.Drawing.Font("Calibri", 10F);
+			this.cablecarCheckBox.Location = new System.Drawing.Point(547, 312);
+			this.cablecarCheckBox.Name = "cablecarCheckBox";
+			this.cablecarCheckBox.Size = new System.Drawing.Size(80, 42);
+			this.cablecarCheckBox.TabIndex = 118;
+			this.cablecarCheckBox.Text = "Cablecar";
+			this.cablecarCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.cablecarCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// NewJourneyWindow
 			// 
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(413, 463);
+			this.ClientSize = new System.Drawing.Size(642, 403);
+			this.Controls.Add(this.cablecarCheckBox);
+			this.Controls.Add(this.shipCheckBox);
+			this.Controls.Add(this.trainCheckBox);
+			this.Controls.Add(this.busCheckBox);
+			this.Controls.Add(this.tramCheckBox);
+			this.Controls.Add(this.subwayCheckBox);
+			this.Controls.Add(this.motLabel);
 			this.Controls.Add(this.sortComboBox);
 			this.Controls.Add(this.sortLabel);
 			this.Controls.Add(this.targetTextBox);
@@ -310,5 +430,12 @@
 		private System.Windows.Forms.TextBox targetTextBox;
 		private System.Windows.Forms.Label sortLabel;
 		private System.Windows.Forms.ComboBox sortComboBox;
+		private System.Windows.Forms.Label motLabel;
+		private System.Windows.Forms.CheckBox subwayCheckBox;
+		private System.Windows.Forms.CheckBox tramCheckBox;
+		private System.Windows.Forms.CheckBox busCheckBox;
+		private System.Windows.Forms.CheckBox trainCheckBox;
+		private System.Windows.Forms.CheckBox shipCheckBox;
+		private System.Windows.Forms.CheckBox cablecarCheckBox;
 	}
 }
