@@ -97,7 +97,7 @@
 			this.searchButton.Location = new System.Drawing.Point(496, 364);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(134, 31);
-			this.searchButton.TabIndex = 8;
+			this.searchButton.TabIndex = 15;
 			this.searchButton.Text = "Search";
 			this.searchButton.UseVisualStyleBackColor = true;
 			this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
@@ -285,7 +285,7 @@
 			this.subwayCheckBox.Location = new System.Drawing.Point(117, 312);
 			this.subwayCheckBox.Name = "subwayCheckBox";
 			this.subwayCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.subwayCheckBox.TabIndex = 113;
+			this.subwayCheckBox.TabIndex = 9;
 			this.subwayCheckBox.Text = "Subway";
 			this.subwayCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subwayCheckBox.UseVisualStyleBackColor = true;
@@ -301,7 +301,7 @@
 			this.tramCheckBox.Location = new System.Drawing.Point(203, 312);
 			this.tramCheckBox.Name = "tramCheckBox";
 			this.tramCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.tramCheckBox.TabIndex = 114;
+			this.tramCheckBox.TabIndex = 10;
 			this.tramCheckBox.Text = "Tram";
 			this.tramCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.tramCheckBox.UseVisualStyleBackColor = true;
@@ -317,7 +317,7 @@
 			this.busCheckBox.Location = new System.Drawing.Point(289, 312);
 			this.busCheckBox.Name = "busCheckBox";
 			this.busCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.busCheckBox.TabIndex = 115;
+			this.busCheckBox.TabIndex = 11;
 			this.busCheckBox.Text = "Bus";
 			this.busCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.busCheckBox.UseVisualStyleBackColor = true;
@@ -333,7 +333,7 @@
 			this.trainCheckBox.Location = new System.Drawing.Point(375, 312);
 			this.trainCheckBox.Name = "trainCheckBox";
 			this.trainCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.trainCheckBox.TabIndex = 116;
+			this.trainCheckBox.TabIndex = 12;
 			this.trainCheckBox.Text = "Train";
 			this.trainCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.trainCheckBox.UseVisualStyleBackColor = true;
@@ -349,7 +349,7 @@
 			this.shipCheckBox.Location = new System.Drawing.Point(461, 312);
 			this.shipCheckBox.Name = "shipCheckBox";
 			this.shipCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.shipCheckBox.TabIndex = 117;
+			this.shipCheckBox.TabIndex = 13;
 			this.shipCheckBox.Text = "Ship";
 			this.shipCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.shipCheckBox.UseVisualStyleBackColor = true;
@@ -365,7 +365,7 @@
 			this.cablecarCheckBox.Location = new System.Drawing.Point(547, 312);
 			this.cablecarCheckBox.Name = "cablecarCheckBox";
 			this.cablecarCheckBox.Size = new System.Drawing.Size(80, 42);
-			this.cablecarCheckBox.TabIndex = 118;
+			this.cablecarCheckBox.TabIndex = 14;
 			this.cablecarCheckBox.Text = "Cablecar";
 			this.cablecarCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.cablecarCheckBox.UseVisualStyleBackColor = true;
