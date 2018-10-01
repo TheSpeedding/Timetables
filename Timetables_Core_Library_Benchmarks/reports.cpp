@@ -81,7 +81,7 @@ void Timetables::Benchmarks::get_journeys_report(const Timetables::Structures::d
 
 	cout << endl << date_time::now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
-	Timetables::Algorithms::router_raptor r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers);
+	Timetables::Algorithms::router_raptor r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers, 1.0, bus);
 
 	r.obtain_journeys();
 

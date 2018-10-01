@@ -7,7 +7,8 @@
 namespace Timetables {
 	namespace Structures {
 		enum mean_of_transport { tram = 1, subway = 2, rail = 4, bus = 8, ship = 16, cablecar = 32, gondola = 64, funicular = 128 }; // Mean of the transport.
-		
+		inline mean_of_transport operator& (mean_of_transport a, mean_of_transport b) { return static_cast<mean_of_transport>(static_cast<int>(a) & static_cast<int>(b)); }
+
 		// Class collecting basic information about route.
 		class route_info {
 		private:

@@ -15,8 +15,8 @@ void Timetables::Algorithms::router_raptor::accumulate_routes() {
 	for (auto&& stop : marked_stops_) { // 8th row of pseudocode.
 
 		for (auto&& route : stop->throughgoing_routes()) { // 9th row of pseudocode.
-
-			if (mot_ & route->info().type()) { // Flag for this mean of transport is set on. Continue with accumulating.
+			
+			if (static_cast<int>(mot_ & route->info().type()) > 0) { // Flag for this mean of transport is set on. Continue with accumulating.
 
 				auto some_stop = active_routes_.find(route);
 
@@ -249,7 +249,7 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
-
+		
 		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
 
@@ -277,7 +277,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		marked_stops_.insert(stop); // 5th row of pseudocode.
 		journeys_[0][stop].reset(new footpath_segment(departure, *stop, *stop, 0, nullptr)); // 4th row of pseudocode.
 
-																							 // We are also to reach the stops that are connected with footpaths.
+		// We are also to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_) {
@@ -308,16 +308,10 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 			if (res != journeys_[i].cend()) {
 
-				auto j = journey(res->second);
+				auto inserted = fastest_journeys_.insert(journey(res->second));
 
-				if (/*!j.contains_redundant_footpath()*/ true) {
-
-					auto inserted = fastest_journeys_.insert(j);
-
-					if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
-						fastest_journey = &*inserted.first; // Insert only if unique.
-
-				}
+				if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
+					fastest_journey = &*inserted.first; 
 			}
 
 		}
