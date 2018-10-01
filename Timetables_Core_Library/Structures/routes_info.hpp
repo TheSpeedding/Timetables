@@ -6,8 +6,8 @@
 
 namespace Timetables {
 	namespace Structures {
-		enum mean_of_transport { tram = 0, subway = 1, rail = 2, bus = 3, ship = 4, cablecar = 5, gondola = 6, funicular = 7 }; // Mean of the transport.
-
+		enum mean_of_transport { tram = 1, subway = 2, rail = 4, bus = 8, ship = 16, cablecar = 32, gondola = 64, funicular = 128 }; // Mean of the transport.
+		
 		// Class collecting basic information about route.
 		class route_info {
 		private:

@@ -16,21 +16,25 @@ void Timetables::Algorithms::router_raptor::accumulate_routes() {
 
 		for (auto&& route : stop->throughgoing_routes()) { // 9th row of pseudocode.
 
-			auto some_stop = active_routes_.find(route);
+			if (mot_ & route->info().type()) { // Flag for this mean of transport is set on. Continue with accumulating.
 
-			if (some_stop != active_routes_.cend()) { // 10th row of pseudocode.
+				auto some_stop = active_routes_.find(route);
 
-				if (route->stop_comes_before(*stop, *some_stop->second)) { // 11th row of pseudocode.
+				if (some_stop != active_routes_.cend()) { // 10th row of pseudocode.
 
-					active_routes_[route] = stop; // 11th row of pseudocode.
+					if (route->stop_comes_before(*stop, *some_stop->second)) { // 11th row of pseudocode.
+
+						active_routes_[route] = stop; // 11th row of pseudocode.
+
+					}
 
 				}
 
+				else // 12th row of pseudocode.
+
+					active_routes_.insert(make_pair(route, stop)); // 13th row of pseudocode.
+
 			}
-
-			else // 12th row of pseudocode.
-
-				active_routes_.insert(make_pair(route, stop)); // 13th row of pseudocode.
 
 		}
 

@@ -12,39 +12,18 @@
 #include <locale>
 #include <Windows.h>
 
-#define BENCHMARK false
-
 using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
-using namespace Timetables::SampleApp;
+using namespace Timetables::Benchmarks;
 
 namespace Timetables {
-	namespace SampleApp {
+	namespace Benchmarks {
 		const size_t random_station(const data_feed& feed) {
 			std::mt19937 rng;
 			rng.seed(std::random_device()());
 			std::uniform_int_distribution<std::mt19937::result_type> dist(0, feed.stations().size() - 1);
 			return dist(rng);
-		}
-
-		void cpu_time_micro_benchmark(const data_feed& feed) {
-			auto A = random_station(feed);
-			auto B = random_station(feed);
-			for (int i = 0; i < 1000; i++) {
-				try {
-					router r(feed, A, B, date_time::now(), 1, 10);
-					r.obtain_journeys();
-				}
-				catch (exception ex) {
-					cout << "Unknown exception " << ex.what() << endl; wcout << L"Stations: " << feed.stations().at(A).name() << L" and " << feed.stations().at(B).name() << L"." << endl;
-				}
-				catch (...) {
-					cout << "Unknown error, not an exception." << endl; wcout << L"Stations: " << feed.stations().at(A).name() << L" and " << feed.stations().at(B).name() << L"." << endl;
-				}
-				if (i % 100 == 0)
-					cout << i << endl;
-			}
 		}
 	}
 }
@@ -65,10 +44,6 @@ int main() {
 		SetConsoleOutputCP(GetACP());
 		
 		locale::global(locale("Czech"));
-		
-#if BENCHMARK
-		cpu_time_micro_benchmark(feed); return 0;
-#endif
 
 		wcout << endl << "To obtain a departure board, use the command DB;Name of the station;Number of departures shown." << endl << L"E.g. DB;Malostranské námìstí;5." << endl << endl;
 

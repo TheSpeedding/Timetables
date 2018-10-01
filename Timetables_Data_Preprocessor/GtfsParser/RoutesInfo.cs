@@ -197,7 +197,7 @@ namespace Timetables.Preprocessor
 				if (!(intType >= 0 && intType <= 7))
 					throw new FormatException("Invalid mean of transport.");
 
-				RouteInfo.RouteType type = (RouteInfo.RouteType)intType;
+				RouteInfo.RouteType type = (RouteInfo.RouteType)(1 << intType);
 
                 RouteInfo routeInfo = new RouteInfo(Count, tokens[dic["route_short_name"]], tokens[dic["route_long_name"]], type, tokens[dic["route_color"]]);
 

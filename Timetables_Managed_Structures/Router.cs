@@ -35,7 +35,11 @@ namespace Timetables.Client
 		/// Coefficient that is transfer duration multiplied with.
 		/// </summary>
 		public double TransfersDurationCoefficient { get; }
-		public RouterRequest(uint sourceStationID, uint targetStationID, DateTime departureDateTime, uint transfers, uint count, double coefficient)
+		/// <summary>
+		/// Means of transport that can be used in journey.
+		/// </summary>
+		public MeanOfTransport MeansOfTransport { get; }
+		public RouterRequest(uint sourceStationID, uint targetStationID, DateTime departureDateTime, uint transfers, uint count, double coefficient, MeanOfTransport mot)
 		{
 			SourceStationID = sourceStationID;
 			TargetStationID = targetStationID;
@@ -43,6 +47,7 @@ namespace Timetables.Client
 			MaxTransfers = transfers;
 			Count = count;
 			TransfersDurationCoefficient = coefficient;
+			MeansOfTransport = mot;
 		}
 	}
 

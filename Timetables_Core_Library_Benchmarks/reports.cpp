@@ -5,7 +5,7 @@
 #include "../Timetables_Core_Library/Structures/journey.hpp"
 #include "../Timetables_Core_Library/Structures/date_time.hpp"
 #include "../Timetables_Core_Library/Algorithms/departure_board.hpp"
-#include "../Timetables_Core_Library/Algorithms/router.hpp"
+#include "../Timetables_Core_Library/Algorithms/router_raptor.hpp"
 #include "Reports.hpp"
 #include <Windows.h>
 
@@ -14,7 +14,7 @@ using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
 
-void Timetables::SampleApp::get_departure_board_report(const Timetables::Structures::data_feed& feed, const std::wstring& station_name, const Timetables::Structures::date_time& date_time, const size_t count) {
+void Timetables::Benchmarks::get_departure_board_report(const Timetables::Structures::data_feed& feed, const std::wstring& station_name, const Timetables::Structures::date_time& date_time, const size_t count) {
 	
 	vector<departure> departures;
 
@@ -73,7 +73,7 @@ void Timetables::SampleApp::get_departure_board_report(const Timetables::Structu
 	}
 }
 
-void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::data_feed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::date_time& date_time, const size_t count, const size_t max_transfers) {
+void Timetables::Benchmarks::get_journeys_report(const Timetables::Structures::data_feed& feed, const std::wstring& A, const std::wstring& B, const Timetables::Structures::date_time& date_time, const size_t count, const size_t max_transfers) {
 	
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -81,7 +81,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 
 	cout << endl << date_time::now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
-	router r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers);
+	Timetables::Algorithms::router_raptor r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers);
 
 	r.obtain_journeys();
 
@@ -160,7 +160,7 @@ void Timetables::SampleApp::get_journeys_report(const Timetables::Structures::da
 	SetConsoleTextAttribute(hConsole, 7);	
 }
 
-void Timetables::SampleApp::get_hint(const Timetables::Structures::stations& stations, const std::wstring& name) {
+void Timetables::Benchmarks::get_hint(const Timetables::Structures::stations& stations, const std::wstring& name) {
 
 	cout << endl;
 

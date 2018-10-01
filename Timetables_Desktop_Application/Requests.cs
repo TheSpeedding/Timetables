@@ -65,10 +65,11 @@ namespace Timetables.Application.Desktop
 		/// <param name="transfers">Max transfers.</param>
 		/// <param name="count">Number of journeys.</param>
 		/// <param name="coefficient">Coefficient for the footpaths.</param>
+		/// <param name="mot">Mean of transport.</param>
 		/// <param name="win">Window with request.</param>
 		/// <param name="comp">Comparer for journeys.</param>
 		/// <returns>Window with results</returns>
-		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, NewJourneyWindow win, IComparer<Journey> comp = null)
+		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
@@ -76,7 +77,7 @@ namespace Timetables.Application.Desktop
 			if (source == null || target == null)
 				return null;
 
-			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient);
+			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient, mot);
 			var routerResponse = await SendRouterRequestAsync(routerRequest);
 
 			if (comp != null)
