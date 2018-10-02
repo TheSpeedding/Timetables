@@ -66,7 +66,7 @@ namespace Timetables {
 				std::size_t base = source_stop_->departure();
 				for (auto it = source_stop_ + 1; it < target_stop_; ++it)
 					stops.push_back(std::make_pair(it->arrival() - base, &it->stop()));
-				return move(stops);
+				return std::move(stops);
 			}
 			virtual inline bool outdated() const override { return outdated_; }
 			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const override;

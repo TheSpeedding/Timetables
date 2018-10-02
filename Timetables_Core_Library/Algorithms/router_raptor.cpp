@@ -16,7 +16,7 @@ void Timetables::Algorithms::router_raptor::accumulate_routes() {
 
 		for (auto&& route : stop->throughgoing_routes()) { // 9th row of pseudocode.
 			
-			if (static_cast<int>(mot_ & route->info().type()) > 0) { // Flag for this mean of transport is set on. Continue with accumulating.
+			if (static_cast<int>(mot_ & route->info().type()) != 0) { // Flag for this mean of transport is set on. Continue with accumulating.
 
 				auto some_stop = active_routes_.find(route);
 

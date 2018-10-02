@@ -86,6 +86,7 @@ namespace Timetables.Application.Desktop
 		private MeanOfTransport GetMeanOfTransport()
 		{
 			MeanOfTransport mot = 0;
+			if (busCheckBox.Checked) mot |= MeanOfTransport.Bus;
 			if (subwayCheckBox.Checked) mot |= MeanOfTransport.Subway;
 			if (tramCheckBox.Checked) mot |= MeanOfTransport.Tram;
 			if (trainCheckBox.Checked) mot |= MeanOfTransport.Rail;

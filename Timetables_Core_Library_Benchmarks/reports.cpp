@@ -81,7 +81,7 @@ void Timetables::Benchmarks::get_journeys_report(const Timetables::Structures::d
 
 	cout << endl << date_time::now() << " : Starting journey searching between stops "; wcout << A << L" and " << B << L"." << endl;
 
-	Timetables::Algorithms::router_raptor r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers, 1.0, bus);
+	Timetables::Algorithms::router_raptor r(feed, feed.stations().find_index(A), feed.stations().find_index(B), date_time, count, max_transfers);
 
 	r.obtain_journeys();
 
@@ -139,17 +139,17 @@ void Timetables::Benchmarks::get_journeys_report(const Timetables::Structures::d
 				SetConsoleTextAttribute(hConsole, color);
 
 				cout << "Board the line "; wcout << it->trip()->route().info().short_name(); cout << " at " << it->departure_from_source() << " at ";
-				wcout << it->intermediate_stops().cbegin()->second->name() << " station going ahead to ";
+				wcout << it->source_stop().name() << " station going ahead to ";
 				wcout << it->trip()->route().headsign() << L" station via following stops:" << endl;
 
 				auto intermediate_stops = it->intermediate_stops();
 
-				for (auto it1 = intermediate_stops.cbegin() + 1; it1 != intermediate_stops.cend() - 1; ++it1) {
+				for (auto it1 = intermediate_stops.cbegin(); it1 != intermediate_stops.cend(); ++it1) {
 					wcout << L"  " << it1->second->name(); cout << " with arrival at " << Timetables::Structures::date_time(it->departure_from_source(), SECOND * it1->first) << "." << endl;
 				}
 
 				cout << "Get off the line "; wcout << it->trip()->route().info().short_name(); cout << " at " << it->arrival_at_target() << " in ";
-				wcout << (it->intermediate_stops().cend() - 1)->second->name() << " station." << endl << endl;
+				wcout << it->target_stop().name() << " station." << endl << endl;
 
 				previous_stop = (it->intermediate_stops().cend() - 1)->second;
 
