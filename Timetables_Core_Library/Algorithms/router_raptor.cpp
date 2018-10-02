@@ -245,6 +245,7 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 		return;
 
 	for (int i = 1; i < count_; i++) {
+
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
 
 		if (current_fastest_journey == nullptr) // No journey found.
@@ -310,7 +311,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 				auto inserted = fastest_journeys_.insert(journey(res->second));
 
-				if (fastest_journey == nullptr || *inserted.first < *fastest_journey)
+				if (inserted.second && (fastest_journey == nullptr || *inserted.first < *fastest_journey))
 					fastest_journey = &*inserted.first; 
 			}
 
