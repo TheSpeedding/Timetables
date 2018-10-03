@@ -62,11 +62,14 @@ bool Timetables::Structures::journey::operator< (const Timetables::Structures::j
 		return journey_segments_.size() < other.journey_segments_.size();
 	else if (number_of_stops() != other.number_of_stops())
 		return number_of_stops() < other.number_of_stops();
-	else 
+	else  if (duration_of_transfers() != other.duration_of_transfers())
 		return duration_of_transfers() < other.duration_of_transfers();
+	else
+		return departure_time() < other.departure_time();
 }
 
 std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_later_departure(const Timetables::Structures::date_time& latest_arrival) const {
+
 	auto new_arrival_date = latest_arrival.date();
 
 	const Timetables::Structures::trip* best_trip = trip_;

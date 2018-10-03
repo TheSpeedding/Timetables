@@ -312,7 +312,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 				auto inserted = fastest_journeys_.insert(journey(res->second));
 
 				if (inserted.second && (fastest_journey == nullptr || *inserted.first < *fastest_journey))
-					fastest_journey = &*inserted.first; 
+					fastest_journey = &*inserted.first;
 			}
 
 		}
