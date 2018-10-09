@@ -54,3 +54,10 @@ trip& Timetables::Structures::route::add_trip(const trip & trip) {
 	(trips_.end() - 1)->stop_times_.reserve(stops_sequence_.capacity()); 
 	return *(trips_.end() - 1);
 }
+
+bool Timetables::Structures::route::contains_station(const station& s) const {
+	for (auto&& stop : stops_sequence_)
+		if (&stop->parent_station() == &s)
+			return true;
+	return false;
+}

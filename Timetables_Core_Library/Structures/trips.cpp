@@ -70,13 +70,6 @@ void Timetables::Structures::trips::set_timetables(std::istream&& stop_times, st
 
 }
 
-bool Timetables::Structures::trip::contains_station(const station& s) const {
-	for (auto&& st : stop_times_) 
-		if (&st.stop().parent_station() == &s) 
-			return true; 
-	return false;
-}
-
 date_time Timetables::Structures::trip::find_departure_time_from_station(const station& s) const {
 	for (auto&& st : stop_times_)
 		if (&st.stop().parent_station() == &s)

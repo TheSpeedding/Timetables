@@ -2,6 +2,7 @@
 #define ROUTES_HPP
 
 // #include "../Structures/stops.hpp" // Reference to stops that the route goes through.
+#include "../Structures/stations.hpp" // Reference parameter in method for checking if route contains station.
 #include "../Structures/routes_info.hpp" // Reference to the route info from route class.
 // #include "../Structures/trips.hpp" // Pointers to the trips serving the route.
 #include <vector> // Main data structure in this header file.
@@ -29,6 +30,8 @@ namespace Timetables {
 			inline const route_info& info() const { return info_; } // Info for the route.
 			inline const std::vector<const stop*>& stops() const { return stops_sequence_; } // Stops for the route.
 			inline const std::vector<trip>& trips() const { return trips_; } // Trips for the route-
+
+			bool contains_station(const station& s) const;
 
 			trip& add_trip(const trip& trip); // Adds trip to the route. Used in initialization. Assuming that the trips are sorted by departure time.
 			inline void add_stop(const stop& stop) { stops_sequence_.push_back(&stop); } // Adds stop to the route. Used in initialization.

@@ -310,9 +310,11 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 			if (res != journeys_[i].cend()) {
 
-				auto inserted = fastest_journeys_.insert(journey(res->second));
+				journey found_journey(res->second);
 
-				if (/*inserted.second &&*/ (fastest_journey == nullptr || *inserted.first < *fastest_journey))
+				auto inserted = fastest_journeys_.insert(found_journey);
+
+				if (fastest_journey == nullptr || *inserted.first < *fastest_journey) // No check if journey was added is intended. Otherwise it would broke the algorithm.
 					fastest_journey = &*inserted.first;
 			}
 
