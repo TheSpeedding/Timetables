@@ -10,47 +10,17 @@ Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
 
 	while (js != nullptr) { // Something to process.
 
-		if (js->departure_from_source() == js->arrival_at_target()) { // Duration = 0 seconds.
-			js = js->previous_;
-			continue;
-		}
+		if (js->duration() > 0) { 
 
-		journey_segments_.push_back(js->find_later_departure((**(journey_segments_.cend() - 1)).departure_from_source()));
+			journey_segments_.push_back(js->find_later_departure((**(journey_segments_.cend() - 1)).departure_from_source()));
+
+		}
 
 		js = js->previous_; // Some kind of linked list.
 	}
 
 
 	std::reverse(journey_segments_.begin(), journey_segments_.end());
-}
-
-bool Timetables::Structures::journey::contains_redundant_footpath() const {
-
-	const footpath_segment* previous_footpath = nullptr;
-
-	for (auto it = journey_segments_.cbegin(); it != journey_segments_.cend(); ++it) {
-
-		if ((**it).trip() == nullptr) { // Footpath.
-
-			previous_footpath = static_cast<const footpath_segment*>(&(**it));
-
-			if (&previous_footpath->source_stop().parent_station() == &previous_footpath->target_stop().parent_station()) // Transfer within a station. This is not a redundant footpath.
-				previous_footpath = nullptr;
-		}
-
-		else if (previous_footpath != nullptr) { // Trip.
-			const trip_segment* current_trip = static_cast<const trip_segment*>(&(**it));
-
-			if (current_trip->trip()->contains_station(previous_footpath->source_stop().parent_station()) &&
-				previous_footpath->departure_from_source().time() <= current_trip->trip()->find_departure_time_from_station(previous_footpath->source_stop().parent_station())) // Current trip contains source station from the previous footpath. The trip can be extended to this stop. Therefore, this footpath is redundant.
-				return true;
-
-			previous_footpath = nullptr;
-		}
-
-	}
-
-	return false;
 }
 
 bool Timetables::Structures::journey::operator< (const Timetables::Structures::journey& other) const {
@@ -64,8 +34,17 @@ bool Timetables::Structures::journey::operator< (const Timetables::Structures::j
 		return number_of_stops() < other.number_of_stops();
 	else  if (duration_of_transfers() != other.duration_of_transfers())
 		return duration_of_transfers() < other.duration_of_transfers();
-	else
+	else if (departure_time() != other.departure_time())
 		return departure_time() < other.departure_time();
+
+	// Journeys might look identical, but they might not be. Some of them may use different line.
+
+	else {
+		for (auto it1 = journey_segments_.cbegin(), it2 = other.journey_segments_.cbegin(); it1 != journey_segments_.cend(); ++it1, ++it2) {
+			if ((**it1).trip() != (**it2).trip())
+				return (**it1).trip() < (**it2).trip();
+		}
+	}
 }
 
 std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_later_departure(const Timetables::Structures::date_time& latest_arrival) const {
@@ -97,10 +76,10 @@ std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_late
 
 		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
-		if (date_time(new_arrival_date, st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight()) > latest_arrival)
+		if (date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight()) > latest_arrival)
 			break;
 
-		new_arrival_date_time = date_time(new_arrival_date, st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight());
+		new_arrival_date_time = date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight());
 		
 		s = st.is_operating_in_date_time(date_time(new_arrival_date_time, st.departure() - st.arrival()));
 

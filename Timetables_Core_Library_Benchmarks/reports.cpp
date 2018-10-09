@@ -157,6 +157,8 @@ void Timetables::Benchmarks::get_journeys_report(const Timetables::Structures::d
 		}
 	}
 
+	cout << journeys.size();
+
 	SetConsoleTextAttribute(hConsole, 7);	
 }
 

@@ -91,6 +91,7 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
 
 			}
+
 			if ((arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
 				(arrival_time_A->second->trip() != nullptr && min < arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop and the previous segment is not a footpath.
 				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
@@ -219,7 +220,7 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 
 		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
-		date_time new_departure_date_time(new_departure_date, st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
+		date_time new_departure_date_time(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
 
 		if (new_departure_date_time > arrival) {
 
@@ -283,7 +284,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_) {
 				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first), *stop, *footpath.second, footpath.first * transfers_coefficient_, nullptr));
+				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first * transfers_coefficient_), *stop, *footpath.second, footpath.first * transfers_coefficient_, nullptr));
 			}
 		}
 	}
@@ -301,7 +302,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 	// Adds all the suitable journeys to the map.
 
 	const journey* fastest_journey = nullptr; // Fastest journey found in this round.
-
+	
 	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++)
 		for (auto&& stop : target_.child_stops()) {
 
@@ -311,7 +312,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 				auto inserted = fastest_journeys_.insert(journey(res->second));
 
-				if (inserted.second && (fastest_journey == nullptr || *inserted.first < *fastest_journey))
+				if (/*inserted.second &&*/ (fastest_journey == nullptr || *inserted.first < *fastest_journey))
 					fastest_journey = &*inserted.first;
 			}
 
