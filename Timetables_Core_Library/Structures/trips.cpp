@@ -8,7 +8,7 @@
 using namespace std;
 using namespace Timetables::Structures;
 
-Timetables::Structures::trips::trips(std::istream&& trips, routes_info& routes_info, routes& routes, services& services) {
+Timetables::Structures::trips::trips(std::istream&& trips, routes& routes, services& services) {
 	
 	string token;
 	std::getline(trips, token); // Number of entries.

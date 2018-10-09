@@ -1,4 +1,6 @@
-﻿using System;
+﻿// All of these methods must be in this project, because of localization settings.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

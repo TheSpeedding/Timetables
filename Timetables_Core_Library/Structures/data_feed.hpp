@@ -31,7 +31,7 @@ namespace Timetables {
 				stations_(std::wifstream(path + "/stations.tfd", std::ios::binary)),
 				stops_(std::ifstream(path + "/stops.tfd"), std::ifstream(path + "/footpaths.tfd"), stations_),
 				routes_(std::wifstream(path + "/routes.tfd", std::ios::binary), routes_info_),
-				trips_(std::ifstream(path + "/trips.tfd"), routes_info_, routes_, services_) {
+				trips_(std::ifstream(path + "/trips.tfd"), routes_, services_) {
 				trips_.set_timetables(std::ifstream(path + "/stop_times.tfd"), stops_);
 				routes_.set_stops_for_routes();
 				stops_.set_throughgoing_routes_for_stops(routes_);

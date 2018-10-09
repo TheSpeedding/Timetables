@@ -24,8 +24,8 @@ Timetables::Structures::routes_info::routes_info(std::wistream&& routes_info) {
 
 		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport, Color
 
-		for (size_t i = 0; i < 5; i++)
-			std::getline(routes_info, tokens[i], wchar_t(';'));
+		for (size_t j = 0; j < 5; j++)
+			std::getline(routes_info, tokens[j], wchar_t(';'));
 		
 		route_info r(tokens[1], tokens[2], mean_of_transport(stoi(tokens[3])), stoul(tokens[4], nullptr, 16));
 		

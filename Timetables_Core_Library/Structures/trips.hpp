@@ -39,7 +39,7 @@ namespace Timetables {
 		private:
 			std::vector<trip*> list; // List of all the trips, index of the item is also identificator for the trip.
 		public:
-			trips(std::istream&& trips, routes_info& routes_info, routes& routes, services& services);
+			trips(std::istream&& trips, routes& routes, services& services);
 
 			inline trip& at(std::size_t id) { return *list.at(id); } // Gets the trip with given id.
 			inline const trip& at(std::size_t id) const { return *list.at(id); } // Gets the trip with given id.

@@ -82,11 +82,11 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 			else if (arrival_time_A != (journeys_.cend() - 1)->cend() && (arrival_time_B == (journeys_.cend() - 1)->cend()))
 
-				min = date_time(arrival_time_A->second->arrival_at_target(), duration * transfers_coefficient_);
+				min = date_time(arrival_time_A->second->arrival_at_target(), (int)(duration * transfers_coefficient_) + 1);
 
 			else {
 
-				date_time other(arrival_time_A->second->arrival_at_target(), duration * transfers_coefficient_);
+				date_time other(arrival_time_A->second->arrival_at_target(), (int)(duration * transfers_coefficient_) + 1);
 
 				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
 
@@ -98,7 +98,7 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
 
-				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, duration * transfers_coefficient_, previous));
+				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, (int)(footpath.first * transfers_coefficient_) + 1, previous));
 
 			}
 
@@ -220,9 +220,9 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 
 		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
-		date_time new_departure_date_time(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() >= DAY ? st.departure_since_midnight() % DAY : st.departure_since_midnight());
+		date_time new_departure_date_time(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() % DAY);
 
-		if (new_departure_date_time > arrival) {
+		if (new_departure_date_time >= arrival) {
 
 			service_state s = st.is_operating_in_date_time(new_departure_date_time);
 
@@ -245,7 +245,7 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 	if (fastest_journeys_.size() == 0)
 		return;
 
-	for (int i = 1; i < count_; i++) {
+	for (size_t i = 1; i < count_; i++) {
 
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
 
@@ -259,7 +259,7 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 	}
 
 	auto it = fastest_journeys_.begin();
-	for (int i = 0; i < count_ && it != fastest_journeys_.end(); ++it, i++);
+	for (size_t i = 0; i < count_ && it != fastest_journeys_.end(); ++it, i++);
 
 	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
 }
@@ -284,7 +284,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_) {
 				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, footpath.first * transfers_coefficient_), *stop, *footpath.second, footpath.first * transfers_coefficient_, nullptr));
+				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, (int)(footpath.first * transfers_coefficient_) + 1), *stop, *footpath.second, (int)(footpath.first * transfers_coefficient_) + 1, nullptr));
 			}
 		}
 	}

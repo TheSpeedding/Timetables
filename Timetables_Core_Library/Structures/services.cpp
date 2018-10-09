@@ -39,7 +39,7 @@ service_state Timetables::Structures::service::is_operating_in_date(const date_t
 
 	// Fully optimized for maximal performance.	
 
-	bool operating_on_day_by_default = is_operating_on_day(date.day_in_week());
+	bool operating_on_day_by_default = is_operating_on_day((size_t)date.day_in_week());
 
 	if (operating_on_day_by_default) {
 		if (is_removed_in_date(date))

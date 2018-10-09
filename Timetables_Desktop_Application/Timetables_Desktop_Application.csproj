@@ -248,4 +248,14 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>if not exist $(TargetDir)xslt mkdir $(TargetDir)xslt
+if not exist $(TargetDir)css mkdir $(TargetDir)css
+if not exist $(TargetDir)loc mkdir $(TargetDir)loc
+
+
+xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.xslt" "$(TargetDir)xslt"
+xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.css" "$(TargetDir)css"
+xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(TargetDir)loc"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

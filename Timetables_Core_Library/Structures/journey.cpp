@@ -26,25 +26,38 @@ Timetables::Structures::journey::journey(std::shared_ptr<journey_segment> js) {
 bool Timetables::Structures::journey::operator< (const Timetables::Structures::journey& other) const {
 	if (arrival_time() != other.arrival_time())
 		return arrival_time() < other.arrival_time();
-	else if (duration_without_waiting_times() != other.duration_without_waiting_times())
-		return duration_without_waiting_times() < other.duration_without_waiting_times();
-	else if (journey_segments_.size() != other.journey_segments_.size())
-		return journey_segments_.size() < other.journey_segments_.size();
-	else if (number_of_stops() != other.number_of_stops())
-		return number_of_stops() < other.number_of_stops();
-	else  if (duration_of_transfers() != other.duration_of_transfers())
-		return duration_of_transfers() < other.duration_of_transfers();
+
 	else if (departure_time() != other.departure_time())
 		return departure_time() < other.departure_time();
+	
+	else if (duration_without_waiting_times() != other.duration_without_waiting_times())
+		return duration_without_waiting_times() < other.duration_without_waiting_times();	
+
+	else if (journey_segments_.size() != other.journey_segments_.size())
+		return journey_segments_.size() < other.journey_segments_.size();
+	
+	else if (number_of_stops() != other.number_of_stops())
+		return number_of_stops() < other.number_of_stops();
+
+	else if (duration_of_transfers() != other.duration_of_transfers())
+		return duration_of_transfers() < other.duration_of_transfers();
 
 	// Journeys might look identical, but they might not be. Some of them may use different line.
 
 	else {
 		for (auto it1 = journey_segments_.cbegin(), it2 = other.journey_segments_.cbegin(); it1 != journey_segments_.cend(); ++it1, ++it2) {
-			if ((**it1).trip() != (**it2).trip())
-				return (**it1).trip() < (**it2).trip();
+			if ((**it1).trip() != (**it2).trip()) {
+				if ((**it1).trip() != nullptr && (**it1).trip() != nullptr)
+					return (**it1).trip()->route().info().short_name() < (**it2).trip()->route().info().short_name();
+				else 
+					return (**it1).trip() != nullptr;
+			}
 		}
 	}
+
+	// Ok, they are identical.
+
+	return false;
 }
 
 std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_later_departure(const Timetables::Structures::date_time& latest_arrival) const {
@@ -76,10 +89,10 @@ std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_late
 
 		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
 
-		if (date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight()) > latest_arrival)
+		if (date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() % DAY) > latest_arrival)
 			break;
 
-		new_arrival_date_time = date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() >= DAY ? st.arrival_since_midnight() % DAY : st.arrival_since_midnight());
+		new_arrival_date_time = date_time(date_time(new_arrival_date, DAY * (st.arrival_since_midnight() / DAY)), st.arrival_since_midnight() % DAY);
 		
 		s = st.is_operating_in_date_time(date_time(new_arrival_date_time, st.departure() - st.arrival()));
 

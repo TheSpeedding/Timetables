@@ -28,7 +28,7 @@ namespace Timetables {
 			virtual const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> intermediate_stops() const = 0;
 			virtual inline bool outdated() const = 0;
 			virtual std::shared_ptr<journey_segment> find_later_departure(const Timetables::Structures::date_time& latest_arrival) const = 0;
-			inline std::size_t duration() const { return date_time::difference(arrival_at_target(), departure_from_source()); }
+			inline std::time_t duration() const { return date_time::difference(arrival_at_target(), departure_from_source()); }
 		};
 
 		// Trip segment.
@@ -106,8 +106,8 @@ namespace Timetables {
 				return number;
 			}
 
-			inline const std::size_t duration_of_transfers() const { // Duration of all the footpaths in the journey.
-				std::size_t number = 0;
+			inline const std::time_t duration_of_transfers() const { // Duration of all the footpaths in the journey.
+				std::time_t number = 0;
 				for (auto&& seg : journey_segments_) if (seg->trip() == nullptr) number += date_time::difference(seg->arrival_at_target(), seg->departure_from_source());
 				return number;
 			}
