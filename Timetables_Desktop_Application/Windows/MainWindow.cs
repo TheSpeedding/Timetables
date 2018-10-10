@@ -17,7 +17,7 @@ namespace Timetables.Application.Desktop
 			settingsToolStripMenuItem.Text = Settings.Localization.Settings;
 			journeyToolStripMenuItem.Text = Settings.Localization.Journey;
 			departureBoardToolStripMenuItem.Text = Settings.Localization.DepartureBoard;
-			findDeparturesToolStripMenuItem.Text = Settings.Localization.FindDepartures;
+			findDeparturesToolStripMenuItem.Text = Settings.Localization.FindDeparturesFromTheStation;
 			findjourneyToolStripMenuItem.Text = Settings.Localization.FindJourney;
 			showmapToolStripMenuItem.Text = Settings.Localization.ShowMap;
 			favoritesToolStripMenuItem.Text = Settings.Localization.Favorites;

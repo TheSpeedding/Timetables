@@ -33,6 +33,7 @@
 			this.languageLabel = new System.Windows.Forms.Label();
 			this.themeComboBox = new System.Windows.Forms.ComboBox();
 			this.languageComboBox = new System.Windows.Forms.ComboBox();
+			this.dataDownloadButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// themeLabel
@@ -91,10 +92,24 @@
 			this.languageComboBox.TabIndex = 1;
 			this.languageComboBox.SelectedIndexChanged += new System.EventHandler(this.languageComboBox_SelectedIndexChanged);
 			// 
+			// dataDownloadButton
+			// 
+			this.dataDownloadButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.dataDownloadButton.Font = new System.Drawing.Font("Calibri", 12F);
+			this.dataDownloadButton.Location = new System.Drawing.Point(18, 126);
+			this.dataDownloadButton.Name = "dataDownloadButton";
+			this.dataDownloadButton.Size = new System.Drawing.Size(212, 31);
+			this.dataDownloadButton.TabIndex = 16;
+			this.dataDownloadButton.Text = "Force data download";
+			this.dataDownloadButton.UseVisualStyleBackColor = true;
+			this.dataDownloadButton.Click += new System.EventHandler(this.dataDownloadButton_Click);
+			// 
 			// SettingsWindow
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(244, 261);
+			this.Controls.Add(this.dataDownloadButton);
 			this.Controls.Add(this.languageComboBox);
 			this.Controls.Add(this.themeComboBox);
 			this.Controls.Add(this.languageLabel);
@@ -115,5 +130,6 @@
 		private System.Windows.Forms.Label languageLabel;
 		private System.Windows.Forms.ComboBox themeComboBox;
 		private System.Windows.Forms.ComboBox languageComboBox;
+		private System.Windows.Forms.Button dataDownloadButton;
 	}
 }

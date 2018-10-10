@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Journey>Spojení</Journey>
-  <FindJourney>Najít spojení</FindJourney>
-  <DepartureBoard>Odjezdová tabule</DepartureBoard>
-  <FindDepartures>Najít odjezdy</FindDepartures>
-  <Traffic>Doprava</Traffic>
-  <Lockouts>Výluky</Lockouts>
-  <ExtraordinaryEvents>Mimořádné události</ExtraordinaryEvents>
-  <Settings>Nastavení</Settings>
-  <Theme>Motiv</Theme>
-  <DarkTheme>Tmavý</DarkTheme>
-  <LightTheme>Světlý</LightTheme>
-  <BlueTheme>Modrý</BlueTheme>
-  <Language>Jazyk</Language>
-  <ShowMap>Zobrazit mapu</ShowMap>
-  <Favorites>Oblíbené</Favorites>
-  <ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Bude použito původní nastavení.</ProblemWhileLoadingSettings>
-  <RestartNeeded>Nutný restart</RestartNeeded>
-  <RestartToApplyChanges>Změny se projeví po restartu aplikace.</RestartToApplyChanges>
-  <SourceStop>Start</SourceStop>
-  <TargetStop>Cíl</TargetStop>
-  <TransfersCount>Přestupy</TransfersCount>
-  <LeavingTime>Odjezd</LeavingTime>
-  <Count>Počet</Count>
-  <Search>Hledat</Search>
-  <Station>Stanice</Station>
-  <Departure>Odjezd</Departure>
-  <Departures>Odjezdy</Departures>
-  <Journeys>Spojení</Journeys>
-  <NoTransfers>Žádný přestup</NoTransfers>
-  <OneTransfer>1 přestup</OneTransfer>
-  <Transfers>přestupy</Transfers>
-  <Minute>minuta</Minute>
-  <Minutes>minut</Minutes>
-  <Hour>hodina</Hour>
-  <Hours>hodin</Hours>
-  <Day>den</Day>
-  <Days>dny</Days>
-  <Left>Před</Left>
-  <Ago></Ago>
-  <LeavesIn>Za</LeavesIn>
-  <NewJourney>Nové spojení</NewJourney>
-  <NewDepartureBoard>Nová odjezdová tabule</NewDepartureBoard>
-  <StationNotFound>Stanice nenalezena</StationNotFound>
-  <UnableToFindStation>Nepodařilo se najít stanici s názvem</UnableToFindStation>
-  <Map>Mapa</Map>
-  <Detail>Podrobnosti</Detail>
-  <Print>Tisk</Print>
-  <Transfer>Přestup</Transfer>
-  <Outdated>Neaktuální!</Outdated>
-  <UnreachableHost>Server je momentálně nedostupný. Může být offline, zkuste to znovu později.</UnreachableHost>
-  <Offline>Offline</Offline>
-  <Add>Přidat</Add>
-  <Remove>Odebrat</Remove>
+	<Journey>Spojení</Journey>
+	<FindJourney>Najít spojení</FindJourney>
+	<DepartureBoard>Odjezdová tabule</DepartureBoard>
+	<FindDeparturesFromTheStation>Najít odjezdy ze stanice</FindDeparturesFromTheStation>
+	<Traffic>Doprava</Traffic>
+	<Lockouts>Výluky</Lockouts>
+	<ExtraordinaryEvents>Mimořádné události</ExtraordinaryEvents>
+	<Settings>Nastavení</Settings>
+	<Theme>Motiv</Theme>
+	<DarkTheme>Tmavý</DarkTheme>
+	<LightTheme>Světlý</LightTheme>
+	<BlueTheme>Modrý</BlueTheme>
+	<Language>Jazyk</Language>
+	<ShowMap>Zobrazit mapu</ShowMap>
+	<Favorites>Oblíbené</Favorites>
+	<ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Bude použito původní nastavení.</ProblemWhileLoadingSettings>
+	<RestartNeeded>Nutný restart</RestartNeeded>
+	<RestartToApplyChanges>Změny se projeví po restartu aplikace.</RestartToApplyChanges>
+	<SourceStop>Start</SourceStop>
+	<TargetStop>Cíl</TargetStop>
+	<TransfersCount>Přestupy</TransfersCount>
+	<LeavingTime>Odjezd</LeavingTime>
+	<Count>Počet</Count>
+	<Search>Hledat</Search>
+	<Station>Stanice</Station>
+	<Departure>Odjezd</Departure>
+	<Departures>Odjezdy</Departures>
+	<Journeys>Spojení</Journeys>
+	<NoTransfers>Žádný přestup</NoTransfers>
+	<OneTransfer>1 přestup</OneTransfer>
+	<Transfers>přestupy</Transfers>
+	<Minute>minuta</Minute>
+	<Minutes>minut</Minutes>
+	<Hour>hodina</Hour>
+	<Hours>hodin</Hours>
+	<Day>den</Day>
+	<Days>dny</Days>
+	<Left>Před</Left>
+	<Ago></Ago>
+	<LeavesIn>Za</LeavesIn>
+	<NewJourney>Nové spojení</NewJourney>
+	<NewStationInfo>Nové informace o stanici</NewStationInfo>
+	<StationNotFound>Stanice nenalezena</StationNotFound>
+	<UnableToFindStation>Nepodařilo se najít stanici s názvem</UnableToFindStation>
+	<Map>Mapa</Map>
+	<Detail>Podrobnosti</Detail>
+	<Print>Tisk</Print>
+	<Transfer>Přestup</Transfer>
+	<Outdated>Neaktuální!</Outdated>
+	<UnreachableHost>Server je momentálně nedostupný. Může být offline, zkuste to znovu později.</UnreachableHost>
+	<Offline>Offline</Offline>
+	<Add>Přidat</Add>
+	<Remove>Odebrat</Remove>
 	<Find>Najít</Find>
 	<PleaseWaitDownloading>Data se stahují, počkejte prosím.</PleaseWaitDownloading>
 	<WalkingSpeed>Chůze</WalkingSpeed>
 	<SlowSpeed>Pomalá</SlowSpeed>
-  <MediumSpeed>Střední</MediumSpeed>
+	<MediumSpeed>Střední</MediumSpeed>
 	<FastSpeed>Rychlá</FastSpeed>
 	<UnableToFindRouteInfo>Nepodařilo se najít linku s označením</UnableToFindRouteInfo>
 	<RouteInfoNotFound>Linka nenalezena</RouteInfoNotFound>
@@ -78,4 +78,6 @@
 	<Cablecar>Lanovka</Cablecar>
 	<Ship>Loď</Ship>
 	<Bus>Autobus</Bus>
+	<ForceDataDownload>Vynutit aktualizaci dat</ForceDataDownload>
+	<DataDownloadedSuccessfully>Data úspěšně aktualizována.</DataDownloadedSuccessfully>
 </Localization>

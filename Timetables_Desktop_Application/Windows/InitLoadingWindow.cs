@@ -55,7 +55,7 @@ namespace Timetables.Application.Desktop
 						else if (timerStarted && loadingProgressBar.Value < 100)
 						{
 							Thread.Sleep(30);
-							LoadingProgressCallback("The data are being loaded.", 1);
+							LoadingProgressCallback("Loading data.", 1);
 						}
 					}
 					while (!DataFeedDesktop.Loaded);
@@ -84,7 +84,7 @@ namespace Timetables.Application.Desktop
 					while (loadingProgressBar.Value < 100)
 					{
 						Thread.Sleep(30);
-						LoadingProgressCallback("The data are being loaded.", 1);
+						LoadingProgressCallback("Loading data.", 1);
 					}
 				}
 			});

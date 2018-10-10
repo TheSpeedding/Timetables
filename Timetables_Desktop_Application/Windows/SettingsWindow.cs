@@ -9,7 +9,7 @@ namespace Timetables.Application.Desktop
 {
 	public partial class SettingsWindow : Form
 	{
-		private bool restartNeeded = false;
+		private bool restartNeeded;
 		public SettingsWindow()
 		{
 			InitializeComponent();
@@ -20,6 +20,8 @@ namespace Timetables.Application.Desktop
 
 			languageLabel.Text = Settings.Localization.Language;
 			themeLabel.Text = Settings.Localization.Theme;
+
+			dataDownloadButton.Text = Settings.Localization.ForceDataDownload;
 
 			themeComboBox.Items.Add(Settings.Localization.BlueTheme);
 			themeComboBox.Items.Add(Settings.Localization.DarkTheme);
@@ -37,6 +39,8 @@ namespace Timetables.Application.Desktop
 						languageComboBox.Items.Add(file.Name.Split('.')[0]);
 
 			languageComboBox.SelectedItem = (from object item in languageComboBox.Items where item.ToString() == Settings.Localization.ToString() select item).First();
+
+			restartNeeded = false;
 		}
 
 		private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -74,6 +78,12 @@ namespace Timetables.Application.Desktop
 		{
 			base.OnClosed(e);
 			if (restartNeeded) MessageBox.Show(Settings.Localization.RestartToApplyChanges, Settings.Localization.RestartNeeded, MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		private async void dataDownloadButton_Click(object sender, EventArgs e)
+		{
+			await DataFeedDesktop.DownloadAsync();
+			MessageBox.Show(Settings.Localization.DataDownloadedSuccessfully);
 		}
 	}
 }

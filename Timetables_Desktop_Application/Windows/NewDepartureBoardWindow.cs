@@ -14,7 +14,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 
-			Text = Settings.Localization.NewDepartureBoard;
+			Text = Settings.Localization.NewStationInfo;
 
 			countLabel.Text = Settings.Localization.Count;
 			departureLabel.Text = Settings.Localization.LeavingTime;
