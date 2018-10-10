@@ -73,6 +73,16 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results</returns>
 		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
+			try
+			{
+				await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
+			}
+			catch (System.Net.WebException)
+			{
+				MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
 
@@ -110,7 +120,6 @@ namespace Timetables.Application.Desktop
 				{
 					try
 					{
-						await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
 						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 					}
 					catch (System.Net.WebException)
@@ -135,6 +144,16 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results.</returns>
 		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewDepartureBoardWindow win)
 		{
+			try
+			{
+				await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
+			}
+			catch (System.Net.WebException)
+			{
+				MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
@@ -169,7 +188,6 @@ namespace Timetables.Application.Desktop
 				{
 					try
 					{
-						await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
 						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 					}
 					catch (System.Net.WebException)
