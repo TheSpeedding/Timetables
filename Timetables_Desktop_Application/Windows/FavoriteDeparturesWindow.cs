@@ -114,7 +114,7 @@ namespace Timetables.Application.Desktop
 
 		private void FavoriteDeparturesWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 
 		private void favoritesListBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -8,10 +8,10 @@ Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardM
 	auto departures_native = native_departure_board_->show_departure_board();
 	for (auto&& departure : departures_native) {
 
-		auto intStops = gcnew System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<unsigned long long, unsigned int>>();
+		auto intStops = gcnew System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<unsigned long long, int>>();
 
 		for (auto&& int_stop : departure.following_stops())
-			intStops->Add(System::Collections::Generic::KeyValuePair<unsigned long long, unsigned int>(departure.departure_time().timestamp() + int_stop.first, int_stop.second->id()));
+			intStops->Add(System::Collections::Generic::KeyValuePair<unsigned long long, int>(departure.departure_time().timestamp() + int_stop.first, int_stop.second->id()));
 
 		unsigned long long departure_timestamp = departure.departure_time().timestamp(); // Recast from 32 bit to 64 bit if necessary. Timestamp is defined as time_t.
 

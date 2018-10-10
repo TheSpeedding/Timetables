@@ -61,17 +61,9 @@
     <Compile Include="XmlSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
-      <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
-      <Name>Timetables_Data_Preprocessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Timetables_Managed_Structures\Timetables_Managed_Structures.csproj">
       <Project>{36816c97-7d07-43f9-b68a-f65622639568}</Project>
       <Name>Timetables_Managed_Structures</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Timetables_Managed_Wrappers\Timetables_Managed_Wrappers.vcxproj">
-      <Project>{38537cc2-e538-4f35-aa82-801293139f63}</Project>
-      <Name>Timetables_Managed_Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

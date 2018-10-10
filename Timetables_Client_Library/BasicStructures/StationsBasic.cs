@@ -20,7 +20,7 @@ namespace Timetables.Structures.Basic
 			/// <summary>
 			/// Station ID.
 			/// </summary>
-			public uint ID { get; set; }
+			public int ID { get; set; }
 			/// <summary>
 			/// Name of the station.
 			/// </summary>
@@ -42,7 +42,7 @@ namespace Timetables.Structures.Basic
 			/// Station ID, Name.
 			/// </summary>
 			public override string ToString() => ID + ";" + Name + ";";
-			public StationBasic(uint id, string name)
+			public StationBasic(int id, string name)
 			{
 				ChildStops = new List<StopsBasic.StopBasic>();
 				ID = id;
@@ -73,7 +73,7 @@ namespace Timetables.Structures.Basic
 			Items = new StationBasic[count];
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
 			for (uint i = 0; i < count; i++)
-				Items[i] = new StationBasic(uint.Parse(tokens[2 * i]), tokens[2 * i + 1]);
+				Items[i] = new StationBasic(int.Parse(tokens[2 * i]), tokens[2 * i + 1]);
 			sr.Dispose();
 		}
 		/// <summary>

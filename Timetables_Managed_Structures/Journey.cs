@@ -21,9 +21,9 @@ namespace Timetables.Client
 		/// <summary>
 		/// Stop identificator.
 		/// </summary>
-		public uint StopID { get; set; }
+		public int StopID { get; set; }
 		internal IntermediateStop() { }
-		public IntermediateStop(DateTime arrival, uint stopId)
+		public IntermediateStop(DateTime arrival, int stopId)
 		{
 			Arrival = arrival;
 			StopID = stopId;
@@ -54,7 +54,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Returns number of transfers.
 		/// </summary>
-		public uint TransfersCount { get { return (uint)(JourneySegments.Count <= 1 ? 0 : JourneySegments.Select(j => j is TripSegment).Count() - 1); } }
+		public int TransfersCount { get { return (int)(JourneySegments.Count <= 1 ? 0 : JourneySegments.Select(j => j is TripSegment).Count() - 1); } }
 		/// <summary>
 		/// Returns total waiting time between trip segments.
 		/// </summary>
@@ -134,11 +134,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Source stop identificator.
 		/// </summary>
-		public uint SourceStopID { get; set; }
+		public int SourceStopID { get; set; }
 		/// <summary>
 		/// Target stop identificator.
 		/// </summary>
-		public uint TargetStopID { get; set; }
+		public int TargetStopID { get; set; }
 		/// <summary>
 		/// Departure date time from the source stop.
 		/// </summary>
@@ -160,7 +160,7 @@ namespace Timetables.Client
 	public sealed class FootpathSegment : JourneySegment
 	{
 		internal FootpathSegment() { }
-		public FootpathSegment(uint sourceStopID, uint targetStopID, ulong departureFromSource, ulong arrivalAtTarget) 
+		public FootpathSegment(int sourceStopID, int targetStopID, ulong departureFromSource, ulong arrivalAtTarget) 
 		{
 			SourceStopID = sourceStopID;
 			TargetStopID = targetStopID;
@@ -205,7 +205,7 @@ namespace Timetables.Client
 		/// </summary>
 		public List<IntermediateStop> IntermediateStops { get; set; }
 		internal TripSegment() { }
-		public TripSegment(uint sourceStopID, uint targetStopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, ulong departureFromSource, ulong arrivalAtTarget, List<KeyValuePair<ulong, uint>> intStops)
+		public TripSegment(int sourceStopID, int targetStopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, int meanOfTransport, ulong departureFromSource, ulong arrivalAtTarget, List<KeyValuePair<ulong, int>> intStops)
 		{
 			SourceStopID = sourceStopID;
 			TargetStopID = targetStopID;

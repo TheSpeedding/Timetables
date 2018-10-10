@@ -76,13 +76,22 @@ namespace Timetables.Server
 		/// </summary>
 		public static void Stop()
 		{
-			Router.Stop();
-			DepartureBoard.Stop();
-			BasicData.Stop();
+			Router.StopServer();
+			DepartureBoard.StopServer();
+			BasicData.StopServer();
 
 			IsStopped = true;
 
 			Logging.Log("The server has stopped.");
+		}
+		/// <summary>
+		/// Stops the server.
+		/// </summary>
+		private void StopServer()
+		{
+			ServerListener.Stop();
+			OperationThread.Abort();
+			OperationThread.Join();
 		}
 		/// <summary>
 		/// Method that serves manipulation with the server while running, blocks the current thread.
@@ -153,15 +162,6 @@ namespace Timetables.Server
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public RouterServer(IPAddress address, int port) => CreateServer((TcpClient client) => new RouterProcessing(client).ProcessAsync(), address, port);
-		/// <summary>
-		/// Stops the server.
-		/// </summary>
-		public new void Stop()
-		{
-			ServerListener.Stop();
-			OperationThread.Abort();
-			OperationThread.Join();
-		}
 	}
 
 	/// <summary>
@@ -175,15 +175,6 @@ namespace Timetables.Server
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public BasicDataFeedServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DataFeedProcessing(client).ProcessAsync(), address, port);
-		/// <summary>
-		/// Stops the server.
-		/// </summary>
-		public new void Stop()
-		{
-			ServerListener.Stop();
-			OperationThread.Abort();
-			OperationThread.Join();
-		}
 	}
 
 	/// <summary>
@@ -197,14 +188,5 @@ namespace Timetables.Server
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public DepartureBoardServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DepartureBoardProcessing(client).ProcessAsync(), address, port);
-		/// <summary>
-		/// Stops the server.
-		/// </summary>
-		public new void Stop()
-		{
-			ServerListener.Stop();
-			OperationThread.Abort();
-			OperationThread.Join();
-		}
 	}
 }

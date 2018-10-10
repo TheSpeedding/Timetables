@@ -13,21 +13,21 @@ namespace Timetables.Client
 		private static readonly string GoogleMapsApiKey = "AIzaSyB05TDGoGzSk_jzTvWYocWD_k1CiLuCgoY";
 		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Departure departure)
 		{
-			yield return DataFeed.Basic.Stops.FindByIndex(departure.StopID);
+			yield return DataFeedClient.Basic.Stops.FindByIndex(departure.StopID);
 			foreach (var @is in departure.IntermediateStops)
-				yield return DataFeed.Basic.Stops.FindByIndex(@is.StopID);
+				yield return DataFeedClient.Basic.Stops.FindByIndex(@is.StopID);
 		}
 		private static IEnumerable<StopsBasic.StopBasic> GetStops(this TripSegment ts)
 		{
-			yield return DataFeed.Basic.Stops.FindByIndex(ts.SourceStopID);
+			yield return DataFeedClient.Basic.Stops.FindByIndex(ts.SourceStopID);
 			foreach (var @is in ts.IntermediateStops)
-				yield return DataFeed.Basic.Stops.FindByIndex(@is.StopID);
-			yield return DataFeed.Basic.Stops.FindByIndex(ts.TargetStopID);
+				yield return DataFeedClient.Basic.Stops.FindByIndex(@is.StopID);
+			yield return DataFeedClient.Basic.Stops.FindByIndex(ts.TargetStopID);
 		}
 		private static IEnumerable<StopsBasic.StopBasic> GetStops(this FootpathSegment fs)
 		{
-			yield return DataFeed.Basic.Stops.FindByIndex(fs.SourceStopID);
-			yield return DataFeed.Basic.Stops.FindByIndex(fs.TargetStopID);
+			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.SourceStopID);
+			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.TargetStopID);
 		}
 		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Journey journey)
 		{
@@ -82,7 +82,7 @@ namespace Timetables.Client
 			double lat, lon;
 			int zoom;
 
-			if (double.IsNaN(DataFeed.GeoWatcher.Position.Location.Latitude) || double.IsNaN(DataFeed.GeoWatcher.Position.Location.Longitude))
+			if (double.IsNaN(DataFeedClient.GeoWatcher.Position.Location.Latitude) || double.IsNaN(DataFeedClient.GeoWatcher.Position.Location.Longitude))
 			{
 				lat = stops.GetAverageLatitude();
 				lon = stops.GetAverageLongitude();
@@ -90,8 +90,8 @@ namespace Timetables.Client
 			}
 			else
 			{
-				lat = DataFeed.GeoWatcher.Position.Location.Latitude;
-				lon = DataFeed.GeoWatcher.Position.Location.Longitude;
+				lat = DataFeedClient.GeoWatcher.Position.Location.Latitude;
+				lon = DataFeedClient.GeoWatcher.Position.Location.Longitude;
 				zoom = 17;
 			}
 

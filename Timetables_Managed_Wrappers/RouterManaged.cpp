@@ -18,11 +18,11 @@ Timetables::Client::RouterResponse^ Timetables::Interop::RouterManaged::ShowJour
 
 			else { // Trip segment.
 
-				auto intStops = gcnew System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<unsigned long long, unsigned int>>();
+				auto intStops = gcnew System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<unsigned long long, int>>();
 
 				for (auto&& stop : js->intermediate_stops()) {
 					unsigned long long timestamp = stop.first + js->departure_from_source().timestamp(); // Recast from 32 bit to 64 bit if necessary. Timestamp is defined as time_t.
-					intStops->Add(System::Collections::Generic::KeyValuePair<unsigned long long, unsigned int>(timestamp, stop.second->id()));
+					intStops->Add(System::Collections::Generic::KeyValuePair<unsigned long long, int>(timestamp, stop.second->id()));
 				}
 
 				unsigned long long departure_timestamp = js->departure_from_source().timestamp(); // Recast from 32 bit to 64 bit if necessary. Timestamp is defined as time_t.

@@ -66,7 +66,7 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 		for (auto&& footpath : stop_A->footpaths()) { // 25th row of pseudocode.
 
-			int duration = footpath.first;
+			int duration = (int)(footpath.first * transfers_coefficient_) + 1;
 
 			const stop* stop_B = footpath.second;
 
@@ -82,13 +82,13 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 			else if (arrival_time_A != (journeys_.cend() - 1)->cend() && (arrival_time_B == (journeys_.cend() - 1)->cend()))
 
-				min = date_time(arrival_time_A->second->arrival_at_target(), (int)(duration * transfers_coefficient_) + 1);
+				min = date_time(arrival_time_A->second->arrival_at_target(), duration);
 
 			else {
 
-				date_time other(arrival_time_A->second->arrival_at_target(), (int)(duration * transfers_coefficient_) + 1);
+				date_time arrival_with_transfer(arrival_time_A->second->arrival_at_target(), duration);
 
-				min = arrival_time_B->second->arrival_at_target() <= other ? arrival_time_B->second->arrival_at_target() : other;
+				min = arrival_time_B->second->arrival_at_target() <= arrival_with_transfer ? arrival_time_B->second->arrival_at_target() : arrival_with_transfer;
 
 			}
 
@@ -98,7 +98,7 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
 
-				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, (int)(footpath.first * transfers_coefficient_) + 1, previous));
+				(journeys_.end() - 1)->operator[](stop_B).reset(new footpath_segment(min, *stop_A, *stop_B, duration, previous));
 
 			}
 

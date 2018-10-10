@@ -33,7 +33,7 @@ namespace Timetables.Client
 
 			foreach (XElement element in elementsToChange)
 			{
-				element.Value = DataFeed.Basic.Stops.FindByIndex(uint.Parse(element.Value)).Name;
+				element.Value = DataFeedClient.Basic.Stops.FindByIndex(int.Parse(element.Value)).Name;
 				element.Name = element.Name.LocalName.Replace("ID", "Name");
 			}
 			

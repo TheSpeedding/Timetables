@@ -80,7 +80,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Connects host to the router server.
 		/// </summary>
-		protected override async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.RouterPortNumber);
+		protected override async Task ConnectAsync() => await ConnectAsync(DataFeedClient.ServerIpAddress, DataFeedClient.RouterPortNumber);
 	}
 	/// <summary>
 	/// Specialized class for departure board processing.
@@ -90,7 +90,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Connects host to the departure board server.
 		/// </summary>
-		protected override async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.DepartureBoardPortNumber);
+		protected override async Task ConnectAsync() => await ConnectAsync(DataFeedClient.ServerIpAddress, DataFeedClient.DepartureBoardPortNumber);
 	}
 	/// <summary>
 	/// Specialized class for basic data downloading.
@@ -100,6 +100,6 @@ namespace Timetables.Client
 		/// <summary>
 		/// Connects host to the basic data feed server.
 		/// </summary>
-		protected override async Task ConnectAsync() => await ConnectAsync(DataFeed.ServerIpAddress, DataFeed.BasicDataPortNumber);
+		protected override async Task ConnectAsync() => await ConnectAsync(DataFeedClient.ServerIpAddress, DataFeedClient.BasicDataPortNumber);
 	}
 }

@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 			
 			await Task.Run(async () =>
 			{
-				var loadingThread = DataFeed.DownloadAsync(false, Settings.TimeoutDuration);
+				var loadingThread = DataFeedDesktop.DownloadAsync(false, Settings.TimeoutDuration);
 				bool timerStarted = false;
 
 				try
@@ -46,7 +46,7 @@ namespace Timetables.Application.Desktop
 						if (loadingThread.IsFaulted)
 							throw loadingThread.Exception;
 
-						if (!timerStarted && (DataFeed.Downloaded || !DataFeed.OfflineMode))
+						if (!timerStarted && (DataFeedDesktop.Downloaded || !DataFeedDesktop.OfflineMode))
 							timerStarted = true;
 
 						else if (timerStarted && loadingProgressBar.Value > 95)
@@ -58,7 +58,7 @@ namespace Timetables.Application.Desktop
 							LoadingProgressCallback("The data are being loaded.", 1);
 						}
 					}
-					while (!DataFeed.Loaded);
+					while (!DataFeedDesktop.Loaded);
 				}
 
 				catch (AggregateException ex)

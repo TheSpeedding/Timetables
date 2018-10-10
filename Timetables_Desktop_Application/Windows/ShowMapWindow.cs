@@ -22,13 +22,13 @@ namespace Timetables.Application.Desktop
 			Settings.Theme.Apply(this);			
 			Text = Settings.Localization.Map;
 			resultsWebBrowser.ObjectForScripting = new Interop.GoogleMapsScripting.General();
-			resultsWebBrowser.DocumentText = GoogleMaps.GetMapWithMarkers(DataFeed.Basic.Stops);
+			resultsWebBrowser.DocumentText = GoogleMaps.GetMapWithMarkers(DataFeedDesktop.Basic.Stops);
 		}
 		public ShowMapWindow(Departure departure)
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-			Text = $"{ Settings.Localization.Map } - { Settings.Localization.Departure } - {  DataFeed.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Map } - { Settings.Localization.Departure } - {  DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 			resultsWebBrowser.ObjectForScripting = new Interop.GoogleMapsScripting.Departure(departure);
 			resultsWebBrowser.DocumentText = GoogleMaps.GetMapWithMarkersAndPolylines(departure);
 		}
@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-			Text = $"{ Settings.Localization.Map } - { Settings.Localization.Journey } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Map } - { Settings.Localization.Journey } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 			resultsWebBrowser.ObjectForScripting = new Interop.GoogleMapsScripting.Journey(journey);
 			resultsWebBrowser.DocumentText = GoogleMaps.GetMapWithMarkersAndPolylines(journey);
 		}

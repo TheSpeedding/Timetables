@@ -21,7 +21,7 @@ namespace Timetables.Structures.Basic
 			/// <summary>
 			/// Stop ID.
 			/// </summary>
-			public uint ID { get; set; }
+			public int ID { get; set; }
 			/// <summary>
 			/// Parent station.
 			/// </summary>
@@ -42,7 +42,7 @@ namespace Timetables.Structures.Basic
 			/// List of all routes that goes through this stop.
 			/// </summary>
 			public List<RoutesInfoBasic.RouteInfoBasic> ThroughgoingRoutes { get; set; }
-			public StopBasic(uint id, StationsBasic.StationBasic station, double lat, double lon, List<RoutesInfoBasic.RouteInfoBasic> routes)
+			public StopBasic(int id, StationsBasic.StationBasic station, double lat, double lon, List<RoutesInfoBasic.RouteInfoBasic> routes)
 			{
 				ID = id;
 				ParentStation = station;
@@ -94,7 +94,7 @@ namespace Timetables.Structures.Basic
 				foreach (var route in tokens[5 * i + 4].Split('`'))
 					if (route != "")
 						r.Add(routes[int.Parse(route)]);
-				var stop = new StopBasic(uint.Parse(tokens[5 * i]), stations[int.Parse(tokens[5 * i + 1])], double.Parse(tokens[5 * i + 2], System.Globalization.CultureInfo.InvariantCulture), double.Parse(tokens[5 * i + 3], System.Globalization.CultureInfo.InvariantCulture), r);
+				var stop = new StopBasic(int.Parse(tokens[5 * i]), stations[int.Parse(tokens[5 * i + 1])], double.Parse(tokens[5 * i + 2], System.Globalization.CultureInfo.InvariantCulture), double.Parse(tokens[5 * i + 3], System.Globalization.CultureInfo.InvariantCulture), r);
 				Items[i] = stop;
 				stations[int.Parse(tokens[5 * i + 1])].ChildStops.Add(stop);
 			}
@@ -115,7 +115,7 @@ namespace Timetables.Structures.Basic
 		/// Returns stop represented by the index.
 		/// </summary>
 		/// <param name="index">Index of the stop.</param>
-		public StopBasic FindByIndex(uint index) => this[(int)index];
+		public StopBasic FindByIndex(int index) => this[(int)index];
 		/// <summary>
 		/// Writes basic data into given stream.
 		/// </summary>

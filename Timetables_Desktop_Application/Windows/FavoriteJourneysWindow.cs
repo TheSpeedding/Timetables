@@ -124,8 +124,8 @@ namespace Timetables.Application.Desktop
 
 		private void FavoriteJourneysWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeed.Basic.Stations);
-			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 
 		private void favoritesListBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -73,7 +73,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (uint)transfersNumericUpDown.Value, (uint)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
+			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (int)transfersNumericUpDown.Value, (int)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -111,8 +111,8 @@ namespace Timetables.Application.Desktop
 
 		private void NewJourneyWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeed.Basic.Stations);
-			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 	}
 }

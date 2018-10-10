@@ -20,7 +20,7 @@ namespace Timetables.Interop
 		public sealed class General : GoogleMapsScripting
 		{
 			protected override DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop) => DateTime.Now;
-			public override string ShowArrivalTime(uint stopId) => string.Empty;
+			public override string ShowArrivalTime(int stopId) => string.Empty;
 			public override string ShowArrivalConstant() => string.Empty;
 			protected override bool ShowDeparturesFromStation() => false;
 		}
@@ -34,15 +34,15 @@ namespace Timetables.Interop
 			{
 				foreach (var js in journey.JourneySegments)
 				{
-					if (DataFeed.Basic.Stops.FindByIndex(js.SourceStopID).ParentStation.ID == stop.ParentStation.ID) return js.DepartureDateTime;
+					if (DataFeedDesktop.Basic.Stops.FindByIndex(js.SourceStopID).ParentStation.ID == stop.ParentStation.ID) return js.DepartureDateTime;
 
 					if (js is TripSegment)
 						foreach (var @is in (js as TripSegment).IntermediateStops)
 						{
-							if (DataFeed.Basic.Stops.FindByIndex(@is.StopID).ParentStation.ID == stop.ParentStation.ID) return @is.Arrival;
+							if (DataFeedDesktop.Basic.Stops.FindByIndex(@is.StopID).ParentStation.ID == stop.ParentStation.ID) return @is.Arrival;
 						}
 
-					if (DataFeed.Basic.Stops.FindByIndex(js.TargetStopID).ParentStation.ID == stop.ParentStation.ID) return js.ArrivalDateTime;
+					if (DataFeedDesktop.Basic.Stops.FindByIndex(js.TargetStopID).ParentStation.ID == stop.ParentStation.ID) return js.ArrivalDateTime;
 				}
 
 				throw new ArgumentException("Stop ID not found in the journey.");
@@ -56,19 +56,19 @@ namespace Timetables.Interop
 			public Departure(Client.Departure departure) => this.departure = departure;
 			protected override DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop)
 			{
-				if (stop.ParentStation.ID == DataFeed.Basic.Stops.FindByIndex(departure.StopID).ParentStation.ID)
+				if (stop.ParentStation.ID == DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).ParentStation.ID)
 					return departure.DepartureDateTime;
 				else
-					return departure.IntermediateStops.Find(s => DataFeed.Basic.Stops.FindByIndex(s.StopID).ParentStation.ID == stop.ParentStation.ID).Arrival;
+					return departure.IntermediateStops.Find(s => DataFeedDesktop.Basic.Stops.FindByIndex(s.StopID).ParentStation.ID == stop.ParentStation.ID).Arrival;
 			}
 		}
 		protected abstract DateTime GetEarliestDepartureDateTime(StopsBasic.StopBasic stop);		
-		public string ShowDepartures(uint stopId)
+		public string ShowDepartures(int stopId)
 		{
-			DateTime dt = GetEarliestDepartureDateTime(DataFeed.Basic.Stops.FindByIndex(stopId));
+			DateTime dt = GetEarliestDepartureDateTime(DataFeedDesktop.Basic.Stops.FindByIndex(stopId));
 
 			bool isStation = ShowDeparturesFromStation();
-			uint newId = isStation ? DataFeed.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
+			int newId = isStation ? DataFeedDesktop.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
 
 			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new DepartureBoardRequest(newId, dt, 5, isStation)));
 
@@ -76,7 +76,7 @@ namespace Timetables.Interop
 		}
 		protected virtual bool ShowDeparturesFromStation() => true;
 		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
-		public virtual string ShowArrivalTime(uint stopId) => GetEarliestDepartureDateTime(DataFeed.Basic.Stops.FindByIndex(stopId)).ToShortTimeString();
+		public virtual string ShowArrivalTime(int stopId) => GetEarliestDepartureDateTime(DataFeedDesktop.Basic.Stops.FindByIndex(stopId)).ToShortTimeString();
 		public string NoDepartures() => Settings.Localization.NoDeparturesFromThisStop;
 	}
 	/// <summary>
@@ -260,7 +260,7 @@ namespace Timetables.Interop
 		/// </summary>
 		/// <param name="id">ID of the stop.</param>
 		/// <returns>Name of the stop.</returns>
-		public string ReplaceIdWithName(uint id) => DataFeed.Basic.Stops.FindByIndex(id).Name;
+		public string ReplaceIdWithName(int id) => DataFeedDesktop.Basic.Stops.FindByIndex(id).Name;
 
 		/// <summary>
 		/// Returns localized string constant.

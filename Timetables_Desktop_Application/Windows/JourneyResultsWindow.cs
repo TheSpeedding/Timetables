@@ -37,7 +37,7 @@ namespace Timetables.Application.Desktop
 		{
 			Results = new RouterResponse(new List<Journey> { journey });
 
-			Text = $"{ Settings.Localization.Journey } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeed.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Journey } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = Results.Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
 		}

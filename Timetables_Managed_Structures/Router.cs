@@ -14,11 +14,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Source station identificator.
 		/// </summary>
-		public uint SourceStationID { get; }
+		public int SourceStationID { get; }
 		/// <summary>
 		/// Target station identificator.
 		/// </summary>
-		public uint TargetStationID { get; }
+		public int TargetStationID { get; }
 		/// <summary>
 		/// Earliest departure date time.
 		/// </summary>
@@ -26,11 +26,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Max transfers in the journey.
 		/// </summary>
-		public uint MaxTransfers { get; }
+		public int MaxTransfers { get; }
 		/// <summary>
 		/// Number of journeys to find.
 		/// </summary>
-		public uint Count { get; }
+		public int Count { get; }
 		/// <summary>
 		/// Coefficient that is transfer duration multiplied with.
 		/// </summary>
@@ -39,7 +39,7 @@ namespace Timetables.Client
 		/// Means of transport that can be used in journey.
 		/// </summary>
 		public MeanOfTransport MeansOfTransport { get; }
-		public RouterRequest(uint sourceStationID, uint targetStationID, DateTime departureDateTime, uint transfers, uint count, double coefficient, MeanOfTransport mot)
+		public RouterRequest(int sourceStationID, int targetStationID, DateTime departureDateTime, int transfers, int count, double coefficient, MeanOfTransport mot)
 		{
 			SourceStationID = sourceStationID;
 			TargetStationID = targetStationID;

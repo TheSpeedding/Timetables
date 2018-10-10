@@ -3,16 +3,14 @@ using System.Device.Location;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
-using Timetables.Preprocessor;
 
 namespace Timetables.Client
 {
 	/// <summary>
 	/// Class offering data feed for GUI applications.
 	/// </summary>
-	public static class DataFeed
+	public class DataFeedClient
 	{
-		private volatile static Interop.DataFeedManaged fullData = null;
 		private volatile static Structures.Basic.DataFeedBasic basicData = null;
 		/// <summary>
 		/// Geowatcher to retrieve current location.
@@ -21,38 +19,19 @@ namespace Timetables.Client
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
-		public static bool Loaded { get; private set; } = false;
+		public static bool Loaded { get; protected set; } = false;
 		/// <summary>
 		/// Indicates whether the data are downloaded.
 		/// </summary>
-		public static bool Downloaded { get; private set; } = false;
+		public static bool Downloaded { get; protected set; } = false;
 		/// <summary>
 		/// Basic data feed.
 		/// </summary>
 		public static Structures.Basic.DataFeedBasic Basic => basicData ?? throw new NullReferenceException("Basic data not initialized correctly.");
 		/// <summary>
-		/// Full data feed.
-		/// </summary>
-		public static Interop.DataFeedManaged Full
-		{
-			get
-			{
-				if (!OfflineMode) throw new NotSupportedException("The application is running in the offline mode. Cannot access data.");
-				return fullData ?? throw new NullReferenceException("Basic data not initialized correctly.");
-			}
-		}
-		/// <summary>
-		/// Path to the data source.
-		/// </summary>
-		public static Uri FullDataSource { get; set; }
-		/// <summary>
-		/// Indicates whether application is working in offline mode.
-		/// </summary>
-		public static bool OfflineMode { get; set; }
-		/// <summary>
 		/// Server IP address. Only relevant in online mode.
 		/// </summary>
-		public static System.Net.IPAddress ServerIpAddress { get; set; }
+		public static IPAddress ServerIpAddress { get; set; }
 		/// <summary>
 		/// End point of router server. Only relevant in online mode.
 		/// </summary>
@@ -89,17 +68,20 @@ namespace Timetables.Client
 		/// <summary>
 		/// Decides whether the computer is connected to the Internet.
 		/// </summary>
-		private static bool IsConnected()
+		protected static bool IsConnected
 		{
-			try
+			get
 			{
-				using (var client = new System.Net.WebClient())
-				using (client.OpenRead("http://clients3.google.com/generate_204"))
-					return true;
-			}
-			catch
-			{
-				return false;
+				try
+				{
+					using (var client = new System.Net.WebClient())
+					using (client.OpenRead("http://clients3.google.com/generate_204"))
+						return true;
+				}
+				catch
+				{
+					return false;
+				}
 			}
 		}
 		/// <summary>
@@ -109,66 +91,49 @@ namespace Timetables.Client
 		{
 			Downloaded = false;
 
-			GeoWatcher.TryStart(false, TimeSpan.FromSeconds(5));
-
-			await Task.Delay(10); // This is temporary "bugfix". There is some race condition in Timetables.Application.Desktop.InitLoadingWindow.
-
-			// Offline mode.
-
-			if (OfflineMode)
+			try
 			{
-				if ((!System.IO.Directory.Exists("data") || !System.IO.Directory.Exists("basic") || forceDownload || (IsUpdateNeeded && IsConnected())))
-					try
-					{
-						Preprocessor.DataFeed.GetAndTransformDataFeed<GtfsDataFeed>(FullDataSource);
-					}
-					catch
-					{
-						throw new ArgumentException("Fatal error. Cannot process the data.");
-					}
-			}
+				Structures.Basic.DataFeedBasicResponse response = null;
 
-			// Online mode.
-
-			else
-			{
 				try
 				{
-					Structures.Basic.DataFeedBasicResponse response = null;
-
-					try
-					{
-						using (var sr = new System.IO.StreamReader("basic/.version"))
-							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), timeout);
-					}
-
-					catch (Exception ex)
-					{
-						if (ex is WebException) // Server offline.
-							throw;
-
-						else // Data does not exist or the version file is corrupted.
-							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), timeout);
-					}
-
-
-					if (response.ShouldBeUpdated)
-						response.Data.Save();
+					using (var sr = new System.IO.StreamReader("basic/.version"))
+						response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), timeout);
 				}
 
 				catch (Exception ex)
 				{
-					if (ex is WebException) // Server offline.
+					if (ex is WebException && (forceDownload || !System.IO.Directory.Exists("basic/"))) // Server offline and data does not exist. Cannot continue.
 						throw;
 
-					else
-						throw new ArgumentException("Fatal error. Cannot process the data.");
+					else if (ex is System.IO.IOException) // Data does not exist or the version file is corrupted.
+						try
+						{
+							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), timeout);
+						}
+						catch
+						{
+							// Some data exists, we do not have to do anything.
+						}
 				}
+
+
+				if (response != null && response.ShouldBeUpdated)
+					response.Data.Save();
+			}
+
+			catch (Exception ex)
+			{
+				if (ex is WebException) // Server offline.
+					throw;
+
+				else
+					throw new ArgumentException("Fatal error. Cannot process the data.");
 			}
 
 			Downloaded = true;
 
-			Load();			
+			Load();
 		}
 		/// <summary>
 		/// Updates data feed.
@@ -176,13 +141,10 @@ namespace Timetables.Client
 		public static void Load()
 		{
 			Loaded = false;
-						
-			basicData = new Structures.Basic.DataFeedBasic();
 
-			if (OfflineMode)
-			{
-				fullData = new Interop.DataFeedManaged();
-			}
+			GeoWatcher.TryStart(false, TimeSpan.FromSeconds(5));
+
+			basicData = new Structures.Basic.DataFeedBasic();
 
 			Loaded = true;
 		}

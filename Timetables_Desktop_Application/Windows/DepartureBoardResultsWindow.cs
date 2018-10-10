@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 		{
 			Results = new DepartureBoardResponse(new List<Departure> { departure });
 
-			Text = $"{ Settings.Localization.Departure } - {  DataFeed.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Departure } - {  DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = Results.Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
 		}

@@ -1,4 +1,4 @@
-﻿// All of these methods must be in this project, because of localization settings.
+﻿// All of these methods must be in this project, because of localization settings. Requests cannot be in Client library, since they need some native methods (C++/CLI), unreachable from mobile app.
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace Timetables.Application.Desktop
 		/// <returns>Station object.</returns>
 		public static Structures.Basic.StationsBasic.StationBasic GetStationFromString(string name)
 		{
-			Structures.Basic.StationsBasic.StationBasic source = DataFeed.Basic.Stations.FindByName(name);
+			Structures.Basic.StationsBasic.StationBasic source = DataFeedDesktop.Basic.Stations.FindByName(name);
 
 			if (source == null)
 				MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + name, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -50,7 +50,7 @@ namespace Timetables.Application.Desktop
 			if (string.IsNullOrEmpty(label))
 				return null;
 
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeed.Basic.RoutesInfo.FindByLabel(label);
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeedDesktop.Basic.RoutesInfo.FindByLabel(label);
 
 			if (route == null)
 				MessageBox.Show(Settings.Localization.UnableToFindRouteInfo + ": " + label, Settings.Localization.RouteInfoNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -71,7 +71,7 @@ namespace Timetables.Application.Desktop
 		/// <param name="win">Window with request.</param>
 		/// <param name="comp">Comparer for journeys.</param>
 		/// <returns>Window with results</returns>
-		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, uint transfers, uint count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
+		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
@@ -82,7 +82,7 @@ namespace Timetables.Application.Desktop
 			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient, mot);
 			var routerResponse = await SendRouterRequestAsync(routerRequest);
 
-			if (comp != null)
+			if (comp != null && routerResponse != null)
 				routerResponse.Journeys.Sort(comp);
 
 			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt, win);
@@ -92,11 +92,11 @@ namespace Timetables.Application.Desktop
 		{
 			RouterResponse routerResponse = null;
 
-			if (DataFeed.OfflineMode)
+			if (DataFeedDesktop.OfflineMode)
 			{
 				await Task.Run(() =>
 				{
-					using (var routerProcessing = new Interop.RouterManaged(DataFeed.Full, routerRequest))
+					using (var routerProcessing = new Interop.RouterManaged(DataFeedDesktop.Full, routerRequest))
 					{
 						routerProcessing.ObtainJourneys();
 						routerResponse = routerProcessing.ShowJourneys();
@@ -110,6 +110,7 @@ namespace Timetables.Application.Desktop
 				{
 					try
 					{
+						await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
 						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 					}
 					catch (System.Net.WebException)
@@ -132,7 +133,7 @@ namespace Timetables.Application.Desktop
 		/// <param name="routeLabel">Route label.</param>
 		/// <param name="win">Window with request.</param>
 		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, uint count, bool isStation, string routeLabel, NewDepartureBoardWindow win)
+		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewDepartureBoardWindow win)
 		{
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
@@ -150,11 +151,11 @@ namespace Timetables.Application.Desktop
 		{
 			DepartureBoardResponse dbResponse = null;
 
-			if (DataFeed.OfflineMode)
+			if (DataFeedDesktop.OfflineMode)
 			{
 				await Task.Run(() =>
 				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
+					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
 					{
 						dbProcessing.ObtainDepartureBoard();
 						dbResponse = dbProcessing.ShowDepartureBoard();
@@ -168,6 +169,7 @@ namespace Timetables.Application.Desktop
 				{
 					try
 					{
+						await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
 						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 					}
 					catch (System.Net.WebException)

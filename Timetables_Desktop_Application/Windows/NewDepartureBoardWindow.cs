@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendDepartureBoardRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (uint)countNumericUpDown.Value, true, lineComboBox.Text, this);
+			var window = await Requests.SendDepartureBoardRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (int)countNumericUpDown.Value, true, lineComboBox.Text, this);
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -41,21 +41,21 @@ namespace Timetables.Application.Desktop
 		private void lineComboBox_DropDown(object sender, EventArgs e)
 		{
 			lineComboBox.Items.Clear();
-			var station = DataFeed.Basic.Stations.FindByName(stationTextBox.Text);
+			var station = DataFeedDesktop.Basic.Stations.FindByName(stationTextBox.Text);
 			if (station != null)
 				lineComboBox.Items.AddRange(station.GetThroughgoingRoutes().Select(r => r.Label).Distinct().ToArray());
 		}
 
 		private void NewDepartureBoardWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeed.Basic.Stations);
+			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 
 		private void stationTextBox_TextChanged(object sender, EventArgs e)
 		{
 			lineComboBox.Items.Clear();
 			lineComboBox.Text = string.Empty;
-			lineComboBox.Enabled = DataFeed.Basic.Stations.FindByName(stationTextBox.Text) != null;
+			lineComboBox.Enabled = DataFeedDesktop.Basic.Stations.FindByName(stationTextBox.Text) != null;
 		}
 	}
 }

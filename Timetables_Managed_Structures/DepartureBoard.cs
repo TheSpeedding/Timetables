@@ -16,7 +16,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Stop identificator.
 		/// </summary>
-		public uint StopID { get; }
+		public int StopID { get; }
 		/// <summary>
 		/// Departure time as Unix timestamp.
 		/// </summary>
@@ -24,7 +24,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Number of departures wanted.
 		/// </summary>
-		public uint Count { get; }
+		public int Count { get; }
 		/// <summary>
 		/// True if station, false state is used in mobile application.
 		/// </summary>
@@ -33,7 +33,7 @@ namespace Timetables.Client
 		/// Route identificator.
 		/// </summary>
 		public int RouteInfoID { get; }
-		public DepartureBoardRequest(uint stopID, DateTime departureTime, uint count, bool station, int routeID = -1)
+		public DepartureBoardRequest(int stopID, DateTime departureTime, int count, bool station, int routeID = -1)
 		{
 			StopID = stopID;
 			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
@@ -70,7 +70,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Stop identificator.
 		/// </summary>
-		public uint StopID { get; set; }
+		public int StopID { get; set; }
 		/// <summary>
 		/// Indicated whether departure uses outdated timetables.
 		/// </summary>
@@ -105,7 +105,7 @@ namespace Timetables.Client
 		/// </summary>
 		public List<IntermediateStop> IntermediateStops { get; set; }
 		internal Departure() { }
-		public Departure(uint stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, uint meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, uint>> intStops)
+		public Departure(int stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, int meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, int>> intStops)
 		{
 			StopID = stopID;
 			Outdated = outdated;

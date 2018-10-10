@@ -148,17 +148,17 @@ namespace Timetables.Application.Desktop
 						throw new ArgumentException();
 				}
 
-				Client.DataFeed.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
+				Client.DataFeedDesktop.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
 
-				Client.DataFeed.FullDataSource = Client.DataFeed.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
+				Client.DataFeedDesktop.FullDataSource = Client.DataFeedDesktop.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
 				
-				Client.DataFeed.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
+				Client.DataFeedDesktop.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
 
-				Client.DataFeed.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
+				Client.DataFeedDesktop.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
 
-				Client.DataFeed.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
+				Client.DataFeedDesktop.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
 
-				Client.DataFeed.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
+				Client.DataFeedDesktop.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
@@ -200,23 +200,23 @@ namespace Timetables.Application.Desktop
 
 			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 
-			settings.GetElementsByTagName("OfflineMode")[0].InnerText = Client.DataFeed.OfflineMode.ToString();
+			settings.GetElementsByTagName("OfflineMode")[0].InnerText = Client.DataFeedDesktop.OfflineMode.ToString();
 
 			settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText = ExtraordinaryEvents == null ? string.Empty : ExtraordinaryEvents.AbsoluteUri;
 
 			settings.GetElementsByTagName("LockoutsUri")[0].InnerText = Lockouts == null ? string.Empty : Lockouts.AbsoluteUri;
 			
-			if (!Client.DataFeed.OfflineMode)
+			if (!Client.DataFeedDesktop.OfflineMode)
 			{
-				settings.GetElementsByTagName("ServerIp")[0].InnerText = Client.DataFeed.ServerIpAddress.ToString();
-				settings.GetElementsByTagName("RouterPort")[0].InnerText = Client.DataFeed.RouterPortNumber.ToString();
-				settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText = Client.DataFeed.DepartureBoardPortNumber.ToString();
-				settings.GetElementsByTagName("BasicDataPort")[0].InnerText = Client.DataFeed.BasicDataPortNumber.ToString();
+				settings.GetElementsByTagName("ServerIp")[0].InnerText = Client.DataFeedDesktop.ServerIpAddress.ToString();
+				settings.GetElementsByTagName("RouterPort")[0].InnerText = Client.DataFeedDesktop.RouterPortNumber.ToString();
+				settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText = Client.DataFeedDesktop.DepartureBoardPortNumber.ToString();
+				settings.GetElementsByTagName("BasicDataPort")[0].InnerText = Client.DataFeedDesktop.BasicDataPortNumber.ToString();
 			}
 
 			else
 			{
-				settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeed.FullDataSource == null ? string.Empty : Client.DataFeed.FullDataSource.AbsoluteUri;
+				settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeedDesktop.FullDataSource == null ? string.Empty : Client.DataFeedDesktop.FullDataSource.AbsoluteUri;
 			}
 
 			settings.Save(".settings");
