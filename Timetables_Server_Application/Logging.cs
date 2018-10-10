@@ -36,5 +36,7 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="message">Message to be logged.</param>
 		public static void Log(this string message) => LoggingEvent?.Invoke(message);
+
+		public static void Dispose() => FileForLogging.Dispose();
 	}
 }

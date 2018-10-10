@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +18,38 @@ namespace Timetables.Server
 		/// <summary>
 		/// Signals that can be used to control server.
 		/// </summary>
-		public enum ServerSignal { Abort, ForceUpdate }
+		public enum ServerSignal
+		{
+			[Description("HELP - Shows this help.")]
+			Help = 0,
+			[Description("ABORT - Aborts server execution.")]
+			Abort = 1,
+			[Description("FORCEUPDATE - Forces data update.")]
+			ForceUpdate = 2,
+			[Description("RESTART - Restarts the server.")]
+			Restart = 3
+		}
+		/// <summary>
+		/// Returns help for server signals.
+		/// </summary>
+		public static string GetServerSignalHelp()
+		{
+			string ToDescriptionString(ServerSignal val)
+			{
+				DescriptionAttribute[] attributes = (DescriptionAttribute[])val
+				   .GetType()
+				   .GetField(val.ToString())
+				   .GetCustomAttributes(typeof(DescriptionAttribute), false);
+				return attributes.Length > 0 ? attributes[0].Description : string.Empty;
+			}
+
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < Enum.GetNames(typeof(ServerSignal)).Length; i++)
+				sb.AppendLine(ToDescriptionString((ServerSignal)i));
+
+			return sb.ToString();
+		}
 		/// <summary>
 		/// Thread that is operating given server.
 		/// </summary>
@@ -89,9 +121,9 @@ namespace Timetables.Server
 		/// </summary>
 		private void StopServer()
 		{
-			ServerListener.Stop();
 			OperationThread.Abort();
 			OperationThread.Join();
+			ServerListener.Stop();
 		}
 		/// <summary>
 		/// Method that serves manipulation with the server while running, blocks the current thread.
@@ -100,16 +132,27 @@ namespace Timetables.Server
 		{
 			string cmd;
 			while ((cmd = Console.ReadLine()) != null)
-				switch ((ServerSignal)int.Parse(cmd))
+				switch ((ServerSignal)Enum.GetNames(typeof(ServerSignal)).Select(s => s.ToUpperInvariant()).ToList().IndexOf(cmd))
 				{
 					case ServerSignal.Abort:
-						Logging.Log("The server has been requested to be stopped.");
-						Stop();
-						break;
+						Logging.Log("Request to stop the server received.");
+						return;
 					case ServerSignal.ForceUpdate:
 						Logging.Log("Request to force data update received.");
 						DataFeed.Download(true);
 						DataFeed.Load();
+						break;
+					case ServerSignal.Restart:
+						Logging.Log("Request to restart the server received.");
+						Logging.Dispose();
+						System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
+						Environment.Exit(0);
+						break;
+					case ServerSignal.Help:
+						Logging.Log("You can use these commands: " + Environment.NewLine + GetServerSignalHelp());
+						break;
+					default:
+						Logging.Log("Unknown command. You can use these commands: " + Environment.NewLine + GetServerSignalHelp());
 						break;
 				}
 		}
@@ -148,7 +191,7 @@ namespace Timetables.Server
 				}
 			});
 		}
-		public void Dispose() => Stop();
+		public void Dispose() => StopServer();
 	}
 
 	/// <summary>
