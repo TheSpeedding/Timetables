@@ -154,11 +154,11 @@ namespace Timetables.Application.Desktop
 				
 				Client.DataFeedDesktop.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
 
-				Client.DataFeedDesktop.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
+				Client.DataFeedDesktop.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
 
-				Client.DataFeedDesktop.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
+				Client.DataFeedDesktop.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
 
-				Client.DataFeedDesktop.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(uint) : uint.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
+				Client.DataFeedDesktop.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
 
 				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 

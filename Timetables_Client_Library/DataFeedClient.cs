@@ -35,15 +35,15 @@ namespace Timetables.Client
 		/// <summary>
 		/// End point of router server. Only relevant in online mode.
 		/// </summary>
-		public static uint RouterPortNumber { get; set; }
+		public static int RouterPortNumber { get; set; }
 		/// <summary>
 		/// End point of departure board server. Only relevant in online mode.
 		/// </summary>
-		public static uint DepartureBoardPortNumber { get; set; }
+		public static int DepartureBoardPortNumber { get; set; }
 		/// <summary>
 		/// End point of basic data server. Only relevant in online mode.
 		/// </summary>
-		public static uint BasicDataPortNumber { get; set; }
+		public static int BasicDataPortNumber { get; set; }
 		/// <summary>
 		/// Decides if the data feed should be updated.
 		/// </summary>

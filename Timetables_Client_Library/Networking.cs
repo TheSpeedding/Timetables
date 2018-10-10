@@ -28,9 +28,9 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="host">Hostname.</param>
 		/// <param name="port">Port number.</param>
-		protected async Task ConnectAsync(IPAddress host, uint port)
+		protected async Task ConnectAsync(IPAddress host, int port)
 		{
-			await client.ConnectAsync(host, (int)port);
+			await client.ConnectAsync(host, port);
 			stream = client.GetStream();
 		}
 		/// <summary>

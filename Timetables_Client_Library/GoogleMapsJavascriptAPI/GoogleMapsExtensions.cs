@@ -64,7 +64,7 @@ namespace Timetables.Client
 
 			var bounds = new JavascriptVariable<JavascriptObject>("bounds", new JavascriptObject("google.maps.LatLngBounds"));
 
-			var cycle = new JavascriptControlStructures.For(new JavascriptVariable<uint>("i", 0), (uint)markersInfo.Content.Count);
+			var cycle = new JavascriptControlStructures.For(new JavascriptVariable<int>("i", 0), (int)markersInfo.Content.Count);
 
 			var marker = new JavascriptVariable<JavascriptObject>("marker", new JavascriptObject("google.maps.Marker",
 				new JavascriptObject.Anonymous(

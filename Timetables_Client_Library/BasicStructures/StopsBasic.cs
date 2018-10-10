@@ -88,7 +88,7 @@ namespace Timetables.Structures.Basic
 			var count = int.Parse(sr.ReadLine());
 			Items = new StopBasic[count];
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
-			for (uint i = 0; i < count; i ++)
+			for (int i = 0; i < count; i ++)
 			{
 				var r = new List<RoutesInfoBasic.RouteInfoBasic>();
 				foreach (var route in tokens[5 * i + 4].Split('`'))

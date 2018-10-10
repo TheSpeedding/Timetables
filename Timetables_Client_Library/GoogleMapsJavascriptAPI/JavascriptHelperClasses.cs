@@ -58,9 +58,9 @@ namespace Timetables.Client
 	{
 		public class For : JavascriptControlStructures
 		{
-			public JavascriptVariable<uint> ControlVariable { get; }
-			public uint UpperBound { get; }
-			public For(JavascriptVariable<uint> var, uint bound)
+			public JavascriptVariable<int> ControlVariable { get; }
+			public int UpperBound { get; }
+			public For(JavascriptVariable<int> var, int bound)
 			{
 				ControlVariable = var;
 				UpperBound = bound;

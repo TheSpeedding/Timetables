@@ -72,7 +72,7 @@ namespace Timetables.Structures.Basic
 			var count = int.Parse(sr.ReadLine());
 			Items = new StationBasic[count];
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
-			for (uint i = 0; i < count; i++)
+			for (int i = 0; i < count; i++)
 				Items[i] = new StationBasic(int.Parse(tokens[2 * i]), tokens[2 * i + 1]);
 			sr.Dispose();
 		}
