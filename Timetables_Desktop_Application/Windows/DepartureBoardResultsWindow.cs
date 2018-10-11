@@ -15,28 +15,28 @@ namespace Timetables.Application.Desktop
 {
 	public partial class DepartureBoardResultsWindow : DockContent
 	{
-		private NewDepartureBoardWindow requestWindow;
+		private DockContent requestWindow;
 		public DepartureBoardResponse Results { get; set; }
-		private DepartureBoardResultsWindow(NewDepartureBoardWindow win = null)
+		private DepartureBoardResultsWindow(DockContent win = null)
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.DepartureBoardScripting(this);
 			requestWindow = win;
 		}
-		public DepartureBoardResultsWindow(DepartureBoardResponse dbReponse, string stationName, DateTime dateTime, NewDepartureBoardWindow win = null) : this(win)
+		public DepartureBoardResultsWindow(DepartureBoardResponse dbReponse, string title, DateTime dateTime, DockContent win = null) : this(win)
 		{
 			Results = dbReponse;
 
-			Text = $"{ Settings.Localization.Departures } ({ dbReponse.Departures.Count }) - { stationName } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Departures } ({ dbReponse.Departures.Count }) - { title } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml(Settings.DepartureBoardSimpleXslt.FullName, Settings.DepartureBoardSimpleCss.FullName);
 		}
-		public DepartureBoardResultsWindow(Departure departure, NewDepartureBoardWindow win = null) : this(win)
+		public DepartureBoardResultsWindow(Departure departure, bool stationInfo, DockContent win = null) : this(win)
 		{
 			Results = new DepartureBoardResponse(new List<Departure> { departure });
 
-			Text = $"{ Settings.Localization.Departure } - {  DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).Name } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
+			Text = $"{ Settings.Localization.Departure } - { (stationInfo ? DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).Name : departure.LineLabel) } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 
 			resultsWebBrowser.DocumentText = Results.Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
 		}

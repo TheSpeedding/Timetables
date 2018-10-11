@@ -170,11 +170,20 @@ namespace Timetables.Server
 
 				await Task.Run(() =>
 				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, dbRequest))
-					{
-						dbProcessing.ObtainDepartureBoard();
-						dbRes = dbProcessing.ShowDepartureBoard();
-					}
+					if (dbRequest is StationInfoRequest)
+						using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, (StationInfoRequest)dbRequest))
+						{
+							dbProcessing.ObtainDepartureBoard();
+							dbRes = dbProcessing.ShowDepartureBoard();
+						}
+					else if (dbRequest is LineInfoRequest)
+						using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeed.Full, (LineInfoRequest)dbRequest))
+						{
+							dbProcessing.ObtainDepartureBoard();
+							dbRes = dbProcessing.ShowDepartureBoard();
+						}
+					else
+						throw new NotImplementedException();
 				});
 
 				Send(dbRes);

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Timetables.Application.Desktop
 {
-	public partial class NewDepartureBoardWindow : DockContent
+	public partial class NewStationInfoWindow : DockContent
 	{
-		public NewDepartureBoardWindow(string station = "")
+		public NewStationInfoWindow(string station = "")
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendDepartureBoardRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (int)countNumericUpDown.Value, true, lineComboBox.Text, this);
+			var window = await Requests.SendStationInfoRequestAsync(stationTextBox.Text, departureDateTimePicker.Value, (int)countNumericUpDown.Value, true, lineComboBox.Text, this);
 			searchButton.Enabled = true;
 
 			if (window != null)

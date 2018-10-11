@@ -73,15 +73,16 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results</returns>
 		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
-			try
-			{
-				await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
-			}
-			catch (System.Net.WebException)
-			{
-				MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return null;
-			}
+			if (!DataFeedDesktop.OfflineMode)
+				try
+				{
+					await DataFeedClient.DownloadAsync(true); // Checks basic data validity.
+				}
+				catch (System.Net.WebException)
+				{
+					MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return null;
+				}
 
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
@@ -142,17 +143,18 @@ namespace Timetables.Application.Desktop
 		/// <param name="routeLabel">Route label.</param>
 		/// <param name="win">Window with request.</param>
 		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> SendDepartureBoardRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewDepartureBoardWindow win)
+		public static async Task<DepartureBoardResultsWindow> SendStationInfoRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
 		{
-			try
-			{
-				await DataFeedDesktop.DownloadAsync(true); // Checks basic data validity.
-			}
-			catch (System.Net.WebException)
-			{
-				MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return null;
-			}
+			if (!DataFeedDesktop.OfflineMode)
+				try
+				{
+					await DataFeedClient.DownloadAsync(true); // Checks basic data validity.
+				}
+				catch (System.Net.WebException)
+				{
+					MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return null;
+				}
 
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
@@ -160,13 +162,13 @@ namespace Timetables.Application.Desktop
 			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel)))
 				return null;
 
-			var dbRequest = new DepartureBoardRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
-			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
+			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
+			var dbResponse = await SendStationInfoRequestAsync(dbRequest);
 
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, win);
 		}
 
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		public static async Task<DepartureBoardResponse> SendStationInfoRequestAsync(StationInfoRequest dbRequest)
 		{
 			DepartureBoardResponse dbResponse = null;
 

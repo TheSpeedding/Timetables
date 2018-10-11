@@ -11,7 +11,8 @@ namespace Timetables {
 		private:
 			Timetables::Algorithms::departure_board* native_departure_board_; // Pointer to C++ heap where the native object has it place.
 		public:
-			DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::DepartureBoardRequest^ req);
+			DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::StationInfoRequest^ req);
+			DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::LineInfoRequest^ req);
 			~DepartureBoardManaged() { this->!DepartureBoardManaged(); }
 			!DepartureBoardManaged() { delete native_departure_board_; }
 

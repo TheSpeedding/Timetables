@@ -30,7 +30,7 @@ namespace Timetables.Application.Desktop
 
 		private void settingsToolStripMenuItem_Click(object sender, EventArgs e) => new SettingsWindow().ShowDialog();
 
-		private void findDeparturesToolStripMenuItem_Click(object sender, EventArgs e) => new NewDepartureBoardWindow().Show(mainDockPanel, DockState.Document);
+		private void findDeparturesToolStripMenuItem_Click(object sender, EventArgs e) => new NewStationInfoWindow().Show(mainDockPanel, DockState.Document);
 
 		private void findjourneyToolStripMenuItem_Click(object sender, EventArgs e) => new NewJourneyWindow().Show(mainDockPanel, DockState.Document);
 
@@ -55,7 +55,7 @@ namespace Timetables.Application.Desktop
 
 			if (window.departuresToFind != null)
 				foreach (var departure in window.departuresToFind.Favorites)
-					new NewDepartureBoardWindow(departure.Station).Show(mainDockPanel, DockState.Document);
+					new NewStationInfoWindow(departure.Station).Show(mainDockPanel, DockState.Document);
 		}
 
 		private void showmapToolStripMenuItem_Click(object sender, EventArgs e) => new ShowMapWindow().Show(mainDockPanel, DockState.Document);

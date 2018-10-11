@@ -70,7 +70,7 @@ namespace Timetables.Interop
 			bool isStation = ShowDeparturesFromStation();
 			int newId = isStation ? DataFeedDesktop.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
 
-			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new DepartureBoardRequest(newId, dt, 5, isStation)));
+			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendStationInfoRequestAsync(new StationInfoRequest(newId, dt, 5, isStation)));
 
 			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName).RenderJavascriptToHtml(this);
 		}
@@ -150,7 +150,7 @@ namespace Timetables.Interop
 		/// Shows detail of the departure.
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
-		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
+		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index], true).Show(window.DockPanel, window.DockState);
 		/// <summary>
 		/// Shows map of the departure.
 		/// </summary>

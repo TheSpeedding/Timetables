@@ -16,16 +16,16 @@ namespace Timetables.Application.Desktop
 {
 	public partial class JourneyResultsWindow : DockContent
 	{
-		private NewJourneyWindow requestWindow;
+		private DockContent requestWindow;
 		public RouterResponse Results { get; set; }
-		private JourneyResultsWindow(NewJourneyWindow win = null)
+		private JourneyResultsWindow(DockContent win = null)
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.JourneyScripting(this);
 			requestWindow = win;
 		}
-		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime, NewJourneyWindow win = null) : this(win)
+		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime, DockContent win = null) : this(win)
 		{
 			Results = rResponse;
 
@@ -33,7 +33,7 @@ namespace Timetables.Application.Desktop
 
 			resultsWebBrowser.DocumentText = rResponse.TransformToHtml(Settings.JourneySimpleXslt.FullName,  Settings.JourneySimpleCss.FullName);
 		}
-		public JourneyResultsWindow(Journey journey, NewJourneyWindow win = null) : this(win)
+		public JourneyResultsWindow(Journey journey, DockContent win = null) : this(win)
 		{
 			Results = new RouterResponse(new List<Journey> { journey });
 

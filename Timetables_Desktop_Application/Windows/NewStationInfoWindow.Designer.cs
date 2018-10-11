@@ -1,6 +1,6 @@
 ﻿namespace Timetables.Application.Desktop
 {
-	partial class NewDepartureBoardWindow
+	partial class NewStationInfoWindow
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewDepartureBoardWindow));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewStationInfoWindow));
 			this.stationLabel = new System.Windows.Forms.Label();
 			this.departureLabel = new System.Windows.Forms.Label();
 			this.departureDateTimePicker = new System.Windows.Forms.DateTimePicker();
