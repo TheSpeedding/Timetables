@@ -49,8 +49,13 @@ namespace Timetables.Client
 			IsStation = station;
 			RouteInfoID = routeID;
 		}
-
-	}
+		public override string ToString()
+		{
+			var idName = IsStation ? "Station" : "Stop";
+			var routeInfo = RouteInfoID == -1 ? string.Empty : $"Route Info ID: { RouteInfoID }. ";
+			return $"{ idName } ID { StopID }. { routeInfo }Count: { Count }."; 
+		}
+	} 
 
 	/// <summary>
 	/// Requests for line info.
@@ -68,6 +73,7 @@ namespace Timetables.Client
 			RouteInfoID = routeID;
 			Headsign = headsign;
 		}
+		public override string ToString() => $"Line ID { RouteInfoID } in direction of { Headsign }. Count: { Count }.";
 	}
 
 	/// <summary>

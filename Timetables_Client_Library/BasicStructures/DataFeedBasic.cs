@@ -16,6 +16,7 @@ namespace Timetables.Structures.Basic
 		public string Version { get; set; }
 		public DataFeedBasicRequest(string version) => Version = version;
 		public DataFeedBasicRequest() => Version = "ForceDownload";
+		public override string ToString() => $"Version: { Version }.";
 	}
 	/// <summary>
 	/// Response from the server to the DataFeedBasicRequest.

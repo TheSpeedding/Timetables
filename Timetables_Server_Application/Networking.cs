@@ -64,7 +64,7 @@ namespace Timetables.Server
 			{
 				RouterRequest routerReq = Receive<RouterRequest>();
 
-				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { DataFeed.Basic.Stations.FindByIndex(routerReq.SourceStationID).Name } - { DataFeed.Basic.Stations.FindByIndex(routerReq.TargetStationID).Name }.");
+				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { routerReq.ToString() }");
 
 				RouterResponse routerRes = null;
 
@@ -112,7 +112,7 @@ namespace Timetables.Server
 			{
 				var dfRequest = Receive<Structures.Basic.DataFeedBasicRequest>();
 
-				Logging.Log($"Received data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dfRequest.Version }.");
+				Logging.Log($"Received data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dfRequest.ToString() }");
 
 				Structures.Basic.DataFeedBasicResponse dfRes = null;
 
@@ -164,7 +164,7 @@ namespace Timetables.Server
 			{
 				var dbRequest = Receive<DepartureBoardRequest>();
 
-				Logging.Log($"Received departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { (dbRequest.IsStation ? DataFeed.Basic.Stations.FindByIndex(dbRequest.StopID).Name : DataFeed.Basic.Stops.FindByIndex(dbRequest.StopID).Name) }.");
+				Logging.Log($"Received departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dbRequest.ToString() }");
 
 				DepartureBoardResponse dbRes = null;
 

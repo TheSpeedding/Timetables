@@ -49,6 +49,7 @@ namespace Timetables.Client
 			TransfersDurationCoefficient = coefficient;
 			MeansOfTransport = mot;
 		}
+		public override string ToString() => $"Source station ID: { SourceStationID }. Target station ID: { TargetStationID }. Max transfers: { MaxTransfers }. Count: { Count }.";
 	}
 
 	/// <summary>
