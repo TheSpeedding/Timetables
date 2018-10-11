@@ -59,7 +59,7 @@ namespace Timetables.Client
 
 			// Online mode.
 
-			else
+			else 
 				await DataFeedClient.DownloadAsync(forceDownload, timeout);
 
 			Downloaded = true;

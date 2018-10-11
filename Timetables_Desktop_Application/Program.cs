@@ -3,6 +3,8 @@ using System.Net.Mail;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using System.Linq;
+using Timetables.Client;
+using Microsoft.VisualBasic;
 
 namespace Timetables.Application.Desktop
 {
@@ -25,7 +27,21 @@ namespace Timetables.Application.Desktop
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
-			Settings.Load();
+			try
+			{
+				Settings.Load();
+			}
+			catch // Settings file corrupted or missing.
+			{
+				try
+				{
+					Settings.CreateSettings();
+				}
+				catch // Bad settings format again (e.g. bad URL format).
+				{
+					Settings.CreateSettings();
+				}
+			}
 
 			var initWindow = new InitLoadingWindow();
 			System.Windows.Forms.Application.Run(initWindow);

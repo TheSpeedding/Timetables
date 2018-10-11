@@ -15,7 +15,7 @@
 	<Language>Jazyk</Language>
 	<ShowMap>Zobrazit mapu</ShowMap>
 	<Favorites>Oblíbené</Favorites>
-	<ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Bude použito původní nastavení.</ProblemWhileLoadingSettings>
+	<ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Nastavte aplikaci pomocí následujícího dialogu.</ProblemWhileLoadingSettings>
 	<RestartNeeded>Nutný restart</RestartNeeded>
 	<RestartToApplyChanges>Změny se projeví po restartu aplikace.</RestartToApplyChanges>
 	<SourceStop>Start</SourceStop>

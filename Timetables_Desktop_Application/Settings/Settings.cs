@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.IO;
 using System.Net;
+using System.Windows.Forms;
 using System.Xml;
 using Timetables.Client;
 using Timetables.Preprocessor;
@@ -126,52 +128,41 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static void Load()
 		{
-			try
+			XmlDocument settings = new XmlDocument();
+			settings.Load(".settings");
+
+			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+
+			switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
 			{
-				XmlDocument settings = new XmlDocument();
-				settings.Load(".settings");
-
-				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
-
-				switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
-				{
-					case '0':
-						Theme = new Themes.BlueTheme();
-						break;
-					case '1':
-						Theme = new Themes.DarkTheme();
-						break;
-					case '2':
-						Theme = new Themes.LightTheme();
-						break;
-					default:
-						throw new ArgumentException();
-				}
-
-				Client.DataFeedDesktop.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
-
-				Client.DataFeedDesktop.FullDataSource = Client.DataFeedDesktop.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
-				
-				Client.DataFeedDesktop.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
-
-				Client.DataFeedDesktop.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
-
-				Client.DataFeedDesktop.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
-
-				Client.DataFeedDesktop.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
-
-				Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
-
-				ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
+				case '0':
+					Theme = new Themes.BlueTheme();
+					break;
+				case '1':
+					Theme = new Themes.DarkTheme();
+					break;
+				case '2':
+					Theme = new Themes.LightTheme();
+					break;
+				default:
+					throw new ArgumentException();
 			}
-			catch
-			{
-				Localization = new Localization();
-				System.Windows.Forms.MessageBox.Show(Localization.ProblemWhileLoadingSettings);
-				Theme = new Themes.BlueTheme();
-				Localization = Localization.GetTranslation("English");
-				Save(true);
-			}
+
+			Client.DataFeedDesktop.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);
+
+			Client.DataFeedDesktop.FullDataSource = Client.DataFeedDesktop.OfflineMode ? new Uri(settings.GetElementsByTagName("FullDataUri")[0].InnerText) : null;
+
+			Client.DataFeedDesktop.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
+
+			Client.DataFeedDesktop.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
+
+			Client.DataFeedDesktop.DepartureBoardPortNumber = settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("DepartureBoardPort")[0].InnerText);
+
+			Client.DataFeedDesktop.BasicDataPortNumber = settings.GetElementsByTagName("BasicDataPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("BasicDataPort")[0].InnerText);
+
+			Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
+
+			ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
 		}
 		/// <summary>
 		/// Saves current settings.
@@ -220,6 +211,48 @@ namespace Timetables.Application.Desktop
 			}
 
 			settings.Save(".settings");
+		}
+
+		/// <summary>
+		/// Creates settings file directly from the application.
+		/// </summary>
+		internal static void CreateSettings()
+		{
+			if (Settings.Localization == null)
+			{
+				Settings.Localization = new Localization();
+				Settings.Localization = Localization.GetTranslation("English");
+			}
+
+			Settings.Theme = new Themes.BlueTheme();
+			
+			MessageBox.Show(Settings.Localization.ProblemWhileLoadingSettings);
+
+			if (MessageBox.Show("Offline mode?", Settings.Localization.Settings, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) // Offline mode.
+			{
+				DataFeedDesktop.OfflineMode = true;
+
+				DataFeedDesktop.FullDataSource = new Uri(Interaction.InputBox("Data source URL:", Settings.Localization.Settings));
+			}
+			else // Online mode.
+			{
+				DataFeedDesktop.OfflineMode = false;
+
+				DataFeedDesktop.ServerIpAddress = System.Net.IPAddress.Parse(Interaction.InputBox("Server IP address:", Settings.Localization.Settings, "127.0.0.1"));
+
+				DataFeedDesktop.RouterPortNumber = int.Parse(Interaction.InputBox("Router server port:", Settings.Localization.Settings, "27000"));
+
+				DataFeedDesktop.DepartureBoardPortNumber = int.Parse(Interaction.InputBox("Departure board server port:", Settings.Localization.Settings, "27001"));
+
+				DataFeedDesktop.BasicDataPortNumber = int.Parse(Interaction.InputBox("Basic data server port:", Settings.Localization.Settings, "27002"));
+			}
+
+
+			Settings.ExtraordinaryEvents = new Uri(Interaction.InputBox("Extraordinary events URL:", Settings.Localization.Settings));
+
+			Settings.Lockouts = new Uri(Interaction.InputBox("Lockouts URL:", Settings.Localization.Settings));
+
+			Settings.Save(true);
 		}
 	}	
 }

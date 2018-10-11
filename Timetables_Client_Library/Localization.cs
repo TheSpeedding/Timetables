@@ -31,7 +31,7 @@ namespace Timetables.Client
 		public string Language { get; set; } = "Language";
 		public string ShowMap { get; set; } = "Show map";
 		public string Favorites { get; set; } = "Favorites";
-		public string ProblemWhileLoadingSettings { get; set; } = "Problem occured while loading user settings. Using default settings instead.";
+		public string ProblemWhileLoadingSettings { get; set; } = "Problem occured while loading user settings. Set the application up using following dialog.";
 		public string RestartNeeded { get; set; } = "Restart needed";
 		public string RestartToApplyChanges { get; set; } = "You have to restart the application to apply the changes.";
 		public string SourceStop { get; set; } = "Source";

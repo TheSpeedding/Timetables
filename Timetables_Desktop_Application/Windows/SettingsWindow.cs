@@ -82,8 +82,15 @@ namespace Timetables.Application.Desktop
 
 		private async void dataDownloadButton_Click(object sender, EventArgs e)
 		{
-			await DataFeedDesktop.DownloadAsync();
-			MessageBox.Show(Settings.Localization.DataDownloadedSuccessfully);
+			var downloading = DataFeedDesktop.DownloadAsync();
+
+			await downloading;
+
+			if (downloading.IsFaulted)
+				MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+			else
+				MessageBox.Show(Settings.Localization.DataDownloadedSuccessfully);
 		}
 	}
 }

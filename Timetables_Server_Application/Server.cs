@@ -140,7 +140,6 @@ namespace Timetables.Server
 					case ServerSignal.ForceUpdate:
 						Logging.Log("Request to force data update received.");
 						DataFeed.Download(true);
-						DataFeed.Load();
 						break;
 					case ServerSignal.Restart:
 						Logging.Log("Request to restart the server received.");
@@ -152,8 +151,8 @@ namespace Timetables.Server
 						Logging.Log("You can use these commands: " + Environment.NewLine + GetServerSignalHelp());
 						break;
 					default:
-						Logging.Log("Unknown command. You can use these commands: " + Environment.NewLine + GetServerSignalHelp());
-						break;
+						Logging.Log("Unknown command.");
+						goto case ServerSignal.Help;
 				}
 		}
 		/// <summary>
