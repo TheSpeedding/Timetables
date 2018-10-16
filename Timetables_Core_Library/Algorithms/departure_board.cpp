@@ -24,7 +24,7 @@ const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> d
 	return move(stops);
 }
 
-void Timetables::Algorithms::departure_board::obtain_departure_board() {
+void Timetables::Algorithms::station_info::obtain_departure_board() {
 	
 	// We have to find "count" departure from each stop of the station. This cannot be done better since we want to support showing departure board from map in mobile application.
 
@@ -78,4 +78,7 @@ void Timetables::Algorithms::departure_board::obtain_departure_board() {
 
 	if (found_departures_.size() > count_)
 		found_departures_.erase(found_departures_.begin() + count_, found_departures_.end());	
+}
+
+void Timetables::Algorithms::line_info::obtain_departure_board() {
 }

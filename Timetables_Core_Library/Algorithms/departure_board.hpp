@@ -32,28 +32,45 @@ namespace Timetables {
 	namespace Algorithms {	
 		// Class collecting information about departure board.
 		class departure_board {
-		private:
+		protected:
 			std::vector<Timetables::Structures::departure> found_departures_; // Departures found by the algorithm.
+		public:
+			virtual void obtain_departure_board() = 0; // Gets a departure board.
+			inline const std::vector<Timetables::Structures::departure>& show_departure_board() { return found_departures_; } // Shows a departure board.
+		};
+
+		class station_info : public departure_board {
+		private:
 			std::vector<const Timetables::Structures::stop*> stops_; // Stops of origin.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
 			const Timetables::Structures::route_info* route_to_show_; // Nullptr if a user wants to show all the lines.
 		public:
-			departure_board(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
-				const size_t count, int route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count), 
-				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)){
-				
+			station_info(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
+				const std::size_t count, int route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count),
+				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)) {
+
 				if (true_if_station)
-						stops_ = feed.stations().at(station_or_stop_id).child_stops();
+					stops_ = feed.stations().at(station_or_stop_id).child_stops();
 
 				else
 					stops_.push_back(&feed.stops().at(station_or_stop_id));
 
 			}
+			virtual void obtain_departure_board() override;
+		};
 
-			void obtain_departure_board(); // Gets a departure board.
+		class line_info : public departure_board {
+		private:
+			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
+			const std::size_t count_; // Number of departures to show.
+			const Timetables::Structures::route_info& route_to_show_; // Route to show.
+			const std::wstring headsign_; // Direction that the user wants to search in.
+		public:
+			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id, const std::wstring& headsign) : 
+				earliest_departure_(earliest_departure), count_(count), route_to_show_(feed.routes_info().at(route_info_id)), headsign_(headsign) {}
+			virtual void obtain_departure_board() override;
 
-			inline const std::vector<Timetables::Structures::departure>& show_departure_board() { return found_departures_; } // Shows a departure board.
 		};
 	}
 }
