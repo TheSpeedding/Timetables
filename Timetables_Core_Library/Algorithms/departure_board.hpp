@@ -62,14 +62,19 @@ namespace Timetables {
 
 		class line_info : public departure_board {
 		private:
+			std::vector<const Timetables::Structures::route*> routes_to_show_; // Routes to show.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
-			const Timetables::Structures::route_info& route_to_show_; // Route to show.
 		public:
 			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id) : 
-				earliest_departure_(earliest_departure), count_(count), route_to_show_(feed.routes_info().at(route_info_id)) {}
+				earliest_departure_(earliest_departure), count_(count) {
+				for (std::size_t i = 0; i < feed.routes().size(); i++) {
+					if (&feed.routes().at(i).info() == &feed.routes_info().at(route_info_id)) {
+						routes_to_show_.push_back(&feed.routes().at(i));
+					}
+				}
+			}
 			virtual void obtain_departure_board() override;
-
 		};
 	}
 }

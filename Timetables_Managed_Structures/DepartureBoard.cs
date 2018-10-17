@@ -53,13 +53,14 @@ namespace Timetables.Client
 		{
 			var idName = IsStation ? "Station" : "Stop";
 			var routeInfo = RouteInfoID == -1 ? string.Empty : $"Route Info ID: { RouteInfoID }. ";
-			return $"{ idName } ID { StopID }. { routeInfo }Count: { Count }."; 
+			return $"{ idName } ID: { StopID }. { routeInfo }Count: { Count }."; 
 		}
 	} 
 
 	/// <summary>
 	/// Requests for line info.
 	/// </summary>
+	[Serializable]
 	public sealed class LineInfoRequest : DepartureBoardRequest
 	{
 		public LineInfoRequest(DateTime departureTime, int count, int routeID)
@@ -68,7 +69,7 @@ namespace Timetables.Client
 			Count = count;
 			RouteInfoID = routeID;
 		}
-		public override string ToString() => $"Line ID { RouteInfoID }. Count: { Count }.";
+		public override string ToString() => $"Line ID: { RouteInfoID }. Count: { Count }.";
 	}
 
 	/// <summary>

@@ -81,4 +81,50 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 }
 
 void Timetables::Algorithms::line_info::obtain_departure_board() {
+
+	for (auto&& route : routes_to_show_) {
+
+		auto departure_time = earliest_departure_.time(); // Lower bound for departures
+
+		auto departure_date = earliest_departure_.date(); // A need for operating days checking.
+
+		if (route->trips().cend() == route->trips().cbegin()) continue; // The route contains no trips.
+
+		auto it = route->trips().cbegin();
+
+		size_t days = 0;
+		size_t counter = 0;
+
+		while (counter < count_ && days < 7) {
+
+			if (it == route->trips().cend()) {
+				it = route->trips().cbegin(); // Midnight reached.
+				departure_date = date_time(departure_date, DAY);
+				days++; // We will count the days to prevent infinite cycle. Seven days considered to be a maximum.
+			}
+
+			// Check if the stop-time (trip respectively) is operating in required date.
+			service_state s = it->service().is_operating_in_date(departure_date);
+			
+			// Check if the departure does not leave before required time.
+			if ((days > 0 || (days == 0 && date_time(it->departure()) >= departure_time)) && s != not_operating) {
+
+				date_time dep = date_time(it->departure()) // Time of the departure.
+					+ departure_date.date(); // Date of the departure.
+
+				found_departures_.push_back(departure(*it->stop_times().cbegin() // First stop time of the trip.
+					, dep // Date time of the departure.
+					, s == outdated ? true : false));
+
+				counter++;
+			}
+
+			it++;
+		}
+	}
+
+	sort(found_departures_.begin(), found_departures_.end());
+
+	if (found_departures_.size() > count_)
+		found_departures_.erase(found_departures_.begin() + count_, found_departures_.end());
 }

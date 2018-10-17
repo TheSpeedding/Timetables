@@ -163,7 +163,7 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
 			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
 
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, win);
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, true, win);
 		}
 
 		public static async Task<DepartureBoardResultsWindow> SendLineInfoRequestAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
@@ -177,7 +177,7 @@ namespace Timetables.Application.Desktop
 			var dbRequest = new LineInfoRequest(dt, count, route.ID);
 			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
 
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, win);
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
 		}
 
 		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)

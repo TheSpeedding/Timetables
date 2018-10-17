@@ -146,12 +146,15 @@ namespace Timetables.Interop
 		/// Initializes the object.
 		/// </summary>
 		/// <param name="window">Window that is relevant for this object.</param>
-		public DepartureBoardScripting(DepartureBoardResultsWindow window) => this.window = window;
+		public DepartureBoardScripting(DepartureBoardResultsWindow window)
+		{
+			this.window = window;
+		}
 		/// <summary>
 		/// Shows detail of the departure.
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
-		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index], true).Show(window.DockPanel, window.DockState);
+		public void ShowDepartureDetail(int index) => new DepartureBoardResultsWindow(window.Results.Departures[index], isStationInfo).Show(window.DockPanel, window.DockState);
 		/// <summary>
 		/// Shows map of the departure.
 		/// </summary>
