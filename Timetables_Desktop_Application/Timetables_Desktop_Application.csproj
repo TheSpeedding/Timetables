@@ -124,6 +124,12 @@
     <Compile Include="Windows\InitLoadingWindow.Designer.cs">
       <DependentUpon>InitLoadingWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\NewLineInfoWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\NewLineInfoWindow.designer.cs">
+      <DependentUpon>NewLineInfoWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewStationInfoWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\JourneyResultsWindow.resx">
       <DependentUpon>JourneyResultsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\NewLineInfoWindow.resx">
+      <DependentUpon>NewLineInfoWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\NewStationInfoWindow.resx">
       <DependentUpon>NewStationInfoWindow.cs</DependentUpon>

@@ -57,6 +57,7 @@ namespace Timetables.Client
 		public string Ago { get; set; } = "ago";
 		public string LeavesIn { get; set; } = "Leaves in";
 		public string NewStationInfo { get; set; } = "New station info";
+		public string NewLineInfo { get; set; } = "New line info";
 		public string NewJourney { get; set; } = "New journey";
 		public string StationNotFound { get; set; } = "Station not found";
 		public string UnableToFindStation { get; set; } = "Unable to find station with name";
@@ -96,6 +97,8 @@ namespace Timetables.Client
 		public string Ship { get; set; } = "Ship";
 		public string ForceDataDownload { get; set; } = "Force data download";
 		public string DataDownloadedSuccessfully { get; set; } = "Data downloaded successfully.";
+		public string Headsign { get; set; } = "Headsign";
+		public string GetLineInfo { get; set; } = "Get information about line";
 
 		/// <summary>
 		/// Returns language that is represented by the object.

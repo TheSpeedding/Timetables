@@ -65,10 +65,9 @@ namespace Timetables {
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
 			const Timetables::Structures::route_info& route_to_show_; // Route to show.
-			const std::wstring headsign_; // Direction that the user wants to search in.
 		public:
-			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id, const std::wstring& headsign) : 
-				earliest_departure_(earliest_departure), count_(count), route_to_show_(feed.routes_info().at(route_info_id)), headsign_(headsign) {}
+			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id) : 
+				earliest_departure_(earliest_departure), count_(count), route_to_show_(feed.routes_info().at(route_info_id)) {}
 			virtual void obtain_departure_board() override;
 
 		};

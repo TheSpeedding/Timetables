@@ -20,7 +20,7 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		/// <param name="tb">Textbox.</param>
 		/// <param name="content">Content.</param>
-		public static void AutoCompleteTextBox(TextBox tb, string[] content)
+		internal static void AutoCompleteTextBox(TextBox tb, string[] content)
 		{
 			tb.AutoCompleteSource = AutoCompleteSource.CustomSource;
 			tb.AutoCompleteCustomSource.AddRange(content);
@@ -59,6 +59,24 @@ namespace Timetables.Application.Desktop
 		}
 
 		/// <summary>
+		/// Returns true if everything is OK.
+		/// </summary>
+		public static async Task<bool> CheckBasicDataValidity()
+		{
+			if (!DataFeedDesktop.OfflineMode)
+				try
+				{
+					await DataFeedClient.DownloadAsync(true); // Checks basic data validity.
+				}
+				catch (System.Net.WebException)
+				{
+					MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return false;
+				}
+			return true;
+		}
+
+		/// <summary>
 		/// Tries to obtain journeys and returns window with results.
 		/// </summary>
 		/// <param name="sourceName">Source station name.</param>
@@ -73,22 +91,12 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results</returns>
 		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
-			if (!DataFeedDesktop.OfflineMode)
-				try
-				{
-					await DataFeedClient.DownloadAsync(true); // Checks basic data validity.
-				}
-				catch (System.Net.WebException)
-				{
-					MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return null;
-				}
+			if (!await CheckBasicDataValidity()) return null;
 
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
 
-			if (source == null || target == null)
-				return null;
+			if (source == null || target == null) return null;
 
 			var routerRequest = new RouterRequest(source.ID, target.ID, dt, transfers, count, coefficient, mot);
 			var routerResponse = await SendRouterRequestAsync(routerRequest);
@@ -134,7 +142,7 @@ namespace Timetables.Application.Desktop
 		}
 
 		/// <summary>
-		/// Tries to obtain departures and return window with results
+		/// Tries to obtain station info and return window with results.
 		/// </summary>
 		/// <param name="stationName">Station name.</param>
 		/// <param name="dt">Datetime.</param>
@@ -145,30 +153,34 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results.</returns>
 		public static async Task<DepartureBoardResultsWindow> SendStationInfoRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
 		{
-			if (!DataFeedDesktop.OfflineMode)
-				try
-				{
-					await DataFeedClient.DownloadAsync(true); // Checks basic data validity.
-				}
-				catch (System.Net.WebException)
-				{
-					MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return null;
-				}
+			if (!await CheckBasicDataValidity()) return null;
 
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
-			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel)))
-				return null;
+			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel))) return null;
 
 			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
-			var dbResponse = await SendStationInfoRequestAsync(dbRequest);
+			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
 
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, win);
 		}
 
-		public static async Task<DepartureBoardResponse> SendStationInfoRequestAsync(StationInfoRequest dbRequest)
+		public static async Task<DepartureBoardResultsWindow> SendLineInfoRequestAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
+		{
+			if (!await CheckBasicDataValidity()) return null;
+			
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
+
+			if (route == null) return null;
+
+			var dbRequest = new LineInfoRequest(dt, count, route.ID);
+			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
+
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, win);
+		}
+
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -176,11 +188,14 @@ namespace Timetables.Application.Desktop
 			{
 				await Task.Run(() =>
 				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
+					using (var dbProcessing = dbRequest.GetType() == typeof(StationInfoRequest) ? // Decide if it is line info request or station info request.
+						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (StationInfoRequest)dbRequest) :
+						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (LineInfoRequest)dbRequest))
 					{
 						dbProcessing.ObtainDepartureBoard();
 						dbResponse = dbProcessing.ShowDepartureBoard();
 					}
+
 				});
 			}
 

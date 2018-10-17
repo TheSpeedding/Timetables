@@ -62,18 +62,13 @@ namespace Timetables.Client
 	/// </summary>
 	public sealed class LineInfoRequest : DepartureBoardRequest
 	{
-		/// <summary>
-		/// Direction of the line for this request.
-		/// </summary>
-		public string Headsign { get; }
-		public LineInfoRequest(DateTime departureTime, int count, int routeID, string headsign)
+		public LineInfoRequest(DateTime departureTime, int count, int routeID)
 		{
 			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			Count = count;
 			RouteInfoID = routeID;
-			Headsign = headsign;
 		}
-		public override string ToString() => $"Line ID { RouteInfoID } in direction of { Headsign }. Count: { Count }.";
+		public override string ToString() => $"Line ID { RouteInfoID }. Count: { Count }.";
 	}
 
 	/// <summary>

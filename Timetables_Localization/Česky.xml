@@ -42,6 +42,7 @@
 	<LeavesIn>Za</LeavesIn>
 	<NewJourney>Nové spojení</NewJourney>
 	<NewStationInfo>Nové informace o stanici</NewStationInfo>
+	<NewLineInfo>Nové informace o lince</NewLineInfo>
 	<StationNotFound>Stanice nenalezena</StationNotFound>
 	<UnableToFindStation>Nepodařilo se najít stanici s názvem</UnableToFindStation>
 	<Map>Mapa</Map>
@@ -80,4 +81,6 @@
 	<Bus>Autobus</Bus>
 	<ForceDataDownload>Vynutit aktualizaci dat</ForceDataDownload>
 	<DataDownloadedSuccessfully>Data úspěšně aktualizována.</DataDownloadedSuccessfully>
+	<Headsign>Směr</Headsign>
+	<GetLineInfo>Najít informace o lince</GetLineInfo>
 </Localization>

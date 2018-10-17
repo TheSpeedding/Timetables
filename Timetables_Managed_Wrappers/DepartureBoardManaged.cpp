@@ -28,7 +28,7 @@ Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::In
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::LineInfoRequest^ req) {
-	native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID, msclr::interop::marshal_as<std::wstring>(req->Headsign));
+	native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID);
 }
 
 void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {

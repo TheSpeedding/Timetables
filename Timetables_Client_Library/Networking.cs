@@ -85,7 +85,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Specialized class for departure board processing.
 	/// </summary>
-	public sealed class DepartureBoardProcessing : Networking<StationInfoRequest, DepartureBoardResponse>
+	public sealed class DepartureBoardProcessing : Networking<DepartureBoardRequest, DepartureBoardResponse>
 	{
 		/// <summary>
 		/// Connects host to the departure board server.

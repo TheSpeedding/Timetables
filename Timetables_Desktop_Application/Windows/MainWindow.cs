@@ -18,6 +18,7 @@ namespace Timetables.Application.Desktop
 			journeyToolStripMenuItem.Text = Settings.Localization.Journey;
 			departureBoardToolStripMenuItem.Text = Settings.Localization.DepartureBoard;
 			findDeparturesToolStripMenuItem.Text = Settings.Localization.FindDeparturesFromTheStation;
+			requestlineInfoToolStripMenuItem.Text = Settings.Localization.GetLineInfo;
 			findjourneyToolStripMenuItem.Text = Settings.Localization.FindJourney;
 			showmapToolStripMenuItem.Text = Settings.Localization.ShowMap;
 			favoritesToolStripMenuItem.Text = Settings.Localization.Favorites;
@@ -59,5 +60,7 @@ namespace Timetables.Application.Desktop
 		}
 
 		private void showmapToolStripMenuItem_Click(object sender, EventArgs e) => new ShowMapWindow().Show(mainDockPanel, DockState.Document);
+
+		private void requestlineInfoToolStripMenuItem_Click(object sender, EventArgs e) => new NewLineInfoWindow().Show(mainDockPanel, DockState.Document);
 	}
 }

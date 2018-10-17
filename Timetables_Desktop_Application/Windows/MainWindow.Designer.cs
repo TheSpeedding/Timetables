@@ -44,6 +44,7 @@
 			this.extraordinaryEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lockoutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.requestlineInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -100,6 +101,7 @@
 			// 
 			this.departureBoardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findDeparturesToolStripMenuItem,
+            this.requestlineInfoToolStripMenuItem,
             this.showmapToolStripMenuItem,
             this.toolStripSeparator1,
             this.favoritesToolStripMenuItem});
@@ -110,26 +112,26 @@
 			// findDeparturesToolStripMenuItem
 			// 
 			this.findDeparturesToolStripMenuItem.Name = "findDeparturesToolStripMenuItem";
-			this.findDeparturesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.findDeparturesToolStripMenuItem.Text = "Find &departures";
+			this.findDeparturesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+			this.findDeparturesToolStripMenuItem.Text = "Find &departures from station";
 			this.findDeparturesToolStripMenuItem.Click += new System.EventHandler(this.findDeparturesToolStripMenuItem_Click);
 			// 
 			// showmapToolStripMenuItem
 			// 
 			this.showmapToolStripMenuItem.Name = "showmapToolStripMenuItem";
-			this.showmapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.showmapToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
 			this.showmapToolStripMenuItem.Text = "Show &map";
 			this.showmapToolStripMenuItem.Click += new System.EventHandler(this.showmapToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
 			// 
 			// favoritesToolStripMenuItem
 			// 
 			this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
-			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
 			this.favoritesToolStripMenuItem.Text = "&Favorites";
 			this.favoritesToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem_Click);
 			// 
@@ -162,6 +164,13 @@
 			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.settingsToolStripMenuItem.Text = "Settings";
 			this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+			// 
+			// requestlineInfoToolStripMenuItem
+			// 
+			this.requestlineInfoToolStripMenuItem.Name = "requestlineInfoToolStripMenuItem";
+			this.requestlineInfoToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+			this.requestlineInfoToolStripMenuItem.Text = "Request &line info";
+			this.requestlineInfoToolStripMenuItem.Click += new System.EventHandler(this.requestlineInfoToolStripMenuItem_Click);
 			// 
 			// MainWindow
 			// 
@@ -201,6 +210,7 @@
 		private System.Windows.Forms.ToolStripMenuItem extraordinaryEventsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem lockoutsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem requestlineInfoToolStripMenuItem;
 	}
 }
 
