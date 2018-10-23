@@ -18,14 +18,20 @@ namespace Timetables.Client
 		/// </summary>
 		public ulong EarliestDepartureDateTime { get; protected set; }
 		/// <summary>
+		/// Route identificator. If not set, -1 is a default value.
+		/// </summary>
+		public int RouteInfoID { get; protected set; } = -1;
+		/// <summary>
 		/// Number of departures wanted.
 		/// </summary>
-		public int Count { get; protected set; }
+		public int Count { get; protected set; } = -1;
 		/// <summary>
-		/// Route identificator.
+		/// Maximal arrival datetime as Unix timestamp.
 		/// </summary>
-		public int RouteInfoID { get; protected set; }
-    }
+		public ulong MaximalArrivalDateTime { get; protected set; }
+		public bool SearchByMaximalArrivalDateTime => Count == -1;
+		public bool SearchByCount => !SearchByMaximalArrivalDateTime;
+	}
 
 	/// <summary>
 	/// Requests for station info.
@@ -49,6 +55,14 @@ namespace Timetables.Client
 			IsStation = station;
 			RouteInfoID = routeID;
 		}
+		public StationInfoRequest(int stopID, DateTime departureTime, DateTime arrivalTime, bool station, int routeID = -1)
+		{
+			StopID = stopID;
+			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			MaximalArrivalDateTime = (ulong)(arrivalTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			IsStation = station;
+			RouteInfoID = routeID;
+		}
 		public override string ToString()
 		{
 			var idName = IsStation ? "Station" : "Stop";
@@ -67,6 +81,12 @@ namespace Timetables.Client
 		{
 			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			Count = count;
+			RouteInfoID = routeID;
+		}
+		public LineInfoRequest(DateTime departureTime, DateTime arrivalTime, int routeID)
+		{
+			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			MaximalArrivalDateTime = (ulong)(arrivalTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			RouteInfoID = routeID;
 		}
 		public override string ToString() => $"Line ID: { RouteInfoID }. Count: { Count }.";

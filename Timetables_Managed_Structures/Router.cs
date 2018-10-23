@@ -28,10 +28,6 @@ namespace Timetables.Client
 		/// </summary>
 		public int MaxTransfers { get; }
 		/// <summary>
-		/// Number of journeys to find.
-		/// </summary>
-		public int Count { get; }
-		/// <summary>
 		/// Coefficient that is transfer duration multiplied with.
 		/// </summary>
 		public double TransfersDurationCoefficient { get; }
@@ -39,6 +35,16 @@ namespace Timetables.Client
 		/// Means of transport that can be used in journey.
 		/// </summary>
 		public MeanOfTransport MeansOfTransport { get; }
+		/// <summary>
+		/// Number of journeys to find.
+		/// </summary>
+		public int Count { get; } = -1;
+		/// <summary>
+		/// Maximal arrival datetime as Unix timestamp.
+		/// </summary>
+		public ulong MaximalArrivalDateTime { get; protected set; }
+		public bool SearchByMaximalArrivalDateTime => Count == -1;
+		public bool SearchByCount => !SearchByMaximalArrivalDateTime;
 		public RouterRequest(int sourceStationID, int targetStationID, DateTime departureDateTime, int transfers, int count, double coefficient, MeanOfTransport mot)
 		{
 			SourceStationID = sourceStationID;
@@ -46,6 +52,16 @@ namespace Timetables.Client
 			EarliestDepartureDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			MaxTransfers = transfers;
 			Count = count;
+			TransfersDurationCoefficient = coefficient;
+			MeansOfTransport = mot;
+		}
+		public RouterRequest(int sourceStationID, int targetStationID, DateTime departureDateTime, int transfers, DateTime arrivalTime, double coefficient, MeanOfTransport mot)
+		{
+			SourceStationID = sourceStationID;
+			TargetStationID = targetStationID;
+			EarliestDepartureDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			MaxTransfers = transfers;
+			MaximalArrivalDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			TransfersDurationCoefficient = coefficient;
 			MeansOfTransport = mot;
 		}
