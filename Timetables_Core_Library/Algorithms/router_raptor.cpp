@@ -245,23 +245,25 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 	if (fastest_journeys_.size() == 0)
 		return;
 
-	for (size_t i = 1; i < count_; i++) {
+	for (size_t i = 1; search_by_arrival_ ? (previous_fastest_journey != nullptr && previous_fastest_journey->arrival_time() < maximal_arrival_) : i < count_; i++) {
 
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 		
-		if (fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+		if (!search_by_arrival_ && fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
 
 		previous_fastest_journey = current_fastest_journey;
 	}
 
-	auto it = fastest_journeys_.begin();
-	for (size_t i = 0; i < count_ && it != fastest_journeys_.end(); ++it, i++);
+	if (!search_by_arrival_) {
+		auto it = fastest_journeys_.begin();
+		for (size_t i = 0; i < count_ && it != fastest_journeys_.end(); ++it, i++);
 
-	fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
+		fastest_journeys_.erase(it, fastest_journeys_.end()); // Delete unwanted journeys.
+	}
 }
 
 const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::obtain_journey(const Timetables::Structures::date_time& departure) {
