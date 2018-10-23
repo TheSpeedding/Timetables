@@ -24,11 +24,17 @@ Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardM
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::StationInfoRequest^ req) {
-	native_departure_board_ = new Timetables::Algorithms::station_info(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID, req->IsStation);
+	if (req->SearchByCount)
+		native_departure_board_ = new Timetables::Algorithms::station_info(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID, req->IsStation);
+	else
+		;
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::LineInfoRequest^ req) {
-	native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID);
+	if (req->SearchByCount)
+		native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID);
+	else
+		;
 }
 
 void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {
