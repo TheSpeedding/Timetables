@@ -89,7 +89,7 @@ namespace Timetables.Application.Desktop
 		/// <param name="win">Window with request.</param>
 		/// <param name="comp">Comparer for journeys.</param>
 		/// <returns>Window with results</returns>
-		public static async Task<JourneyResultsWindow> SendRouterRequestAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
+		public static async Task<JourneyResultsWindow> GetRouterWindowAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
 			if (!await CheckBasicDataValidity()) return null;
 
@@ -151,7 +151,7 @@ namespace Timetables.Application.Desktop
 		/// <param name="routeLabel">Route label.</param>
 		/// <param name="win">Window with request.</param>
 		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> SendStationInfoRequestAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
+		public static async Task<DepartureBoardResultsWindow> GetStationInfoWindowAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
 		{
 			if (!await CheckBasicDataValidity()) return null;
 
@@ -166,7 +166,7 @@ namespace Timetables.Application.Desktop
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, true, win);
 		}
 
-		public static async Task<DepartureBoardResultsWindow> SendLineInfoRequestAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
+		public static async Task<DepartureBoardResultsWindow> GetLineInfoWindowAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
 		{
 			if (!await CheckBasicDataValidity()) return null;
 			

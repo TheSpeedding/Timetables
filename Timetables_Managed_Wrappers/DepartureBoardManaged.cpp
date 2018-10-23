@@ -2,7 +2,6 @@
 #include "../Timetables_Core_Library/Algorithms/departure_board.hpp"
 #include "../Timetables_Core_Library/Structures/date_time.hpp"
 #include "DepartureBoardManaged.hpp"
-#include <msclr/marshal_cppstd.h> 
 
 Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardManaged::ShowDepartureBoard() {
 	System::Collections::Generic::List<Timetables::Client::Departure^>^ departures = gcnew System::Collections::Generic::List<Timetables::Client::Departure^>();
@@ -27,14 +26,15 @@ Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::In
 	if (req->SearchByCount)
 		native_departure_board_ = new Timetables::Algorithms::station_info(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID, req->IsStation);
 	else
-		;
+		native_departure_board_ = new Timetables::Algorithms::station_info(feed->Get(), req->StopID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), Timetables::Structures::date_time(req->MaximalArrivalDateTime), req->RouteInfoID, req->IsStation);
+
 }
 
 Timetables::Interop::DepartureBoardManaged::DepartureBoardManaged(Timetables::Interop::DataFeedManaged^ feed, Timetables::Client::LineInfoRequest^ req) {
 	if (req->SearchByCount)
 		native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->RouteInfoID);
 	else
-		;
+		native_departure_board_ = new Timetables::Algorithms::line_info(feed->Get(), Timetables::Structures::date_time(req->EarliestDepartureDateTime), Timetables::Structures::date_time(req->MaximalArrivalDateTime), req->RouteInfoID);
 }
 
 void Timetables::Interop::DepartureBoardManaged::ObtainDepartureBoard() {

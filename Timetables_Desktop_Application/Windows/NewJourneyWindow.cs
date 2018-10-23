@@ -73,7 +73,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendRouterRequestAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (int)transfersNumericUpDown.Value, (int)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
+			var window = await Requests.GetRouterWindowAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (int)transfersNumericUpDown.Value, (int)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
 			searchButton.Enabled = true;
 
 			if (window != null)

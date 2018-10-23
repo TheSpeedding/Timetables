@@ -45,17 +45,24 @@ namespace Timetables {
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
 			const Timetables::Structures::route_info* route_to_show_; // Nullptr if a user wants to show all the lines.
+			const bool search_by_arrival_; // Indicates whether the algorithm should search by maximal arrival. Otherwise by count.
+			const Timetables::Structures::date_time maximal_arrival_; // Maximal arrival defined by the user.
 		public:
 			station_info(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
 				const std::size_t count, int route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(count),
-				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)) {
-
+				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)), search_by_arrival_(false), maximal_arrival_(0) {
 				if (true_if_station)
 					stops_ = feed.stations().at(station_or_stop_id).child_stops();
-
 				else
 					stops_.push_back(&feed.stops().at(station_or_stop_id));
-
+			}
+			station_info(const Timetables::Structures::data_feed& feed, const std::size_t station_or_stop_id, const Timetables::Structures::date_time& earliest_departure,
+				const Timetables::Structures::date_time& maximal_arrival, int route_info_id, bool true_if_station) : earliest_departure_(earliest_departure), count_(0),
+				route_to_show_(route_info_id == -1 ? nullptr : &feed.routes_info().at(route_info_id)), search_by_arrival_(true), maximal_arrival_(maximal_arrival) {
+				if (true_if_station)
+					stops_ = feed.stations().at(station_or_stop_id).child_stops();
+				else
+					stops_.push_back(&feed.stops().at(station_or_stop_id));
 			}
 			virtual void obtain_departure_board() override;
 		};
@@ -65,9 +72,19 @@ namespace Timetables {
 			std::vector<const Timetables::Structures::route*> routes_to_show_; // Routes to show.
 			const Timetables::Structures::date_time earliest_departure_; // Earliest departure set by the user.
 			const std::size_t count_; // Number of departures to show.
+			const bool search_by_arrival_; // Indicates whether the algorithm should search by maximal arrival. Otherwise by count.
+			const Timetables::Structures::date_time maximal_arrival_; // Maximal arrival defined by the user.
 		public:
-			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id) : 
-				earliest_departure_(earliest_departure), count_(count) {
+			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, int route_info_id) :
+				earliest_departure_(earliest_departure), count_(count), search_by_arrival_(false), maximal_arrival_(0) {
+				for (std::size_t i = 0; i < feed.routes().size(); i++) {
+					if (&feed.routes().at(i).info() == &feed.routes_info().at(route_info_id)) {
+						routes_to_show_.push_back(&feed.routes().at(i));
+					}
+				}
+			}
+			line_info(const Timetables::Structures::data_feed& feed, const Timetables::Structures::date_time& earliest_departure, const Timetables::Structures::date_time& maximal_arrival, int route_info_id) :
+				earliest_departure_(earliest_departure), count_(0), search_by_arrival_(true), maximal_arrival_(maximal_arrival) {
 				for (std::size_t i = 0; i < feed.routes().size(); i++) {
 					if (&feed.routes().at(i).info() == &feed.routes_info().at(route_info_id)) {
 						routes_to_show_.push_back(&feed.routes().at(i));

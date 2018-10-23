@@ -36,12 +36,16 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 
 		if (stop->departures().cend() == stop->departures().cbegin()) continue; // The stop contains no departures.
 
+		const departure* latest_departure_in_this_round = nullptr;
+
 		auto it = stop->departures().cbegin();
 
 		size_t days = 0;
-		size_t counter = 0;
 
-		while (counter < count_ && days < 7) {
+		while ((search_by_arrival_ ?
+			(latest_departure_in_this_round == nullptr || latest_departure_in_this_round->departure_time() < maximal_arrival_) : // Condition for maximal arrival.
+			found_departures_.size() < count_ // Condition for number of departures.
+			) && days < 7) {
 
 			if (it == stop->departures().cend()) {
 				it = stop->departures().cbegin(); // Midnight reached.
@@ -66,7 +70,7 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 						, dep // Date time of the departure.
 						, s == outdated ? true : false));
 
-					counter++;
+					latest_departure_in_this_round = &*(--found_departures_.cend());
 				}
 
 
@@ -76,7 +80,7 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 
 	sort(found_departures_.begin(), found_departures_.end());
 
-	if (found_departures_.size() > count_)
+	if (!search_by_arrival_ && found_departures_.size() > count_)
 		found_departures_.erase(found_departures_.begin() + count_, found_departures_.end());	
 }
 
@@ -90,12 +94,16 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 
 		if (route->trips().cend() == route->trips().cbegin()) continue; // The route contains no trips.
 
+		const departure* latest_departure_in_this_round = nullptr;
+
 		auto it = route->trips().cbegin();
 
 		size_t days = 0;
-		size_t counter = 0;
 
-		while (counter < count_ && days < 7) {
+		while ((search_by_arrival_ ? 
+			(latest_departure_in_this_round == nullptr || latest_departure_in_this_round->departure_time() < maximal_arrival_) : // Condition for maximal arrival.
+			found_departures_.size() < count_ // Condition for number of departures.
+			) && days < 7) {
 
 			if (it == route->trips().cend()) {
 				it = route->trips().cbegin(); // Midnight reached.
@@ -116,7 +124,7 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 					, dep // Date time of the departure.
 					, s == outdated ? true : false));
 
-				counter++;
+				latest_departure_in_this_round = &*(--found_departures_.cend());
 			}
 
 			it++;
@@ -125,6 +133,6 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 
 	sort(found_departures_.begin(), found_departures_.end());
 
-	if (found_departures_.size() > count_)
+	if (!search_by_arrival_ && found_departures_.size() > count_)
 		found_departures_.erase(found_departures_.begin() + count_, found_departures_.end());
 }

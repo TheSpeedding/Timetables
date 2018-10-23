@@ -46,7 +46,7 @@ Timetables::Interop::RouterManaged::RouterManaged(Timetables::Interop::DataFeedM
 	if (req->SearchByCount)
 		native_router_ = new Timetables::Algorithms::router_raptor(feed->Get(), req->SourceStationID, req->TargetStationID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), req->Count, req->MaxTransfers, req->TransfersDurationCoefficient, static_cast<Timetables::Structures::mean_of_transport>(req->MeansOfTransport));
 	else
-		;
+		native_router_ = new Timetables::Algorithms::router_raptor(feed->Get(), req->SourceStationID, req->TargetStationID, Timetables::Structures::date_time(req->EarliestDepartureDateTime), Timetables::Structures::date_time(req->MaximalArrivalDateTime), req->MaxTransfers, req->TransfersDurationCoefficient, static_cast<Timetables::Structures::mean_of_transport>(req->MeansOfTransport));
 }
 
 void Timetables::Interop::RouterManaged::ObtainJourneys() {

@@ -27,7 +27,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.SendLineInfoRequestAsync(departureDateTimePicker.Value, (int)countNumericUpDown.Value, lineTextBox.Text, this);
+			var window = await Requests.GetLineInfoWindowAsync(departureDateTimePicker.Value, (int)countNumericUpDown.Value, lineTextBox.Text, this);
 			searchButton.Enabled = true;
 
 			if (window != null)
