@@ -42,9 +42,11 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 
 		size_t days = 0;
 
+		size_t counter = 0;
+
 		while ((search_by_arrival_ ?
 			(latest_departure_in_this_round == nullptr || latest_departure_in_this_round->departure_time() < maximal_arrival_) : // Condition for maximal arrival.
-			found_departures_.size() < count_ // Condition for number of departures.
+			counter < count_ // Condition for number of departures.
 			) && days < 7) {
 
 			if (it == stop->departures().cend()) {
@@ -71,6 +73,8 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 						, s == outdated ? true : false));
 
 					latest_departure_in_this_round = &*(--found_departures_.cend());
+
+					counter++;
 				}
 
 
@@ -99,10 +103,12 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 		auto it = route->trips().cbegin();
 
 		size_t days = 0;
+		
+		size_t counter = 0;
 
 		while ((search_by_arrival_ ? 
 			(latest_departure_in_this_round == nullptr || latest_departure_in_this_round->departure_time() < maximal_arrival_) : // Condition for maximal arrival.
-			found_departures_.size() < count_ // Condition for number of departures.
+			counter < count_ // Condition for number of departures.
 			) && days < 7) {
 
 			if (it == route->trips().cend()) {
@@ -125,6 +131,8 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 					, s == outdated ? true : false));
 
 				latest_departure_in_this_round = &*(--found_departures_.cend());
+
+				counter++;
 			}
 
 			it++;

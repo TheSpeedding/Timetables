@@ -9,7 +9,7 @@ namespace Timetables.Client
 	/// Class serving router requests.
 	/// </summary>
 	[Serializable]
-	public class RouterRequest
+	public class RouterRequest : RequestBase
 	{
 		/// <summary>
 		/// Source station identificator.
@@ -35,16 +35,6 @@ namespace Timetables.Client
 		/// Means of transport that can be used in journey.
 		/// </summary>
 		public MeanOfTransport MeansOfTransport { get; }
-		/// <summary>
-		/// Number of journeys to find.
-		/// </summary>
-		public int Count { get; } = -1;
-		/// <summary>
-		/// Maximal arrival datetime as Unix timestamp.
-		/// </summary>
-		public ulong MaximalArrivalDateTime { get; protected set; }
-		public bool SearchByMaximalArrivalDateTime => Count == -1;
-		public bool SearchByCount => !SearchByMaximalArrivalDateTime;
 		public RouterRequest(int sourceStationID, int targetStationID, DateTime departureDateTime, int transfers, int count, double coefficient, MeanOfTransport mot)
 		{
 			SourceStationID = sourceStationID;
@@ -72,16 +62,12 @@ namespace Timetables.Client
 	/// Class serving router responses.
 	/// </summary>
 	[Serializable]
-	public class RouterResponse
+	public class RouterResponse : ResponseBase
 	{
 		/// <summary>
 		/// List of journeys found by the algorithms.
 		/// </summary>
 		public List<Journey> Journeys { get; set; }
-		/// <summary>
-		/// Specifies when was the response created. Used in caching.
-		/// </summary>
-		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public RouterResponse() => Journeys = new List<Journey>();
 		public RouterResponse(List<Journey> journeys) => Journeys = journeys;
 		/// <summary>

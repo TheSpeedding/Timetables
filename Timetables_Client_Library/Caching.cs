@@ -16,7 +16,7 @@ namespace Timetables.Client
 	/// </summary>
 	/// <typeparam name="T">Data type to cache.</typeparam>
 	/// <typeparam name="R">Data type to create new request for update.</typeparam>
-	public abstract class CachedData<T, R>
+	public abstract class CachedData<T, R> where T : ResponseBase where R : RequestBase
 	{
 		/// <summary>
 		/// Directory where the cached files are saved.

@@ -8,8 +8,6 @@ using System.Xml.Serialization;
 
 namespace Timetables.Client
 {
-	// TO-DO: Better place for this class.
-
 	/// <summary>
 	/// Color structure is not serializable by default. We need to serialize the color as well.
 	/// </summary>

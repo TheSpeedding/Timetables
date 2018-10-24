@@ -11,7 +11,7 @@ namespace Timetables.Client
 	/// Class serving departure board requests.
 	/// </summary>
 	[Serializable]
-    public abstract class DepartureBoardRequest
+    public abstract class DepartureBoardRequest : RequestBase
 	{
 		/// <summary>
 		/// Departure time as Unix timestamp.
@@ -21,16 +21,6 @@ namespace Timetables.Client
 		/// Route identificator. If not set, -1 is a default value.
 		/// </summary>
 		public int RouteInfoID { get; protected set; } = -1;
-		/// <summary>
-		/// Number of departures wanted.
-		/// </summary>
-		public int Count { get; protected set; } = -1;
-		/// <summary>
-		/// Maximal arrival datetime as Unix timestamp.
-		/// </summary>
-		public ulong MaximalArrivalDateTime { get; protected set; }
-		public bool SearchByMaximalArrivalDateTime => Count == -1;
-		public bool SearchByCount => !SearchByMaximalArrivalDateTime;
 	}
 
 	/// <summary>
@@ -96,16 +86,12 @@ namespace Timetables.Client
 	/// Class serving departure board responses.
 	/// </summary>
 	[Serializable]
-	public class DepartureBoardResponse
+	public class DepartureBoardResponse : ResponseBase
 	{
 		/// <summary>
 		/// List of departures found by the algorithms.
 		/// </summary>
 		public List<Departure> Departures { get; set; }
-		/// <summary>
-		/// Specifies when was the response created. Used in caching.
-		/// </summary>
-		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DepartureBoardResponse() => Departures = new List<Departure>();
 		public DepartureBoardResponse(List<Departure> departures) => Departures = departures;
 		/// <summary>
