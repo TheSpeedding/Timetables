@@ -102,6 +102,10 @@ namespace Timetables.Client
 		/// List of departures found by the algorithms.
 		/// </summary>
 		public List<Departure> Departures { get; set; }
+		/// <summary>
+		/// Specifies when was the response created. Used in caching.
+		/// </summary>
+		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DepartureBoardResponse() => Departures = new List<Departure>();
 		public DepartureBoardResponse(List<Departure> departures) => Departures = departures;
 		/// <summary>

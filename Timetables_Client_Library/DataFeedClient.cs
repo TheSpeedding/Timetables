@@ -27,7 +27,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Timespan that the cached data should be cached in advance.
 		/// </summary>
-		public static TimeSpan CachingTime { get; } = new TimeSpan(1, 0, 0, 0);
+		public static TimeSpan TimeToCacheFor { get; } = new TimeSpan(1, 0, 0, 0);
+		/// <summary>
+		/// Timespan that the cached data should be updated before expiration.
+		/// </summary>
+		public static TimeSpan TimeToUpdateCachedBeforeExpiration { get; } = new TimeSpan(6, 0, 0);
 		/// <summary>
 		/// Basic data feed.
 		/// </summary>

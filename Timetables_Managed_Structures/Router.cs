@@ -78,6 +78,10 @@ namespace Timetables.Client
 		/// List of journeys found by the algorithms.
 		/// </summary>
 		public List<Journey> Journeys { get; set; }
+		/// <summary>
+		/// Specifies when was the response created. Used in caching.
+		/// </summary>
+		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public RouterResponse() => Journeys = new List<Journey>();
 		public RouterResponse(List<Journey> journeys) => Journeys = journeys;
 		/// <summary>

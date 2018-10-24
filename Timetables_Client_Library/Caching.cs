@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Timetables.Structures.Basic;
 
 namespace Timetables.Client
 {
-	public abstract class CachedData<T>
+	/// <summary>
+	/// Base class for cached data.
+	/// </summary>
+	/// <typeparam name="T">Data type to cache.</typeparam>
+	/// <typeparam name="R">Data type to create new request for update.</typeparam>
+	public abstract class CachedData<T, R>
 	{
 		/// <summary>
 		/// Directory where the cached files are saved.
@@ -30,30 +36,28 @@ namespace Timetables.Client
 		/// <returns>Requested journeys.</returns>
 		public T LoadResults()
 		{
-			using (FileStream fileStream = new FileStream(pathToFile, FileMode.Open))
+			using (FileStream fileStream = new FileStream(cachedFilesDirectory + pathToFile, FileMode.Open))
 				return (T)new XmlSerializer(typeof(T)).Deserialize(fileStream);
 		}
 		/// <summary>
-		/// Caches the results to the specified path and returns true on success.
+		/// Decides whether the cached data should be updated or not yet.
 		/// </summary>
-		protected static bool SaveResults(T res, string path)
+		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Element("CreatedAt")?.Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) >= DateTime.Now;
+		/// <summary>
+		/// Caches the results to the specified path.
+		/// </summary>
+		protected static void SaveResults(T res, string path)
 		{
-			try
-			{
-				using (StreamWriter sw = new StreamWriter(path))
-					new XmlSerializer(typeof(T)).Serialize(sw, res);
-			}
-
-			catch
-			{
-				return false;
-			}
-
-			return true;
+			using (StreamWriter sw = new StreamWriter(path))
+				new XmlSerializer(typeof(T)).Serialize(sw, res);
 		}
+		/// <summary>
+		/// Constructs new request so it is ready to be updated.
+		/// </summary>
+		public abstract R ConstructNewRequest();
 	}
 
-	public class StationInfoCached : CachedData<DepartureBoardResponse>
+	public class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>
 	{
 		private static string stationInfoPrefix = "si";
 		private static readonly Regex stationInfoFilePattern = new Regex($@"{ stationInfoPrefix }-[0-9]+\.fav"); // Format: "si-<station id>.fav"
@@ -69,23 +73,35 @@ namespace Timetables.Client
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
-		public static IEnumerable<StationInfoCached> FetchStationInfoData(string directoryPath) =>
-			Directory.EnumerateFiles(directoryPath).Where(x => stationInfoFilePattern.IsMatch(x)).Select(x => new StationInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
+		public static IEnumerable<StationInfoCached> FetchStationInfoData() =>
+			Directory.EnumerateFiles(cachedFilesDirectory).Where(x => stationInfoFilePattern.IsMatch(x)).Select(x => new StationInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(DepartureBoardResponse res) =>
-			SaveResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + DataFeedClient.Basic.Stops.FindByIndex(res.Departures[0].StopID).ParentStation.ID + ".fav");
+		public static bool SaveResults(DepartureBoardResponse res)
+		{
+			try
+			{
+				SaveResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + DataFeedClient.Basic.Stops.FindByIndex(res.Departures[0].StopID).ParentStation.ID + ".fav");
+			}
+
+			catch
+			{
+				return false;
+			}
+
+			return true;
+		} 
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
-		public StationInfoRequest ConstructNewRequest() => new StationInfoRequest(Station.ID, DateTime.Now, DateTime.Now.Add(DataFeedClient.CachingTime), true);
+		public override StationInfoRequest ConstructNewRequest() => new StationInfoRequest(Station.ID, DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), true);
 	}
 
-	public class LineInfoCached : CachedData<DepartureBoardResponse>
+	public class LineInfoCached : CachedData<DepartureBoardResponse, LineInfoRequest>
 	{
 		private static string lineInfoPrefix = "li";
-		private static readonly Regex lineInfoFilePattern = new Regex($@"{ lineInfoPrefix }-[0-9]+\.fav"); // Format: "li-<route info id>-fav"
+		private static readonly Regex lineInfoFilePattern = new Regex($@"{ lineInfoPrefix }-[0-9]+\.fav"); // Format: "li-<route info id>.fav"
 		/// <summary>
 		/// Cached line.
 		/// </summary>
@@ -98,20 +114,32 @@ namespace Timetables.Client
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
-		public static IEnumerable<LineInfoCached> FetchLineInfoData(string directoryPath) =>
-			Directory.EnumerateFiles(directoryPath).Where(x => lineInfoFilePattern.IsMatch(x)).Select(x => new LineInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
+		public static IEnumerable<LineInfoCached> FetchLineInfoData() =>
+			Directory.EnumerateFiles(cachedFilesDirectory).Where(x => lineInfoFilePattern.IsMatch(x)).Select(x => new LineInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(DepartureBoardResponse res) =>
-			SaveResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + DataFeedClient.Basic.RoutesInfo.FindByLabel(res.Departures[0].LineLabel).ID + ".fav");
+		public static bool SaveResults(DepartureBoardResponse res)
+		{
+			try
+			{
+				SaveResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + DataFeedClient.Basic.RoutesInfo.FindByLabel(res.Departures[0].LineLabel).ID + ".fav");
+			}
+
+			catch
+			{
+				return false;
+			}
+
+			return true;
+		}			
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
-		public LineInfoRequest ConstructNewRequest() => new LineInfoRequest(DateTime.Now, DateTime.Now.Add(DataFeedClient.CachingTime), Route.ID);
+		public override LineInfoRequest ConstructNewRequest() => new LineInfoRequest(DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), Route.ID);
 	}
 
-	public class JourneyCached : CachedData<RouterResponse>
+	public class JourneyCached : CachedData<RouterResponse, RouterRequest>
 	{
 		private static string journeyPrefix = "jo";
 		private static readonly Regex journeyFilePattern = new Regex($@"{ journeyPrefix }-[0-9]+-[0-9]+\.fav"); // Format: "jo-<source station id>-<target station id>.fav"
@@ -132,8 +160,8 @@ namespace Timetables.Client
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
-		public static IEnumerable<JourneyCached> FetchJourneyData(string directoryPath) =>
-			Directory.EnumerateFiles(directoryPath).Where(x => journeyFilePattern.IsMatch(x)).Select(x =>
+		public static IEnumerable<JourneyCached> FetchJourneyData() =>
+			Directory.EnumerateFiles(cachedFilesDirectory).Where(x => journeyFilePattern.IsMatch(x)).Select(x =>
 			{
 				var tokens = GetTokensFromFileName(x);
 				return new JourneyCached(tokens.ElementAt(0), tokens.ElementAt(1), x);
@@ -141,7 +169,23 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(RouterResponse res) =>
-			SaveResults(res, cachedFilesDirectory + journeyPrefix + "-" + res.Journeys[0].JourneySegments.First().SourceStopID + "-" + res.Journeys[0].JourneySegments.Last().TargetStopID + ".fav");
+		public static bool SaveResults(RouterResponse res)
+		{
+			try
+			{
+				SaveResults(res, cachedFilesDirectory + journeyPrefix + "-" + res.Journeys[0].JourneySegments.First().SourceStopID + "-" + res.Journeys[0].JourneySegments.Last().TargetStopID + ".fav");
+			}
+
+			catch
+			{
+				return false;
+			}
+
+			return true;
+		}			
+		/// <summary>
+		/// Constructs new request so it is ready to be updated.
+		/// </summary>
+		public override RouterRequest ConstructNewRequest() => new RouterRequest(SourceStation.ID, TargetStation.ID, DateTime.Now, 100, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), 1.0, (MeanOfTransport)255);
 	}
 }
