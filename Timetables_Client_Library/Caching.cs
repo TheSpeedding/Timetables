@@ -70,6 +70,7 @@ namespace Timetables.Client
 			Station = DataFeedClient.Basic.Stations.FindByIndex(stationId);
 			pathToFile = path;
 		}
+		public override string ToString() => Station.Name;
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
@@ -111,6 +112,7 @@ namespace Timetables.Client
 			Route = DataFeedClient.Basic.RoutesInfo.FindByIndex(routeInfoId);
 			pathToFile = path;
 		}
+		public override string ToString() => Route.Label;
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
@@ -157,6 +159,7 @@ namespace Timetables.Client
 			TargetStation = DataFeedClient.Basic.Stations.FindByIndex(targetStationId);
 			pathToFile = path;
 		}
+		public override string ToString() => $"{ SourceStation.Name } - { TargetStation }";
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>
