@@ -217,13 +217,36 @@ namespace Timetables.Application.Desktop
 
 			return routerResponse;
 		}
+		/// <summary>
+		/// Caches the departures according to departure board request.
 		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
 		{
 			var response = await SendDepartureBoardRequestAsync(dbRequest);
 
 			return dbRequest.GetType() == typeof(StationInfoRequest) ? StationInfoCached.SaveResults(response) : LineInfoCached.SaveResults(response);
 		}
+		/// <summary>
+		/// Caches the journeys according to router request.
+		/// </summary>
 		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => JourneyCached.SaveResults(await SendRouterRequestAsync(routerRequest));
+		/// <summary>
+		/// Updates all the cached results.
+		/// </summary>
+		public static async Task UpdateCachedResultsAsync()
+		{
+			async Task forEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			{
+				foreach (var fetched in collection)
+					if (fetched.ShouldBeUpdated)
+						await processAsync(fetched.ConstructNewRequest());
+			}
+
+			await Task.WhenAll(
+				forEachFetchedResult(StationInfoCached.FetchStationInfoData(), CacheDepartureBoardAsync),
+				forEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
+				forEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
+				);
+		}
 		/// <summary>
 		/// Returns loading HTML string with customized text.
 		/// </summary>

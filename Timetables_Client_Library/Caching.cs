@@ -14,9 +14,9 @@ namespace Timetables.Client
 	/// <summary>
 	/// Base class for cached data.
 	/// </summary>
-	/// <typeparam name="T">Data type to cache.</typeparam>
-	/// <typeparam name="R">Data type to create new request for update.</typeparam>
-	public abstract class CachedData<T, R> where T : ResponseBase where R : RequestBase
+	/// <typeparam name="Res">Data type to cache.</typeparam>
+	/// <typeparam name="Req">Data type to create new request for update.</typeparam>
+	public abstract class CachedData<Res, Req> where Res : ResponseBase where Req : RequestBase
 	{
 		/// <summary>
 		/// Directory where the cached files are saved.
@@ -34,10 +34,10 @@ namespace Timetables.Client
 		/// Loads cached journeys from the file.
 		/// </summary>
 		/// <returns>Requested journeys.</returns>
-		public T LoadResults()
+		public Res LoadResults()
 		{
 			using (FileStream fileStream = new FileStream(cachedFilesDirectory + pathToFile, FileMode.Open))
-				return (T)new XmlSerializer(typeof(T)).Deserialize(fileStream);
+				return (Res)new XmlSerializer(typeof(Res)).Deserialize(fileStream);
 		}
 		/// <summary>
 		/// Decides whether the cached data should be updated or not yet.
@@ -46,15 +46,15 @@ namespace Timetables.Client
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>
-		protected static void SaveResults(T res, string path)
+		protected static void SaveResults(Res res, string path)
 		{
 			using (StreamWriter sw = new StreamWriter(path))
-				new XmlSerializer(typeof(T)).Serialize(sw, res);
+				new XmlSerializer(typeof(Res)).Serialize(sw, res);
 		}
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
-		public abstract R ConstructNewRequest();
+		public abstract Req ConstructNewRequest();
 	}
 
 	public class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>

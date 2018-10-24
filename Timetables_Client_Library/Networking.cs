@@ -14,7 +14,7 @@ namespace Timetables.Client
 	/// <summary>
 	/// Class that supplies methods for parsing Tcp streams, their operation and answers to the requests.
 	/// </summary>
-	public abstract class Networking<Request, Response> : IDisposable
+	public abstract class Networking<Req, Res> : IDisposable
 	{
 		private TcpClient client = new TcpClient();
 		private NetworkStream stream;
@@ -42,20 +42,20 @@ namespace Timetables.Client
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
-		private Response Receive() => (Response)new BinaryFormatter().Deserialize(stream);
+		private Res Receive() => (Res)new BinaryFormatter().Deserialize(stream);
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
 		/// </summary>
 		/// <param name="item">Object to serialize.</param>
-		private void Send(Request item) => new BinaryFormatter().Serialize(stream, item);
+		private void Send(Req item) => new BinaryFormatter().Serialize(stream, item);
 		/// <summary>
 		/// Processes the request asynchronously.
 		/// </summary>
 		/// <param name="request">Request.</param>
 		/// <returns>Response.</returns>
-		public async Task<Response> ProcessAsync(Request request, int timeout)
+		public async Task<Res> ProcessAsync(Req request, int timeout)
 		{
-			Response response = default(Response);
+			Res response = default(Res);
 
 			var connection = ConnectAsync();
 
