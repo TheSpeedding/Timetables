@@ -57,7 +57,6 @@ namespace Timetables.Application.Desktop
 
 			return route;
 		}
-
 		/// <summary>
 		/// Returns true if everything is OK.
 		/// </summary>
@@ -75,7 +74,6 @@ namespace Timetables.Application.Desktop
 				}
 			return true;
 		}
-
 		/// <summary>
 		/// Tries to obtain journeys and returns window with results.
 		/// </summary>
@@ -106,7 +104,86 @@ namespace Timetables.Application.Desktop
 
 			return routerResponse == null ? null : new JourneyResultsWindow(routerResponse, source.Name, target.Name, dt, win);
 		}
+		/// <summary>
+		/// Tries to obtain station info and return window with results.
+		/// </summary>
+		/// <param name="stationName">Station name.</param>
+		/// <param name="dt">Datetime.</param>
+		/// <param name="count">Number of departures.</param>
+		/// <param name="isStation">Indicates whether it is station or stop.</param>
+		/// <param name="routeLabel">Route label.</param>
+		/// <param name="win">Window with request.</param>
+		/// <returns>Window with results.</returns>
+		public static async Task<DepartureBoardResultsWindow> GetStationInfoWindowAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
+		{
+			if (!await CheckBasicDataValidity()) return null;
 
+			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
+
+			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel))) return null;
+
+			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
+			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
+
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, true, win);
+		}
+		/// <summary>
+		/// Tries to obtain station info and return window with results.
+		/// </summary>
+		/// <param name="dt">Datetime.</param>
+		/// <param name="count">Number of departures.</param>
+		/// <param name="routeLabel">Route label.</param>
+		/// <param name="win">Window with request.</param>
+		/// <returns>Window with results.</returns>
+		public static async Task<DepartureBoardResultsWindow> GetLineInfoWindowAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
+		{
+			if (!await CheckBasicDataValidity()) return null;
+			
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
+
+			if (route == null) return null;
+
+			var dbRequest = new LineInfoRequest(dt, count, route.ID);
+			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
+
+			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
+		}
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		{
+			DepartureBoardResponse dbResponse = null;
+
+			if (DataFeedDesktop.OfflineMode)
+			{
+				await Task.Run(() =>
+				{
+					using (var dbProcessing = dbRequest.GetType() == typeof(StationInfoRequest) ? // Decide if it is line info request or station info request. Method not overloaded, the rest of code remains the same.
+						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (StationInfoRequest)dbRequest) :
+						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (LineInfoRequest)dbRequest))
+					{
+						dbProcessing.ObtainDepartureBoard();
+						dbResponse = dbProcessing.ShowDepartureBoard();
+					}
+
+				});
+			}
+
+			else
+			{
+				using (var dbProcessing = new DepartureBoardProcessing())
+				{
+					try
+					{
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+					}
+					catch (System.Net.WebException)
+					{
+						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
+			return dbResponse;
+		}
 		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
 		{
 			RouterResponse routerResponse = null;
@@ -140,82 +217,13 @@ namespace Timetables.Application.Desktop
 
 			return routerResponse;
 		}
-
-		/// <summary>
-		/// Tries to obtain station info and return window with results.
-		/// </summary>
-		/// <param name="stationName">Station name.</param>
-		/// <param name="dt">Datetime.</param>
-		/// <param name="count">Number of departures.</param>
-		/// <param name="isStation">Indicates whether it is station or stop.</param>
-		/// <param name="routeLabel">Route label.</param>
-		/// <param name="win">Window with request.</param>
-		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> GetStationInfoWindowAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
+		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
 		{
-			if (!await CheckBasicDataValidity()) return null;
+			var response = await SendDepartureBoardRequestAsync(dbRequest);
 
-			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
-
-			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel))) return null;
-
-			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
-			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
-
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, true, win);
+			return dbRequest.GetType() == typeof(StationInfoRequest) ? StationInfoCached.SaveResults(response) : LineInfoCached.SaveResults(response);
 		}
-
-		public static async Task<DepartureBoardResultsWindow> GetLineInfoWindowAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
-		{
-			if (!await CheckBasicDataValidity()) return null;
-			
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
-
-			if (route == null) return null;
-
-			var dbRequest = new LineInfoRequest(dt, count, route.ID);
-			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
-
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
-		}
-
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
-		{
-			DepartureBoardResponse dbResponse = null;
-
-			if (DataFeedDesktop.OfflineMode)
-			{
-				await Task.Run(() =>
-				{
-					using (var dbProcessing = dbRequest.GetType() == typeof(StationInfoRequest) ? // Decide if it is line info request or station info request.
-						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (StationInfoRequest)dbRequest) :
-						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (LineInfoRequest)dbRequest))
-					{
-						dbProcessing.ObtainDepartureBoard();
-						dbResponse = dbProcessing.ShowDepartureBoard();
-					}
-
-				});
-			}
-
-			else
-			{
-				using (var dbProcessing = new DepartureBoardProcessing())
-				{
-					try
-					{
-						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
-					}
-					catch (System.Net.WebException)
-					{
-						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}
-			}
-			return dbResponse;
-		}
-
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => JourneyCached.SaveResults(await SendRouterRequestAsync(routerRequest));
 		/// <summary>
 		/// Returns loading HTML string with customized text.
 		/// </summary>

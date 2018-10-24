@@ -51,6 +51,7 @@
     <Compile Include="BasicStructures\RoutesInfoBasic.cs" />
     <Compile Include="BasicStructures\StationsBasic.cs" />
     <Compile Include="BasicStructures\StopsBasic.cs" />
+    <Compile Include="Caching.cs" />
     <Compile Include="DataFeedClient.cs" />
     <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsExtensions.cs" />
     <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsIntegration.cs" />

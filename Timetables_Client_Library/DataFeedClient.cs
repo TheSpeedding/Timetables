@@ -25,6 +25,10 @@ namespace Timetables.Client
 		/// </summary>
 		public static bool Downloaded { get; protected set; } = false;
 		/// <summary>
+		/// Timespan that the cached data should be cached in advance.
+		/// </summary>
+		public static TimeSpan CachingTime { get; } = new TimeSpan(1, 0, 0, 0);
+		/// <summary>
 		/// Basic data feed.
 		/// </summary>
 		public static Structures.Basic.DataFeedBasic Basic => basicData ?? throw new NullReferenceException("Basic data not initialized correctly.");
