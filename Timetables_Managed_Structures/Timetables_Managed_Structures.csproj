@@ -7,7 +7,7 @@
     <ProjectGuid>{36816C97-7D07-43F9-B68A-F65622639568}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Timetables_Managed_Structures</RootNamespace>
+    <RootNamespace>Timetables.Client</RootNamespace>
     <AssemblyName>Timetables_Managed_Structures</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -28,7 +28,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Timetables_Managed_Structures.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

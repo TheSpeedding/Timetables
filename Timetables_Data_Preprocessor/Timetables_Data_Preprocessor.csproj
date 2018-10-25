@@ -7,7 +7,7 @@
     <ProjectGuid>{E64FC3AF-7B0D-438D-9FAA-5D4C7AFF945B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Timetables_Data_Preprocessor</RootNamespace>
+    <RootNamespace>Timetables.Preprocessor</RootNamespace>
     <AssemblyName>Timetables_Data_Preprocessor</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -28,7 +28,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Timetables_Data_Preprocessor.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
