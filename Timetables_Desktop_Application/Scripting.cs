@@ -170,7 +170,7 @@ namespace Timetables.Interop
 		{
 			var wb = new WebBrowser
 			{
-				ObjectForScripting = new DepartureBoardScripting(window),
+				ObjectForScripting = new DepartureBoardScripting(window, isStationInfo),
 				ScriptErrorsSuppressed = true,
 				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailPrintXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName)
 			};
@@ -181,7 +181,7 @@ namespace Timetables.Interop
 		{
 			var wb = new WebBrowser
 			{
-				ObjectForScripting = new DepartureBoardScripting(window),
+				ObjectForScripting = new DepartureBoardScripting(window, isStationInfo),
 				ScriptErrorsSuppressed = true,
 				DocumentText = window.Results.TransformToHtml(Settings.DepartureBoardSimplePrintXslt.FullName, Settings.DepartureBoardSimplePrintCss.FullName)
 			};

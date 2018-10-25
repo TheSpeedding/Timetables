@@ -23,7 +23,7 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.DepartureBoardScripting(this);
+			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.DepartureBoardScripting(this, isStationInfo);
 			IsStationInfo = isStationInfo;
 			requestWindow = win;
 		}
