@@ -21,7 +21,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Directory where the cached files are saved.
 		/// </summary>
-		protected static string cachedFilesDirectory = "cached/";
+		protected static readonly string cachedFilesDirectory = "cached/";
 		/// <summary>
 		/// Path to the file with cached data.
 		/// </summary>
@@ -55,6 +55,11 @@ namespace Timetables.Client
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
 		public abstract Req ConstructNewRequest();
+		static CachedData()
+		{
+			if (!Directory.Exists(cachedFilesDirectory))
+				Directory.CreateDirectory(cachedFilesDirectory);
+		}
 	}
 
 	public class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>
