@@ -24,7 +24,7 @@ namespace Timetables.Application.Desktop
 			dataDownloadButton.Text = Settings.Localization.ForceDataDownload;
 			cacheButton.Text = Settings.Localization.ForceCachedDataUpdate;
 
-			cacheButton.Enabled = !DataFeedDesktop.OfflineMode;
+			cacheButton.Visible = !DataFeedDesktop.OfflineMode;
 
 			themeComboBox.Items.Add(Settings.Localization.BlueTheme);
 			themeComboBox.Items.Add(Settings.Localization.DarkTheme);
@@ -87,7 +87,7 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await DataFeedDesktop.DownloadAsync(true, Settings.TimeoutDuration);
+				await System.Threading.Tasks.Task.Run(async () => await DataFeedDesktop.DownloadAsync(true, Settings.TimeoutDuration));
 			}
 			catch
 			{
@@ -101,7 +101,7 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await Requests.UpdateCachedResultsAsync();
+				await System.Threading.Tasks.Task.Run(async () => await Requests.UpdateCachedResultsAsync());
 			}
 			catch
 			{
