@@ -146,9 +146,11 @@ namespace Timetables.Interop
 		/// Initializes the object.
 		/// </summary>
 		/// <param name="window">Window that is relevant for this object.</param>
-		public DepartureBoardScripting(DepartureBoardResultsWindow window)
+		/// <param name="isStationInfo">True if station info. False if line info.</param>
+		public DepartureBoardScripting(DepartureBoardResultsWindow window, bool isStationInfo)
 		{
 			this.window = window;
+			this.isStationInfo = isStationInfo;
 		}
 		/// <summary>
 		/// Shows detail of the departure.

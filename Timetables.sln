@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Webbrowser_Stuff
 		Timetables_Webbrowser_Stuff\JourneySimpleToHtml.xslt = Timetables_Webbrowser_Stuff\JourneySimpleToHtml.xslt
 		Timetables_Webbrowser_Stuff\LockoutsToHtml.css = Timetables_Webbrowser_Stuff\LockoutsToHtml.css
 		Timetables_Webbrowser_Stuff\LockoutsToHtml.xslt = Timetables_Webbrowser_Stuff\LockoutsToHtml.xslt
+		Timetables_Localization\Česky.xml = Timetables_Localization\Česky.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Localization", "Timetables_Localization", "{BDBB5145-4177-4DA7-9862-9D5390A90C79}"

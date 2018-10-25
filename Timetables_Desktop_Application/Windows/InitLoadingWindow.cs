@@ -28,6 +28,7 @@ namespace Timetables.Application.Desktop
 		
 		private async void InitLoadingWindow_Shown(object sender, EventArgs e)
 		{
+
 			topBarTimer.Start();
 
 			System.Windows.Forms.Application.DoEvents();
@@ -91,6 +92,11 @@ namespace Timetables.Application.Desktop
 			
 
 			Preprocessor.DataFeed.LoadingProgress -= LoadingProgressCallback;
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			if (!DataFeedDesktop.OfflineMode)
+				Requests.UpdateCachedResultsAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 			Close();
 		}

@@ -34,6 +34,7 @@
 			this.themeComboBox = new System.Windows.Forms.ComboBox();
 			this.languageComboBox = new System.Windows.Forms.ComboBox();
 			this.dataDownloadButton = new System.Windows.Forms.Button();
+			this.cacheButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// themeLabel
@@ -105,10 +106,24 @@
 			this.dataDownloadButton.UseVisualStyleBackColor = true;
 			this.dataDownloadButton.Click += new System.EventHandler(this.dataDownloadButton_Click);
 			// 
+			// cacheButton
+			// 
+			this.cacheButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.cacheButton.Font = new System.Drawing.Font("Calibri", 12F);
+			this.cacheButton.Location = new System.Drawing.Point(18, 163);
+			this.cacheButton.Name = "cacheButton";
+			this.cacheButton.Size = new System.Drawing.Size(212, 31);
+			this.cacheButton.TabIndex = 17;
+			this.cacheButton.Text = "Force cached data update";
+			this.cacheButton.UseVisualStyleBackColor = true;
+			this.cacheButton.Click += new System.EventHandler(this.cacheButton_Click);
+			// 
 			// SettingsWindow
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(244, 261);
+			this.ClientSize = new System.Drawing.Size(244, 219);
+			this.Controls.Add(this.cacheButton);
 			this.Controls.Add(this.dataDownloadButton);
 			this.Controls.Add(this.languageComboBox);
 			this.Controls.Add(this.themeComboBox);
@@ -131,5 +146,6 @@
 		private System.Windows.Forms.ComboBox themeComboBox;
 		private System.Windows.Forms.ComboBox languageComboBox;
 		private System.Windows.Forms.Button dataDownloadButton;
+		private System.Windows.Forms.Button cacheButton;
 	}
 }

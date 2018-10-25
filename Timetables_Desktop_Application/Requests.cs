@@ -1,4 +1,4 @@
-﻿// All of these methods must be in this project, because of localization settings. Requests cannot be in Client library, since they need some native methods (C++/CLI), unreachable from mobile app.
+﻿// All of these methods must be in this project, because of localization settings and global settings (timeout duration etc.). Requests cannot be in Client library, since they need some native methods (C++/CLI), unreachable from mobile app.
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Timetables.Application.Desktop
 	/// <summary>
 	/// Class that supplies methods to send requests.
 	/// </summary>
-	static class Requests
+	internal static class Requests
 	{
 		/// <summary>
 		/// Gets everything ready for textbox auto-completion.
@@ -219,6 +219,7 @@ namespace Timetables.Application.Desktop
 		}
 		/// <summary>
 		/// Caches the departures according to departure board request.
+		/// </summary>
 		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
 		{
 			var response = await SendDepartureBoardRequestAsync(dbRequest);

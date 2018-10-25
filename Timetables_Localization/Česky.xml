@@ -83,4 +83,5 @@
 	<DataDownloadedSuccessfully>Data úspěšně aktualizována.</DataDownloadedSuccessfully>
 	<Headsign>Směr</Headsign>
 	<GetLineInfo>Najít informace o lince</GetLineInfo>
+	<ForceCachedDataUpdate>Aktualizovat cache</ForceCachedDataUpdate>
 </Localization>

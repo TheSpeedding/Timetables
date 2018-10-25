@@ -99,6 +99,7 @@ namespace Timetables.Client
 		public string DataDownloadedSuccessfully { get; set; } = "Data downloaded successfully.";
 		public string Headsign { get; set; } = "Headsign";
 		public string GetLineInfo { get; set; } = "Get information about line";
+		public string ForceCachedDataUpdate { get; set; } = "Update cache";
 
 		/// <summary>
 		/// Returns language that is represented by the object.
