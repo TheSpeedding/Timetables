@@ -31,7 +31,7 @@ namespace Timetables.Structures.Basic
 		/// Class collecting basic information about route info.
 		/// </summary>
 		[Serializable]
-		public class RouteInfoBasic
+		public class RouteInfoBasic : IEquatable<RouteInfoBasic>
 		{
 			/// <summary>
 			/// ID of the route info.
@@ -61,6 +61,8 @@ namespace Timetables.Structures.Basic
 			/// Route Info ID, Short Name, Mean Of The Transport, Color.
 			/// </summary>
 			public override string ToString() => ID + ";" + Label + ";" + (int)MeanOfTransport + ";" + Color.ToHex() + ";";
+
+			public bool Equals(RouteInfoBasic other) => ID == other.ID;
 		}
 		public static implicit operator RouteInfoBasic[] (RoutesInfoBasic routes) => routes.Items;
 		public static explicit operator string[] (RoutesInfoBasic routes) => routes.Select(r => r.Label).ToArray();

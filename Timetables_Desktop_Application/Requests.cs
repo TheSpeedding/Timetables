@@ -224,12 +224,12 @@ namespace Timetables.Application.Desktop
 		{
 			var response = await SendDepartureBoardRequestAsync(dbRequest);
 
-			return dbRequest.GetType() == typeof(StationInfoRequest) ? StationInfoCached.SaveResults(response) : LineInfoCached.SaveResults(response);
+			return dbRequest.GetType() == typeof(StationInfoRequest) ? StationInfoCached.CacheResults(response) : LineInfoCached.CacheResults(response);
 		}
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => JourneyCached.SaveResults(await SendRouterRequestAsync(routerRequest));
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => JourneyCached.CacheResults(await SendRouterRequestAsync(routerRequest));
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>

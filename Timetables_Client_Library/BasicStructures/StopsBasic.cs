@@ -16,7 +16,7 @@ namespace Timetables.Structures.Basic
 		/// Class collecting basic information about stop.
 		/// </summary>
 		[Serializable]
-		public class StopBasic
+		public class StopBasic : IEquatable<StopBasic>
 		{
 			/// <summary>
 			/// Stop ID.
@@ -64,6 +64,8 @@ namespace Timetables.Structures.Basic
 				result.Append(";");
 				return result.ToString();
 			}
+
+			public bool Equals(StopBasic other) => ID == other.ID;
 		}
 		public static implicit operator StopBasic[] (StopsBasic stops) => stops.Items;
 		public static explicit operator string[] (StopsBasic stops) => stops.Select(s => s.Name).ToArray();

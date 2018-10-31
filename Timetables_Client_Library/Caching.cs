@@ -46,7 +46,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>
-		protected static void SaveResults(Res res, string path)
+		protected static void CacheResults(Res res, string path)
 		{
 			using (StreamWriter sw = new StreamWriter(path))
 				new XmlSerializer(typeof(Res)).Serialize(sw, res);
@@ -62,7 +62,7 @@ namespace Timetables.Client
 		}
 	}
 
-	public class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>
+	public sealed class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>
 	{
 		private static string stationInfoPrefix = "si";
 		private static readonly Regex stationInfoFilePattern = new Regex($@"{ stationInfoPrefix }-[0-9]+\.fav"); // Format: "si-<station id>.fav"
@@ -70,7 +70,7 @@ namespace Timetables.Client
 		/// Station of cached departures.
 		/// </summary>
 		public StationsBasic.StationBasic Station { get; }
-		public StationInfoCached(int stationId, string path)
+		private StationInfoCached(int stationId, string path)
 		{
 			Station = DataFeedClient.Basic.Stations.FindByIndex(stationId);
 			pathToFile = path;
@@ -82,13 +82,17 @@ namespace Timetables.Client
 		public static IEnumerable<StationInfoCached> FetchStationInfoData() =>
 			Directory.EnumerateFiles(cachedFilesDirectory).Where(x => stationInfoFilePattern.IsMatch(x)).Select(x => new StationInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
 		/// <summary>
+		/// Selects desired cached data, if exists. Otherwise returns null.
+		/// </summary>
+		public static StationInfoCached Select(StationsBasic.StationBasic station) => FetchStationInfoData().FirstOrDefault(x => x.Station == station);
+		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(DepartureBoardResponse res)
+		public static bool CacheResults(DepartureBoardResponse res)
 		{
 			try
 			{
-				SaveResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + DataFeedClient.Basic.Stops.FindByIndex(res.Departures[0].StopID).ParentStation.ID + ".fav");
+				CacheResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + DataFeedClient.Basic.Stops.FindByIndex(res.Departures[0].StopID).ParentStation.ID + ".fav");
 			}
 
 			catch
@@ -104,7 +108,7 @@ namespace Timetables.Client
 		public override StationInfoRequest ConstructNewRequest() => new StationInfoRequest(Station.ID, DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), true);
 	}
 
-	public class LineInfoCached : CachedData<DepartureBoardResponse, LineInfoRequest>
+	public sealed class LineInfoCached : CachedData<DepartureBoardResponse, LineInfoRequest>
 	{
 		private static string lineInfoPrefix = "li";
 		private static readonly Regex lineInfoFilePattern = new Regex($@"{ lineInfoPrefix }-[0-9]+\.fav"); // Format: "li-<route info id>.fav"
@@ -112,7 +116,7 @@ namespace Timetables.Client
 		/// Cached line.
 		/// </summary>
 		public RoutesInfoBasic.RouteInfoBasic Route { get; }
-		public LineInfoCached(int routeInfoId, string path)
+		private LineInfoCached(int routeInfoId, string path)
 		{
 			Route = DataFeedClient.Basic.RoutesInfo.FindByIndex(routeInfoId);
 			pathToFile = path;
@@ -124,13 +128,17 @@ namespace Timetables.Client
 		public static IEnumerable<LineInfoCached> FetchLineInfoData() =>
 			Directory.EnumerateFiles(cachedFilesDirectory).Where(x => lineInfoFilePattern.IsMatch(x)).Select(x => new LineInfoCached(GetTokensFromFileName(x).ElementAt(0), x));
 		/// <summary>
+		/// Selects desired cached data, if exists. Otherwise returns null.
+		/// </summary>
+		public static LineInfoCached Select(RoutesInfoBasic.RouteInfoBasic route) => FetchLineInfoData().FirstOrDefault(x => x.Route == route);
+		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(DepartureBoardResponse res)
+		public static bool CacheResults(DepartureBoardResponse res)
 		{
 			try
 			{
-				SaveResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + DataFeedClient.Basic.RoutesInfo.FindByLabel(res.Departures[0].LineLabel).ID + ".fav");
+				CacheResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + DataFeedClient.Basic.RoutesInfo.FindByLabel(res.Departures[0].LineLabel).ID + ".fav");
 			}
 
 			catch
@@ -146,7 +154,7 @@ namespace Timetables.Client
 		public override LineInfoRequest ConstructNewRequest() => new LineInfoRequest(DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), Route.ID);
 	}
 
-	public class JourneyCached : CachedData<RouterResponse, RouterRequest>
+	public sealed class JourneyCached : CachedData<RouterResponse, RouterRequest>
 	{
 		private static string journeyPrefix = "jo";
 		private static readonly Regex journeyFilePattern = new Regex($@"{ journeyPrefix }-[0-9]+-[0-9]+\.fav"); // Format: "jo-<source station id>-<target station id>.fav"
@@ -158,7 +166,7 @@ namespace Timetables.Client
 		/// Target station of cached journey.
 		/// </summary>
 		public StationsBasic.StationBasic TargetStation { get; }
-		public JourneyCached(int sourceStationId, int targetStationId, string path)
+		private JourneyCached(int sourceStationId, int targetStationId, string path)
 		{
 			SourceStation = DataFeedClient.Basic.Stations.FindByIndex(sourceStationId);
 			TargetStation = DataFeedClient.Basic.Stations.FindByIndex(targetStationId);
@@ -175,13 +183,17 @@ namespace Timetables.Client
 				return new JourneyCached(tokens.ElementAt(0), tokens.ElementAt(1), x);
 			});
 		/// <summary>
+		/// Selects desired cached data, if exists. Otherwise returns null.
+		/// </summary>
+		public static JourneyCached Select(StationsBasic.StationBasic source, StationsBasic.StationBasic target) => FetchJourneyData().FirstOrDefault(x => x.SourceStation == source && x.TargetStation == target);
+		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool SaveResults(RouterResponse res)
+		public static bool CacheResults(RouterResponse res)
 		{
 			try
 			{
-				SaveResults(res, cachedFilesDirectory + journeyPrefix + "-" + res.Journeys[0].JourneySegments.First().SourceStopID + "-" + res.Journeys[0].JourneySegments.Last().TargetStopID + ".fav");
+				CacheResults(res, cachedFilesDirectory + journeyPrefix + "-" + res.Journeys[0].JourneySegments.First().SourceStopID + "-" + res.Journeys[0].JourneySegments.Last().TargetStopID + ".fav");
 			}
 
 			catch

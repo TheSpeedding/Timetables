@@ -15,7 +15,7 @@ namespace Timetables.Structures.Basic
 		/// Class collecting basic information about station.
 		/// </summary>
 		[Serializable]
-		public class StationBasic
+		public class StationBasic : IEquatable<StationBasic>
 		{
 			/// <summary>
 			/// Station ID.
@@ -42,6 +42,9 @@ namespace Timetables.Structures.Basic
 			/// Station ID, Name.
 			/// </summary>
 			public override string ToString() => ID + ";" + Name + ";";
+
+			public bool Equals(StationBasic other) => ID == other.ID;
+
 			public StationBasic(int id, string name)
 			{
 				ChildStops = new List<StopsBasic.StopBasic>();
