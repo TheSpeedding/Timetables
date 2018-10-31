@@ -149,7 +149,18 @@ namespace Timetables.Application.Desktop
 
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
 		}
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		{
+			// This cannot be done better since in each of the method we need information about specialized classes (caching, algorithm). 
+			// Actually, it could be done better (without repeating code), but then the code would be unreadable.
+
+			if (dbRequest.GetType() == typeof(StationInfoRequest))
+				return await SendDepartureBoardRequestAsync((StationInfoRequest)dbRequest);
+
+			else
+				return await SendDepartureBoardRequestAsync((LineInfoRequest)dbRequest);
+		}
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -177,6 +188,9 @@ namespace Timetables.Application.Desktop
 						try
 						{
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+
+							if (cached.ShouldBeUpdated)
+								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
 						{
@@ -192,8 +206,7 @@ namespace Timetables.Application.Desktop
 			}
 			return dbResponse;
 		}
-
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -221,6 +234,9 @@ namespace Timetables.Application.Desktop
 						try
 						{
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+
+							if (cached.ShouldBeUpdated)
+								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
 						{
@@ -263,6 +279,9 @@ namespace Timetables.Application.Desktop
 						try
 						{
 							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
+
+							if (cached.ShouldBeUpdated)
+								await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
 						{
@@ -282,11 +301,22 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		public static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => StationInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
+		{
+			if (dbRequest.GetType() == typeof(StationInfoRequest))
+				return await CacheDepartureBoardAsync((StationInfoRequest)dbRequest);
+
+			else
+				return await CacheDepartureBoardAsync((LineInfoRequest)dbRequest);
+		}
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		public static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => LineInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => StationInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		/// <summary>
+		/// Caches the departures according to departure board request.
+		/// </summary>
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => LineInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
