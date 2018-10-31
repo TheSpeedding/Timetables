@@ -25,6 +25,7 @@ namespace Timetables.Client
 		/// Decides if the algorithm should search by count.
 		/// </summary>
 		public bool SearchByCount => !SearchByMaximalArrivalDateTime;
+		public static ulong ConvertDateTimeToUnixTimestamp(DateTime dt) => (ulong)(dt.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
 	}
 	[Serializable]

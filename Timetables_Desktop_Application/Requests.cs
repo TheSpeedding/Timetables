@@ -149,7 +149,7 @@ namespace Timetables.Application.Desktop
 
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
 		}
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -157,9 +157,7 @@ namespace Timetables.Application.Desktop
 			{
 				await Task.Run(() =>
 				{
-					using (var dbProcessing = dbRequest.GetType() == typeof(StationInfoRequest) ? // Decide if it is line info request or station info request. Method not overloaded, the rest of code remains the same.
-						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (StationInfoRequest)dbRequest) :
-						new Interop.DepartureBoardManaged(DataFeedDesktop.Full, (LineInfoRequest)dbRequest))
+					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
 					{
 						dbProcessing.ObtainDepartureBoard();
 						dbResponse = dbProcessing.ShowDepartureBoard();
@@ -172,13 +170,67 @@ namespace Timetables.Application.Desktop
 			{
 				using (var dbProcessing = new DepartureBoardProcessing())
 				{
-					try
+					var cached = StationInfoCached.Select(dbRequest.StopID);
+
+					if (cached == null || cached.ShouldBeUpdated)
 					{
-						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+						try
+						{
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+						}
+						catch (System.Net.WebException)
+						{
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
 					}
-					catch (System.Net.WebException)
+
+					else
 					{
-						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						dbResponse = new DepartureBoardResponse(cached.LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > dbRequest.EarliestDepartureDateTime).Take(dbRequest.Count).ToList());
+					}
+				}
+			}
+			return dbResponse;
+		}
+
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
+		{
+			DepartureBoardResponse dbResponse = null;
+
+			if (DataFeedDesktop.OfflineMode)
+			{
+				await Task.Run(() =>
+				{
+					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
+					{
+						dbProcessing.ObtainDepartureBoard();
+						dbResponse = dbProcessing.ShowDepartureBoard();
+					}
+
+				});
+			}
+
+			else
+			{
+				using (var dbProcessing = new DepartureBoardProcessing())
+				{
+					var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
+
+					if (cached == null || cached.ShouldBeUpdated)
+					{
+						try
+						{
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+						}
+						catch (System.Net.WebException)
+						{
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+					}
+
+					else
+					{
+						dbResponse = new DepartureBoardResponse(cached.LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > dbRequest.EarliestDepartureDateTime).Take(dbRequest.Count).ToList());
 					}
 				}
 			}
@@ -202,16 +254,26 @@ namespace Timetables.Application.Desktop
 
 			else
 			{
-				using (var routerProcessing = new RouterProcessing())
+				var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
+
+				if (cached == null || cached.ShouldBeUpdated)
 				{
-					try
+					using (var routerProcessing = new RouterProcessing())
 					{
-						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
+						try
+						{
+							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
+						}
+						catch (System.Net.WebException)
+						{
+							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
 					}
-					catch (System.Net.WebException)
-					{
-						MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+				}
+
+				else
+				{
+					routerResponse = new RouterResponse(cached.LoadResults().Journeys.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > routerRequest.MaximalArrivalDateTime).Take(routerRequest.Count).ToList());					
 				}
 			}
 
@@ -220,12 +282,11 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
-		{
-			var response = await SendDepartureBoardRequestAsync(dbRequest);
-
-			return dbRequest.GetType() == typeof(StationInfoRequest) ? StationInfoCached.CacheResults(response) : LineInfoCached.CacheResults(response);
-		}
+		public static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => StationInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		/// <summary>
+		/// Caches the departures according to departure board request.
+		/// </summary>
+		public static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => LineInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>

@@ -39,7 +39,7 @@ namespace Timetables.Client
 		{
 			SourceStationID = sourceStationID;
 			TargetStationID = targetStationID;
-			EarliestDepartureDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureDateTime);
 			MaxTransfers = transfers;
 			Count = count;
 			TransfersDurationCoefficient = coefficient;
@@ -51,7 +51,7 @@ namespace Timetables.Client
 			TargetStationID = targetStationID;
 			EarliestDepartureDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 			MaxTransfers = transfers;
-			MaximalArrivalDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			MaximalArrivalDateTime = ConvertDateTimeToUnixTimestamp(arrivalTime);
 			TransfersDurationCoefficient = coefficient;
 			MeansOfTransport = mot;
 		}

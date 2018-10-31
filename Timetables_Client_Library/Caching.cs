@@ -85,6 +85,7 @@ namespace Timetables.Client
 		/// Selects desired cached data, if exists. Otherwise returns null.
 		/// </summary>
 		public static StationInfoCached Select(StationsBasic.StationBasic station) => FetchStationInfoData().FirstOrDefault(x => x.Station == station);
+		public static StationInfoCached Select(int id) => FetchStationInfoData().FirstOrDefault(x => x.Station.ID == id);
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
@@ -131,6 +132,7 @@ namespace Timetables.Client
 		/// Selects desired cached data, if exists. Otherwise returns null.
 		/// </summary>
 		public static LineInfoCached Select(RoutesInfoBasic.RouteInfoBasic route) => FetchLineInfoData().FirstOrDefault(x => x.Route == route);
+		public static LineInfoCached Select(int id) => FetchLineInfoData().FirstOrDefault(x => x.Route.ID == id);
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
@@ -186,6 +188,7 @@ namespace Timetables.Client
 		/// Selects desired cached data, if exists. Otherwise returns null.
 		/// </summary>
 		public static JourneyCached Select(StationsBasic.StationBasic source, StationsBasic.StationBasic target) => FetchJourneyData().FirstOrDefault(x => x.SourceStation == source && x.TargetStation == target);
+		public static JourneyCached Select(int sourceID, int targetID) => FetchJourneyData().FirstOrDefault(x => x.SourceStation.ID == sourceID && x.TargetStation.ID == targetID);
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>

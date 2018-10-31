@@ -40,7 +40,7 @@ namespace Timetables.Client
 		public StationInfoRequest(int stopID, DateTime departureTime, int count, bool station, int routeID = -1)
 		{
 			StopID = stopID;
-			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureTime);
 			Count = count;
 			IsStation = station;
 			RouteInfoID = routeID;
@@ -48,8 +48,8 @@ namespace Timetables.Client
 		public StationInfoRequest(int stopID, DateTime departureTime, DateTime arrivalTime, bool station, int routeID = -1)
 		{
 			StopID = stopID;
-			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-			MaximalArrivalDateTime = (ulong)(arrivalTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureTime);
+			MaximalArrivalDateTime = ConvertDateTimeToUnixTimestamp(arrivalTime);
 			IsStation = station;
 			RouteInfoID = routeID;
 		}
@@ -69,14 +69,14 @@ namespace Timetables.Client
 	{
 		public LineInfoRequest(DateTime departureTime, int count, int routeID)
 		{
-			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureTime);
 			Count = count;
 			RouteInfoID = routeID;
 		}
 		public LineInfoRequest(DateTime departureTime, DateTime arrivalTime, int routeID)
 		{
-			EarliestDepartureDateTime = (ulong)(departureTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-			MaximalArrivalDateTime = (ulong)(arrivalTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureTime);
+			MaximalArrivalDateTime = ConvertDateTimeToUnixTimestamp(arrivalTime);
 			RouteInfoID = routeID;
 		}
 		public override string ToString() => $"Line ID: { RouteInfoID }. Count: { Count }.";
