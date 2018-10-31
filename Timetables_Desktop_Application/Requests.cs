@@ -189,7 +189,7 @@ namespace Timetables.Application.Desktop
 						{
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 
-							if (cached.ShouldBeUpdated)
+							if (cached != null && cached.ShouldBeUpdated)
 								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
@@ -235,7 +235,7 @@ namespace Timetables.Application.Desktop
 						{
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 
-							if (cached.ShouldBeUpdated)
+							if (cached != null && cached.ShouldBeUpdated)
 								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
@@ -280,7 +280,7 @@ namespace Timetables.Application.Desktop
 						{
 							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 
-							if (cached.ShouldBeUpdated)
+							if (cached != null && cached.ShouldBeUpdated)
 								await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
 						}
 						catch (System.Net.WebException)
