@@ -152,7 +152,7 @@ namespace Timetables.Application.Desktop
 		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
 		{
 			// This cannot be done better since in each of the method we need information about specialized classes (caching, algorithm). 
-			// Actually, it could be done better (without repeating code), but then the code would be unreadable.
+			// Actually, it could be done better (without code copies), but then the code would be unreadable and less efficient, too.
 
 			if (dbRequest.GetType() == typeof(StationInfoRequest))
 				return await SendDepartureBoardRequestAsync((StationInfoRequest)dbRequest);
@@ -312,15 +312,18 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => StationInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
+			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => LineInfoCached.CacheResults(await SendDepartureBoardRequestAsync(dbRequest));
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
+			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => JourneyCached.CacheResults(await SendRouterRequestAsync(routerRequest));
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
+			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), await SendRouterRequestAsync(routerRequest));
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>

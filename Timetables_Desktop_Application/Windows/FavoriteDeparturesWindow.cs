@@ -12,42 +12,8 @@ namespace Timetables.Application.Desktop
 {
 	public partial class FavoriteDeparturesWindow : Form
 	{
-		/// <summary>
-		/// Serializable class that serves only for load and save from and to the file.
-		/// </summary>
-		[Serializable]		
-		public class FavoriteDepartures
-		{
-			/// <summary>
-			/// One entry in the collection.
-			/// </summary>
-			[Serializable]
-			public class FavoriteDeparture
-			{
-				/// <summary>
-				/// Station.
-				/// </summary>
-				public string Station { get; set; }
-				public override string ToString() => Station;
-				public FavoriteDeparture(string station) => Station = station;
-				internal FavoriteDeparture() { }
-			}
-			/// <summary>
-			/// List of favorite departures.
-			/// </summary>
-			public List<FavoriteDeparture> Favorites { get; set; } = new List<FavoriteDeparture>();
-
-			/// <summary>
-			/// Remove all entries satisfying given criteria.
-			/// </summary>
-			/// <param name="station">Source stop.</param>
-			public void Remove(string station) => Favorites.RemoveAll((FavoriteDeparture dep) => dep.Station == station);
-			public void Remove(FavoriteDeparture dep) => Remove(dep.Station);
-		}
-
-		private FavoriteDepartures favorites;
-
-		internal FavoriteDepartures departuresToFind = null;
+		private IList<StationInfoCached> favorites;
+		internal List<StationInfoCached> ItemsToFind { get; private set; }
 
 		public FavoriteDeparturesWindow()
 		{
@@ -59,44 +25,33 @@ namespace Timetables.Application.Desktop
 			addButton.Text = Settings.Localization.Add;
 			removeButton.Text = Settings.Localization.Remove;
 			findButton.Text = Settings.Localization.Find;
-			
-			// Try to load file with favorites, if exists.
 
-			try
-			{
-				using (FileStream fileStream = new FileStream("departures.fav", FileMode.Open))
-					favorites = (FavoriteDepartures)new XmlSerializer(typeof(FavoriteDepartures)).Deserialize(fileStream);
-			}
-			catch
-			{
-				favorites = new FavoriteDepartures();
-			}
+			favorites = StationInfoCached.FetchStationInfoData().ToList();			
 
-			foreach (var departure in favorites.Favorites)
-				favoritesListBox.Items.Add(departure);
+			foreach (var item in favorites)
+				favoritesListBox.Items.Add(item);
 		}
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			var fav = new FavoriteDepartures.FavoriteDeparture(stationTextBox.Text);
-			favoritesListBox.Items.Add(fav);
-			favorites.Favorites.Add(fav);
-		}
+			Structures.Basic.StationsBasic.StationBasic station = Requests.GetStationFromString(stationTextBox.Text);
 
-		private void FavoriteDeparturesWindow_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			using (StreamWriter sw = new StreamWriter("departures.fav"))
-				new XmlSerializer(typeof(FavoriteDepartures)).Serialize(sw, favorites);
+			if (station == null) return;
+
+			var fav = new StationInfoCached(station.ID);
+			favoritesListBox.Items.Add(fav);
+			favorites.Add(fav);
 		}
 
 		private void removeButton_Click(object sender, EventArgs e)
 		{
-			foreach (FavoriteDepartures.FavoriteDeparture departuresToRemove in favoritesListBox.CheckedItems)
-				favorites.Remove(departuresToRemove);
+			foreach (StationInfoCached item in favoritesListBox.CheckedItems)
+				item.Remove();
 
-			favoritesListBox.Items.Clear();
-			foreach (var departure in favorites.Favorites)
-				favoritesListBox.Items.Add(departure);
+			favorites = StationInfoCached.FetchStationInfoData().ToList();
+
+			foreach (var item in favorites)
+				favoritesListBox.Items.Add(item);
 
 			removeButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
 			findButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
@@ -104,10 +59,10 @@ namespace Timetables.Application.Desktop
 
 		private void findButton_Click(object sender, EventArgs e)
 		{
-			departuresToFind = new FavoriteDepartures();
+			ItemsToFind = new List<StationInfoCached>();
 
-			foreach (FavoriteDepartures.FavoriteDeparture departure in favoritesListBox.CheckedItems)
-				departuresToFind.Favorites.Add(departure);
+			foreach (StationInfoCached item in favoritesListBox.CheckedItems)
+				ItemsToFind.Add(item);
 
 			Close();
 		}

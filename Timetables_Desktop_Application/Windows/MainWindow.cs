@@ -54,9 +54,9 @@ namespace Timetables.Application.Desktop
 			var window = new FavoriteDeparturesWindow();
 			window.ShowDialog();
 
-			if (window.departuresToFind != null)
-				foreach (var departure in window.departuresToFind.Favorites)
-					new NewStationInfoWindow(departure.Station).Show(mainDockPanel, DockState.Document);
+			if (window.ItemsToFind != null)
+				foreach (var item in window.ItemsToFind)
+					new NewStationInfoWindow(item.Station.Name).Show(mainDockPanel, DockState.Document);
 		}
 
 		private void showmapToolStripMenuItem_Click(object sender, EventArgs e) => new ShowMapWindow().Show(mainDockPanel, DockState.Document);

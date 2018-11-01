@@ -29,9 +29,9 @@ namespace Timetables.Client
 		/// <summary>
 		/// Parses the tokens from the filename.
 		/// </summary>
-		protected static IEnumerable<int> GetTokensFromFileName(string fileName) => fileName.Split('-').Skip(1).Select(x => int.Parse(x));
+		protected static IEnumerable<int> GetTokensFromFileName(string fileName) => fileName.Split('.')[0].Split('-').Skip(1).Select(x => int.Parse(x));
 		/// <summary>
-		/// Loads cached journeys from the file.
+		/// Loads cached data from the file.
 		/// </summary>
 		/// <returns>Requested journeys.</returns>
 		public Res LoadResults()
@@ -40,9 +40,13 @@ namespace Timetables.Client
 				return (Res)new XmlSerializer(typeof(Res)).Deserialize(fileStream);
 		}
 		/// <summary>
+		/// Remove this item from the favorites list.
+		/// </summary>
+		public void Remove() => File.Delete(pathToFile);
+		/// <summary>
 		/// Decides whether the cached data should be updated or not yet.
 		/// </summary>
-		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Element("CreatedAt")?.Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) >= DateTime.Now;
+		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) >= DateTime.Now;
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>
@@ -70,6 +74,11 @@ namespace Timetables.Client
 		/// Station of cached departures.
 		/// </summary>
 		public StationsBasic.StationBasic Station { get; }
+		public StationInfoCached(int stationId)
+		{
+			Station = DataFeedClient.Basic.Stations.FindByIndex(stationId);
+			CacheResults(Station, new DepartureBoardResponse(new List<Departure>()));
+		}
 		private StationInfoCached(int stationId, string path)
 		{
 			Station = DataFeedClient.Basic.Stations.FindByIndex(stationId);
@@ -89,11 +98,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(DepartureBoardResponse res)
+		public static bool CacheResults(StationsBasic.StationBasic station, DepartureBoardResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + DataFeedClient.Basic.Stops.FindByIndex(res.Departures[0].StopID).ParentStation.ID + ".fav");
+				CacheResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + station.ID + ".fav");
 			}
 
 			catch
@@ -117,6 +126,11 @@ namespace Timetables.Client
 		/// Cached line.
 		/// </summary>
 		public RoutesInfoBasic.RouteInfoBasic Route { get; }
+		public LineInfoCached(int routeInfoId)
+		{
+			Route = DataFeedClient.Basic.RoutesInfo.FindByIndex(routeInfoId);
+			CacheResults(Route, new DepartureBoardResponse(new List<Departure>()));
+		}
 		private LineInfoCached(int routeInfoId, string path)
 		{
 			Route = DataFeedClient.Basic.RoutesInfo.FindByIndex(routeInfoId);
@@ -136,11 +150,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(DepartureBoardResponse res)
+		public static bool CacheResults(RoutesInfoBasic.RouteInfoBasic route, DepartureBoardResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + DataFeedClient.Basic.RoutesInfo.FindByLabel(res.Departures[0].LineLabel).ID + ".fav");
+				CacheResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + route.ID + ".fav");
 			}
 
 			catch
@@ -168,6 +182,12 @@ namespace Timetables.Client
 		/// Target station of cached journey.
 		/// </summary>
 		public StationsBasic.StationBasic TargetStation { get; }
+		public JourneyCached(int sourceStationId, int targetStationId)
+		{
+			SourceStation = DataFeedClient.Basic.Stations.FindByIndex(sourceStationId);
+			TargetStation = DataFeedClient.Basic.Stations.FindByIndex(targetStationId);
+			CacheResults(SourceStation, TargetStation, new RouterResponse(new List<Journey>()));
+		}
 		private JourneyCached(int sourceStationId, int targetStationId, string path)
 		{
 			SourceStation = DataFeedClient.Basic.Stations.FindByIndex(sourceStationId);
@@ -192,11 +212,11 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(RouterResponse res)
+		public static bool CacheResults(StationsBasic.StationBasic source, StationsBasic.StationBasic target, RouterResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + journeyPrefix + "-" + res.Journeys[0].JourneySegments.First().SourceStopID + "-" + res.Journeys[0].JourneySegments.Last().TargetStopID + ".fav");
+				CacheResults(res, cachedFilesDirectory + journeyPrefix + "-" + source.ID + "-" + target.ID + ".fav");
 			}
 
 			catch
