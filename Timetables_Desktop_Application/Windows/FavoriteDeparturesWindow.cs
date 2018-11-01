@@ -39,6 +39,11 @@ namespace Timetables.Application.Desktop
 			if (station == null) return;
 
 			var fav = new StationInfoCached(station.ID);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			Requests.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
 			favoritesListBox.Items.Add(fav);
 			favorites.Add(fav);
 		}
@@ -50,6 +55,7 @@ namespace Timetables.Application.Desktop
 
 			favorites = StationInfoCached.FetchStationInfoData().ToList();
 
+			favoritesListBox.Items.Clear();
 			foreach (var item in favorites)
 				favoritesListBox.Items.Add(item);
 

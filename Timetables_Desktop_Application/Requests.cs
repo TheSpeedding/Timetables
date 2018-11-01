@@ -323,7 +323,7 @@ namespace Timetables.Application.Desktop
 		/// Caches the journeys according to router request.
 		/// </summary>
 		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), await SendRouterRequestAsync(routerRequest));
+			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest));
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>

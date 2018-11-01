@@ -57,8 +57,10 @@ namespace Timetables.Client
 		{
 			Res response = default(Res);
 
-			var connection = ConnectAsync();
+			bool suppressErrorsOnTimeout = (request as RequestBase).Count == -1;
 
+			var connection = ConnectAsync();
+			
 			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection && connection.Status == TaskStatus.RanToCompletion)
 			{
 				Send(request);
