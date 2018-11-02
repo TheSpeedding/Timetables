@@ -59,6 +59,10 @@ namespace Timetables.Client
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
 		public abstract Req ConstructNewRequest();
+		/// <summary>
+		/// Find the data that satisfies given request.
+		/// </summary>
+		public abstract Res FindResultsSatisfyingRequest(Req request);
 		static CachedData()
 		{
 			if (!Directory.Exists(cachedFilesDirectory))
@@ -116,6 +120,18 @@ namespace Timetables.Client
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
 		public override StationInfoRequest ConstructNewRequest() => new StationInfoRequest(Station.ID, DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), true);
+		public override DepartureBoardResponse FindResultsSatisfyingRequest(StationInfoRequest request)
+		{
+			var results = LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime);
+
+			if (request.RouteInfoID != -1)
+			{
+				var routeInfo = DataFeedClient.Basic.RoutesInfo.FindByIndex(request.RouteInfoID);
+				results = results.Where(x => x.LineLabel == routeInfo.Label);
+			}
+
+			return new DepartureBoardResponse(results.Take(request.Count).ToList());
+		}
 	}
 
 	public sealed class LineInfoCached : CachedData<DepartureBoardResponse, LineInfoRequest>
@@ -168,6 +184,10 @@ namespace Timetables.Client
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
 		public override LineInfoRequest ConstructNewRequest() => new LineInfoRequest(DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), Route.ID);
+		public override DepartureBoardResponse FindResultsSatisfyingRequest(LineInfoRequest request) =>
+			new DepartureBoardResponse(LoadResults().Departures.
+				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime).
+				Take(request.Count).ToList());
 	}
 
 	public sealed class JourneyCached : CachedData<RouterResponse, RouterRequest>
@@ -230,5 +250,33 @@ namespace Timetables.Client
 		/// Constructs new request so it is ready to be updated.
 		/// </summary>
 		public override RouterRequest ConstructNewRequest() => new RouterRequest(SourceStation.ID, TargetStation.ID, DateTime.Now, 100, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), 1.0, (MeanOfTransport)255);
+		public override RouterResponse FindResultsSatisfyingRequest(RouterRequest request)
+		{
+			List<Journey> results = new List<Journey>();
+
+			foreach (var journey in LoadResults().Journeys.
+				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime).
+				Where(x => x.TransfersCount <= request.MaxTransfers))
+			{
+				bool isSuitable = true;
+
+				foreach (var js in journey.JourneySegments)
+				{
+					if (js is TripSegment && (((TripSegment)js).MeanOfTransport & request.MeansOfTransport) == 0)// This journey contains mean of transport which is not in the request.
+					{
+						isSuitable = false;
+						break;
+					}
+				}
+
+				if (isSuitable)
+					results.Add(journey);
+
+				if (results.Count == request.Count)
+					break;
+			}
+
+			return new RouterResponse(results);
+		}
 	}
 }

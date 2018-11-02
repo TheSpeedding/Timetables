@@ -200,7 +200,7 @@ namespace Timetables.Application.Desktop
 
 					else
 					{
-						dbResponse = new DepartureBoardResponse(cached.LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > dbRequest.EarliestDepartureDateTime).Take(dbRequest.Count).ToList());
+						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
 					}
 				}
 			}
@@ -246,7 +246,7 @@ namespace Timetables.Application.Desktop
 
 					else
 					{
-						dbResponse = new DepartureBoardResponse(cached.LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > dbRequest.EarliestDepartureDateTime).Take(dbRequest.Count).ToList());
+						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
 					}
 				}
 			}
@@ -292,7 +292,7 @@ namespace Timetables.Application.Desktop
 
 				else
 				{
-					routerResponse = new RouterResponse(cached.LoadResults().Journeys.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > routerRequest.MaximalArrivalDateTime).Take(routerRequest.Count).ToList());					
+					routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
 				}
 			}
 
