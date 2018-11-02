@@ -56,9 +56,7 @@ namespace Timetables.Client
 		public async Task<Res> ProcessAsync(Req request, int timeout)
 		{
 			Res response = default(Res);
-
-			bool suppressErrorsOnTimeout = (request as RequestBase).Count == -1;
-
+			
 			var connection = ConnectAsync();
 			
 			if (await Task.WhenAny(connection, Task.Delay(timeout)) == connection && connection.Status == TaskStatus.RanToCompletion)

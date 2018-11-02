@@ -89,8 +89,6 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results</returns>
 		public static async Task<JourneyResultsWindow> GetRouterWindowAsync(string sourceName, string targetName, DateTime dt, int transfers, int count, double coefficient, MeanOfTransport mot, NewJourneyWindow win, IComparer<Journey> comp = null)
 		{
-			if (!await CheckBasicDataValidity()) return null;
-
 			Structures.Basic.StationsBasic.StationBasic source = GetStationFromString(sourceName);
 			Structures.Basic.StationsBasic.StationBasic target = GetStationFromString(targetName);
 
@@ -116,8 +114,6 @@ namespace Timetables.Application.Desktop
 		/// <returns>Window with results.</returns>
 		public static async Task<DepartureBoardResultsWindow> GetStationInfoWindowAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
 		{
-			if (!await CheckBasicDataValidity()) return null;
-
 			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
@@ -137,9 +133,7 @@ namespace Timetables.Application.Desktop
 		/// <param name="win">Window with request.</param>
 		/// <returns>Window with results.</returns>
 		public static async Task<DepartureBoardResultsWindow> GetLineInfoWindowAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
-		{
-			if (!await CheckBasicDataValidity()) return null;
-			
+		{			
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
 
 			if (route == null) return null;
@@ -187,6 +181,8 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
+							if (!await CheckBasicDataValidity()) return null;
+
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 
 							if (cached != null && cached.ShouldBeUpdated)
@@ -233,6 +229,8 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
+							if (!await CheckBasicDataValidity()) return null;
+
 							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 
 							if (cached != null && cached.ShouldBeUpdated)
@@ -278,6 +276,8 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
+							if (!await CheckBasicDataValidity()) return null;
+
 							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 
 							if (cached != null && cached.ShouldBeUpdated)

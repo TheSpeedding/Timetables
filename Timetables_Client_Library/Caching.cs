@@ -36,7 +36,7 @@ namespace Timetables.Client
 		/// <returns>Requested journeys.</returns>
 		public Res LoadResults()
 		{
-			using (FileStream fileStream = new FileStream(cachedFilesDirectory + pathToFile, FileMode.Open))
+			using (FileStream fileStream = new FileStream(pathToFile, FileMode.Open))
 				return (Res)new XmlSerializer(typeof(Res)).Deserialize(fileStream);
 		}
 		/// <summary>
@@ -122,7 +122,7 @@ namespace Timetables.Client
 		public override StationInfoRequest ConstructNewRequest() => new StationInfoRequest(Station.ID, DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), true);
 		public override DepartureBoardResponse FindResultsSatisfyingRequest(StationInfoRequest request)
 		{
-			var results = LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime);
+			var results = LoadResults().Departures.SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) < request.EarliestDepartureDateTime);
 
 			if (request.RouteInfoID != -1)
 			{
@@ -186,7 +186,7 @@ namespace Timetables.Client
 		public override LineInfoRequest ConstructNewRequest() => new LineInfoRequest(DateTime.Now, DateTime.Now.Add(DataFeedClient.TimeToCacheFor), Route.ID);
 		public override DepartureBoardResponse FindResultsSatisfyingRequest(LineInfoRequest request) =>
 			new DepartureBoardResponse(LoadResults().Departures.
-				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime).
+				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) < request.EarliestDepartureDateTime).
 				Take(request.Count).ToList());
 	}
 
@@ -255,7 +255,7 @@ namespace Timetables.Client
 			List<Journey> results = new List<Journey>();
 
 			foreach (var journey in LoadResults().Journeys.
-				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) > request.MaximalArrivalDateTime).
+				SkipWhile(x => RequestBase.ConvertDateTimeToUnixTimestamp(x.DepartureDateTime) < request.EarliestDepartureDateTime).
 				Where(x => x.TransfersCount <= request.MaxTransfers))
 			{
 				bool isSuitable = true;
