@@ -10,11 +10,9 @@
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 			</head>
 
-			<body>
+			<body id="journey-type">
 
-				<script>
-					javascript: document.write(window.external.ShowJourneyText());
-				</script>
+				<span id="basic-info"></span>
 				
 				<div class="journey">
 					<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
@@ -54,46 +52,45 @@
 								<ol>
 									<li>
 										<span style="font-weight: bold;">
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./DepartureDateTime/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./SourceStopID/text()"/>));
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./DepartureDateTime/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./SourceStopID/text()"/>
+											</span>
 										</span>
 									</li>
 
 									<xsl:for-each select="./IntermediateStops/IntermediateStop">
 
 										<li>
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Arrival/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./StopID/text()"/>));												
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./Arrival/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./StopID/text()"/>
+											</span>
 										</li>
 
 									</xsl:for-each>
 
 									<li>
 										<span style="font-weight: bold;">
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./ArrivalDateTime/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./TargetStopID/text()"/>));
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./ArrivalDateTime/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./TargetStopID/text()"/>
+											</span>
 										</span>
 									</li>
 								</ol>
 							</xsl:if>
-
 						</div>
-
 					</xsl:for-each>
-
-
 				</div>					
 			</body>
 		</html>

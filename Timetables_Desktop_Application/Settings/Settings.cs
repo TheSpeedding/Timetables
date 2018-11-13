@@ -120,6 +120,10 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static FileInfo JourneySimplePrintXslt => new FileInfo("xslt/JourneySimplePrintToHtml.xslt");
 		/// <summary>
+		/// Path to script file with onLoad actions.
+		/// </summary>
+		public static FileInfo OnLoadActionsJavaScript => new FileInfo("js/OnLoadActions.js");
+		/// <summary>
 		/// Timeout duration while waiting for connection with the server.
 		/// </summary>
 		public static int TimeoutDuration { get; } = 5000;

@@ -10,10 +10,9 @@
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 			</head>
 			
-			<body>
-					<script>
-						javascript: document.write(window.external.ShowDepartureText());
-					</script>
+			<body id="departure-board-type">
+
+				<span id="basic-info"></span>
 							
 				<xsl:for-each select="//Departure">
 					<div class="departure">
@@ -40,9 +39,9 @@
 
 
 							<div class="time">
-								<script>
-									javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./DepartureDateTime/text()"/>'));
-								</script>
+								<span class="iso8601">
+									<xsl:value-of select="./DepartureDateTime/text()"/>
+								</span>
 							</div>							
 						</div>
 					</div>

@@ -101,7 +101,7 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await System.Threading.Tasks.Task.Run(async () => await Requests.UpdateCachedResultsAsync());
+				await System.Threading.Tasks.Task.Run(async () => await Requests.UpdateCachedResultsAsync(true));
 			}
 			catch
 			{

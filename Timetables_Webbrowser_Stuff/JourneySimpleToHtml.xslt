@@ -10,15 +10,11 @@
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 			</head>
 			
-			<body>
+			<body id="journey-type">
+				
 				<ul class="tools">
 					<li>
-						<a href="#">
-							<xsl:attribute name="onClick">
-								javascript: window.external.EditJourneysParameters();
-							</xsl:attribute>
-							<script>javascript: document.write(window.external.EditParametersStringConstant());</script>
-						</a>
+						<a id="edit-parameters-link" href="#"></a>
 					</li>
 					<li>
 						<a href="#">
@@ -36,9 +32,7 @@
 						<div class="leaves-in">														
 								<xsl:if test="./JourneySegments/JourneySegment/Outdated[text() = 'true']">			
 									<!-- Indicates whether the journey uses outdated timetables. -->
-									<span class="outdated">
-										<script>javascript: document.write(window.external.OutdatedStringConstant());</script>
-									</span>
+									<span class="outdated"></span>
 								</xsl:if>
 							<!-- Writes the relative time that the journey leaves in. -->
 							<script>javascript: document.write(window.external.LeavingTimeToString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));</script>
@@ -80,15 +74,15 @@
 								<div class="departure">
 
 									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
-										</script>
+										<span class="iso8601">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>
+										</span>
 									</div>
 
 									<div class="station">
-										<script>
-											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>));
-										</script>										
+										<span class="station-id">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>
+										</span>
 									</div>
 
 								</div>
@@ -128,19 +122,17 @@
 								<div class="arrival">
 
 									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
-										</script>
+										<span class="iso8601">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>
+										</span>
 									</div>
 
 									<div class="station">
-										<script>
-											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>));
-										</script>										
+										<span class="station-id">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>
+										</span>
 									</div>
-
 								</div>
-
 							</div>												
 						</div>
 					</div>

@@ -262,7 +262,7 @@ namespace Timetables.Client
 
 				foreach (var js in journey.JourneySegments)
 				{
-					if (js is TripSegment && (((TripSegment)js).MeanOfTransport & request.MeansOfTransport) == 0)// This journey contains mean of transport which is not in the request.
+					if (js is TripSegment && (((TripSegment)js).MeanOfTransport & request.MeansOfTransport) == 0) // This journey contains mean of transport which is not in the request.
 					{
 						isSuitable = false;
 						break;

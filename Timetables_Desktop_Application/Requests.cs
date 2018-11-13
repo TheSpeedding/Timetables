@@ -327,19 +327,19 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>
-		public static async Task UpdateCachedResultsAsync()
+		public static async Task UpdateCachedResultsAsync(bool forceUpdate = false)
 		{
-			async Task forEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			async Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
 			{
 				foreach (var fetched in collection)
-					if (fetched.ShouldBeUpdated)
+					if (forceUpdate || fetched.ShouldBeUpdated)
 						await processAsync(fetched.ConstructNewRequest());
 			}
 
 			await Task.WhenAll(
-				forEachFetchedResult(StationInfoCached.FetchStationInfoData(), CacheDepartureBoardAsync),
-				forEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
-				forEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
+				ForEachFetchedResult(StationInfoCached.FetchStationInfoData(), CacheDepartureBoardAsync),
+				ForEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
+				ForEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
 				);
 		}
 		/// <summary>

@@ -72,7 +72,7 @@ namespace Timetables.Interop
 
 			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new StationInfoRequest(newId, dt, 5, isStation)));
 
-			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName).RenderJavascriptToHtml(this);
+			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName, Settings.OnLoadActionsJavaScript.FullName).RenderJavascriptToHtml(this);
 		}
 		protected virtual bool ShowDeparturesFromStation() => true;
 		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
@@ -112,7 +112,7 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new JourneyScripting(window),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.Journeys[index].TransformToHtml(Settings.JourneyDetailPrintXslt.FullName, Settings.JourneyDetailPrintCss.FullName)
+				DocumentText = window.Results.Journeys[index].TransformToHtml(Settings.JourneyDetailPrintXslt.FullName, Settings.JourneyDetailPrintCss.FullName, Settings.OnLoadActionsJavaScript.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
@@ -123,7 +123,7 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new JourneyScripting(window),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.TransformToHtml(Settings.JourneySimplePrintXslt.FullName, Settings.JourneySimplePrintCss.FullName)
+				DocumentText = window.Results.TransformToHtml(Settings.JourneySimplePrintXslt.FullName, Settings.JourneySimplePrintCss.FullName, Settings.OnLoadActionsJavaScript.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
@@ -172,7 +172,7 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new DepartureBoardScripting(window, isStationInfo),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailPrintXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName)
+				DocumentText = window.Results.Departures[index].TransformToHtml(Settings.DepartureBoardDetailPrintXslt.FullName, Settings.DepartureBoardDetailPrintCss.FullName, Settings.OnLoadActionsJavaScript.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
@@ -183,7 +183,7 @@ namespace Timetables.Interop
 			{
 				ObjectForScripting = new DepartureBoardScripting(window, isStationInfo),
 				ScriptErrorsSuppressed = true,
-				DocumentText = window.Results.TransformToHtml(Settings.DepartureBoardSimplePrintXslt.FullName, Settings.DepartureBoardSimplePrintCss.FullName)
+				DocumentText = window.Results.TransformToHtml(Settings.DepartureBoardSimplePrintXslt.FullName, Settings.DepartureBoardSimplePrintCss.FullName, Settings.OnLoadActionsJavaScript.FullName)
 			};
 
 			wb.DocumentCompleted += (object sender, WebBrowserDocumentCompletedEventArgs e) => (sender as WebBrowser).ShowPrintDialog();
@@ -206,6 +206,11 @@ namespace Timetables.Interop
 	{
 		public static readonly Scripting ObjectForScripting = new Scripting();
 		protected Scripting() { }
+
+		/// <summary>
+		/// Always returns false, this is used in JavaScript file so we don't need duplicates for mobile and desktop version.
+		/// </summary>
+		public bool IsMobileVersion() => false;
 
 		/// <summary>
 		/// Returns total number of transfers in the journey represented as a string.

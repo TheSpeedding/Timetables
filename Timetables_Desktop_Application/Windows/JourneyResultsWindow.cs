@@ -31,7 +31,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"{ Settings.Localization.Journeys } ({ rResponse.Journeys.Count }) - { source } - { target } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = rResponse.TransformToHtml(Settings.JourneySimpleXslt.FullName,  Settings.JourneySimpleCss.FullName);
+			resultsWebBrowser.DocumentText = rResponse.TransformToHtml(Settings.JourneySimpleXslt.FullName,  Settings.JourneySimpleCss.FullName, Settings.OnLoadActionsJavaScript.FullName);
 		}
 		public JourneyResultsWindow(Journey journey, DockContent win = null) : this(win)
 		{
@@ -39,7 +39,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"{ Settings.Localization.Journey } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[0].SourceStopID).Name } - { DataFeedDesktop.Basic.Stops.FindByIndex(journey.JourneySegments[journey.JourneySegments.Count - 1].TargetStopID).Name } - { journey.DepartureDateTime.ToShortTimeString() } { journey.DepartureDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Results.Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName);
+			resultsWebBrowser.DocumentText = Results.Journeys[0].TransformToHtml(Settings.JourneyDetailXslt.FullName, Settings.JourneyDetailCss.FullName, Settings.OnLoadActionsJavaScript.FullName);
 		}
 		public void CloseThisAndReopenPrevious()
 		{

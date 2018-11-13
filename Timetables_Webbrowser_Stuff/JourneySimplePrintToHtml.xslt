@@ -9,11 +9,10 @@
 			<head>
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 			</head>
-			
-			<body>
-				<script>
-					javascript: document.write(window.external.ShowJourneyText());
-				</script>
+
+			<body id="journey-type">
+
+				<span id="basic-info"></span>
 								
 				<xsl:for-each select="//Journey">
 					<div class="journey">						
@@ -24,15 +23,15 @@
 								<div class="departure">
 
 									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
-										</script>
+										<span class="iso8601">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>
+										</span>
 									</div>
 
 									<div class="station">
-										<script>
-											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>));
-										</script>										
+										<span class="station-id">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>
+										</span>
 									</div>
 
 								</div>
@@ -69,19 +68,17 @@
 								<div class="arrival">
 
 									<div class="time">
-										<script>
-											javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
-										</script>
+										<span class="iso8601">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>
+										</span>
 									</div>
 
 									<div class="station">
-										<script>
-											javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>));
-										</script>										
+										<span class="station-id">
+											<xsl:value-of select="./JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>
+										</span>
 									</div>
-
 								</div>
-
 							</div>												
 						</div>
 					</div>

@@ -10,16 +10,14 @@
 				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 			</head>
 
-			<body>
+			<body id="journey-type">
 
 				<div class="journey">
 
 					<div class="leaves-in">
 						<xsl:if test="./Journey/JourneySegments/JourneySegment/Outdated[text() = 'true']">
 							<!-- Indicates whether the journey uses outdated timetables. -->
-							<span class="outdated">
-								<script>javascript: document.write(window.external.OutdatedStringConstant());</script>
-							</span>
+							<span class="outdated"></span>
 						</xsl:if>
 						<!-- Writes the relative time that the journey leaves in. -->
 						<script>
@@ -30,16 +28,10 @@
 					<!-- Links to other windows. -->
 					<ul class="tools">
 						<li>
-							<a href="#">
-								<xsl:attribute name="onClick">javascript: window.external.ShowMap();</xsl:attribute>
-								<script>javascript: document.write(window.external.MapStringConstant());</script>
-							</a>
+							<a class="map-link" href="#"></a>
 						</li>
 						<li>
-							<a href="#">
-								<xsl:attribute name="onClick">javascript: window.external.PrintJourneyDetail();</xsl:attribute>
-								<script>javascript: document.write(window.external.PrintStringConstant());</script>
-							</a>
+							<a class="print-link" href="#"></a>
 						</li>
 					</ul>
 
@@ -69,15 +61,15 @@
 							<div class="departure">
 
 								<div class="time">
-									<script>
-										javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>'));
-									</script>
+									<span class="iso8601">
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>
+									</span>
 								</div>
 
 								<div class="station">
-									<script>
-										javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>));
-									</script>
+									<span class="station-id">
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/SourceStopID/text()"/>
+									</span>
 								</div>
 
 							</div>
@@ -117,15 +109,15 @@
 							<div class="arrival">
 
 								<div class="time">
-									<script>
-										javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>'));
-									</script>
+									<span class="iso8601">
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>
+									</span>
 								</div>
 
 								<div class="station">
-									<script>
-										javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>));
-									</script>
+									<span class="station-id">
+										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/TargetStopID/text()"/>
+									</span>
 								</div>
 
 							</div>
@@ -173,46 +165,45 @@
 								<ol>
 									<li>
 										<span style="font-weight: bold;">
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./DepartureDateTime/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./SourceStopID/text()"/>));
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./DepartureDateTime/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./SourceStopID/text()"/>
+											</span>
 										</span>
 									</li>
 
 									<xsl:for-each select="./IntermediateStops/IntermediateStop">
 
 										<li>
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./Arrival/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./StopID/text()"/>));												
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./Arrival/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./StopID/text()"/>
+											</span>
 										</li>
 
 									</xsl:for-each>
 
 									<li>
 										<span style="font-weight: bold;">
-											<script>
-												javascript: document.write(window.external.Iso8601ToSimpleString('<xsl:value-of select="./ArrivalDateTime/text()"/>'));
-											</script> ·
-											<script>
-												javascript: document.write(window.external.ReplaceIdWithName(<xsl:value-of select="./TargetStopID/text()"/>));
-											</script>
+											<span class="iso8601">
+												<xsl:value-of select="./ArrivalDateTime/text()"/>
+											</span>
+											 ·
+											<span class="station-id">
+												<xsl:value-of select="./TargetStopID/text()"/>
+											</span>
 										</span>
 									</li>
 								</ol>
 							</xsl:if>
-
 						</div>
-
 					</xsl:for-each>
-
-
 				</div>					
 			</body>
 		</html>

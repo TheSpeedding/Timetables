@@ -33,7 +33,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"{ Settings.Localization.Departures } ({ dbReponse.Departures.Count }) - { title } - { dateTime.ToShortTimeString() } { dateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml(Settings.DepartureBoardSimpleXslt.FullName, Settings.DepartureBoardSimpleCss.FullName);
+			resultsWebBrowser.DocumentText = dbReponse.TransformToHtml(Settings.DepartureBoardSimpleXslt.FullName, Settings.DepartureBoardSimpleCss.FullName, Settings.OnLoadActionsJavaScript.FullName);
 		}
 		public DepartureBoardResultsWindow(Departure departure, bool isStationInfo, DockContent win = null) : this(isStationInfo, win)
 		{
@@ -41,7 +41,7 @@ namespace Timetables.Application.Desktop
 
 			Text = $"{ Settings.Localization.Departure } - { (isStationInfo ? DataFeedDesktop.Basic.Stops.FindByIndex(departure.StopID).Name : departure.LineLabel) } - { departure.DepartureDateTime.ToShortTimeString() } { departure.DepartureDateTime.ToShortDateString() }";
 
-			resultsWebBrowser.DocumentText = Results.Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName);
+			resultsWebBrowser.DocumentText = Results.Departures[0].TransformToHtml(Settings.DepartureBoardDetailXslt.FullName, Settings.DepartureBoardDetailCss.FullName, Settings.OnLoadActionsJavaScript.FullName);
 		}
 		public void CloseThisAndReopenPrevious()
 		{

@@ -52,25 +52,27 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="o">Object to serialize.</param>
 		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
-		/// <param name="cssPath">Path to CSS stylesheet.
+		/// <param name="cssPath">Path to CSS stylesheet.</param>
+		/// <param name="jsPath">Path to JS script.</param>
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
-		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null)
+		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null, string jsPath = null)
 		{
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
 
 			o.GetType().GetMethod("Serialize").Invoke(o, new object[] { sw });
 
-			return TransformToHtml(sw.ToString(), xsltPath, cssPath);
+			return TransformToHtml(sw.ToString(), xsltPath, cssPath, jsPath);
 		}
 		/// <summary>
 		/// Converts XML string into the HTML string using given XSLT script.
 		/// </summary>
 		/// <param name="content">XML in string.</param>
 		/// <param name="xsltPath">Path to XSLT stylesheet.</param>
-		/// <param name="cssPath">Path to CSS stylesheet.
+		/// <param name="cssPath">Path to CSS stylesheet.</param>
+		/// <param name="jsPath">Path to JS script.</param>
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
-		public static string TransformToHtml(this string content, string xsltPath, string cssPath = null)
+		public static string TransformToHtml(this string content, string xsltPath, string cssPath = null, string jsPath = null)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(content);
@@ -83,7 +85,10 @@ namespace Timetables.Client
 
 			xsltTrans.Transform(xPathDoc, null, sw);
 
-			return (cssPath == null ? "" : "<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>") + sw.ToString();
+			return 
+				(cssPath == null ? "" : ("<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>" + Environment.NewLine)) +
+				sw.ToString() +
+				(jsPath == null ? "" : ("<script>" + new System.IO.StreamReader(jsPath).ReadToEnd() + "</script>" + Environment.NewLine));
 		}
 		/// <summary>
 		/// Takes HTML string and returns new HTML string after all the scripts were executed. Note that this uses Windows Forms classes.
