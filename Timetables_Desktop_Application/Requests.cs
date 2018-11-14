@@ -313,17 +313,17 @@ namespace Timetables.Application.Desktop
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
-			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest));
+			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
-			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest));
+			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest));
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
 		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest));
+			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest));
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>

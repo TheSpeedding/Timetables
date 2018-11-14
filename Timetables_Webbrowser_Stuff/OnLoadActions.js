@@ -134,6 +134,4 @@
 		let transfer = totalTransfersClassCollection[i];
 		transfer.innerHTML = window.external.TotalTransfersToString(transfer.innerHTML);
 	}
-
-	alert('Everything is OK.');
 }
