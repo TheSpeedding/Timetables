@@ -1,4 +1,5 @@
-window.onload = function () {
+// window.onload = function () // This script is appended to the page, thus it does not have to wait for load.
+{
 	// Change this to false if application should not support printing option. By default, enabled in desktop application, disabled in mobile application.
 	var printingOptionsEnabled = !window.external.IsMobileVersion();
 
@@ -12,6 +13,18 @@ window.onload = function () {
 			basicInfoPrintElement.innerText = window.external.ShowJourneyText();
 		else
 			basicInfoPrintElement.innerText = window.external.ShowDepartureText();
+	}
+
+	// Customize a link to print a list.
+	let printListElement = document.getElementById("print-list-link");
+	if (printListElement !== null) {
+		printListElement.addEventListener('click', function (event) {
+			if (isJourney)
+				window.external.PrintJourneyList();
+			else
+				window.external.PrintDepartureBoardList();
+		});
+		printListElement.innerHTML = window.external.PrintListStringConstant();
 	}
 
 	// Customize a link to edit parameters.
@@ -69,6 +82,58 @@ window.onload = function () {
 		stationId.classList.remove("station-id");
 	}
 
-	
+	// Converts all absolute leaving times into relative ones.
+	let leavingTimesClassCollection = document.getElementsByClassName("leaving-time");
+	for (let i = 0; i < leavingTimesClassCollection.length; ++i) {
+		leavingTimesClassCollection[i].innerHTML = window.external.LeavingTimeToString(leavingTimesClassCollection[i].innerHTML);
+	}
+
+	// Print that there are no departures if so. Case of map.
+	let noDeparturesElement = document.getElementById("no-departures");
+	if (noDeparturesElement !== null) {
+		noDeparturesElement.innerHTML = window.external.NoDepartures();
+	}
+
+	// Print arrival to the station. Case of map.
+	let arrivalToTheStationElement = document.getElementById("arrival-to-station");
+	if (arrivalToTheStationElement !== null) {
+		arrivalToTheStationElement.innerHTML = window.external.ShowArrivalConstant() + ": " + window.external.ShowArrivalTime(arrivalToTheStationElement.innerHTML);
+	}
+
+	// Set the link to the details.
+	let detailClassCollection = document.getElementsByClassName("detail-link");
+	for (let i = 0; i < detailClassCollection.length; ++i) {
+		let detail = detailClassCollection[i];
+		detail.addEventListener('click', function (event) {
+			if (isJourney)
+				window.external.ShowJourneyDetail(detail.id);
+			else
+				window.external.ShowDepartureDetail(detail.id);
+		});
+		detail.innerHTML = window.external.DetailStringConstant();
+	}
+
+	// Write transfer constants to the given positions.
+	let transferClassCollection = document.getElementsByClassName("transfer-constant");
+	for (let i = 0; i < transferClassCollection.length; ++i) {
+		transferClassCollection[i].innerHTML = window.external.TransferStringConstant();
+	}
+
+	// Compute total duration of the journey.
+	let totalDurationClassCollection = document.getElementsByClassName("total-duration");
+	for (let i = 0; i < totalDurationClassCollection.length; ++i) {
+		let el = totalDurationClassCollection[i];
+		let departure = el.getElementsByClassName("departure-from-source")[0].innerHTML;
+		let arrival = el.getElementsByClassName("arrival-to-target")[0].innerHTML;
+		el.innerHTML = window.external.TotalDurationToString(departure, arrival);
+	}
+
+	// Write number of transfers for given journey.
+	let totalTransfersClassCollection = document.getElementsByClassName("total-transfers");
+	for (let i = 0; i < totalTransfersClassCollection.length; ++i) {
+		let transfer = totalTransfersClassCollection[i];
+		transfer.innerHTML = window.external.TotalTransfersToString(transfer.innerHTML);
+	}
+
 	alert('Everything is OK.');
 }

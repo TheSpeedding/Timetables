@@ -75,7 +75,7 @@ namespace Timetables.Interop
 			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName, Settings.OnLoadActionsJavaScript.FullName).RenderJavascriptToHtml(this);
 		}
 		protected virtual bool ShowDeparturesFromStation() => true;
-		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt + ": ";
+		public virtual string ShowArrivalConstant() => Settings.Localization.ArrivalAt;
 		public virtual string ShowArrivalTime(int stopId) => GetEarliestDepartureDateTime(DataFeedDesktop.Basic.Stops.FindByIndex(stopId)).ToShortTimeString();
 		public string NoDepartures() => Settings.Localization.NoDeparturesFromThisStop;
 	}
