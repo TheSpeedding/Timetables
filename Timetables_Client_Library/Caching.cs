@@ -46,7 +46,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Decides whether the cached data should be updated or not yet.
 		/// </summary>
-		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) >= DateTime.Now;
+		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>

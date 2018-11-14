@@ -97,7 +97,7 @@
 	// Print arrival to the station. Case of map.
 	let arrivalToTheStationElement = document.getElementById("arrival-to-station");
 	if (arrivalToTheStationElement !== null) {
-		arrivalToTheStationElement.innerHTML = window.external.ShowArrivalConstant() + ": " + window.external.ShowArrivalTime(arrivalToTheStationElement.innerHTML);
+		arrivalToTheStationElement.innerHTML = window.external.ShowArrivalConstant() + window.external.ShowArrivalTime(arrivalToTheStationElement.innerHTML);
 	}
 
 	// Set the link to the details.
