@@ -183,10 +183,16 @@ namespace Timetables.Application.Desktop
 						{
 							if (!await CheckBasicDataValidity()) return null;
 
-							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+							// Process the request immediately so the user does not have to wait until the caching is completed.
 
-							if (cached != null && cached.ShouldBeUpdated)
-								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
+
+							// Then update the cache.
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+							if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+								Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 						}
 						catch (System.Net.WebException)
 						{
@@ -231,10 +237,17 @@ namespace Timetables.Application.Desktop
 						{
 							if (!await CheckBasicDataValidity()) return null;
 
-							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
+							// Process the request immediately so the user does not have to wait until the caching is completed.
 
-							if (cached != null && cached.ShouldBeUpdated)
-								await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
+
+							// Then update the cache.
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+							if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+								Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
 						}
 						catch (System.Net.WebException)
 						{
@@ -278,10 +291,17 @@ namespace Timetables.Application.Desktop
 						{
 							if (!await CheckBasicDataValidity()) return null;
 
-							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
+							// Process the request immediately so the user does not have to wait until the caching is completed.
 
-							if (cached != null && cached.ShouldBeUpdated)
-								await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), Settings.TimeoutDuration);
+							routerResponse = await routerProcessing.ProcessAsync(routerRequest, routerRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
+
+							// Then update the cache.
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+							if (cached != null && cached.ShouldBeUpdated && routerRequest.Count != -1)
+								Task.Run(async () => cached.UpdateCache(await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
 						}
 						catch (System.Net.WebException)
 						{
@@ -313,17 +333,17 @@ namespace Timetables.Application.Desktop
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
-			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest));
+			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
-			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest));
+			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
 		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest));
+			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest)) != null;
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>

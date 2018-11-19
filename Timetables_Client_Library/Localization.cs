@@ -30,7 +30,7 @@ namespace Timetables.Client
 		public string BlueTheme { get; set; } = "Blue";
 		public string Language { get; set; } = "Language";
 		public string ShowMap { get; set; } = "Show map";
-		public string Favorites { get; set; } = "Favorites";
+		public string FavoriteJourneys { get; set; } = "Favorite journeys";
 		public string ProblemWhileLoadingSettings { get; set; } = "Problem occured while loading user settings. Set the application up using following dialog.";
 		public string RestartNeeded { get; set; } = "Restart needed";
 		public string RestartToApplyChanges { get; set; } = "You have to restart the application to apply the changes.";
@@ -100,7 +100,9 @@ namespace Timetables.Client
 		public string Headsign { get; set; } = "Headsign";
 		public string GetLineInfo { get; set; } = "Get information about line";
 		public string ForceCachedDataUpdate { get; set; } = "Update cache";
-
+		public string FavoriteLines { get; set; } = "Favorite lines";
+		public string FavoriteStations { get; set; } = "Favorite stations";
+			
 		/// <summary>
 		/// Returns language that is represented by the object.
 		/// </summary>

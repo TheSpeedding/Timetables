@@ -46,14 +46,18 @@ namespace Timetables.Client
 		/// <summary>
 		/// Decides whether the cached data should be updated or not yet.
 		/// </summary>
-		public bool ShouldBeUpdated => DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value).Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
+		public bool ShouldBeUpdated => 
+			XDocument.Load(pathToFile).Descendants("Departures").First().IsEmpty ||
+			DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value)
+			.Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>
-		protected static void CacheResults(Res res, string path)
+		protected static string CacheResults(Res res, string path)
 		{
 			using (StreamWriter sw = new StreamWriter(path))
 				new XmlSerializer(typeof(Res)).Serialize(sw, res);
+			return path;
 		}
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
@@ -63,6 +67,11 @@ namespace Timetables.Client
 		/// Find the data that satisfies given request.
 		/// </summary>
 		public abstract Res FindResultsSatisfyingRequest(Req request);
+		/// <summary>
+		/// Updates the cache.
+		/// </summary>
+		/// <param name="response">Response with results.</param>
+		public void UpdateCache(Res response) => CacheResults(response, pathToFile);
 		static CachedData()
 		{
 			if (!Directory.Exists(cachedFilesDirectory))
@@ -72,7 +81,7 @@ namespace Timetables.Client
 
 	public sealed class StationInfoCached : CachedData<DepartureBoardResponse, StationInfoRequest>
 	{
-		private static string stationInfoPrefix = "si";
+		private static readonly string stationInfoPrefix = "si";
 		private static readonly Regex stationInfoFilePattern = new Regex($@"{ stationInfoPrefix }-[0-9]+\.fav"); // Format: "si-<station id>.fav"
 		/// <summary>
 		/// Station of cached departures.
@@ -81,7 +90,7 @@ namespace Timetables.Client
 		public StationInfoCached(int stationId)
 		{
 			Station = DataFeedClient.Basic.Stations.FindByIndex(stationId);
-			CacheResults(Station, new DepartureBoardResponse(new List<Departure>()));
+			pathToFile = CacheResults(Station, new DepartureBoardResponse(new List<Departure>()));
 		}
 		private StationInfoCached(int stationId, string path)
 		{
@@ -102,19 +111,17 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(StationsBasic.StationBasic station, DepartureBoardResponse res)
+		public static string CacheResults(StationsBasic.StationBasic station, DepartureBoardResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + station.ID + ".fav");
+				return CacheResults(res, cachedFilesDirectory + stationInfoPrefix + "-" + station.ID + ".fav");
 			}
 
 			catch
 			{
-				return false;
+				return null;
 			}
-
-			return true;
 		} 
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
@@ -136,7 +143,7 @@ namespace Timetables.Client
 
 	public sealed class LineInfoCached : CachedData<DepartureBoardResponse, LineInfoRequest>
 	{
-		private static string lineInfoPrefix = "li";
+		private static readonly string lineInfoPrefix = "li";
 		private static readonly Regex lineInfoFilePattern = new Regex($@"{ lineInfoPrefix }-[0-9]+\.fav"); // Format: "li-<route info id>.fav"
 		/// <summary>
 		/// Cached line.
@@ -145,7 +152,7 @@ namespace Timetables.Client
 		public LineInfoCached(int routeInfoId)
 		{
 			Route = DataFeedClient.Basic.RoutesInfo.FindByIndex(routeInfoId);
-			CacheResults(Route, new DepartureBoardResponse(new List<Departure>()));
+			pathToFile = CacheResults(Route, new DepartureBoardResponse(new List<Departure>()));
 		}
 		private LineInfoCached(int routeInfoId, string path)
 		{
@@ -166,19 +173,17 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(RoutesInfoBasic.RouteInfoBasic route, DepartureBoardResponse res)
+		public static string CacheResults(RoutesInfoBasic.RouteInfoBasic route, DepartureBoardResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + route.ID + ".fav");
+				return CacheResults(res, cachedFilesDirectory + lineInfoPrefix + "-" + route.ID + ".fav");
 			}
 
 			catch
 			{
-				return false;
+				return null;
 			}
-
-			return true;
 		}			
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.
@@ -192,7 +197,7 @@ namespace Timetables.Client
 
 	public sealed class JourneyCached : CachedData<RouterResponse, RouterRequest>
 	{
-		private static string journeyPrefix = "jo";
+		private static readonly string journeyPrefix = "jo";
 		private static readonly Regex journeyFilePattern = new Regex($@"{ journeyPrefix }-[0-9]+-[0-9]+\.fav"); // Format: "jo-<source station id>-<target station id>.fav"
 		/// <summary>
 		/// Source station of cached journey.
@@ -206,7 +211,7 @@ namespace Timetables.Client
 		{
 			SourceStation = DataFeedClient.Basic.Stations.FindByIndex(sourceStationId);
 			TargetStation = DataFeedClient.Basic.Stations.FindByIndex(targetStationId);
-			CacheResults(SourceStation, TargetStation, new RouterResponse(new List<Journey>()));
+			pathToFile = CacheResults(SourceStation, TargetStation, new RouterResponse(new List<Journey>()));
 		}
 		private JourneyCached(int sourceStationId, int targetStationId, string path)
 		{
@@ -232,19 +237,17 @@ namespace Timetables.Client
 		/// <summary>
 		/// Saves results as expected.
 		/// </summary>
-		public static bool CacheResults(StationsBasic.StationBasic source, StationsBasic.StationBasic target, RouterResponse res)
+		public static string CacheResults(StationsBasic.StationBasic source, StationsBasic.StationBasic target, RouterResponse res)
 		{
 			try
 			{
-				CacheResults(res, cachedFilesDirectory + journeyPrefix + "-" + source.ID + "-" + target.ID + ".fav");
+				return CacheResults(res, cachedFilesDirectory + journeyPrefix + "-" + source.ID + "-" + target.ID + ".fav");
 			}
 
 			catch
 			{
-				return false;
+				return null;
 			}
-
-			return true;
 		}			
 		/// <summary>
 		/// Constructs new request so it is ready to be updated.

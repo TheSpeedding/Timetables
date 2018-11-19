@@ -1,6 +1,6 @@
 namespace Timetables.Application.Desktop
 {
-	partial class FavoriteDeparturesWindow
+	partial class FavoriteStationsWindow
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FavoriteDeparturesWindow));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FavoriteStationsWindow));
 			this.favoritesListBox = new System.Windows.Forms.CheckedListBox();
 			this.addButton = new System.Windows.Forms.Button();
 			this.removeButton = new System.Windows.Forms.Button();

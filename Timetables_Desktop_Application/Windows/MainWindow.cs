@@ -21,8 +21,9 @@ namespace Timetables.Application.Desktop
 			requestlineInfoToolStripMenuItem.Text = Settings.Localization.GetLineInfo;
 			findjourneyToolStripMenuItem.Text = Settings.Localization.FindJourney;
 			showmapToolStripMenuItem.Text = Settings.Localization.ShowMap;
-			favoritesToolStripMenuItem.Text = Settings.Localization.Favorites;
-			favoritesToolStripMenuItem1.Text = Settings.Localization.Favorites;
+			favoriteStationsToolStripMenuItem.Text = Settings.Localization.FavoriteStations;
+			favoriteJourneysToolStripMenuItem.Text = Settings.Localization.FavoriteJourneys;
+			favoriteLinesToolStripMenuItem.Text = Settings.Localization.FavoriteLines;
 
 			Settings.Theme.PanelTheme.Apply(mainDockPanel);
 			Settings.Theme.MenuTheme.Apply(mainMenuStrip);
@@ -49,9 +50,9 @@ namespace Timetables.Application.Desktop
 					new NewJourneyWindow(journey.Source, journey.Target).Show(mainDockPanel, DockState.Document);
 		}
 
-		private void favoritesToolStripMenuItem_Click(object sender, EventArgs e)
+		private void favoriteStationsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var window = new FavoriteDeparturesWindow();
+			var window = new FavoriteStationsWindow();
 			window.ShowDialog();
 
 			if (window.ItemsToFind != null)
@@ -62,5 +63,16 @@ namespace Timetables.Application.Desktop
 		private void showmapToolStripMenuItem_Click(object sender, EventArgs e) => new ShowMapWindow().Show(mainDockPanel, DockState.Document);
 
 		private void requestlineInfoToolStripMenuItem_Click(object sender, EventArgs e) => new NewLineInfoWindow().Show(mainDockPanel, DockState.Document);
+
+		private void favoriteLinesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var window = new FavoriteLinesWindow();
+			window.ShowDialog();
+
+			if (window.ItemsToFind != null)
+				foreach (var item in window.ItemsToFind)
+					new NewLineInfoWindow(item.Route.Label).Show(mainDockPanel, DockState.Document);
+
+		}
 	}
 }

@@ -34,17 +34,18 @@
 			this.journeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.findjourneyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.favoritesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.favoriteJourneysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.departureBoardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.findDeparturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.requestlineInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.favoriteStationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.trafficToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.extraordinaryEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lockoutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.requestlineInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.favoriteLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -73,7 +74,7 @@
 			this.journeyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findjourneyToolStripMenuItem,
             this.toolStripSeparator2,
-            this.favoritesToolStripMenuItem1});
+            this.favoriteJourneysToolStripMenuItem});
 			this.journeyToolStripMenuItem.Name = "journeyToolStripMenuItem";
 			this.journeyToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
 			this.journeyToolStripMenuItem.Text = "&Journey";
@@ -92,10 +93,10 @@
 			// 
 			// favoritesToolStripMenuItem1
 			// 
-			this.favoritesToolStripMenuItem1.Name = "favoritesToolStripMenuItem1";
-			this.favoritesToolStripMenuItem1.Size = new System.Drawing.Size(145, 22);
-			this.favoritesToolStripMenuItem1.Text = "&Favorites";
-			this.favoritesToolStripMenuItem1.Click += new System.EventHandler(this.favoritesToolStripMenuItem1_Click);
+			this.favoriteJourneysToolStripMenuItem.Name = "favoritesToolStripMenuItem1";
+			this.favoriteJourneysToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+			this.favoriteJourneysToolStripMenuItem.Text = "&Favorites";
+			this.favoriteJourneysToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem1_Click);
 			// 
 			// departureBoardToolStripMenuItem
 			// 
@@ -104,7 +105,8 @@
             this.requestlineInfoToolStripMenuItem,
             this.showmapToolStripMenuItem,
             this.toolStripSeparator1,
-            this.favoritesToolStripMenuItem});
+            this.favoriteStationsToolStripMenuItem,
+            this.favoriteLinesToolStripMenuItem});
 			this.departureBoardToolStripMenuItem.Name = "departureBoardToolStripMenuItem";
 			this.departureBoardToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
 			this.departureBoardToolStripMenuItem.Text = "&Departure board";
@@ -115,6 +117,13 @@
 			this.findDeparturesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
 			this.findDeparturesToolStripMenuItem.Text = "Find &departures from station";
 			this.findDeparturesToolStripMenuItem.Click += new System.EventHandler(this.findDeparturesToolStripMenuItem_Click);
+			// 
+			// requestlineInfoToolStripMenuItem
+			// 
+			this.requestlineInfoToolStripMenuItem.Name = "requestlineInfoToolStripMenuItem";
+			this.requestlineInfoToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+			this.requestlineInfoToolStripMenuItem.Text = "Request &line info";
+			this.requestlineInfoToolStripMenuItem.Click += new System.EventHandler(this.requestlineInfoToolStripMenuItem_Click);
 			// 
 			// showmapToolStripMenuItem
 			// 
@@ -130,10 +139,10 @@
 			// 
 			// favoritesToolStripMenuItem
 			// 
-			this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
-			this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-			this.favoritesToolStripMenuItem.Text = "&Favorites";
-			this.favoritesToolStripMenuItem.Click += new System.EventHandler(this.favoritesToolStripMenuItem_Click);
+			this.favoriteStationsToolStripMenuItem.Name = "favoritesToolStripMenuItem";
+			this.favoriteStationsToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+			this.favoriteStationsToolStripMenuItem.Text = "Favorite &stations";
+			this.favoriteStationsToolStripMenuItem.Click += new System.EventHandler(this.favoriteStationsToolStripMenuItem_Click);
 			// 
 			// trafficToolStripMenuItem
 			// 
@@ -165,12 +174,12 @@
 			this.settingsToolStripMenuItem.Text = "Settings";
 			this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
 			// 
-			// requestlineInfoToolStripMenuItem
+			// favoriteLinesToolStripMenuItem
 			// 
-			this.requestlineInfoToolStripMenuItem.Name = "requestlineInfoToolStripMenuItem";
-			this.requestlineInfoToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-			this.requestlineInfoToolStripMenuItem.Text = "Request &line info";
-			this.requestlineInfoToolStripMenuItem.Click += new System.EventHandler(this.requestlineInfoToolStripMenuItem_Click);
+			this.favoriteLinesToolStripMenuItem.Name = "favoriteLinesToolStripMenuItem";
+			this.favoriteLinesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+			this.favoriteLinesToolStripMenuItem.Text = "Favorite l&ines";
+			this.favoriteLinesToolStripMenuItem.Click += new System.EventHandler(this.favoriteLinesToolStripMenuItem_Click);
 			// 
 			// MainWindow
 			// 
@@ -201,16 +210,17 @@
 		private System.Windows.Forms.ToolStripMenuItem findDeparturesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showmapToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem favoriteStationsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem journeyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem findjourneyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem favoriteJourneysToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem trafficToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem extraordinaryEventsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem lockoutsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem requestlineInfoToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem favoriteLinesToolStripMenuItem;
 	}
 }
 

@@ -88,11 +88,17 @@
     </Compile>
     <Compile Include="Requests.cs" />
     <Compile Include="Scripting.cs" />
-    <Compile Include="Windows\FavoriteDeparturesWindow.cs">
+    <Compile Include="Windows\FavoriteLinesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\FavoriteDeparturesWindow.designer.cs">
-      <DependentUpon>FavoriteDeparturesWindow.cs</DependentUpon>
+    <Compile Include="Windows\FavoriteLinesWindow.designer.cs">
+      <DependentUpon>FavoriteLinesWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FavoriteStationsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\FavoriteStationsWindow.designer.cs">
+      <DependentUpon>FavoriteStationsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\FavoriteJourneysWindow.cs">
       <SubType>Form</SubType>
@@ -170,8 +176,11 @@
     <EmbeddedResource Include="Windows\DepartureBoardResultsWindow.resx">
       <DependentUpon>DepartureBoardResultsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\FavoriteDeparturesWindow.resx">
-      <DependentUpon>FavoriteDeparturesWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\FavoriteLinesWindow.resx">
+      <DependentUpon>FavoriteLinesWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\FavoriteStationsWindow.resx">
+      <DependentUpon>FavoriteStationsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\FavoriteJourneysWindow.resx">
       <DependentUpon>FavoriteJourneysWindow.cs</DependentUpon>

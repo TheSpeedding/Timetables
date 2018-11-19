@@ -10,12 +10,12 @@ using Timetables.Client;
 
 namespace Timetables.Application.Desktop
 {
-	public partial class FavoriteDeparturesWindow : Form
+	public partial class FavoriteStationsWindow : Form
 	{
 		private IList<StationInfoCached> favorites;
 		internal List<StationInfoCached> ItemsToFind { get; private set; }
 
-		public FavoriteDeparturesWindow()
+		public FavoriteStationsWindow()
 		{
 			InitializeComponent();
 

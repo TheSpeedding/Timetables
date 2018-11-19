@@ -14,7 +14,7 @@
 	<BlueTheme>Modrý</BlueTheme>
 	<Language>Jazyk</Language>
 	<ShowMap>Zobrazit mapu</ShowMap>
-	<Favorites>Oblíbené</Favorites>
+	<FavoriteJourneys>Oblíbená spojení</FavoriteJourneys>
 	<ProblemWhileLoadingSettings>Nastal problém při nahrávání uživatelského nastavení. Nastavte aplikaci pomocí následujícího dialogu.</ProblemWhileLoadingSettings>
 	<RestartNeeded>Nutný restart</RestartNeeded>
 	<RestartToApplyChanges>Změny se projeví po restartu aplikace.</RestartToApplyChanges>
@@ -84,4 +84,6 @@
 	<Headsign>Směr</Headsign>
 	<GetLineInfo>Najít informace o lince</GetLineInfo>
 	<ForceCachedDataUpdate>Aktualizovat cache</ForceCachedDataUpdate>
+	<FavoriteLines>Oblíbené linky</FavoriteLines>
+	<FavoriteStations>Oblíbené stanice</FavoriteStations>
 </Localization>
