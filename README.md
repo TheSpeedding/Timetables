@@ -1,4 +1,4 @@
-<h1>About the Project</h1>
+# Timetables
 The aim of the project is to design and implement applications, which will offer the user a user-friendly user interface with the possibility of simple, fast and efficient searching in automatically updated timetables. There will be support for any timetables that will be stored in a well-formed GTFS format, as well as the ability to combine the dataset in different ways, creating a search engine for an area of any size, or even the whole world.
 
 
