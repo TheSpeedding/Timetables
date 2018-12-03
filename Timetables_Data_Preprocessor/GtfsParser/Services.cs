@@ -279,18 +279,19 @@ namespace Timetables.Preprocessor
 			{
 				IList<string> tokens = GtfsDataFeed.SplitGtfs(calendarDates.ReadLine());
 
-				Calendar.Service service;
+				Calendar.Service service = null;
 
                 try
                 {
                     service = calendar[tokens[dic["service_id"]]];
                 }
-                catch (KeyNotFoundException)
-                {
-					throw new FormatException("Service with this ID does not exist.");
-                }
+                catch
+				{
+					DataFeed.LogError($"Preprocessor tried to parse an exception, but the service with ID { tokens[dic["service_id"]] } does not exist. Skipping this item to recover the parsing process.");
+					continue;
+				}
 
-                bool type = tokens[dic["exception_type"]] == "1" ? true : false;
+				bool type = tokens[dic["exception_type"]] == "1" ? true : false;
 
 				service.ExtraordinaryEvents.Add(new Tuple<string, bool>(tokens[dic["date"]], type));
 

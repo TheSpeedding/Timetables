@@ -44,6 +44,10 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		public static event DataProcessingEventHandler DataProcessing;
 		/// <summary>
+		/// The event acknowleding the server administrator about problems with data.
+		/// </summary>
+		public static event DataProcessingEventHandler DataErrors;
+		/// <summary>
 		/// Delegate serving information about loading progress.
 		/// </summary>
 		/// <param name="message">Message to be shown.</param>
@@ -53,6 +57,11 @@ namespace Timetables.Preprocessor
 		/// The event acknowleding user about the progress of loading the data.
 		/// </summary>
 		public static event LoadingProgressEventHandler LoadingProgress;
+		/// <summary>
+		/// Logs the error.
+		/// </summary>
+		/// <param name="error">Error to log.</param>
+		internal static void LogError(string error) => DataErrors?.Invoke(error);
 		/// <summary>
 		/// Processes one data source.
 		/// </summary>

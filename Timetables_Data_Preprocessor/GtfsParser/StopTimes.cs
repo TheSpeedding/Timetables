@@ -136,8 +136,9 @@ namespace Timetables.Preprocessor
 					trip = trips[tokens[dic["trip_id"]]];
 				}
 
-				catch // Trip does not exist, a problem with data validity. Skip this stoptime.
+				catch 
 				{
+					DataFeed.LogError($"Preprocessor tried to parse a stop-time, but the trip with ID { tokens[dic["trip_id"]] } does not exist. Skipping this item to recover the parsing process.");
 					continue;
 				}
 
@@ -151,8 +152,9 @@ namespace Timetables.Preprocessor
 					stop = stops[tokens[dic["stop_id"]]];
 				}
 
-				catch // Stop does not exist, a problem with data validity. Skip this stoptime.
+				catch 
 				{
+					DataFeed.LogError($"Preprocessor tried to parse a stop-time to the trip { trip.ID }, line { trip.RouteInfo.ShortName } in direction to { trip.Headsign }, but the stop with ID { tokens[dic["stop_id"]] } does not exist. Skipping this item to recover the parsing process.");
 					continue;
 				}
 

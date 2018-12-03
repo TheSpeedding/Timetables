@@ -58,6 +58,7 @@ namespace Timetables.Server
 		static DataFeed()
 		{
 			Preprocessor.DataFeed.DataProcessing += LoadingProgressCallback;
+			Preprocessor.DataFeed.DataErrors += ErrorsCallback;
 
 			AutoUpdate.Update += AutoUpdateCallback;
 
@@ -80,6 +81,11 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="message">Message.</param>
 		private static void AutoUpdateCallback(string message) => Logging.Log($"Auto update: { message }");
+		/// <summary>
+		/// Callback to log warnings in preprocessor.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		private static void ErrorsCallback(string message) => Logging.Log($"Preprocessor warning: { message }");
 
 		/// <summary>
 		/// Loads data while starting the application.
