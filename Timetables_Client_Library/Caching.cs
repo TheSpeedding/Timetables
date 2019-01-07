@@ -46,10 +46,22 @@ namespace Timetables.Client
 		/// <summary>
 		/// Decides whether the cached data should be updated or not yet.
 		/// </summary>
-		public bool ShouldBeUpdated => 
-			XDocument.Load(pathToFile).Descendants("Departures").First().IsEmpty ||
-			DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value)
-			.Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
+		public bool ShouldBeUpdated
+		{
+			get
+			{
+				try
+				{
+					return XDocument.Load(pathToFile).Descendants().First().Descendants().Last().IsEmpty ||
+					DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value)
+					.Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
+				}
+				catch
+				{
+					return true;
+				}
+			}
+		}
 		/// <summary>
 		/// Caches the results to the specified path.
 		/// </summary>
@@ -219,7 +231,7 @@ namespace Timetables.Client
 			TargetStation = DataFeedClient.Basic.Stations.FindByIndex(targetStationId);
 			pathToFile = path;
 		}
-		public override string ToString() => $"{ SourceStation.Name } - { TargetStation }";
+		public override string ToString() => $"{ SourceStation.Name } - { TargetStation.Name }";
 		/// <summary>
 		/// Enumerates files in specified directory and returns a collection of cached data.
 		/// </summary>

@@ -45,9 +45,9 @@ namespace Timetables.Application.Desktop
 			var window = new FavoriteJourneysWindow();
 			window.ShowDialog();
 
-			if (window.journeysToFind != null)
-				foreach (var journey in window.journeysToFind.Favorites)
-					new NewJourneyWindow(journey.Source, journey.Target).Show(mainDockPanel, DockState.Document);
+			if (window.ItemsToFind != null)
+				foreach (var item in window.ItemsToFind)
+					new NewJourneyWindow(item.SourceStation.Name, item.TargetStation.Name).Show(mainDockPanel, DockState.Document);
 		}
 
 		private void favoriteStationsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -101,7 +101,8 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await System.Threading.Tasks.Task.Run(async () => await Requests.UpdateCachedResultsAsync(true));
+				await Requests.UpdateCachedResultsAsync(true); // TO-DO: Temporary bugfix. This deletes the data, in the next call the data will be updated. The problem is probably in overwriting files.
+				await Requests.UpdateCachedResultsAsync(true);
 			}
 			catch
 			{

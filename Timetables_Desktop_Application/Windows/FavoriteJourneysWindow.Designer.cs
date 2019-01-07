@@ -119,7 +119,6 @@ namespace Timetables.Application.Desktop
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FavoriteJourneysWindow";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.favoriteJourneysWindow_FormClosing);
 			this.Load += new System.EventHandler(this.FavoriteJourneysWindow_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

@@ -12,51 +12,8 @@ namespace Timetables.Application.Desktop
 {
 	public partial class FavoriteJourneysWindow : Form
 	{
-		/// <summary>
-		/// Serializable class that serves only for load and save from and to the file.
-		/// </summary>
-		[Serializable]		
-		public class FavoriteJourneys
-		{
-			/// <summary>
-			/// One entry in the collection.
-			/// </summary>
-			[Serializable]
-			public class FavoriteJourney
-			{
-				/// <summary>
-				/// Source stop.
-				/// </summary>
-				public string Source { get; set; }
-				/// <summary>
-				/// Target stop.
-				/// </summary>
-				public string Target { get; set; }
-				public override string ToString() => $"{ Source } - { Target }";
-				public FavoriteJourney(string source, string target)
-				{
-					Source = source;
-					Target = target;
-				}
-				internal FavoriteJourney() { }
-			}
-			/// <summary>
-			/// List of favorite journeys.
-			/// </summary>
-			public List<FavoriteJourney> Favorites { get; set; } = new List<FavoriteJourney>();
-
-			/// <summary>
-			/// Remove all entries satisfying given criteria.
-			/// </summary>
-			/// <param name="source">Source stop.</param>
-			/// <param name="target">Target stop.</param>
-			public void Remove(string source, string target) => Favorites.RemoveAll((FavoriteJourney journey) => journey.Source == source && journey.Target == target);
-			public void Remove(FavoriteJourney journey) => Remove(journey.Source, journey.Target);
-		}
-
-		private FavoriteJourneys favorites;
-
-		internal FavoriteJourneys journeysToFind = null;
+		private IList<JourneyCached> favorites;
+		internal List<JourneyCached> ItemsToFind { get; private set; }
 
 		public FavoriteJourneysWindow()
 		{
@@ -70,43 +27,39 @@ namespace Timetables.Application.Desktop
 			removeButton.Text = Settings.Localization.Remove;
 			findButton.Text = Settings.Localization.Find;
 
-			// Try to load file with favorites, if exists.
+			favorites = JourneyCached.FetchJourneyData().ToList();
 
-			try
-			{
-				using (FileStream fileStream = new FileStream("journeys.fav", FileMode.Open))
-					favorites = (FavoriteJourneys)new XmlSerializer(typeof(FavoriteJourneys)).Deserialize(fileStream);
-			}
-			catch
-			{
-				favorites = new FavoriteJourneys();
-			}
-
-			foreach (var journey in favorites.Favorites)
-				favoritesListBox.Items.Add(journey);
+			foreach (var item in favorites)
+				favoritesListBox.Items.Add(item);
 		}
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			var fav = new FavoriteJourneys.FavoriteJourney(sourceTextBox.Text, targetTextBox.Text);
-			favoritesListBox.Items.Add(fav);
-			favorites.Favorites.Add(fav);
-		}
+			Structures.Basic.StationsBasic.StationBasic source = Requests.GetStationFromString(sourceTextBox.Text);
+			Structures.Basic.StationsBasic.StationBasic target = Requests.GetStationFromString(targetTextBox.Text);
 
-		private void favoriteJourneysWindow_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			using (StreamWriter sw = new StreamWriter("journeys.fav"))
-				new XmlSerializer(typeof(FavoriteJourneys)).Serialize(sw, favorites);
+			if (source == null || target == null) return;
+
+			var fav = new JourneyCached(source.ID, target.ID);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			Requests.CacheJourneyAsync(fav.ConstructNewRequest());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+			favoritesListBox.Items.Add(fav);
+			favorites.Add(fav);
 		}
 
 		private void removeButton_Click(object sender, EventArgs e)
 		{
-			foreach (FavoriteJourneys.FavoriteJourney journeyToRemove in favoritesListBox.CheckedItems)
-				favorites.Remove(journeyToRemove);
+			foreach (JourneyCached item in favoritesListBox.CheckedItems)
+				item.Remove();
+
+			favorites = JourneyCached.FetchJourneyData().ToList();
 
 			favoritesListBox.Items.Clear();
-			foreach (var journey in favorites.Favorites)
-				favoritesListBox.Items.Add(journey);
+			foreach (var item in favorites)
+				favoritesListBox.Items.Add(item);
 
 			removeButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
 			findButton.Enabled = favoritesListBox.CheckedItems.Count > 0;
@@ -114,10 +67,10 @@ namespace Timetables.Application.Desktop
 
 		private void findButton_Click(object sender, EventArgs e)
 		{
-			journeysToFind = new FavoriteJourneys();
+			ItemsToFind = new List<JourneyCached>();
 
-			foreach (FavoriteJourneys.FavoriteJourney journey in favoritesListBox.CheckedItems)
-				journeysToFind.Favorites.Add(journey);
+			foreach (JourneyCached item in favoritesListBox.CheckedItems)
+				ItemsToFind.Add(item);
 
 			Close();
 		}

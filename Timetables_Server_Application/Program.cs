@@ -18,7 +18,7 @@ namespace Timetables.Server
 			
 			try
 			{
-				while (!DataFeed.Loaded) ; // Temporary. Actually, this does nothing. Just forces data to be loaded (static class constructor).
+				while (!DataFeed.Loaded) ; // Temporary. Actually, this does nothing. Just forces data to be loaded (static class constructor). Without this, the data would be loaded when the first request approaches the server.
 			}
 			catch
 			{
