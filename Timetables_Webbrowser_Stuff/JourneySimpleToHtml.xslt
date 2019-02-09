@@ -79,6 +79,17 @@
 											<xsl:when test="@xsi:type = 'FootpathSegment'">
 												<li class="Footpath">
 													<img width="20" height="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4gcIDykjDbFNcgAAAiFJREFUWMPFlzFoVEEQhv/RM4l3yIkkNkEtRJRTo4WEkEoQRJRoZWG0tAjaiIWdjYKkEOxSi40RVAghEFDEwtIrUmgjYiEIJgp6xhzh4n02e7Cuz+Pu3tvn3+wyOzv/v7uzO+9JKQBUgBdAA6gC48oLQBlY5k/8Aka7ibMphYZjkoYS4p3LS8BAhJhdH8FP/sZonnkwBtSAOvADOK3/AWAXsLWXuYUeyAYkTUk6K6lf0pKkG2ZWz2OlO4D3Cec+lwd5BfjEv3E4JvkJl2jt8CgW+eWAaBFYTRBQB0pZk/cDHzyS20CpzS7MxEi61ns/5WyXEojXvf7eLAXsBtZc4O3O9jRBwD5XiFq4BwxmlfkAX4Gis60H5MvANuBUYK8BT4ByGgHnXbA3QJ87khBLQMH5bwFmEq7rSK/VcMy1nyU1JH1L8HltZhuSZGYNM7si6YCkSUlrzmdP2nJcNTPMrClpOhgbAsw3mFnNzB6aWUlS0czmez2CAnAwsG0G3gVbfCivqnfLtROBgJVwF2IJWAUWXH82EHE3NvlRj+yiu3pfgseoHFPAfY/ssbNdDXahGot8p/vkAmgCE97YfCDiQgwBDzyC761X0Y0NB6X6Y+xyPJLgcy3wmc2KfNBlftMFvtPG96UnoAkcyULAcy/o2w4K14bn/yot+aS3mpVOrhhwPSzTaQTc9H44z3Qx75knYDiNgD7gJLC/y3lF4DhQ6cT/N9dexPM3mnpEAAAAAElFTkSuQmCC"/>
+													<span class="details">
+														 · 
+														<span class="total-duration">
+															<span class="departure-from-source">
+																<xsl:value-of select="./DepartureDateTime/text()"/>
+															</span>
+															<span class="arrival-to-target">
+																<xsl:value-of select="./ArrivalDateTime/text()"/>
+															</span>
+														</span>
+													</span>
 												</li>
 											</xsl:when>
 											<xsl:otherwise>
@@ -90,6 +101,22 @@
 														background-color: <xsl:value-of select="./LineColor/@Hex"/>;
 													</xsl:attribute>
 													<xsl:value-of select="./LineLabel/text()"/>
+													<span class="details">														
+														 · 
+														<span class="station-id">
+															<xsl:value-of select="./SourceStopID/text()"/>													
+														</span>
+														(<span class="iso8601">
+															<xsl:value-of select="./DepartureDateTime/text()"/>													
+														</span>)
+														 - 
+														<span class="station-id">
+															<xsl:value-of select="./TargetStopID/text()"/>													
+														</span>
+														(<span class="iso8601">
+															<xsl:value-of select="./ArrivalDateTime/text()"/>													
+														</span>) 
+													</span>
 												</li>
 											</xsl:otherwise>
 										</xsl:choose>

@@ -10,6 +10,19 @@ namespace Timetables.Application.Desktop
 {
 	static class Program
 	{
+		private static bool CreateSettings()
+		{
+			try
+			{
+				Settings.CreateSettings();
+			}
+			catch // Bad settings format (e.g. bad URL format).
+			{
+				return false;
+			}
+
+			return true;
+		}
 		private static MailAddress UnhandledExceptionMailSendTo { get; } = new MailAddress("thespeedding@gmail.com");
 		/// <summary>
 		/// The main entry point for the application.
@@ -33,14 +46,7 @@ namespace Timetables.Application.Desktop
 			}
 			catch // Settings file corrupted or missing.
 			{
-				try
-				{
-					Settings.CreateSettings();
-				}
-				catch // Bad settings format again (e.g. bad URL format).
-				{
-					Settings.CreateSettings();
-				}
+				while (!CreateSettings()) ;
 			}
 
 			var initWindow = new InitLoadingWindow();

@@ -37,7 +37,7 @@ namespace Timetables.Server
 					using (var sr = new System.IO.StreamReader("data/expires.tfd"))
 						autoUpdateDateTime = DateTime.ParseExact(sr.ReadLine(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None).AddDays(1);
 
-					Update?.Invoke($"Another auto update is scheduled to be in { autoUpdateDateTime }.");
+					Update?.Invoke($"Another auto update is scheduled to be at { autoUpdateDateTime }.");
 
 					Thread.Sleep(autoUpdateDateTime - DateTime.Now);
 
