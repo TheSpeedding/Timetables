@@ -53,8 +53,10 @@
 			this.trainCheckBox = new System.Windows.Forms.CheckBox();
 			this.shipCheckBox = new System.Windows.Forms.CheckBox();
 			this.cablecarCheckBox = new System.Windows.Forms.CheckBox();
+			this.locationPictureBox = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.locationPictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// sourceLabel
@@ -229,7 +231,7 @@
 			this.sourceTextBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.sourceTextBox.Location = new System.Drawing.Point(116, 18);
 			this.sourceTextBox.Name = "sourceTextBox";
-			this.sourceTextBox.Size = new System.Drawing.Size(514, 24);
+			this.sourceTextBox.Size = new System.Drawing.Size(484, 24);
 			this.sourceTextBox.TabIndex = 0;
 			// 
 			// targetTextBox
@@ -370,12 +372,25 @@
 			this.cablecarCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.cablecarCheckBox.UseVisualStyleBackColor = true;
 			// 
+			// locationPictureBox
+			// 
+			this.locationPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.locationPictureBox.Image = global::Timetables.Application.Desktop.Properties.Resources.loc;
+			this.locationPictureBox.InitialImage = global::Timetables.Application.Desktop.Properties.Resources.loc;
+			this.locationPictureBox.Location = new System.Drawing.Point(606, 18);
+			this.locationPictureBox.Name = "locationPictureBox";
+			this.locationPictureBox.Size = new System.Drawing.Size(24, 24);
+			this.locationPictureBox.TabIndex = 113;
+			this.locationPictureBox.TabStop = false;
+			this.locationPictureBox.Click += new System.EventHandler(this.locationPictureBox_Click);
+			// 
 			// NewJourneyWindow
 			// 
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(642, 403);
+			this.Controls.Add(this.locationPictureBox);
 			this.Controls.Add(this.cablecarCheckBox);
 			this.Controls.Add(this.shipCheckBox);
 			this.Controls.Add(this.trainCheckBox);
@@ -407,6 +422,7 @@
 			this.Load += new System.EventHandler(this.NewJourneyWindow_Load);
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.transfersNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.locationPictureBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -437,5 +453,6 @@
 		private System.Windows.Forms.CheckBox trainCheckBox;
 		private System.Windows.Forms.CheckBox shipCheckBox;
 		private System.Windows.Forms.CheckBox cablecarCheckBox;
+		private System.Windows.Forms.PictureBox locationPictureBox;
 	}
 }

@@ -163,7 +163,7 @@ namespace Timetables.Server
 			ServerListener.Start();
 			OperationThread.Start();
 
-			Logging.Log($"Listening at { ((IPEndPoint)ServerListener.Server.LocalEndPoint).Address.ToString() }:{ Port }.");
+			Logging.Log($"Server { GetType().Name } listening at { ((IPEndPoint)ServerListener.Server.LocalEndPoint).Address.ToString() }:{ Port }.");
 		}
 		/// <summary>
 		/// Creates customized server.

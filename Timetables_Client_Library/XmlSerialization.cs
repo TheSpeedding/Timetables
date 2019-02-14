@@ -100,7 +100,7 @@ namespace Timetables.Client
 		{
 			bool wbLoaded = false;
 
-			int bodyOpenIndex = html.IndexOf("<body"); // Enclosing > not include because body usually contain identifier specifying type of the results.
+			int bodyOpenIndex = html.IndexOf("<body"); // Enclosing > not included because body usually contain identifier specifying type of the results.
 			int bodyCloseIndex = html.IndexOf("</body>") + "</body>".Length;
 			
 			string beforeBody = (bodyOpenIndex == -1 || bodyCloseIndex == -1) ? string.Empty : html.Substring(0, bodyOpenIndex);

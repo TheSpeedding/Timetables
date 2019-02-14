@@ -21,7 +21,7 @@ namespace Timetables.Application.Desktop
 			InitializeComponent();
 			Settings.Theme.Apply(this);
 			
-			resultsWebBrowser.DocumentText = Requests.LoadingHtml(Settings.Localization.PleaseWaitDownloading);
+			resultsWebBrowser.DocumentText = Request.LoadingHtml(Settings.Localization.PleaseWaitDownloading);
 		}
 
 		protected void SetWebbrowserContent(string content) => resultsWebBrowser.DocumentText = content;

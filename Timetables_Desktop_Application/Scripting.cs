@@ -70,7 +70,7 @@ namespace Timetables.Interop
 			bool isStation = ShowDeparturesFromStation();
 			int newId = isStation ? DataFeedDesktop.Basic.Stops.FindByIndex(stopId).ParentStation.ID : stopId;
 
-			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Requests.SendDepartureBoardRequestAsync(new StationInfoRequest(newId, dt, 5, isStation)));
+			DepartureBoardResponse results = AsyncHelpers.RunSync(() => Request.SendDepartureBoardRequestAsync(new StationInfoRequest(newId, dt, 5, isStation)));
 
 			return results.TransformToHtml(Settings.DepartureBoardInMapXslt.FullName, Settings.DepartureBoardInMapCss.FullName, Settings.OnLoadActionsJavaScript.FullName).RenderJavascriptToHtml(this);
 		}

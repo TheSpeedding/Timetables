@@ -34,14 +34,14 @@ namespace Timetables.Application.Desktop
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Requests.GetRouteInfoFromLabel(lineTextBox.Text);
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineTextBox.Text);
 
 			if (route == null) return;
 
 			var fav = new LineInfoCached(route.ID);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			Requests.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+			Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 			favoritesListBox.Items.Add(fav);
@@ -75,7 +75,7 @@ namespace Timetables.Application.Desktop
 
 		private void FavoriteDeparturesWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(lineTextBox, (string[])DataFeedDesktop.Basic.RoutesInfo);
+			Request.AutoCompleteTextBox(lineTextBox, (string[])DataFeedDesktop.Basic.RoutesInfo);
 		}
 
 		private void favoritesListBox_SelectedIndexChanged(object sender, EventArgs e)

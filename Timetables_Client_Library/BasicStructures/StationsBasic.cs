@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Device.Location;
 
 namespace Timetables.Structures.Basic
 {
@@ -94,6 +95,47 @@ namespace Timetables.Structures.Basic
 		/// </summary>
 		/// <param name="index">Index of the station.</param>
 		public StationBasic FindByIndex(int index) => this[index];
+		/// <summary>
+		/// Returns the closest station to the user position.
+		/// </summary>
+		/// <param name="geo">Geological coordinate of the user.</param>
+		public StationBasic FindClosestStation(GeoCoordinate geo)
+		{
+			double GetDistance(double Alat, double Alon, double Blat, double Blon)
+			{
+				double DegreesToRadians(double degrees) => (Math.PI / 180) * degrees;
+
+				// Using Haversine formula. 
+				double AlatR = DegreesToRadians(Alat);
+				double AlonR = DegreesToRadians(Alon);
+				double BlatR = DegreesToRadians(Blat);
+				double BlonR = DegreesToRadians(Blon);
+				double u = Math.Sin((BlatR - AlatR) / 2);
+				double v = Math.Sin((BlonR - AlonR) / 2);
+				return 2 * 6371 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v));
+			}
+
+			double userLatitude = geo.Latitude;
+			double userLongitude = geo.Longitude;
+
+			StopsBasic.StopBasic closestStop = null;
+			double closestStopDistance = double.MaxValue;
+
+			foreach (var station in this)
+			{
+				foreach (var stop in station.ChildStops)
+				{
+					var distance = GetDistance(stop.Latitude, stop.Longitude, userLatitude, userLongitude);
+					if (distance < closestStopDistance)
+					{
+						closestStopDistance = distance;
+						closestStop = stop;
+					}
+				}
+			}
+
+			return closestStop?.ParentStation;
+		}
 		/// <summary>
 		/// Writes basic data into given stream.
 		/// </summary>

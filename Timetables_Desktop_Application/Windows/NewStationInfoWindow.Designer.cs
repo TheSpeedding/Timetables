@@ -38,7 +38,9 @@
 			this.lineLabel = new System.Windows.Forms.Label();
 			this.lineComboBox = new System.Windows.Forms.ComboBox();
 			this.stationTextBox = new System.Windows.Forms.TextBox();
+			this.locationPictureBox = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.locationPictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// stationLabel
@@ -148,16 +150,29 @@
 			this.stationTextBox.Font = new System.Drawing.Font("Calibri", 10F);
 			this.stationTextBox.Location = new System.Drawing.Point(116, 18);
 			this.stationTextBox.Name = "stationTextBox";
-			this.stationTextBox.Size = new System.Drawing.Size(146, 24);
+			this.stationTextBox.Size = new System.Drawing.Size(116, 24);
 			this.stationTextBox.TabIndex = 0;
 			this.stationTextBox.TextChanged += new System.EventHandler(this.stationTextBox_TextChanged);
 			// 
-			// NewDepartureBoardWindow
+			// locationPictureBox
+			// 
+			this.locationPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.locationPictureBox.Image = global::Timetables.Application.Desktop.Properties.Resources.loc;
+			this.locationPictureBox.InitialImage = global::Timetables.Application.Desktop.Properties.Resources.loc;
+			this.locationPictureBox.Location = new System.Drawing.Point(238, 18);
+			this.locationPictureBox.Name = "locationPictureBox";
+			this.locationPictureBox.Size = new System.Drawing.Size(24, 24);
+			this.locationPictureBox.TabIndex = 71;
+			this.locationPictureBox.TabStop = false;
+			this.locationPictureBox.Click += new System.EventHandler(this.locationPictureBox_Click);
+			// 
+			// NewStationInfoWindow
 			// 
 			this.AcceptButton = this.searchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(274, 220);
+			this.Controls.Add(this.locationPictureBox);
 			this.Controls.Add(this.stationTextBox);
 			this.Controls.Add(this.lineComboBox);
 			this.Controls.Add(this.lineLabel);
@@ -169,10 +184,11 @@
 			this.Controls.Add(this.stationLabel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(276, 219);
-			this.Name = "NewDepartureBoardWindow";
+			this.Name = "NewStationInfoWindow";
 			this.Text = "New departure board";
 			this.Load += new System.EventHandler(this.NewDepartureBoardWindow_Load);
 			((System.ComponentModel.ISupportInitialize)(this.countNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.locationPictureBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -188,5 +204,6 @@
 		private System.Windows.Forms.Label lineLabel;
 		private System.Windows.Forms.ComboBox lineComboBox;
 		private System.Windows.Forms.TextBox stationTextBox;
+		private System.Windows.Forms.PictureBox locationPictureBox;
 	}
 }

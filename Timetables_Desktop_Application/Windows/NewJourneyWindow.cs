@@ -73,7 +73,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.GetRouterWindowAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (int)transfersNumericUpDown.Value, (int)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
+			var window = await Request.GetRouterWindowAsync(sourceTextBox.Text, targetTextBox.Text, departureDateTimePicker.Value, (int)transfersNumericUpDown.Value, (int)countNumericUpDown.Value, GetTransferCoefficient(), GetMeanOfTransport(), this, CurrentComparer);
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -111,8 +111,17 @@ namespace Timetables.Application.Desktop
 
 		private void NewJourneyWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
-			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Request.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Request.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
+		}
+
+		private void locationPictureBox_Click(object sender, EventArgs e)
+		{
+			var station = DataFeedDesktop.Basic.Stations.FindClosestStation(DataFeedDesktop.GeoWatcher.Position.Location);
+			if (station != null)
+			{
+				sourceTextBox.Text = station.Name;
+			}
 		}
 	}
 }

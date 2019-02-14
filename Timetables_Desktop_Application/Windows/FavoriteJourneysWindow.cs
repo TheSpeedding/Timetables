@@ -35,15 +35,15 @@ namespace Timetables.Application.Desktop
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			Structures.Basic.StationsBasic.StationBasic source = Requests.GetStationFromString(sourceTextBox.Text);
-			Structures.Basic.StationsBasic.StationBasic target = Requests.GetStationFromString(targetTextBox.Text);
+			Structures.Basic.StationsBasic.StationBasic source = Request.GetStationFromString(sourceTextBox.Text);
+			Structures.Basic.StationsBasic.StationBasic target = Request.GetStationFromString(targetTextBox.Text);
 
 			if (source == null || target == null) return;
 
 			var fav = new JourneyCached(source.ID, target.ID);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			Requests.CacheJourneyAsync(fav.ConstructNewRequest());
+			Request.CacheJourneyAsync(fav.ConstructNewRequest());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 			favoritesListBox.Items.Add(fav);
@@ -77,8 +77,8 @@ namespace Timetables.Application.Desktop
 
 		private void FavoriteJourneysWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
-			Requests.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Request.AutoCompleteTextBox(sourceTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Request.AutoCompleteTextBox(targetTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 
 		private void favoritesListBox_SelectedIndexChanged(object sender, EventArgs e)

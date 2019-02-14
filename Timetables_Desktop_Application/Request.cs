@@ -13,7 +13,7 @@ namespace Timetables.Application.Desktop
 	/// <summary>
 	/// Class that supplies methods to send requests.
 	/// </summary>
-	internal static class Requests
+	internal static class Request
 	{
 		/// <summary>
 		/// Gets everything ready for textbox auto-completion.

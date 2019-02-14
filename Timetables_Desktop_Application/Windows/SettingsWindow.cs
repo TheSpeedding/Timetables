@@ -101,8 +101,8 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await Requests.UpdateCachedResultsAsync(true); // TO-DO: Temporary bugfix. This deletes the data, in the next call the data will be updated. The problem is probably in overwriting files.
-				await Requests.UpdateCachedResultsAsync(true);
+				await Request.UpdateCachedResultsAsync(true); // TO-DO: Temporary bugfix. This deletes the data, in the next call the data will be updated. The problem is probably in overwriting files.
+				await Request.UpdateCachedResultsAsync(true);
 			}
 			catch
 			{

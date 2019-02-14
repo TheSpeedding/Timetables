@@ -86,7 +86,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Requests.cs" />
+    <Compile Include="Request.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="Windows\FavoriteLinesWindow.cs">
       <SubType>Form</SubType>
@@ -263,6 +263,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -28,7 +28,7 @@ namespace Timetables.Application.Desktop
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			searchButton.Enabled = false;
-			var window = await Requests.GetStationInfoWindowAsync(stationTextBox.Text, departureDateTimePicker.Value, (int)countNumericUpDown.Value, true, lineComboBox.Text, this);
+			var window = await Request.GetStationInfoWindowAsync(stationTextBox.Text, departureDateTimePicker.Value, (int)countNumericUpDown.Value, true, lineComboBox.Text, this);
 			searchButton.Enabled = true;
 
 			if (window != null)
@@ -48,7 +48,7 @@ namespace Timetables.Application.Desktop
 
 		private void NewDepartureBoardWindow_Load(object sender, EventArgs e)
 		{
-			Requests.AutoCompleteTextBox(stationTextBox, (string[])DataFeedDesktop.Basic.Stations);
+			Request.AutoCompleteTextBox(stationTextBox, (string[])DataFeedDesktop.Basic.Stations);
 		}
 
 		private void stationTextBox_TextChanged(object sender, EventArgs e)
@@ -56,6 +56,15 @@ namespace Timetables.Application.Desktop
 			lineComboBox.Items.Clear();
 			lineComboBox.Text = string.Empty;
 			lineComboBox.Enabled = DataFeedDesktop.Basic.Stations.FindByName(stationTextBox.Text) != null;
+		}
+
+		private void locationPictureBox_Click(object sender, EventArgs e)
+		{
+			var station = DataFeedDesktop.Basic.Stations.FindClosestStation(DataFeedDesktop.GeoWatcher.Position.Location);
+			if (station != null)
+			{
+				stationTextBox.Text = station.Name;
+			}
 		}
 	}
 }
