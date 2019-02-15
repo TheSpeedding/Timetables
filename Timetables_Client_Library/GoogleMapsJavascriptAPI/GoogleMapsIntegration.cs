@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timetables.Structures.Basic;
+using Timetables.Utilities;
 
 namespace Timetables.Client
 {
@@ -82,7 +82,9 @@ namespace Timetables.Client
 			double lat, lon;
 			int zoom;
 
-			if (double.IsNaN(DataFeedClient.GeoWatcher.Position.Location.Latitude) || double.IsNaN(DataFeedClient.GeoWatcher.Position.Location.Longitude))
+			var loc = AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition);
+
+			if (double.IsNaN(loc.Latitude) || double.IsNaN(loc.Longitude))
 			{
 				lat = stops.GetAverageLatitude();
 				lon = stops.GetAverageLongitude();
@@ -90,8 +92,8 @@ namespace Timetables.Client
 			}
 			else
 			{
-				lat = DataFeedClient.GeoWatcher.Position.Location.Latitude;
-				lon = DataFeedClient.GeoWatcher.Position.Location.Longitude;
+				lat = loc.Latitude;
+				lon = loc.Longitude;
 				zoom = 17;
 			}
 

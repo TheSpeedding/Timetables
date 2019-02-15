@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Device.Location;
 using System.Net;
 using System.Threading.Tasks;
-using System.Xml;
+using Timetables.Utilities;
 
 namespace Timetables.Client
 {
@@ -15,7 +14,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Geowatcher to retrieve current location.
 		/// </summary>
-		public static GeoCoordinateWatcher GeoWatcher { get; } = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
+		public static CPGeolocator GeoWatcher { get; set; }
 		/// <summary>
 		/// Indicates whether the data were sucessfully loaded.
 		/// </summary>
@@ -149,9 +148,7 @@ namespace Timetables.Client
 		public static void Load()
 		{
 			Loaded = false;
-
-			GeoWatcher.TryStart(false, TimeSpan.FromSeconds(5));
-
+			
 			basicData = new Structures.Basic.DataFeedBasic();
 
 			Loaded = true;

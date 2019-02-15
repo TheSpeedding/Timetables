@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
 using Timetables.Client;
+using System.Device.Location;
 
 namespace Timetables.Application.Desktop
 {
@@ -28,6 +29,14 @@ namespace Timetables.Application.Desktop
 		
 		private async void InitLoadingWindow_Shown(object sender, EventArgs e)
 		{
+			var gw = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
+			gw.TryStart(false, TimeSpan.FromSeconds(5));
+
+			DataFeedClient.GeoWatcher = new Timetables.Utilities.CPGeolocator(() =>
+			{
+				var loc = gw.Position.Location;
+				return new Timetables.Utilities.Position(loc.Latitude, loc.Longitude);
+			});
 
 			topBarTimer.Start();
 

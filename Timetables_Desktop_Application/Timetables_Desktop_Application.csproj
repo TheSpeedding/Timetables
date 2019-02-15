@@ -52,6 +52,15 @@
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
@@ -218,6 +227,7 @@
       <DependentUpon>ShowMapWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -238,6 +248,10 @@
     <ProjectReference Include="..\Timetables_Client_Library\Timetables_Client_Library.csproj">
       <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
       <Name>Timetables_Client_Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj">
+      <Project>{a492f425-5484-4b3e-a6a7-cec957a4df4f}</Project>
+      <Name>Timetables_Crossplatform_Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
       <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>

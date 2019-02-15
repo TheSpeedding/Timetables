@@ -4,6 +4,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using Timetables.Client;
 using System.Linq;
 using System.Threading.Tasks;
+using Timetables.Utilities;
 
 namespace Timetables.Application.Desktop
 {
@@ -60,7 +61,7 @@ namespace Timetables.Application.Desktop
 
 		private void locationPictureBox_Click(object sender, EventArgs e)
 		{
-			var station = DataFeedDesktop.Basic.Stations.FindClosestStation(DataFeedDesktop.GeoWatcher.Position.Location);
+			var station = DataFeedDesktop.Basic.Stations.FindClosestStation(AsyncHelpers.RunSync<Position>(DataFeedDesktop.GeoWatcher.GetCurrentPosition));
 			if (station != null)
 			{
 				stationTextBox.Text = station.Name;

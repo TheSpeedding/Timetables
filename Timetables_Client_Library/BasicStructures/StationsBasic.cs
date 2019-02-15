@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using System.Device.Location;
+using Timetables.Utilities;
 
 namespace Timetables.Structures.Basic
 {
@@ -66,6 +66,12 @@ namespace Timetables.Structures.Basic
 		/// Gets the total number of stations.
 		/// </summary>
 		public int Count => Items.Length;
+
+		public object FindClosestStation(bool v)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
@@ -99,7 +105,7 @@ namespace Timetables.Structures.Basic
 		/// Returns the closest station to the user position.
 		/// </summary>
 		/// <param name="user">Geological coordinate of the user.</param>
-		public StationBasic FindClosestStation(GeoCoordinate user)
+		public StationBasic FindClosestStation(Position user)
 		{
 			double GetDistance(double Alat, double Alon, double Blat, double Blon)
 			{
