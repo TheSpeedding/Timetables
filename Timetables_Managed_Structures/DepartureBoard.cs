@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Timetables.Utilities;
 
 namespace Timetables.Client
 {
@@ -129,8 +129,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Color of the line used in GUI.
 		/// </summary>
-		[XmlElement(Type = typeof(XmlColor))]
-		public Color LineColor { get; set; }
+		public CPColor LineColor { get; set; }
 		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
@@ -151,7 +150,7 @@ namespace Timetables.Client
 			Headsign = headsign;
 			LineLabel = lineLabel;
 			LineName = lineName;
-			LineColor = ColorTranslator.FromHtml("#" + lineColor.ToString("X"));
+			LineColor = CPColor.FromHtml("#" + lineColor.ToString("X"));
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
 			DepartureDateTime = new DateTime(1970, 1, 1).AddSeconds(departureDateTime);
 

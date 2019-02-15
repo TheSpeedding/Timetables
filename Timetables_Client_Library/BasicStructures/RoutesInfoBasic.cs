@@ -1,26 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Timetables.Client;
+using Timetables.Utilities;
 
 namespace Timetables.Structures.Basic
 {
-	/// <summary>
-	/// Static class that supplies extensions needed for routes info.
-	/// </summary>
-	public static partial class RoutesInfoExtension
-	{
-		/// <summary>
-		/// Converts Color object to HEX string representation
-		/// </summary>
-		/// <param name="c">Color.</param>
-		/// <returns>Color in HEX format.</returns>
-		public static string ToHex(this System.Drawing.Color c) => c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
-	}
 	/// <summary>
 	/// Collection of routes info.
 	/// </summary>
@@ -48,9 +36,8 @@ namespace Timetables.Structures.Basic
 			/// <summary>
 			/// Color of route used in GUI.
 			/// </summary>
-			[XmlElement(Type = typeof(XmlColor))]
-			public Color Color { get; set; }
-			public RouteInfoBasic(int id, string label, MeanOfTransport type, Color c)
+			public CPColor Color { get; set; }
+			public RouteInfoBasic(int id, string label, MeanOfTransport type, CPColor c)
 			{
 				ID = id;
 				Label = label;
@@ -88,7 +75,7 @@ namespace Timetables.Structures.Basic
 			Items = new RouteInfoBasic[count];
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
 			for (int i = 0; i < count; i++)
-				Items[i] = (new RouteInfoBasic(int.Parse(tokens[4 * i]), tokens[4 * i + 1], (MeanOfTransport)int.Parse(tokens[4 * i + 2]), ColorTranslator.FromHtml(tokens[4 * i + 3][0] == '#' ? tokens[4 * i + 3] : "#" + tokens[4 * i + 3])));
+				Items[i] = (new RouteInfoBasic(int.Parse(tokens[4 * i]), tokens[4 * i + 1], (MeanOfTransport)int.Parse(tokens[4 * i + 2]), CPColor.FromHtml(tokens[4 * i + 3][0] == '#' ? tokens[4 * i + 3] : "#" + tokens[4 * i + 3])));
 			sr.Dispose();
 		}
 		/// <summary>

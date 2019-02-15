@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Timetables.Utilities;
 
 namespace Timetables.Preprocessor
 {
-	/// <summary>
-	/// Static class that supplies extensions needed for routes info.
-	/// </summary>
-	public static partial class RoutesInfoExtension
-	{
-		/// <summary>
-		/// Converts Color object to HEX string representation
-		/// </summary>
-		/// <param name="c">Color.</param>
-		/// <returns>Color in HEX format.</returns>
-		public static string ToHex(this System.Drawing.Color c) => c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
-	}
 	/// <summary>
 	/// Abstract class for routes info collecting information about routes info.
 	/// </summary>
@@ -49,7 +38,7 @@ namespace Timetables.Preprocessor
             /// <summary>
             /// Color that represents the route.
             /// </summary>
-            public System.Drawing.Color Color { get; }
+            public CPColor Color { get; }
 			/// <summary>
 			/// Route Info ID, Short Name, Long Name, Mean Of The Transport, Color.
 			/// </summary>
@@ -97,12 +86,12 @@ namespace Timetables.Preprocessor
                             Color = GlobalData.DefaultTramColor;
                             break;
 						default:
-							Color = System.Drawing.ColorTranslator.FromHtml("#000000");
+							Color = CPColor.FromHtml("#000000");
 							break;
                     }
 
                 else
-                    Color = System.Drawing.ColorTranslator.FromHtml(color[0] == '#' ? color : "#" + color);
+                    Color = CPColor.FromHtml(color[0] == '#' ? color : "#" + color);
             }
         }
 		protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();

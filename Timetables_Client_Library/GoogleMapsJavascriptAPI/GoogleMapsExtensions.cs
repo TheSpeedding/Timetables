@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timetables.Structures.Basic;
+using Timetables.Utilities;
 
 namespace Timetables.Client
 {
@@ -23,7 +23,7 @@ namespace Timetables.Client
 							new KeyValuePair<string, object>("lat", lat),
 							new KeyValuePair<string, object>("lng", lon))))));
 
-		public static string CreateSimplePolyline(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map, double strokeWeight, Color strokeColor, bool strokeDashed = false, int index = 0)
+		public static string CreateSimplePolyline(this IEnumerable<StopsBasic.StopBasic> stops, JavascriptVariable<JavascriptObject> map, double strokeWeight, CPColor strokeColor, bool strokeDashed = false, int index = 0)
 		{
 			var arr = new JavascriptArray<JavascriptObject.Anonymous>(stops.Select(s => new JavascriptObject.Anonymous(
 				new KeyValuePair<string, object>("lat", s.Latitude),

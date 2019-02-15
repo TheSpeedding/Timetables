@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Xml;
+using Timetables.Utilities;
 
 namespace Timetables.Preprocessor
 {
@@ -15,12 +15,12 @@ namespace Timetables.Preprocessor
 		public static readonly int MaximalDurationOfTransfer; // In seconds.
 		public static readonly double AverageWalkingSpeed; // Meters per second.
 
-		public static readonly Color DefaultBusColor;
-		public static readonly Color DefaultTramColor;
-		public static readonly Color DefaultCableCarColor;
-		public static readonly Color DefaultRailColor;
-		public static readonly Color DefaultSubwayColor;
-		public static readonly Color DefaultShipColor;
+		public static readonly CPColor DefaultBusColor;
+		public static readonly CPColor DefaultTramColor;
+		public static readonly CPColor DefaultCableCarColor;
+		public static readonly CPColor DefaultRailColor;
+		public static readonly CPColor DefaultSubwayColor;
+		public static readonly CPColor DefaultShipColor;
 
 		static GlobalData()
 		{
@@ -44,12 +44,12 @@ namespace Timetables.Preprocessor
 				MaximalDurationOfTransfer = 600; 
 				AverageWalkingSpeed = 0.9;
 
-				DefaultBusColor = ColorTranslator.FromHtml("#4A90E2");
-				DefaultTramColor = ColorTranslator.FromHtml("#8B572A");
-				DefaultCableCarColor = ColorTranslator.FromHtml("#FF8C00");
-				DefaultRailColor = ColorTranslator.FromHtml("#006600");
-				DefaultSubwayColor = ColorTranslator.FromHtml("#FFFF00");
-				DefaultShipColor = ColorTranslator.FromHtml("#0033CC");
+				DefaultBusColor = CPColor.FromHtml("#4A90E2");
+				DefaultTramColor = CPColor.FromHtml("#8B572A");
+				DefaultCableCarColor = CPColor.FromHtml("#FF8C00");
+				DefaultRailColor = CPColor.FromHtml("#006600");
+				DefaultSubwayColor = CPColor.FromHtml("#FFFF00");
+				DefaultShipColor = CPColor.FromHtml("#0033CC");
 			}
 		}
 	}

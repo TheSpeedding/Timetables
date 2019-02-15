@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using Timetables.Utilities;
 
 namespace Timetables.Client
 {
@@ -194,8 +194,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Color of the line used in GUI.
 		/// </summary>
-		[XmlElement(Type = typeof(XmlColor))]
-		public Color LineColor { get; set; }
+		public CPColor LineColor { get; set; }
 		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
@@ -216,7 +215,7 @@ namespace Timetables.Client
 			LineLabel = lineLabel;
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
 			LineName = lineName;
-			LineColor = ColorTranslator.FromHtml("#" + lineColor.ToString("X"));
+			LineColor = CPColor.FromHtml("#" + lineColor.ToString("X"));
 
 			IntermediateStops = new List<IntermediateStop>();
 			foreach (var x in intStops)

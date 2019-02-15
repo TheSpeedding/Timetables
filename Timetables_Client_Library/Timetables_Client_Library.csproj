@@ -35,7 +35,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
@@ -63,6 +62,10 @@
     <Compile Include="XmlSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj">
+      <Project>{a492f425-5484-4b3e-a6a7-cec957a4df4f}</Project>
+      <Name>Timetables_Crossplatform_Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timetables_Managed_Structures\Timetables_Managed_Structures.csproj">
       <Project>{36816c97-7d07-43f9-b68a-f65622639568}</Project>
       <Name>Timetables_Managed_Structures</Name>

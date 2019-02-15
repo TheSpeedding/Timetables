@@ -72,7 +72,7 @@ namespace Timetables.Client
 					initMap.AddInstruction(((TripSegment)js).GetStops().CreateSimplePolyline(map, 4.0, ((TripSegment)js).LineColor, false, i).ToString);
 
 				else
-					initMap.AddInstruction(((FootpathSegment)js).GetStops().CreateSimplePolyline(map, 4.0, System.Drawing.Color.Gray, true, i).ToString);
+					initMap.AddInstruction(((FootpathSegment)js).GetStops().CreateSimplePolyline(map, 4.0, Timetables.Utilities.CPColor.Gray, true, i).ToString);
 			}
 
 			return GetHtmlStringConstant(initMap.ToString(), initMap.FunctionName);

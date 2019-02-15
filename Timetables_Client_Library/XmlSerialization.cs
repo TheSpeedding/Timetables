@@ -73,6 +73,7 @@ namespace Timetables.Client
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
 		public static string TransformToHtml(this string content, string xsltPath, string cssPath = null, string jsPath = null)
 		{
+			Clipboard.SetText(content);
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(content);
 
