@@ -10,6 +10,39 @@ using Timetables.Structures.Basic;
 
 namespace Timetables.Interop
 {
+	public static partial class Exctensions
+	{
+
+		/// <summary>
+		/// Takes HTML string and returns new HTML string after all the scripts were executed. Note that this uses Windows Forms classes.
+		/// </summary>
+		/// <param name="html">Input string.</param>
+		/// <param name="objectForScripting">Object for scripting.</param>
+		/// <returns>Transformed string.</returns>
+		public static string RenderJavascriptToHtml(this string html, object objectForScripting)
+		{
+			bool wbLoaded = false;
+
+			int bodyOpenIndex = html.IndexOf("<body"); // Enclosing > not included because body usually contain identifier specifying type of the results.
+			int bodyCloseIndex = html.IndexOf("</body>") + "</body>".Length;
+
+			string beforeBody = (bodyOpenIndex == -1 || bodyCloseIndex == -1) ? string.Empty : html.Substring(0, bodyOpenIndex);
+			string afterBody = (bodyOpenIndex == -1 || bodyCloseIndex == -1) ? string.Empty : html.Substring(bodyCloseIndex, html.Length - bodyCloseIndex);
+
+			WebBrowser wb = new WebBrowser
+			{
+				ScriptErrorsSuppressed = true,
+				ObjectForScripting = objectForScripting,
+				DocumentText = html
+			};
+
+			wb.DocumentCompleted += (o, e) => wbLoaded = true;
+
+			while (!wbLoaded) System.Windows.Forms.Application.DoEvents();
+
+			return beforeBody + wb.Document.Body.OuterHtml + afterBody;
+		}
+	}
 
 	[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
 	[System.Runtime.InteropServices.ComVisible(true)]

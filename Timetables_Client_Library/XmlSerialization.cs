@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using System.Windows.Forms;
 
 namespace Timetables.Client
 { 
@@ -56,6 +55,8 @@ namespace Timetables.Client
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
 		public static string TransformToHtml(this object o, string xsltPath, string cssPath = null, string jsPath = null)
 		{
+			if (o == null) return string.Empty;
+
 			System.IO.StringWriter sw = new System.IO.StringWriter();
 			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
 
@@ -73,7 +74,6 @@ namespace Timetables.Client
 		/// <returns>String representation of transformed XML, usually in HTML.</returns>
 		public static string TransformToHtml(this string content, string xsltPath, string cssPath = null, string jsPath = null)
 		{
-			Clipboard.SetText(content);
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(content);
 
@@ -89,35 +89,6 @@ namespace Timetables.Client
 				(cssPath == null ? "" : ("<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>" + Environment.NewLine)) +
 				sw.ToString() +
 				(jsPath == null ? "" : ("<script>" + new System.IO.StreamReader(jsPath).ReadToEnd() + "</script>" + Environment.NewLine));
-		}
-		/// <summary>
-		/// Takes HTML string and returns new HTML string after all the scripts were executed. Note that this uses Windows Forms classes.
-		/// </summary>
-		/// <param name="html">Input string.</param>
-		/// <param name="objectForScripting">Object for scripting.</param>
-		/// <returns>Transformed string.</returns>
-		public static string RenderJavascriptToHtml(this string html, object objectForScripting)
-		{
-			bool wbLoaded = false;
-
-			int bodyOpenIndex = html.IndexOf("<body"); // Enclosing > not included because body usually contain identifier specifying type of the results.
-			int bodyCloseIndex = html.IndexOf("</body>") + "</body>".Length;
-			
-			string beforeBody = (bodyOpenIndex == -1 || bodyCloseIndex == -1) ? string.Empty : html.Substring(0, bodyOpenIndex);
-			string afterBody = (bodyOpenIndex == -1 || bodyCloseIndex == -1) ? string.Empty : html.Substring(bodyCloseIndex, html.Length - bodyCloseIndex);
-
-			WebBrowser wb = new WebBrowser
-			{
-				ScriptErrorsSuppressed = true,
-				ObjectForScripting = objectForScripting,
-				DocumentText = html
-			};
-
-			wb.DocumentCompleted += (o, e) => wbLoaded = true;
-
-			while (!wbLoaded) Application.DoEvents();
-
-			return beforeBody + wb.Document.Body.OuterHtml + afterBody;
 		}
 	}
 }
