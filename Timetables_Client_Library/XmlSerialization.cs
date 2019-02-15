@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Timetables.Client

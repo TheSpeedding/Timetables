@@ -98,8 +98,8 @@ namespace Timetables.Structures.Basic
 		/// <summary>
 		/// Returns the closest station to the user position.
 		/// </summary>
-		/// <param name="geo">Geological coordinate of the user.</param>
-		public StationBasic FindClosestStation(GeoCoordinate geo)
+		/// <param name="user">Geological coordinate of the user.</param>
+		public StationBasic FindClosestStation(GeoCoordinate user)
 		{
 			double GetDistance(double Alat, double Alon, double Blat, double Blon)
 			{
@@ -114,10 +114,7 @@ namespace Timetables.Structures.Basic
 				double v = Math.Sin((BlonR - AlonR) / 2);
 				return 2 * 6371 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v));
 			}
-
-			double userLatitude = geo.Latitude;
-			double userLongitude = geo.Longitude;
-
+						
 			StopsBasic.StopBasic closestStop = null;
 			double closestStopDistance = double.MaxValue;
 
@@ -125,7 +122,7 @@ namespace Timetables.Structures.Basic
 			{
 				foreach (var stop in station.ChildStops)
 				{
-					var distance = GetDistance(stop.Latitude, stop.Longitude, userLatitude, userLongitude);
+					var distance = GetDistance(stop.Latitude, stop.Longitude, user.Latitude, user.Longitude);
 					if (distance < closestStopDistance)
 					{
 						closestStopDistance = distance;
