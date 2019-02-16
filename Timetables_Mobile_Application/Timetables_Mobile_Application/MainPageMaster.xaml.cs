@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using Timetables.Client;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,22 +23,26 @@ namespace Timetables.Application.Mobile
 
             BindingContext = new MainPageMasterViewModel();
             ListView = MenuItemsListView;
-        }
+		}
 
         class MainPageMasterViewModel : INotifyPropertyChanged
         {
-            public ObservableCollection<MainPageMenuItem> MenuItems { get; set; }
+            public ObservableCollection<MainPageMenuItem> MenuItems { get; }
             
+			public Localization Localization { get; }
+
             public MainPageMasterViewModel()
             {
+				Localization = Settings.Localization;
+
                 MenuItems = new ObservableCollection<MainPageMenuItem>(new[]
                 {
-                    new MainPageMenuItem { Id = 0, Title = Settings.Localization.NewJourney },
-                    new MainPageMenuItem { Id = 1, Title = Settings.Localization.FindDeparturesFromTheStation },
-                    new MainPageMenuItem { Id = 2, Title = Settings.Localization.NewLineInfo },
-                    new MainPageMenuItem { Id = 3, Title = Settings.Localization.ExtraordinaryEvents },
-					new MainPageMenuItem { Id = 4, Title = Settings.Localization.Lockouts },
-					new MainPageMenuItem { Id = 5, Title = Settings.Localization.Settings }
+                    new MainPageMenuItem { Id = 0, Title = Localization.FindJourney, TargetType = typeof(FindJourneyPage) },
+                    new MainPageMenuItem { Id = 1, Title = Localization.FindDeparturesFromTheStation },
+                    new MainPageMenuItem { Id = 2, Title = Localization.FindInformationAboutLine },
+                    new MainPageMenuItem { Id = 3, Title = Localization.ExtraordinaryEvents },
+					new MainPageMenuItem { Id = 4, Title = Localization.Lockouts },
+					new MainPageMenuItem { Id = 5, Title = Localization.Settings }
 				});
             }
             

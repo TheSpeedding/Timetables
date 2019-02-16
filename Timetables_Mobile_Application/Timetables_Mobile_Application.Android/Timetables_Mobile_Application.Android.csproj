@@ -83,7 +83,6 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
@@ -97,19 +96,72 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\icon.ico" />
+    <AndroidAsset Include="Assets\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\DepartureBoardDetailToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\DepartureBoardInMapToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\DepartureBoardSimpleToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\ExtraordinaryEventsToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\JourneyDetailToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\JourneySimpleToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\css\LockoutsToHtml.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\js\OnLoadActions.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\loc\Czech.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\DepartureBoardDetailToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\DepartureBoardInMapToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\DepartureBoardSimpleToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\ExtraordinaryEventsToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\JourneyDetailToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\JourneySimpleToHtml.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\xslt\LockoutsToHtml.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist $(TargetDir)xslt mkdir $(TargetDir)xslt
-if not exist $(TargetDir)css mkdir $(TargetDir)css
-if not exist $(TargetDir)js mkdir $(TargetDir)js
-if not exist $(TargetDir)loc mkdir $(TargetDir)loc
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if not exist $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\xslt mkdir $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\xslt
+if not exist $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\css mkdir $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\css
+if not exist $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\js mkdir $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\js
+if not exist $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\loc mkdir $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\loc
 
-
-xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.xslt" "$(TargetDir)xslt"
-xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.css" "$(TargetDir)css"
-xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.js" "$(TargetDir)js"
-xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(TargetDir)loc"</PostBuildEvent>
+xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.xslt" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\xslt"
+xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.css" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\css"
+xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.js" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\js"
+xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\loc"</PreBuildEvent>
   </PropertyGroup>
 </Project>

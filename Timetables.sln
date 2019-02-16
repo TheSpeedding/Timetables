@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Webbrowser_Stuff
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Localization", "Timetables_Localization", "{BDBB5145-4177-4DA7-9862-9D5390A90C79}"
 	ProjectSection(SolutionItems) = preProject
-		Timetables_Localization\Česky.xml = Timetables_Localization\Česky.xml
+		Timetables_Localization\Czech.xml = Timetables_Localization\Czech.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Server_Application", "Timetables_Server_Application\Timetables_Server_Application.csproj", "{B0E2AA0A-FFF4-42F3-9FC7-5A9141C92784}"
@@ -54,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Mobile_Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Mobile_Application", "Timetables_Mobile_Application\Timetables_Mobile_Application\Timetables_Mobile_Application.csproj", "{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Crossplatform_Utilities", "Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj", "{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Crossplatform_Utilities", "Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj", "{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

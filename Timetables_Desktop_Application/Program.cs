@@ -68,7 +68,7 @@ namespace Timetables.Application.Desktop
 
 				try
 				{
-					using (var sr = new System.IO.StreamReader(".settings"))
+					using (var sr = new System.IO.StreamReader("settings.xml"))
 						messageText += Environment.NewLine + sr.ReadToEnd();
 				}
 				catch
@@ -106,7 +106,7 @@ namespace Timetables.Application.Desktop
 				sw.WriteLine(((Exception)e.ExceptionObject).StackTrace);
 				try
 				{
-					using (var sr = new System.IO.StreamReader(".settings"))
+					using (var sr = new System.IO.StreamReader("settings.xml"))
 						sw.WriteLine(sr.ReadToEnd());
 				}
 				catch

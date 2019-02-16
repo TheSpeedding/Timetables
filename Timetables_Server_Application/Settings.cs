@@ -32,7 +32,7 @@ namespace Timetables.Server
 			try
 			{
 				XmlDocument settings = new XmlDocument();
-				settings.Load(".settings");
+				settings.Load("settings.xml");
 
 				foreach (XmlNode link in settings.GetElementsByTagName("Link"))
 					try { DataFeedSources.Add(new Uri(link.InnerText)); } catch { /* Invalid URI. Do not process this data source. */ }

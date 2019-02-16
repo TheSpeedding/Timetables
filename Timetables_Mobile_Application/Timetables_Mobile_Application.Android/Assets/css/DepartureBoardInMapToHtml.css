@@ -1,0 +1,63 @@
+body {
+	font-family: Verdana;
+	text-align: center;
+	background-color: #F1F4F6;
+}
+
+.content {
+	width: 300px;
+}
+
+.arrival, .title {
+	margin-bottom: 10px;
+}
+
+.departure {
+	position: relative;
+	padding: 5px 5px 5px 5px;
+}
+
+	.departure .box {
+		margin: 5px 0 5px 0;
+		position: relative;
+		height: auto;
+		overflow: auto;
+		background-color: white;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		box-shadow: 2px 2px 2px 2px #ccc;
+	}
+
+		.departure .box .label {
+			position: relative;
+		}
+
+			.departure .box .label span {
+				font-weight: bold;
+				text-align: center;
+				float: left;
+				color: white;
+				padding: 5px 10px 5px 10px;
+				margin: 5px 5px 5px 5px;
+				background-color: black;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				box-shadow: 1px 1px 1px 1px #ccc;
+			}
+
+		.departure .box .headsign {
+			position: absolute;
+			left: 55px;
+			top: 5px;
+			margin: 5px;
+		}
+
+		.departure .box .time {
+			position: absolute;
+			right: 0px;
+			top: 5px;
+			margin: 5px 15px 5px 5px;
+			text-align: right;
+		}

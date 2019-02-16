@@ -9,7 +9,7 @@
   <MasterDetailPage.Detail>
     <NavigationPage>
       <x:Arguments>
-        <pages:MainPageDetail />
+				<pages:FindJourneyPage />
       </x:Arguments>
     </NavigationPage>
   </MasterDetailPage.Detail>

@@ -133,9 +133,9 @@ namespace Timetables.Application.Desktop
 		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");
+			settings.Load("settings.xml");
 
-			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+			Localization = Localization.GetTranslation_Filesystem(settings.GetElementsByTagName("Language")?[0].InnerText);
 
 			switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
 			{
@@ -173,12 +173,12 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static void Save(bool afterException = false)
 		{
-			if (!System.IO.File.Exists(".settings") || afterException)
-				using (var sw = new System.IO.StreamWriter(".settings"))
+			if (!System.IO.File.Exists("settings.xml") || afterException)
+				using (var sw = new System.IO.StreamWriter("settings.xml"))
 					sw.Write("<Timetables></Timetables>");
 
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");							
+			settings.Load("settings.xml");							
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -214,7 +214,7 @@ namespace Timetables.Application.Desktop
 				settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeedDesktop.FullDataSource == null ? string.Empty : Client.DataFeedDesktop.FullDataSource.AbsoluteUri;
 			}
 
-			settings.Save(".settings");
+			settings.Save("settings.xml");
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace Timetables.Application.Desktop
 			if (Settings.Localization == null)
 			{
 				Settings.Localization = new Localization();
-				Settings.Localization = Localization.GetTranslation("English");
+				Settings.Localization = Localization.GetTranslation_Filesystem("English");
 			}
 
 			Settings.Theme = new Themes.BlueTheme();

@@ -4,13 +4,26 @@ using System.Net;
 using System.Xml;
 using Timetables.Client;
 
+// Settings class should be accessible from executable application.
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Timetables_Mobile_Application.Android")]
+
 namespace Timetables.Application.Mobile
 {
 	/// <summary>
 	/// Settings for the application.
 	/// </summary>
-	static class Settings
+	internal static class Settings
 	{
+		/// <summary>
+		/// Opens a filestream with given filename.
+		/// </summary>
+		/// <param name="file">File.</param>
+		/// <returns>Filestream.</returns>
+		public delegate Stream GetStreamHandler(System.IO.FileInfo file);
+		/// <summary>
+		/// Gets stream for the file.
+		/// </summary>
+		public static GetStreamHandler GetStream { get; set; }
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
@@ -85,9 +98,9 @@ namespace Timetables.Application.Mobile
 		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");
+			settings.Load(GetStream(new FileInfo("settings.xml")));
 
-			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+			Localization = Localization.GetTranslation_Android(settings.GetElementsByTagName("Language")?[0].InnerText, GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")));
 			
 			Client.DataFeedClient.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
 
@@ -104,14 +117,10 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Saves current settings.
 		/// </summary>
-		public static void Save(bool afterException = false)
+		public static void Save()
 		{
-			if (!System.IO.File.Exists(".settings") || afterException)
-				using (var sw = new System.IO.StreamWriter(".settings"))
-					sw.Write("<Timetables></Timetables>");
-
 			XmlDocument settings = new XmlDocument();
-			settings.Load(".settings");							
+			settings.Load(GetStream(new FileInfo("settings.xml")));
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -136,7 +145,7 @@ namespace Timetables.Application.Mobile
 
 			settings.GetElementsByTagName("BasicDataPort")[0].InnerText = Client.DataFeedClient.BasicDataPortNumber.ToString();
 
-			settings.Save(".settings");
+			settings.Save("settings.xml");
 		}
 	}	
 }

@@ -16,7 +16,9 @@ namespace Timetables.Client
 	{
 		[XmlIgnore]
 		private string locName = "English";
+		public string MainMenu { get; set; } = "Main menu";
 		public string Journey { get; set; } = "Journey";
+		public string FindInformationAboutLine { get; set; } = "Find information about line";
 		public string FindJourney { get; set; } = "Find journey";
 		public string DepartureBoard { get; set; } = "Departure board";
 		public string FindDeparturesFromTheStation { get; set; } = "Find departures from the station";
@@ -110,13 +112,14 @@ namespace Timetables.Client
 		public override string ToString() => locName;
 		/// <summary>
 		/// Creates a new instance of Localization class offering string constants in given language.
+		/// Uses filesystem methods.
 		/// </summary>
 		/// <param name="language">Language.</param>
 		/// <returns>Localization object.</returns>
-		public static Localization GetTranslation(string language = "English")
+		public static Localization GetTranslation_Filesystem(string language = "English")
 		{
-			if (language == "English") return new Localization();
-
+			if (language == "English") return new Localization();			
+			
 			if (!File.Exists("loc/" + language + ".xml")) throw new ArgumentException($"Translation sheet with language \" { language } \" was not found.");
 			
 			using (FileStream fileStream = new FileStream("loc/" + language + ".xml", FileMode.Open))
@@ -132,6 +135,28 @@ namespace Timetables.Client
 					return new Localization();
 				}
 			}
+		}
+		/// <summary>
+		/// Creates a new instance of Localization class offering string constants in given language.
+		/// Uses stream.
+		/// </summary>
+		/// <param name="language">Language.</param>
+		/// <returns>Localization object.</returns>
+		public static Localization GetTranslation_Android(string language = "English", Stream stream = null)
+		{
+			if (stream == null || language == "English") return new Localization();
+
+			try
+			{
+				var loc = (Localization)new XmlSerializer(typeof(Localization)).Deserialize(stream);
+				loc.locName = language;
+				return loc;
+			}
+			catch
+			{
+				return new Localization();
+			}
+
 		}
 	}
 }

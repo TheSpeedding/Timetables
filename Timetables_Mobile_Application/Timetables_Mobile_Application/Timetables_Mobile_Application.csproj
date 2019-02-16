@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="FindJourneyPage.xaml.cs">
+      <DependentUpon>FindJourneyPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="MainPageMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -29,7 +32,7 @@
     <EmbeddedResource Update="MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="MainPageDetail.xaml">
+    <EmbeddedResource Update="FindJourneyPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="MainPageMaster.xaml">

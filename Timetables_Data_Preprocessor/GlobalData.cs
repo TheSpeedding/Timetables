@@ -27,7 +27,7 @@ namespace Timetables.Preprocessor
 			try
 			{
 				XmlDocument settings = new XmlDocument();
-				settings.Load(".settings");
+				settings.Load("settings.xml");
 
 				CoefficientUndergroundTransfersWithinSameLine = double.Parse(settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinSameLine")?[0].InnerText);
 				CoefficientUndergroundTransfersWithinDifferentLines = double.Parse(settings.GetElementsByTagName("CoefficientUndergroundTransfersWithinDifferentLines")?[0].InnerText);

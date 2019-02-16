@@ -9,13 +9,9 @@ namespace Timetables.Application.Mobile
 
     public class MainPageMenuItem
     {
-        public MainPageMenuItem()
-        {
-            TargetType = typeof(MainPageDetail);
-        }
+        public MainPageMenuItem() => TargetType = typeof(FindJourneyPage);
         public int Id { get; set; }
         public string Title { get; set; }
-
         public Type TargetType { get; set; }
     }
 }

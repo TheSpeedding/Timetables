@@ -65,7 +65,7 @@
 			// 
 			// settingsOpenFileDialog
 			// 
-			this.settingsOpenFileDialog.FileName = ".settings";
+			this.settingsOpenFileDialog.FileName = "settings.xml";
 			// 
 			// routerPortTextBox
 			// 
@@ -203,7 +203,7 @@
 			// 
 			this.settingsSaveFileDialog.AddExtension = false;
 			this.settingsSaveFileDialog.DefaultExt = "settings";
-			this.settingsSaveFileDialog.FileName = ".settings";
+			this.settingsSaveFileDialog.FileName = "settings.xml";
 			// 
 			// sourcesLabel
 			// 

@@ -1,0 +1,29 @@
+body {
+	font-family: Verdana;
+	background-color: #F1F4F6;
+}
+
+.extraevent {
+	position: relative;
+	padding: 10px 10px 10px 10px;
+	margin-bottom: 50px;
+}
+
+	.extraevent .name {
+		font-weight: bold;
+		margin: 0 0 0 20px;
+	}
+
+
+	.extraevent .box {
+		margin: 15px 0 15px 0;
+		position: relative;
+		height: auto;
+		overflow: auto;
+		background-color: white;
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		box-shadow: 3px 3px 3px 3px #ccc;
+		padding: 10px;
+	}

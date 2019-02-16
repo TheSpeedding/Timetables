@@ -19,6 +19,11 @@ namespace Timetables.Application.Mobile.Droid
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+			Settings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
+
+			Settings.Load();
+
             LoadApplication(new App());
         }
     }
