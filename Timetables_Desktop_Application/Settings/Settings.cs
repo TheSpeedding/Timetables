@@ -16,6 +16,10 @@ namespace Timetables.Application.Desktop
 	static class Settings
 	{
 		/// <summary>
+		/// Reference to the settings file location.
+		/// </summary>
+		public static FileInfo SettingsFile { get; } = new FileInfo("settings.xml");
+		/// <summary>
 		/// Color theme used in the application.
 		/// </summary>
 		public static Themes.Theme Theme { get; set; }
@@ -133,9 +137,9 @@ namespace Timetables.Application.Desktop
 		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load("settings.xml");
+			settings.Load(SettingsFile.FullName);
 
-			Localization = Localization.GetTranslation_Filesystem(settings.GetElementsByTagName("Language")?[0].InnerText);
+			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
 
 			switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
 			{
@@ -173,12 +177,12 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static void Save(bool afterException = false)
 		{
-			if (!System.IO.File.Exists("settings.xml") || afterException)
-				using (var sw = new System.IO.StreamWriter("settings.xml"))
+			if (!System.IO.File.Exists(SettingsFile.FullName) || afterException)
+				using (var sw = new System.IO.StreamWriter(SettingsFile.FullName))
 					sw.Write("<Timetables></Timetables>");
 
 			XmlDocument settings = new XmlDocument();
-			settings.Load("settings.xml");							
+			settings.Load(SettingsFile.FullName);							
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -214,7 +218,7 @@ namespace Timetables.Application.Desktop
 				settings.GetElementsByTagName("FullDataUri")[0].InnerText = Client.DataFeedDesktop.FullDataSource == null ? string.Empty : Client.DataFeedDesktop.FullDataSource.AbsoluteUri;
 			}
 
-			settings.Save("settings.xml");
+			settings.Save(SettingsFile.FullName);
 		}
 
 		/// <summary>
@@ -225,7 +229,7 @@ namespace Timetables.Application.Desktop
 			if (Settings.Localization == null)
 			{
 				Settings.Localization = new Localization();
-				Settings.Localization = Localization.GetTranslation_Filesystem("English");
+				Settings.Localization = Localization.GetTranslation("English");
 			}
 
 			Settings.Theme = new Themes.BlueTheme();

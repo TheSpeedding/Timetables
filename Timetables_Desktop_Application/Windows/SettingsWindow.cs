@@ -70,7 +70,7 @@ namespace Timetables.Application.Desktop
 
 		private void languageComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Settings.Localization = Timetables.Client.Localization.GetTranslation_Filesystem((sender as ComboBox).SelectedItem.ToString());
+			Settings.Localization = Timetables.Client.Localization.GetTranslation((sender as ComboBox).SelectedItem.ToString());
 
 			restartNeeded = true;
 

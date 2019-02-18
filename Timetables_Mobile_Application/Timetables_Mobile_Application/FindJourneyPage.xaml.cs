@@ -17,16 +17,25 @@ namespace Timetables.Application.Mobile
         public FindJourneyPage()
         {
             InitializeComponent();
+
+			BindingContext = new FindJourneyPageViewModel();
+		}
+		private void OnCountSliderValueChanged(object sender, ValueChangedEventArgs e)
+		{
+			countSlider.Value = Math.Round(e.NewValue / 1.0);
+			countLabel.Text = countSlider.Value.ToString();
+		}
+		private void OnTransfersSliderValueChanged(object sender, ValueChangedEventArgs e)
+		{
+			transfersSlider.Value = Math.Round(e.NewValue / 1.0);
+			transfersLabel.Text = transfersSlider.Value.ToString();
 		}
 
 		class FindJourneyPageViewModel : INotifyPropertyChanged
 		{
-			public Localization Localization { get; }
+			public Localization Localization { get; } = Settings.Localization;
 
-			public FindJourneyPageViewModel()
-			{
-				Localization = Settings.Localization;
-			}
+			public DateTime CurrentDateTime { get; } = DateTime.Now;
 
 			#region INotifyPropertyChanged Implementation
 			public event PropertyChangedEventHandler PropertyChanged;
@@ -38,6 +47,11 @@ namespace Timetables.Application.Mobile
 				PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
 			}
 			#endregion
+		}
+		
+		private void FindButtonClicked(object sender, EventArgs e)
+		{
+			return;
 		}
 	}
 }

@@ -11,7 +11,11 @@ namespace Timetables.Application.Mobile
 		{
 			InitializeComponent();
 
+			Settings.Load();
+
 			MainPage = new MainPage();
+
+			Settings.LoadDataFeedAsync();
 		}
 
 		protected override void OnStart()

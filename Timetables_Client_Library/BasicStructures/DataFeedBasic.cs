@@ -44,29 +44,29 @@ namespace Timetables.Structures.Basic
 		public RoutesInfoBasic RoutesInfo { get; set; }
 		public StopsBasic Stops { get; set; }
 		public string Version { get; set; }
-		public DataFeedBasic(string path)
+		public DataFeedBasic(string path = ".")
 		{
-			Stations = new StationsBasic(new StreamReader(path + "/stations.tfb"));
-			RoutesInfo = new RoutesInfoBasic(new StreamReader(path + "/routes_info.tfb"));
-			Stops = new StopsBasic(new StreamReader(path + "/stops.tfb"), Stations, RoutesInfo);
-			using (var sr = new System.IO.StreamReader(path + "/.version"))
+			Stations = new StationsBasic(new StreamReader(path + "basic/stations.tfb"));
+			RoutesInfo = new RoutesInfoBasic(new StreamReader(path + "basic/routes_info.tfb"));
+			Stops = new StopsBasic(new StreamReader(path + "basic/stops.tfb"), Stations, RoutesInfo);
+			using (var sr = new System.IO.StreamReader(path + "basic/.version"))
 				Version = sr.ReadLine();
 		}
-		public DataFeedBasic() : this("basic") { }
 		/// <summary>
 		/// Saves the data into desired folder.
 		/// </summary>
+		/// <param name="basePath">Base path to the folder.</param>
 		/// <param name="folder">Desired folder.</param>
-		public void Save(string folder = "basic")
+		public void Save(string basePath = "./")
 		{
-			if (Directory.Exists(folder))
-				Directory.Delete(folder, true);
-			Directory.CreateDirectory(folder);
+			if (Directory.Exists(basePath + "basic"))
+				Directory.Delete(basePath + "/basic", true);
+			Directory.CreateDirectory(basePath + "/basic");
 
-			RoutesInfo.WriteBasic(new StreamWriter(folder + "/routes_info.tfb"));
-			Stops.WriteBasic(new StreamWriter(folder + "/stops.tfb"));
-			Stations.WriteBasic(new StreamWriter(folder + "/stations.tfb"));
-			using (var sw = new StreamWriter(folder + "/.version"))
+			RoutesInfo.WriteBasic(new StreamWriter(basePath + "basic/routes_info.tfb"));
+			Stops.WriteBasic(new StreamWriter(basePath + "basic/stops.tfb"));
+			Stations.WriteBasic(new StreamWriter(basePath + "basic/stations.tfb"));
+			using (var sw = new StreamWriter(basePath + "basic/.version"))
 				sw.WriteLine(Version);
 		}
 	}

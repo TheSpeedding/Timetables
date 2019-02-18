@@ -12,6 +12,10 @@ namespace Timetables.Client
 	{
 		private volatile static Structures.Basic.DataFeedBasic basicData = null;
 		/// <summary>
+		/// Basepath to the local storage.
+		/// </summary>
+		public static string BasePath { get; set; } = "./";
+		/// <summary>
 		/// Geowatcher to retrieve current location.
 		/// </summary>
 		public static CPGeolocator GeoWatcher { get; set; }
@@ -60,7 +64,7 @@ namespace Timetables.Client
 			{
 				try
 				{
-					using (var sr = new System.IO.StreamReader("data/expires.tfd"))
+					using (var sr = new System.IO.StreamReader(BasePath + "data/expires.tfd"))
 						if (DateTime.ParseExact(sr.ReadLine(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now)
 							return true;
 						else
@@ -104,13 +108,13 @@ namespace Timetables.Client
 
 				try
 				{
-					using (var sr = new System.IO.StreamReader("basic/.version"))
+					using (var sr = new System.IO.StreamReader(BasePath + "basic/.version"))
 						response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(sr.ReadLine()), timeout);
 				}
 
 				catch (Exception ex)
 				{
-					if (ex is WebException && (forceDownload || !System.IO.Directory.Exists("basic/"))) // Server offline and data does not exist. Cannot continue.
+					if (ex is WebException && (forceDownload || !System.IO.Directory.Exists(BasePath + "basic/"))) // Server offline and data does not exist. Cannot continue.
 						throw;
 
 					else if (ex is System.IO.IOException) // Data does not exist or the version file is corrupted.
@@ -126,7 +130,7 @@ namespace Timetables.Client
 
 
 				if (response != null && response.ShouldBeUpdated)
-					response.Data.Save();
+					response.Data.Save(BasePath);
 			}
 
 			catch (Exception ex)
@@ -149,7 +153,7 @@ namespace Timetables.Client
 		{
 			Loaded = false;
 			
-			basicData = new Structures.Basic.DataFeedBasic();
+			basicData = new Structures.Basic.DataFeedBasic(BasePath);
 
 			Loaded = true;
 		}

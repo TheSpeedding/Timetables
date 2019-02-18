@@ -73,6 +73,7 @@ namespace Timetables.Client
 		public string Add { get; set; } = "Add";
 		public string Remove { get; set; } = "Remove";
 		public string Find { get; set; } = "Find";
+		public string AddToFavorites { get; set; } = "Add to favorites";
 		public string PleaseWaitDownloading { get; set; } = "Please wait while data are just being downloaded.";
 		public string WalkingSpeed { get; set; } = "W. speed";
 		public string SlowSpeed { get; set; } = "Slow";
@@ -116,7 +117,7 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="language">Language.</param>
 		/// <returns>Localization object.</returns>
-		public static Localization GetTranslation_Filesystem(string language = "English")
+		public static Localization GetTranslation(string language = "English")
 		{
 			if (language == "English") return new Localization();			
 			
@@ -138,18 +139,18 @@ namespace Timetables.Client
 		}
 		/// <summary>
 		/// Creates a new instance of Localization class offering string constants in given language.
-		/// Uses stream.
+		/// Uses stream methods, used in Android application.
 		/// </summary>
-		/// <param name="language">Language.</param>
+		/// <param name="info">Tuple to store a stream and name of the language.</param>
 		/// <returns>Localization object.</returns>
-		public static Localization GetTranslation_Android(string language = "English", Stream stream = null)
+		public static Localization GetTranslation(Tuple<Stream, string> info = null)
 		{
-			if (stream == null || language == "English") return new Localization();
+			if (info == null) return new Localization();
 
 			try
 			{
-				var loc = (Localization)new XmlSerializer(typeof(Localization)).Deserialize(stream);
-				loc.locName = language;
+				var loc = (Localization)new XmlSerializer(typeof(Localization)).Deserialize(info.Item1);
+				loc.locName = info.Item2;
 				return loc;
 			}
 			catch

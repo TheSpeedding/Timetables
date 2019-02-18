@@ -15,13 +15,22 @@ namespace Timetables.Application.Mobile
 	internal static class Settings
 	{
 		/// <summary>
+		/// Sets the base path to the given path.
+		/// </summary>
+		/// <param name="path">Path.</param>
+		public static void SetBasePath(string path) => DataFeedClient.BasePath = path;
+		/// <summary>
+		/// Reference to the settings file location.
+		/// </summary>
+		public static FileInfo SettingsFile { get; } = new FileInfo("settings.xml");
+		/// <summary>
 		/// Opens a filestream with given filename.
 		/// </summary>
 		/// <param name="file">File.</param>
 		/// <returns>Filestream.</returns>
 		public delegate Stream GetStreamHandler(System.IO.FileInfo file);
 		/// <summary>
-		/// Gets stream for the file.
+		/// Gets stream for the file. This should use platform-dependent methods which are inaccessible from this class.
 		/// </summary>
 		public static GetStreamHandler GetStream { get; set; }
 		/// <summary>
@@ -93,14 +102,44 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static int TimeoutDuration { get; } = 15000;
 		/// <summary>
+		/// Determines whether subway is allowed in search results.
+		/// </summary>
+		public static bool AllowSubway { get; set; }
+		/// <summary>
+		/// Determines whether tram is allowed in search results.
+		/// </summary>
+		public static bool AllowTram { get; set; }
+		/// <summary>
+		/// Determines whether bus is allowed in search results.
+		/// </summary>
+		public static bool AllowBus { get; set; }
+		/// <summary>
+		/// Determines whether ship is allowed in search results.
+		/// </summary>
+		public static bool AllowShip { get; set; }
+		/// <summary>
+		/// Determines whether train is allowed in search results.
+		/// </summary>
+		public static bool AllowTrain { get; set; }
+		/// <summary>
+		/// Determines whether cablecar is allowed in search results.
+		/// </summary>
+		public static bool AllowCablecar { get; set; }
+		/// <summary>
+		/// Coefficient that are transfers multiplied by in searching.
+		/// </summary>
+		public static double WalkingSpeedCoefficient { get; set; }
+		/// <summary>
 		/// Loads the settings.
 		/// </summary>
 		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(GetStream(new FileInfo("settings.xml")));
+			settings.Load(GetStream(SettingsFile));
 
-			Localization = Localization.GetTranslation_Android(settings.GetElementsByTagName("Language")?[0].InnerText, GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")));
+			Localization = Localization.GetTranslation(new Tuple<Stream, string>( 
+				GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")),
+				settings.GetElementsByTagName("Language")?[0].InnerText));
 			
 			Client.DataFeedClient.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
 
@@ -113,6 +152,20 @@ namespace Timetables.Application.Mobile
 			Lockouts = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("LockoutsUri")[0].InnerText);
 
 			ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
+
+			AllowSubway = bool.Parse(settings.GetElementsByTagName("AllowSubway")[0].InnerText);
+
+			AllowTram = bool.Parse(settings.GetElementsByTagName("AllowTram")[0].InnerText);
+
+			AllowCablecar = bool.Parse(settings.GetElementsByTagName("AllowCablecar")[0].InnerText);
+
+			AllowBus = bool.Parse(settings.GetElementsByTagName("AllowBus")[0].InnerText);
+
+			AllowTrain = bool.Parse(settings.GetElementsByTagName("AllowTrain")[0].InnerText);
+
+			AllowShip = bool.Parse(settings.GetElementsByTagName("AllowShip")[0].InnerText);
+
+			WalkingSpeedCoefficient = double.Parse(settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText);
 		}
 		/// <summary>
 		/// Saves current settings.
@@ -120,7 +173,7 @@ namespace Timetables.Application.Mobile
 		public static void Save()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(GetStream(new FileInfo("settings.xml")));
+			settings.Load(GetStream(SettingsFile));
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -129,7 +182,8 @@ namespace Timetables.Application.Mobile
 						settings.DocumentElement.AppendChild(settings.CreateElement(name));
 			}
 
-			CreateElementIfNotExist("Language", "ExtraEventsUri", "LockoutsUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort");
+			CreateElementIfNotExist("Language", "ExtraEventsUri", "LockoutsUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort",
+				"AllowSubway", "AllowTram", "AllowCablecar", "AllowBus", "AllowTrain", "AllowShip", "WalkingSpeedCoefficient");
 
 			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 			
@@ -145,7 +199,35 @@ namespace Timetables.Application.Mobile
 
 			settings.GetElementsByTagName("BasicDataPort")[0].InnerText = Client.DataFeedClient.BasicDataPortNumber.ToString();
 
-			settings.Save("settings.xml");
+			settings.GetElementsByTagName("AllowSubway")[0].InnerText = AllowSubway.ToString();
+
+			settings.GetElementsByTagName("AllowTram")[0].InnerText = AllowTram.ToString();
+
+			settings.GetElementsByTagName("AllowCablecar")[0].InnerText = AllowCablecar.ToString();
+
+			settings.GetElementsByTagName("AllowBus")[0].InnerText = AllowBus.ToString();
+
+			settings.GetElementsByTagName("AllowTrain")[0].InnerText = AllowTrain.ToString();
+
+			settings.GetElementsByTagName("AllowShip")[0].InnerText = AllowShip.ToString();
+
+			settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText = WalkingSpeedCoefficient.ToString();
+
+			settings.Save(GetStream(SettingsFile));
+		}
+		/// <summary>
+		/// Loads data feed.
+		/// </summary>
+		public static async void LoadDataFeedAsync()
+		{
+			try
+			{
+				await DataFeedClient.DownloadAsync(false, TimeoutDuration);
+			}
+			catch
+			{
+				// MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 	}	
 }

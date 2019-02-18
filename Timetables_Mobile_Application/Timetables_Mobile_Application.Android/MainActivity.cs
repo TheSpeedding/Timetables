@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android;
 
 namespace Timetables.Application.Mobile.Droid
 {
@@ -20,11 +21,35 @@ namespace Timetables.Application.Mobile.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+			// Ask for permissions if not granted yet.
+			if ((int)Build.VERSION.SdkInt >= 23)
+			{
+				if (PackageManager.CheckPermission(Manifest.Permission.ReadExternalStorage, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.WriteExternalStorage, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.AccessNetworkState, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.AccessCoarseLocation, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.AccessFineLocation, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.Internet, PackageName) != Permission.Granted &&
+					PackageManager.CheckPermission(Manifest.Permission.AccessWifiState, PackageName) != Permission.Granted)
+				{
+					var permissions = new string[] {
+						Manifest.Permission.ReadExternalStorage,
+						Manifest.Permission.WriteExternalStorage,
+						Manifest.Permission.AccessNetworkState,
+						Manifest.Permission.AccessCoarseLocation,
+						Manifest.Permission.AccessFineLocation,
+						Manifest.Permission.Internet,
+						Manifest.Permission.AccessWifiState };
+
+					RequestPermissions(permissions, 1);
+				}
+			}
+
 			Settings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 
-			Settings.Load();
+			Settings.SetBasePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/");
 
-            LoadApplication(new App());
+			LoadApplication(new App());
         }
     }
 }
