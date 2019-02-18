@@ -49,9 +49,19 @@ namespace Timetables.Application.Mobile
 			#endregion
 		}
 		
-		private void FindButtonClicked(object sender, EventArgs e)
+		private async void FindButtonClicked(object sender, EventArgs e)
 		{
-			return;
+			Structures.Basic.StationsBasic.StationBasic source = Request.GetStationFromString(sourceStopEntry.Text);
+			Structures.Basic.StationsBasic.StationBasic target = Request.GetStationFromString(targetStopEntry.Text);
+
+			if (source == null || target == null) ; // TO-DO: return null;
+
+			var routerRequest = new RouterRequest(source.ID, target.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time), 
+				(int)transfersSlider.Value, (int)countSlider.Value, Settings.WalkingSpeedCoefficient, Settings.GetMoT());
+
+			var routerResponse = await Request.SendRouterRequestAsync(routerRequest);
+
+			await Navigation.PushAsync(new FindJourneyResults(routerResponse));
 		}
 	}
 }

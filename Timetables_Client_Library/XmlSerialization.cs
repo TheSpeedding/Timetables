@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using System.IO;
 
 namespace Timetables.Client
 { 
@@ -64,6 +65,17 @@ namespace Timetables.Client
 
 			return TransformToHtml(sw.ToString(), xsltPath, cssPath, jsPath);
 		}
+		public static string TransformToHtml(this object o, Stream xslt, Stream css = null, Stream js = null)
+		{
+			if (o == null) return string.Empty;
+
+			System.IO.StringWriter sw = new System.IO.StringWriter();
+			if (!o.GetType().IsSerializable) throw new MissingMethodException("Given object is not serializable.");
+
+			o.GetType().GetMethod("Serialize").Invoke(o, new object[] { sw });
+
+			return TransformToHtml(sw.ToString(), xslt, css, js);
+		}
 		/// <summary>
 		/// Converts XML string into the HTML string using given XSLT script.
 		/// </summary>
@@ -85,10 +97,28 @@ namespace Timetables.Client
 
 			xsltTrans.Transform(xPathDoc, null, sw);
 
-			return 
+			return
 				(cssPath == null ? "" : ("<style>" + new System.IO.StreamReader(cssPath).ReadToEnd() + "</style>" + Environment.NewLine)) +
 				sw.ToString() +
 				(jsPath == null ? "" : ("<script>" + new System.IO.StreamReader(jsPath).ReadToEnd() + "</script>" + Environment.NewLine));
+		}
+		public static string TransformToHtml(this string content, Stream xslt, Stream css = null, Stream js = null)
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(content);
+
+			XPathDocument xPathDoc = new XPathDocument(new XmlNodeReader(doc));
+			XslCompiledTransform xsltTrans = new XslCompiledTransform();
+
+			xsltTrans.Load(XmlReader.Create(xslt));
+			var sw = new System.IO.StringWriter();
+
+			xsltTrans.Transform(xPathDoc, null, sw);
+
+			return
+				(css == null ? "" : ("<style>" + new StreamReader(css).ReadToEnd() + "</style>" + Environment.NewLine)) +
+				sw.ToString() +
+				(js == null ? "" : ("<script>" + new StreamReader(js).ReadToEnd() + "</script>" + Environment.NewLine));
 		}
 	}
 }

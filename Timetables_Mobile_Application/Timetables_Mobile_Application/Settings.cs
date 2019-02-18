@@ -216,6 +216,22 @@ namespace Timetables.Application.Mobile
 			settings.Save(GetStream(SettingsFile));
 		}
 		/// <summary>
+		/// Gets predefined means of transport that can be used.
+		/// </summary>
+		public static MeanOfTransport GetMoT()
+		{
+			MeanOfTransport mot = 0;
+
+			if (AllowBus) mot |= MeanOfTransport.Bus;
+			if (AllowCablecar) mot |= MeanOfTransport.CableCar | MeanOfTransport.Funicular | MeanOfTransport.Gondola;
+			if (AllowShip) mot |= MeanOfTransport.Ship;
+			if (AllowSubway) mot |= MeanOfTransport.Subway;
+			if (AllowTrain) mot |= MeanOfTransport.Rail;
+			if (AllowTram) mot |= MeanOfTransport.Tram;
+
+			return mot;
+		}
+		/// <summary>
 		/// Loads data feed.
 		/// </summary>
 		public static async void LoadDataFeedAsync()
@@ -226,7 +242,7 @@ namespace Timetables.Application.Mobile
 			}
 			catch
 			{
-				// MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				// TO-DO: MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 	}	
