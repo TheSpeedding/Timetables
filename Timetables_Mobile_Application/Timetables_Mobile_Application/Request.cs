@@ -24,8 +24,8 @@ namespace Timetables.Application.Mobile
 		{
 			Structures.Basic.StationsBasic.StationBasic source = DataFeedClient.Basic.Stations.FindByName(name);
 
-			if (source == null) ;
-				// TO-DO: MessageBox.Show(Settings.Localization.UnableToFindStation + ": " + name, Settings.Localization.StationNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			if (source == null)
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + name);
 
 			return source;
 		}
@@ -41,8 +41,8 @@ namespace Timetables.Application.Mobile
 
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = DataFeedClient.Basic.RoutesInfo.FindByLabel(label);
 
-			if (route == null) ;
-				// TO-DO: MessageBox.Show(Settings.Localization.UnableToFindRouteInfo + ": " + label, Settings.Localization.RouteInfoNotFound, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			if (route == null)
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + label);
 
 			return route;
 		}
@@ -57,7 +57,7 @@ namespace Timetables.Application.Mobile
 			}
 			catch (System.Net.WebException)
 			{
-				// TO-DO: MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
 				return false;
 			}
 			return true;
@@ -91,7 +91,7 @@ namespace Timetables.Application.Mobile
 					}
 					catch (System.Net.WebException)
 					{
-						// TO-DO: MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
 					}
 				}
 			}

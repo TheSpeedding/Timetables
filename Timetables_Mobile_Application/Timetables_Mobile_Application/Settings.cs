@@ -10,19 +10,10 @@ using Timetables.Client;
 namespace Timetables.Application.Mobile
 {
 	/// <summary>
-	/// Settings for the application.
+	/// Class containing settings that varies through the platforms.
 	/// </summary>
-	internal static class Settings
+	internal static class PlatformDependentSettings
 	{
-		/// <summary>
-		/// Sets the base path to the given path.
-		/// </summary>
-		/// <param name="path">Path.</param>
-		public static void SetBasePath(string path) => DataFeedClient.BasePath = path;
-		/// <summary>
-		/// Reference to the settings file location.
-		/// </summary>
-		public static FileInfo SettingsFile { get; } = new FileInfo("settings.xml");
 		/// <summary>
 		/// Opens a filestream with given filename.
 		/// </summary>
@@ -30,9 +21,28 @@ namespace Timetables.Application.Mobile
 		/// <returns>Filestream.</returns>
 		public delegate Stream GetStreamHandler(System.IO.FileInfo file);
 		/// <summary>
-		/// Gets stream for the file. This should use platform-dependent methods which are inaccessible from this class.
+		/// Gets stream for the file.
 		/// </summary>
 		public static GetStreamHandler GetStream { get; set; }
+		/// <summary>
+		/// Callback to show a message to the user. 
+		/// </summary>
+		public static Action<string> ShowMessage { get; set; }
+		/// <summary>
+		/// Sets the base path to the given path.
+		/// </summary>
+		/// <param name="path">Path.</param>
+		public static void SetBasePath(string path) => DataFeedClient.BasePath = path;
+	}
+	/// <summary>
+	/// Settings for the application.
+	/// </summary>
+	internal static class Settings
+	{
+		/// <summary>
+		/// Reference to the settings file location.
+		/// </summary>
+		public static FileInfo SettingsFile { get; } = new FileInfo("settings.xml");
 		/// <summary>
 		/// Language used in the application.
 		/// </summary>
@@ -135,10 +145,10 @@ namespace Timetables.Application.Mobile
 		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(GetStream(SettingsFile));
+			settings.Load(PlatformDependentSettings.GetStream(SettingsFile));
 
-			Localization = Localization.GetTranslation(new Tuple<Stream, string>( 
-				GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")),
+			Localization = Localization.GetTranslation(new Tuple<Stream, string>(
+				PlatformDependentSettings.GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")),
 				settings.GetElementsByTagName("Language")?[0].InnerText));
 			
 			Client.DataFeedClient.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
@@ -173,7 +183,7 @@ namespace Timetables.Application.Mobile
 		public static void Save()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(GetStream(SettingsFile));
+			settings.Load(PlatformDependentSettings.GetStream(SettingsFile));
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -213,7 +223,7 @@ namespace Timetables.Application.Mobile
 
 			settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText = WalkingSpeedCoefficient.ToString();
 
-			settings.Save(GetStream(SettingsFile));
+			settings.Save(PlatformDependentSettings.GetStream(SettingsFile));
 		}
 		/// <summary>
 		/// Gets predefined means of transport that can be used.
@@ -242,7 +252,7 @@ namespace Timetables.Application.Mobile
 			}
 			catch
 			{
-				// TO-DO: MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
 			}
 		}
 	}	

@@ -12,18 +12,18 @@ namespace Timetables.Application.Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FindJourneyResults : ContentPage
 	{
-		public FindJourneyResults (RouterResponse res)
+		public FindJourneyResults(RouterResponse res)
 		{
 			InitializeComponent();
-
+			
 			resultsWebView.Source = new HtmlWebViewSource
 			{
 				Html = res.TransformToHtml(
-					Settings.GetStream(Settings.JourneySimpleXslt),
-					Settings.GetStream(Settings.JourneySimpleCss),
-					Settings.GetStream(Settings.OnLoadActionsJavaScript)
+					PlatformDependentSettings.GetStream(Settings.JourneySimpleXslt),
+					PlatformDependentSettings.GetStream(Settings.JourneySimpleCss),
+					PlatformDependentSettings.GetStream(Settings.OnLoadActionsJavaScript)
 					)
-			};
+			}; 
 		}
 	}
 }

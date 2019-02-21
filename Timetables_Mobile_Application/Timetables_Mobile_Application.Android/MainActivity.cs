@@ -45,9 +45,11 @@ namespace Timetables.Application.Mobile.Droid
 				}
 			}
 
-			Settings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
+			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 
-			Settings.SetBasePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/");
+			PlatformDependentSettings.SetBasePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/");
+
+			PlatformDependentSettings.ShowMessage = (message) => Toast.MakeText(this, message, ToastLength.Long).Show();
 
 			LoadApplication(new App());
         }

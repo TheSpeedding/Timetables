@@ -23,6 +23,9 @@
     <Compile Update="FindJourneyPage.xaml.cs">
       <DependentUpon>FindJourneyPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="FindJourneyResults.xaml.cs">
+      <DependentUpon>FindJourneyResults.xaml</DependentUpon>
+    </Compile>
     <Compile Update="MainPageMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>

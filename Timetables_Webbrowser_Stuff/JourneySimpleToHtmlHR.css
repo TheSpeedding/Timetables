@@ -1,0 +1,128 @@
+body {
+	font-family: Verdana;
+	background-color: #F1F4F6;
+}
+
+ul.tools li {
+	display: inline;
+	margin-right: 20px;
+}
+
+ul.tools a {
+	color: grey;
+	text-decoration: none;
+}
+
+	ul.tools a:hover {
+		color: black;
+	}
+
+
+.journey {
+	position: relative;
+	padding: 10px 10px 10px 10px;
+	margin-bottom: 50px;
+}
+
+	.journey .leaves-in {
+		font-weight: bold;
+		margin: 0 0 0 20px;
+	}
+
+		.journey .leaves-in .outdated {
+			color: red;
+			font-weight: bold;
+			margin-right: 5px;
+		}
+
+	.journey ul.tools {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		margin: 10px 30px 0 0;
+	}
+
+		.journey ul.tools li {
+			display: inline;
+			margin-left: 10px;
+			margin-right: 0px;
+		}
+
+	.journey .box {
+		margin: 15px 0 15px 0;
+		position: relative;
+		height: auto;
+		overflow: auto;
+		background-color: white;
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		box-shadow: 3px 3px 3px 3px #ccc;
+	}
+
+	.journey .info {
+		width: 15%;
+		float: left;
+	}
+
+		.journey .info .duration, .journey .info .transfers, .journey .info .outdated {
+			margin: 10px 20px 10px 20px;
+		}
+
+	.journey .main {
+		width: 85%;
+		float: right;
+		display: flex;
+		justify-content: center;
+	}
+
+		.journey .main .departure {
+			width: 15%;
+		}
+
+		.journey .main .arrival {
+			width: 15%;
+		}
+
+		.journey .main .segments {
+			width: 70%;
+			text-align: center;
+		}
+
+			.journey .main .segments li {
+				display: inline-block;
+				font-weight: bold;
+				text-align: center;
+				color: white;
+				padding: 10px 20px 10px 20px;
+				margin: 0 10px 0 10px;
+				background-color: black;
+				-webkit-border-radius: 15px;
+				-moz-border-radius: 15px;
+				border-radius: 15px;
+				box-shadow: 1px 1px 1px 1px #ccc;
+			}
+
+			.journey .main .segments .Footpath {
+				font-size: 70%;
+				padding: 10px 8px 10px 8px;
+				content: url('img/icons8-walking-32.png');
+				position: relative;
+				top: 3px;
+				background-color: grey;
+			}
+
+		.journey .main .time {
+			margin: 10px 10px 10px 10px;
+			text-align: center;
+			font-size: 120%;
+		}
+
+		.journey .main .station {
+			margin: 10px 10px 10px 10px;
+			text-align: center;
+		}
+
+.details {
+	display: none;
+}

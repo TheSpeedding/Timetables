@@ -54,7 +54,16 @@ namespace Timetables.Application.Mobile
 			Structures.Basic.StationsBasic.StationBasic source = Request.GetStationFromString(sourceStopEntry.Text);
 			Structures.Basic.StationsBasic.StationBasic target = Request.GetStationFromString(targetStopEntry.Text);
 
-			if (source == null || target == null) ; // TO-DO: return null;
+			if (source == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + sourceStopEntry.Text);
+				return;
+			}
+			if (target == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + targetStopEntry.Text);
+				return;
+			}
 
 			var routerRequest = new RouterRequest(source.ID, target.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time), 
 				(int)transfersSlider.Value, (int)countSlider.Value, Settings.WalkingSpeedCoefficient, Settings.GetMoT());

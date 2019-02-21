@@ -42,15 +42,15 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to journey detail CSS stylesheet.
 		/// </summary>
-		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtml.css");
+		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtmlHR.css");
 		/// <summary>
 		/// Path to journey detail CSS stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneyDetailPrintCss => new FileInfo("css/JourneyDetailPrintToHtml.css");
+		public static FileInfo JourneyDetailPrintCss => new FileInfo("css/JourneyDetailToHtmlLR.css");
 		/// <summary>
 		/// Path to journey detail XSLT stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneyDetailPrintXslt => new FileInfo("xslt/JourneyDetailPrintToHtml.xslt");
+		public static FileInfo JourneyDetailPrintXslt => JourneyDetailXslt;
 		/// <summary>
 		/// Path to journey simple XSLT stylesheet.
 		/// </summary>
@@ -58,7 +58,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to journey simple CSS stylesheet.
 		/// </summary>
-		public static FileInfo JourneySimpleCss => new FileInfo("css/JourneySimpleToHtml.css");
+		public static FileInfo JourneySimpleCss => new FileInfo("css/JourneySimpleToHtmlHR.css");
 		/// <summary>
 		/// Path to departure board detail XSLT stylesheet.
 		/// </summary>
@@ -66,15 +66,15 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to departure board detail CSS stylesheet.
 		/// </summary>
-		public static FileInfo DepartureBoardDetailCss => new FileInfo("css/DepartureBoardDetailToHtml.css");
+		public static FileInfo DepartureBoardDetailCss => new FileInfo("css/DepartureBoardDetailToHtmlHR.css");
 		/// <summary>
 		/// Path to departure board detail CSS stylesheet for printing.
 		/// </summary>
-		public static FileInfo DepartureBoardDetailPrintCss => new FileInfo("css/DepartureBoardDetailPrintToHtml.css");
+		public static FileInfo DepartureBoardDetailPrintCss => new FileInfo("css/DepartureBoardDetailToHtmlLR.css");
 		/// <summary>
 		/// Path to departure board detail XSLT stylesheet for printing.
 		/// </summary>
-		public static FileInfo DepartureBoardDetailPrintXslt => new FileInfo("xslt/DepartureBoardDetailPrintToHtml.xslt");
+		public static FileInfo DepartureBoardDetailPrintXslt => DepartureBoardDetailXslt;
 		/// <summary>
 		/// Path to departure board simple XSLT stylesheet.
 		/// </summary>
@@ -82,7 +82,7 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to departure board simple CSS stylesheet.
 		/// </summary>
-		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtml.css");
+		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtmlHR.css");
 		/// <summary>
 		/// Path to departure board map XSLT stylesheet.
 		/// </summary>
@@ -118,11 +118,11 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to journey list CSS stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneySimplePrintCss => new FileInfo("css/JourneySimplePrintToHtml.css");
+		public static FileInfo JourneySimplePrintCss => new FileInfo("css/DepartureBoardSimpleToHtmlLR.css");
 		/// <summary>
 		/// Path to journey list XSLT stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneySimplePrintXslt => new FileInfo("xslt/JourneySimplePrintToHtml.xslt");
+		public static FileInfo JourneySimplePrintXslt => JourneySimpleXslt;
 		/// <summary>
 		/// Path to script file with onLoad actions.
 		/// </summary>

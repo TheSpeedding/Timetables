@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +61,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -90,6 +92,10 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Timetables_Client_Library\Timetables_Client_Library.csproj">
+      <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
+      <Name>Timetables_Client_Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timetables_Mobile_Application\Timetables_Mobile_Application.csproj">
       <Project>{76C0E604-1E08-4FC6-81B0-88E87B1E739A}</Project>
       <Name>Timetables_Mobile_Application</Name>
@@ -101,22 +107,22 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\css\DepartureBoardDetailToHtml.css" />
+    <AndroidAsset Include="Assets\css\DepartureBoardDetailToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\css\DepartureBoardInMapToHtml.css" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\css\DepartureBoardSimpleToHtml.css" />
+    <AndroidAsset Include="Assets\css\DepartureBoardSimpleToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\css\ExtraordinaryEventsToHtml.css" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\css\JourneyDetailToHtml.css" />
+    <AndroidAsset Include="Assets\css\JourneyDetailToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\css\JourneySimpleToHtml.css" />
+    <AndroidAsset Include="Assets\css\JourneySimpleToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\css\LockoutsToHtml.css" />
