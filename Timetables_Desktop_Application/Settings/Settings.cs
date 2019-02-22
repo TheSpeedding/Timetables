@@ -110,15 +110,15 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Path to departure board list CSS stylesheet for printing.
 		/// </summary>
-		public static FileInfo DepartureBoardSimplePrintCss => new FileInfo("css/DepartureBoardSimplePrintToHtml.css");
+		public static FileInfo DepartureBoardSimplePrintCss => new FileInfo("css/DepartureBoardSimpleToHtmlLR.css");
 		/// <summary>
 		/// Path to departure board list XSLT stylesheet for printing.
 		/// </summary>
-		public static FileInfo DepartureBoardSimplePrintXslt => new FileInfo("xslt/DepartureBoardSimplePrintToHtml.xslt");
+		public static FileInfo DepartureBoardSimplePrintXslt => DepartureBoardSimpleXslt;
 		/// <summary>
 		/// Path to journey list CSS stylesheet for printing.
 		/// </summary>
-		public static FileInfo JourneySimplePrintCss => new FileInfo("css/DepartureBoardSimpleToHtmlLR.css");
+		public static FileInfo JourneySimplePrintCss => new FileInfo("css/JourneySimpleToHtmlLR.css");
 		/// <summary>
 		/// Path to journey list XSLT stylesheet for printing.
 		/// </summary>

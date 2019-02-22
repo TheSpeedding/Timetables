@@ -28,28 +28,30 @@
 							<a class="print-link" href="#"></a>
 						</li>
 					</ul>
-					<div class="box">
-						<div class="label">
-							<span>
-								<xsl:attribute name="class">
-									<xsl:value-of select="./Departure/MeanOfTransport/text()"/>
-								</xsl:attribute>
-								<xsl:attribute name="style">
-									background-color: <xsl:value-of select="./Departure/LineColor/@Hex"/>;
-								</xsl:attribute>
-								<xsl:value-of select="./Departure/LineLabel/text()"/>
-							</span>
+					<div class="basic">
+						<div class="box">
+							<div class="label">
+								<span>
+									<xsl:attribute name="class">
+										<xsl:value-of select="./Departure/MeanOfTransport/text()"/>
+									</xsl:attribute>
+									<xsl:attribute name="style">
+										background-color: <xsl:value-of select="./Departure/LineColor/@Hex"/>;
+									</xsl:attribute>
+									<xsl:value-of select="./Departure/LineLabel/text()"/>
+								</span>
+							</div>
+							<div class="headsign">
+								<xsl:value-of select="./Departure/Headsign/text()"/>
+							</div>
+							<div class="time">
+								<span class="iso8601">
+									<xsl:value-of select="./Departure/DepartureDateTime/text()"/>
+								</span>
+							</div>
 						</div>
-						<div class="headsign">
-							<xsl:value-of select="./Departure/Headsign/text()"/>
-						</div>
-						<div class="time">
-							<span class="iso8601">
-								<xsl:value-of select="./Departure/DepartureDateTime/text()"/>
-							</span>
-						</div>
+						<hr/>
 					</div>
-					<hr/>
 					<div class="box detail">
 						<h1>
 							<xsl:attribute name="class">

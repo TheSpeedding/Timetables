@@ -3,21 +3,6 @@ body {
 	background-color: #F1F4F6;
 }
 
-ul.tools li {
-	display: inline;
-	margin-right: 20px;
-}
-
-ul.tools a {
-	color: grey;
-	text-decoration: none;
-}
-
-	ul.tools a:hover {
-		color: black;
-	}
-
-
 .journey {
 	position: relative;
 	padding: 10px 10px 10px 10px;
@@ -31,7 +16,6 @@ ul.tools a {
 
 		.journey .leaves-in .outdated {
 			color: red;
-			font-weight: bold;
 			margin-right: 5px;
 		}
 
@@ -45,8 +29,20 @@ ul.tools a {
 		.journey ul.tools li {
 			display: inline;
 			margin-left: 10px;
-			margin-right: 0px;
 		}
+
+		.journey ul.tools a {
+			color: grey;
+			text-decoration: none;
+		}
+
+			.journey ul.tools a:hover {
+				color: black;
+			}
+
+.basic {
+	display: none;
+}
 
 	.journey .box {
 		margin: 15px 0 15px 0;
@@ -60,39 +56,42 @@ ul.tools a {
 		box-shadow: 3px 3px 3px 3px #ccc;
 	}
 
-	.journey .info .duration, .journey .info .transfers {
-		display: inline;
-	}
-
-	.journey .info .transfers {
-		float: right;
-	}
-
 	.journey .info {
-		margin: 10px 20px 10px 20px;
+		width: 15%;
+		float: left;
 	}
 
-	.journey .main .departure, .journey .main .arrival {
-		display: none;
-	}
+		.journey .info .duration, .journey .info .transfers, .journey .info .outdated {
+			margin: 10px 20px 10px 20px;
+		}
 
 	.journey .main {
+		width: 85%;
+		float: right;
 		display: flex;
 		justify-content: center;
 	}
 
+		.journey .main .departure {
+			width: 15%;
+		}
+
+		.journey .main .arrival {
+			width: 15%;
+		}
+
 		.journey .main .segments {
+			width: 70%;
 			text-align: center;
-			width: 100%;
 		}
 
 			.journey .main .segments li {
-				list-style-type: none;
+				display: inline-block;
 				font-weight: bold;
 				text-align: center;
 				color: white;
 				padding: 10px 20px 10px 20px;
-				margin: 0 40px 10px 0;
+				margin: 0 10px 0 10px;
 				background-color: black;
 				-webkit-border-radius: 15px;
 				-moz-border-radius: 15px;
@@ -101,14 +100,11 @@ ul.tools a {
 			}
 
 			.journey .main .segments .Footpath {
+				font-size: 70%;
 				padding: 10px 8px 10px 8px;
 				position: relative;
 				top: 3px;
 				background-color: grey;
-			}
-
-			.journey .main .segments .Footpath .icon {
-				display: none;
 			}
 
 		.journey .main .time {
@@ -121,3 +117,27 @@ ul.tools a {
 			margin: 10px 10px 10px 10px;
 			text-align: center;
 		}
+
+	.journey hr {
+		margin: 25px 0 25px 0;
+		border: 0;
+		height: 1px;
+		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	}
+
+	.journey .detail h1 {
+		margin: 0;
+		background-color: grey;
+		color: white;
+		font-weight: 600;
+		padding: 15px 10px 15px 10px;
+		font-size: 120%;
+	}
+
+	.journey .detail ol {
+		list-style-type: none;
+	}
+
+	.journey .detail {
+		font-size: 80%;
+	}
