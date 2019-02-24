@@ -93,13 +93,13 @@ namespace Timetables.Server
 		{
 			Logging.Log("The server has started.");
 
-			Router = new RouterServer(address, routerPort);
-			DepartureBoard = new DepartureBoardServer(address, dbPort);
-			BasicData = new BasicDataFeedServer(address, dfPort);
+			if (routerPort >= 0) Router = new RouterServer(address, routerPort);
+			if (dbPort >= 0) DepartureBoard = new DepartureBoardServer(address, dbPort);
+			if (dfPort >= 0) BasicData = new BasicDataFeedServer(address, dfPort);
 
-			Router.Start();
-			DepartureBoard.Start();
-			BasicData.Start();
+			Router?.Start();
+			DepartureBoard?.Start();
+			BasicData?.Start();
 
 			IsStopped = false;
 		}

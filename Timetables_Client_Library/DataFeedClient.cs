@@ -122,9 +122,12 @@ namespace Timetables.Client
 						{
 							response = await new BasicDataProcessing().ProcessAsync(new Structures.Basic.DataFeedBasicRequest(), timeout);
 						}
-						catch
+						catch (Exception innerEx)
 						{
 							// Some data exists, we do not have to do anything.
+
+							if (innerEx is WebException)
+								throw;
 						}
 				}
 

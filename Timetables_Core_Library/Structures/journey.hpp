@@ -98,8 +98,8 @@ namespace Timetables {
 			inline const std::time_t duration() const { return date_time::difference(arrival_time(), departure_time()); } // Total duration of the journey.
 			inline const std::time_t duration_without_waiting_times() const { std::time_t t = 0; for (auto&& js : journey_segments_) t += js->duration(); return t; } // Total duration of the journey without waiting times.
 
-			bool operator< (const journey& other) const; // Preferences: Arrival time, duration, number of transfers, number of stops, total duration of transfers, departure time.
-		
+			bool operator< (const journey& other) const;
+
 			inline const std::size_t number_of_stops() const { // Total number of stops in the journey. May contain duplicates, it's intended.
 				std::size_t number = 0;
 				for (auto&& seg : journey_segments_) if (seg->trip() != nullptr) number += seg->intermediate_stops().size() + 2;

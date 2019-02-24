@@ -44,7 +44,7 @@ namespace Timetables.Structures.Basic
 		public RoutesInfoBasic RoutesInfo { get; set; }
 		public StopsBasic Stops { get; set; }
 		public string Version { get; set; }
-		public DataFeedBasic(string path = ".")
+		public DataFeedBasic(string path = "./")
 		{
 			Stations = new StationsBasic(new StreamReader(path + "basic/stations.tfb"));
 			RoutesInfo = new RoutesInfoBasic(new StreamReader(path + "basic/routes_info.tfb"));

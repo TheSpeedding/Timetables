@@ -245,14 +245,22 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 	if (fastest_journeys_.size() == 0)
 		return;
 
-	for (size_t i = 1; search_by_arrival_ ? (previous_fastest_journey != nullptr && previous_fastest_journey->arrival_time() < maximal_arrival_) : i < count_; i++) {
+	size_t inc_time = SECOND;
 
-		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), SECOND));
+	for (/*size_t i = 1*/; search_by_arrival_ ? previous_fastest_journey->arrival_time() < maximal_arrival_ : /*i* < count_*/ true; /*i++*/) {
+
+		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), inc_time));
 
 		if (current_fastest_journey == nullptr) // No journey found.
 			break;
 		
 		if (!search_by_arrival_ && fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
+			break;
+
+		// Temporal bugfix so the algorithm is not stuck at the point while searching by maximal arrival. Also ensures that requested count of journeys will be found.
+		inc_time = previous_fastest_journey->arrival_time() >= current_fastest_journey->arrival_time() ? 
+			date_time::difference(previous_fastest_journey->arrival_time(), current_fastest_journey->arrival_time()) + 2 * inc_time + MINUTE : SECOND;
+		if (inc_time > DAY) 
 			break;
 
 		previous_fastest_journey = current_fastest_journey;

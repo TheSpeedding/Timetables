@@ -79,7 +79,9 @@ namespace Timetables.Application.Desktop
 							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 						else
-							Program.ShowUnhandledExceptionCallback(this, new UnhandledExceptionEventArgs(innerEx, true)); // Appdomain.UnhandledException only works for exceptions thrown from UI thread. This is a background thread.
+						{
+							Environment.Exit(0);
+						}
 
 						IsFaulted = true;
 					}
