@@ -6,6 +6,8 @@ using System.Linq;
 using Timetables.Client;
 using Microsoft.VisualBasic;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Timetables_Benchmarks")]
+
 namespace Timetables.Application.Desktop
 {
 	static class Program

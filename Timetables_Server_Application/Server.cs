@@ -108,9 +108,9 @@ namespace Timetables.Server
 		/// </summary>
 		public static void Stop()
 		{
-			Router.StopServer();
-			DepartureBoard.StopServer();
-			BasicData.StopServer();
+			Router?.StopServer();
+			DepartureBoard?.StopServer();
+			BasicData?.StopServer();
 
 			IsStopped = true;
 
