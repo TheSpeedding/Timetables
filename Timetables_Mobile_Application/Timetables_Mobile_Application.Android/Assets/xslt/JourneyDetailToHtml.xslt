@@ -28,26 +28,27 @@
 							<a class="print-link" href="#"></a>
 						</li>
 					</ul>
-					<div class="box">
-						<div class="info">
-							<!-- Writes total duration of the journey. -->
-							<div class="duration">
-								<span class="total-duration">
-									<span class="departure-from-source">
-										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>
+					<div class="basic">
+						<div class="box">
+							<div class="info">
+								<!-- Writes total duration of the journey. -->
+								<div class="duration">
+									<span class="total-duration">
+										<span class="departure-from-source">
+											<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = 1]/DepartureDateTime/text()"/>
+										</span>
+										<span class="arrival-to-target">
+											<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>
+										</span>
 									</span>
-									<span class="arrival-to-target">
-										<xsl:value-of select="./Journey/JourneySegments/JourneySegment[position() = last()]/ArrivalDateTime/text()"/>
+								</div>
+								<!-- Writes number of transfers. -->
+								<div class="transfers">
+									<span class="total-transfers">
+										<xsl:value-of select="count(./Journey/JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>
 									</span>
-								</span>
-							</div>
-							<!-- Writes number of transfers. -->
-							<div class="transfers">
-								<span class="total-transfers">
-									<xsl:value-of select="count(./Journey/JourneySegments/JourneySegment[@xsi:type = 'TripSegment'])"/>
-								</span>
-							</div>
-						</div>
+								</div>
+							</div>				
 						<div class="main">
 							<!-- Writes info about source station, i.e. leaving time and its name. -->
 							<div class="departure">
@@ -100,8 +101,9 @@
 							</div>
 						</div>
 					</div>							
-					<!-- Detailed info. -->
 					<hr/>
+					</div>
+					<!-- Detailed info. -->
 					<xsl:for-each select="./Journey/JourneySegments/JourneySegment">
 						<div class="box detail">								
 							<xsl:choose>

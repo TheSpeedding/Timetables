@@ -1,102 +1,101 @@
-@media screen and (min-width: 1000px) {
-	body {
-		font-family: Verdana;
-		background-color: #F1F4F6;
+body {
+	font-family: Verdana;
+	background-color: #F1F4F6;
+}
+
+ul.tools li {
+	display: inline;
+	margin-right: 20px;
+}
+
+ul.tools a {
+	color: grey;
+	text-decoration: none;
+}
+
+	ul.tools a:hover {
+		color: black;
 	}
 
-	ul.tools li {
-		display: inline;
-		margin-right: 20px;
+.departure {
+	position: relative;
+	padding: 10px 10px 10px 10px;
+	margin-bottom: 50px;
+}
+
+	.departure .leaves-in {
+		font-weight: bold;
+		margin: 0 0 0 20px;
 	}
 
-	ul.tools a {
-		color: grey;
-		text-decoration: none;
-	}
-
-		ul.tools a:hover {
-			color: black;
-		}
-
-	.departure {
-		position: relative;
-		padding: 10px 10px 10px 10px;
-		margin-bottom: 50px;
-	}
-
-		.departure .leaves-in {
+		.departure .leaves-in .outdated {
+			color: red;
 			font-weight: bold;
-			margin: 0 0 0 20px;
+			margin-right: 5px;
 		}
 
-			.departure .leaves-in .outdated {
-				color: red;
-				font-weight: bold;
-				margin-right: 5px;
-			}
 
+	.departure ul.tools {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		margin: 10px 30px 0 0;
+	}
 
-		.departure ul.tools {
-			position: absolute;
-			top: 0px;
-			right: 0px;
-			margin: 10px 30px 0 0;
+		.departure ul.tools li {
+			margin-left: 10px;
+			margin-right: 0px;
 		}
 
-			.departure ul.tools li {
-				margin-left: 10px;
-				margin-right: 0px;
-			}
+	.departure .box {
+		margin: 15px 0 15px 0;
+		position: relative;
+		height: auto;
+		overflow: auto;
+		background-color: white;
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		box-shadow: 3px 3px 3px 3px #ccc;
+	}
 
-		.departure .box {
-			margin: 15px 0 15px 0;
-			position: relative;
-			height: auto;
-			overflow: auto;
-			background-color: white;
+	.departure .info {
+		width: 15%;
+		float: left;
+	}
+
+	.departure .box .label {
+		position: relative;
+		margin: 20px 20px 20px 20px;
+	}
+
+		.departure .box .label span {
+			font-weight: bold;
+			text-align: center;
+			color: white;
+			padding: 10px 20px 10px 20px;
+			margin: 0 10px 0 10px;
+			background-color: black;
 			-webkit-border-radius: 15px;
 			-moz-border-radius: 15px;
 			border-radius: 15px;
-			box-shadow: 3px 3px 3px 3px #ccc;
+			box-shadow: 1px 1px 1px 1px #ccc;
 		}
 
-		.departure .info {
-			width: 15%;
-			float: left;
-		}
+	.departure .box .headsign {
+		position: absolute;
+		left: 150px;
+		top: 10px;
+		margin: 10px;
+		font-size: 110%;
+		max-width: calc(100% - 100px);
+	}
 
-		.departure .box .label {
-			position: relative;
-			margin: 20px 20px 20px 20px;
-		}
-
-			.departure .box .label span {
-				font-weight: bold;
-				text-align: center;
-				color: white;
-				padding: 10px 20px 10px 20px;
-				margin: 0 10px 0 10px;
-				background-color: black;
-				-webkit-border-radius: 15px;
-				-moz-border-radius: 15px;
-				border-radius: 15px;
-				box-shadow: 1px 1px 1px 1px #ccc;
-			}
-
-		.departure .box .headsign {
-			position: absolute;
-			left: 150px;
-			top: 10px;
-			margin: 10px;
-			font-size: 110%;
-		}
-
-		.departure .box .time {
-			position: absolute;
-			right: 0px;
-			top: 10px;
-			margin: 10px 25px 10px 10px;
-			text-align: right;
-			font-size: 110%;
-		}
-}
+	.departure .box .time {
+		position: absolute;
+		right: 0px;
+		top: 10px;
+		margin: 10px 25px 10px 10px;
+		text-align: right;
+		font-size: 110%;
+	}

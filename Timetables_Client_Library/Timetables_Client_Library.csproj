@@ -56,7 +56,6 @@
     <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsExtensions.cs" />
     <Compile Include="GoogleMapsJavascriptAPI\GoogleMapsIntegration.cs" />
     <Compile Include="GoogleMapsJavascriptAPI\JavascriptHelperClasses.cs" />
-    <Compile Include="Localization.cs" />
     <Compile Include="Networking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSerialization.cs" />

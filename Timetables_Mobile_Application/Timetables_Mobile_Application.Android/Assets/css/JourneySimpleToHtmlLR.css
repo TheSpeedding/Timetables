@@ -87,6 +87,7 @@ ul.tools a {
 		}
 
 			.journey .main .segments li {
+				list-style-type: none;
 				font-weight: bold;
 				text-align: center;
 				color: white;
@@ -100,12 +101,14 @@ ul.tools a {
 			}
 
 			.journey .main .segments .Footpath {
-				font-size: 70%;
 				padding: 10px 8px 10px 8px;
-				content: url('img/icons8-walking-32.png');
 				position: relative;
 				top: 3px;
 				background-color: grey;
+			}
+
+			.journey .main .segments .Footpath .icon {
+				display: none;
 			}
 
 		.journey .main .time {

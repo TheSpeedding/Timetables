@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:mobile="clr-namespace:Timetables.Application.Mobile"
 			 x:Class="Timetables.Application.Mobile.FindJourneyResults"
              Title="{Binding Localization.FindJourney}">
     <ContentPage.Content>
         <StackLayout>
-			<WebView x:Name="resultsWebView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+			<mobile:HybridWebView x:Name="resultsWebView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
 		</StackLayout>
     </ContentPage.Content>
 </ContentPage>

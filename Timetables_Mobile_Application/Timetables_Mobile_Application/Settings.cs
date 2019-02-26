@@ -62,7 +62,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Path to journey detail CSS stylesheet.
 		/// </summary>
-		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtml.css");
+		public static FileInfo JourneyDetailCss => new FileInfo("css/JourneyDetailToHtmlLR.css");
 		/// <summary>
 		/// Path to journey simple XSLT stylesheet.
 		/// </summary>
@@ -70,7 +70,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Path to journey simple CSS stylesheet.
 		/// </summary>
-		public static FileInfo JourneySimpleCss => new FileInfo("css/JourneySimpleToHtml.css");
+		public static FileInfo JourneySimpleCss => new FileInfo("css/JourneySimpleToHtmlLR.css");
 		/// <summary>
 		/// Path to departure board simple XSLT stylesheet.
 		/// </summary>
@@ -78,7 +78,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Path to departure board simple CSS stylesheet.
 		/// </summary>
-		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtml.css");
+		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtmlLR.css");
 		/// <summary>
 		/// Path to departure board map XSLT stylesheet.
 		/// </summary>
@@ -86,7 +86,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Path to departure board map CSS stylesheet.
 		/// </summary>
-		public static FileInfo DepartureBoardInMapCss => new FileInfo("css/DepartureBoardInMapToHtml.css");
+		public static FileInfo DepartureBoardInMapCss => new FileInfo("css/DepartureBoardInMapToHtmlLR.css");
 		/// <summary>
 		/// Path to lockouts XSLT stylesheet.
 		/// </summary>

@@ -22,7 +22,7 @@ namespace Timetables.Application.Desktop
 		{
 			InitializeComponent();
 			Settings.Theme.Apply(this);
-			resultsWebBrowser.ObjectForScripting = new Timetables.Interop.JourneyScripting(this);
+			resultsWebBrowser.ObjectForScripting = new JourneyScripting(this);
 			requestWindow = win;
 		}
 		public JourneyResultsWindow(RouterResponse rResponse, string source, string target, DateTime dateTime, DockContent win = null) : this(win)

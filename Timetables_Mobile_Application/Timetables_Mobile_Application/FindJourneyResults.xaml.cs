@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timetables.Client;
+using Timetables.Interop;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +16,9 @@ namespace Timetables.Application.Mobile
 		public FindJourneyResults(RouterResponse res)
 		{
 			InitializeComponent();
-			
+
+			resultsWebView.Scripting = new Scripting(resultsWebView);
+
 			resultsWebView.Source = new HtmlWebViewSource
 			{
 				Html = res.TransformToHtml(

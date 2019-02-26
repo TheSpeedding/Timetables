@@ -71,13 +71,13 @@ namespace Timetables.Benchmarks
 
 			async Task RunOneIterationBenchmark(Structures.Basic.StationsBasic.StationBasic sourceStation, Structures.Basic.StationsBasic.StationBasic targetStation, int count)
 			{
-				WriteLine($"Trying to obtain journeys in the morning rush (high traffic).");
+				WriteLine($"Trying to obtain journeys in the morning rush (very high traffic).");
 				await RunOnlineAndOfflineBenchmark(sourceStation, targetStation, count, DateTime.Now.Date.AddHours(9));
 				WriteLine();
 				WriteLine($"Trying to obtain journeys at the noon time (moderate traffic).");
 				await RunOnlineAndOfflineBenchmark(sourceStation, targetStation, count, DateTime.Now.Date.AddHours(13));
 				WriteLine();
-				WriteLine($"Trying to obtain journeys in the morning rush (very high traffic).");
+				WriteLine($"Trying to obtain journeys in the afternoon rush (high traffic).");
 				await RunOnlineAndOfflineBenchmark(sourceStation, targetStation, count, DateTime.Now.Date.AddHours(17));
 				WriteLine();
 				WriteLine($"Trying to obtain journeys at night (very low traffic).");

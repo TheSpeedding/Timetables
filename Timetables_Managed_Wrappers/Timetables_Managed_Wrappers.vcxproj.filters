@@ -37,5 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\timetables_mobile_application\timetables_mobile_application.android\scripting.cs" />
   </ItemGroup>
 </Project>
