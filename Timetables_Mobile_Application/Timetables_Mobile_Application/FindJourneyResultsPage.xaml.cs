@@ -11,21 +11,37 @@ using Xamarin.Forms.Xaml;
 namespace Timetables.Application.Mobile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class FindJourneyResultsPage : ContentPage
+	public partial class FindJourneyResults : ContentPage
 	{
-		private RouterResponse res;
-
-		public FindJourneyResultsPage(RouterResponse res)
+		public RouterResponse Response { get; }
+		public FindJourneyResults(Journey journey)
 		{
 			InitializeComponent();
 
-			this.res = res;
+			Response = new RouterResponse(new List<Journey> { journey });
 
-			resultsWebView.Scripting = new Scripting(resultsWebView);
+			resultsWebView.Scripting = new JourneyScripting(resultsWebView, this);
 
 			resultsWebView.Source = new HtmlWebViewSource
 			{
-				Html = res.TransformToHtml(
+				Html = Response.Journeys[0].TransformToHtml(
+					PlatformDependentSettings.GetStream(Settings.JourneyDetailXslt),
+					PlatformDependentSettings.GetStream(Settings.JourneyDetailCss),
+					PlatformDependentSettings.GetStream(Settings.OnLoadActionsJavaScript)
+					)
+			};
+		}
+		public FindJourneyResults(RouterResponse res)
+		{
+			InitializeComponent();
+
+			Response = res;
+			
+			resultsWebView.Scripting = new JourneyScripting(resultsWebView, this);
+
+			resultsWebView.Source = new HtmlWebViewSource
+			{
+				Html = Response.TransformToHtml(
 					PlatformDependentSettings.GetStream(Settings.JourneySimpleXslt),
 					PlatformDependentSettings.GetStream(Settings.JourneySimpleCss),
 					PlatformDependentSettings.GetStream(Settings.OnLoadActionsJavaScript)

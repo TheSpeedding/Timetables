@@ -6,9 +6,32 @@ using System.Threading.Tasks;
 using Timetables.Application.Mobile;
 using Timetables.Client;
 using Timetables.Structures.Basic;
+using Xamarin.Forms;
 
 namespace Timetables.Application.Mobile
 {
+	public class JourneyScripting : Scripting
+	{
+		private FindJourneyResults page;
+
+		public JourneyScripting(HybridWebView view, FindJourneyResults page) : base(view)
+		{
+			this.page = page;
+
+			view.RegisterCallback(nameof(ShowJourneyDetail), arg => { ShowJourneyDetail(int.Parse(arg)); return string.Empty; });
+		}
+		/// <summary>
+		/// Shows detail of the journey.
+		/// </summary>
+		/// <param name="index">Index of the journey.</param>
+		public void ShowJourneyDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new FindJourneyResults(page.Response.Journeys[index]), true)); 
+		/// <summary>
+		/// Shows map of the journey.
+		/// </summary>
+		/// <param name="index">Index of the journey.</param>
+		//public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
+	}
+
 	// <summary>
 	/// Offers functions that can be called from Javascript code.
 	/// </summary>

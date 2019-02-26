@@ -70,7 +70,7 @@ namespace Timetables.Application.Mobile
 
 			var routerResponse = await Request.SendRouterRequestAsync(routerRequest);
 
-			await Navigation.PushAsync(new FindJourneyResultsPage(routerResponse));
+			await Navigation.PushAsync(new FindJourneyResults(routerResponse), true);
 		}
 	}
 }

@@ -79,6 +79,7 @@
 												</xsl:attribute>
 												<xsl:attribute name="style">
 													background-color: <xsl:value-of select="./LineColor/@Hex"/>;
+													color: <xsl:value-of select="./LineTextColor/@Hex"/>;
 												</xsl:attribute>
 												<xsl:value-of select="./LineLabel/text()"/>
 											</li>
@@ -110,7 +111,7 @@
 								<xsl:when test="@xsi:type = 'FootpathSegment'">
 									<h1>
 										<span class="transfer-constant"></span>
-										 ·
+										 · 
 										<span class="total-duration">
 											<span class="departure-from-source">
 												<xsl:value-of select="./DepartureDateTime/text()"/>
@@ -128,6 +129,7 @@
 										</xsl:attribute>
 										<xsl:attribute name="style">
 											background-color: <xsl:value-of select="./LineColor/@Hex"/>;
+											color: <xsl:value-of select="./LineTextColor/@Hex"/>;
 										</xsl:attribute>
 										<xsl:value-of select="./LineLabel/text()"/> · <xsl:value-of select="./Headsign/text()"/>
 									</h1>										
@@ -140,7 +142,7 @@
 											<span class="iso8601">
 												<xsl:value-of select="./DepartureDateTime/text()"/>
 											</span>
-											 ·
+											 · 
 											<span class="station-id">
 												<xsl:value-of select="./SourceStopID/text()"/>
 											</span>
@@ -151,7 +153,7 @@
 											<span class="iso8601">
 												<xsl:value-of select="./Arrival/text()"/>
 											</span>
-											 ·
+											 · 
 											<span class="station-id">
 												<xsl:value-of select="./StopID/text()"/>
 											</span>
@@ -162,7 +164,7 @@
 											<span class="iso8601">
 												<xsl:value-of select="./ArrivalDateTime/text()"/>
 											</span>
-											 ·
+											 · 
 											<span class="station-id">
 												<xsl:value-of select="./TargetStopID/text()"/>
 											</span>

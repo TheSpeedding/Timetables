@@ -32,7 +32,7 @@ if (printListElement !== null && printingOptionsEnabled) {
 	printListElement.addEventListener('click', function (event) {
 		if (isJourney)
 			callCSharp("PrintJourneyList", null);
-		else
+		else 
 			callCSharp("PrintDepartureBoardList", null);
 	});
 	printListElement.innerHTML = callCSharp("PrintListStringConstant", null);
@@ -43,7 +43,7 @@ if (editParametersLinkElement !== null && isDesktop) {
 	editParametersLinkElement.addEventListener('click', function (event) {
 		if (isJourney)
 			callCSharp("EditJourneysParameters", null);
-		else
+		else 
 			callCSharp("EditDeparturesParameters", null);
 	});
 	editParametersLinkElement.innerHTML = callCSharp("EditParametersStringConstant", null);
@@ -60,7 +60,7 @@ for (let i = 0; i < printLinkClassCollection.length && printingOptionsEnabled; +
 	printLink.addEventListener('click', function (event) {
 		if (isJourney)
 			callCSharp("PrintJourneyDetail", null);
-		else
+		else 
 			callCSharp("PrintDepartureDetail", null);
 	});
 	printLink.innerHTML = callCSharp("PrintStringConstant", null);
@@ -116,7 +116,7 @@ for (let i = 0; i < detailClassCollection.length; ++i) {
 	detail.addEventListener('click', function (event) {
 		if (isJourney)
 			callCSharp("ShowJourneyDetail", detail.id);
-		else
+		else 
 			callCSharp("ShowDepartureDetail", detail.id);
 	});
 	detail.innerHTML = callCSharp("DetailStringConstant", null);
