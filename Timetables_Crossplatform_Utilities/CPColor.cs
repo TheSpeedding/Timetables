@@ -60,9 +60,9 @@ namespace Timetables.Utilities
 		{
 			int offset = hex[0] == '#' ? 1 : 0;
 
-			var r = byte.Parse(hex.Substring(offset, 2), System.Globalization.NumberStyles.HexNumber);
-			var g = byte.Parse(hex.Substring(offset + 2, 2), System.Globalization.NumberStyles.HexNumber);
-			var b = byte.Parse(hex.Substring(offset + 4, 2), System.Globalization.NumberStyles.HexNumber);
+			var r = hex.Length >= 3 ? byte.Parse(hex.Substring(offset, 2), System.Globalization.NumberStyles.HexNumber) : byte.MinValue;
+			var g = hex.Length >= 5 ? byte.Parse(hex.Substring(offset + 2, 2), System.Globalization.NumberStyles.HexNumber) : byte.MinValue;
+			var b = hex.Length >= 7 ? byte.Parse(hex.Substring(offset + 4, 2), System.Globalization.NumberStyles.HexNumber) : byte.MinValue;
 
 			return new CPColor(r, g, b);
 		}

@@ -23,8 +23,8 @@
     <Compile Update="FindJourneyPage.xaml.cs">
       <DependentUpon>FindJourneyPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="FindJourneyResults.xaml.cs">
-      <DependentUpon>FindJourneyResults.xaml</DependentUpon>
+    <Compile Update="FindJourneyResultsPage.xaml.cs">
+      <DependentUpon>FindJourneyResultsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="MainPageMenuItem.cs">
       <SubType>Code</SubType>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="FindJourneyResults.xaml">
+    <EmbeddedResource Update="FindJourneyResultsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="MainPage.xaml">

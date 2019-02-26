@@ -196,6 +196,10 @@ namespace Timetables.Client
 		/// </summary>
 		public CPColor LineColor { get; set; }
 		/// <summary>
+		/// Color of the line used in GUI.
+		/// </summary>
+		public CPColor LineTextColor { get; set; }
+		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
 		public MeanOfTransport MeanOfTransport { get; set; }
@@ -204,7 +208,7 @@ namespace Timetables.Client
 		/// </summary>
 		public List<IntermediateStop> IntermediateStops { get; set; }
 		internal TripSegment() { }
-		public TripSegment(int sourceStopID, int targetStopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, int meanOfTransport, ulong departureFromSource, ulong arrivalAtTarget, List<KeyValuePair<ulong, int>> intStops)
+		public TripSegment(int sourceStopID, int targetStopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, ulong lineTextColor, int meanOfTransport, ulong departureFromSource, ulong arrivalAtTarget, List<KeyValuePair<ulong, int>> intStops)
 		{
 			SourceStopID = sourceStopID;
 			TargetStopID = targetStopID;
@@ -216,6 +220,7 @@ namespace Timetables.Client
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
 			LineName = lineName;
 			LineColor = CPColor.FromHtml("#" + lineColor.ToString("X"));
+			LineTextColor = CPColor.FromHtml("#" + lineTextColor.ToString("X"));
 
 			IntermediateStops = new List<IntermediateStop>();
 			foreach (var x in intStops)

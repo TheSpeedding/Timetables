@@ -37,17 +37,22 @@ namespace Timetables.Structures.Basic
 			/// Color of route used in GUI.
 			/// </summary>
 			public CPColor Color { get; set; }
-			public RouteInfoBasic(int id, string label, MeanOfTransport type, CPColor c)
+			/// <summary>
+			/// Color of route used in GUI.
+			/// </summary>
+			public CPColor TextColor { get; set; }
+			public RouteInfoBasic(int id, string label, MeanOfTransport type, CPColor c, CPColor tc)
 			{
 				ID = id;
 				Label = label;
 				MeanOfTransport = type;
 				Color = c;
+				TextColor = tc;
 			}
 			/// <summary>
 			/// Route Info ID, Short Name, Mean Of The Transport, Color.
 			/// </summary>
-			public override string ToString() => ID + ";" + Label + ";" + (int)MeanOfTransport + ";" + Color.ToHex() + ";";
+			public override string ToString() => ID + ";" + Label + ";" + (int)MeanOfTransport + ";" + Color.ToHex() + ";" + TextColor.ToHex() + ";";
 
 			public bool Equals(RouteInfoBasic other) => ID == other.ID;
 		}
@@ -75,7 +80,7 @@ namespace Timetables.Structures.Basic
 			Items = new RouteInfoBasic[count];
 			var tokens = sr.ReadLine().Split(';'); // This could take some time but files are usually small.
 			for (int i = 0; i < count; i++)
-				Items[i] = (new RouteInfoBasic(int.Parse(tokens[4 * i]), tokens[4 * i + 1], (MeanOfTransport)int.Parse(tokens[4 * i + 2]), CPColor.FromHtml(tokens[4 * i + 3][0] == '#' ? tokens[4 * i + 3] : "#" + tokens[4 * i + 3])));
+				Items[i] = new RouteInfoBasic(int.Parse(tokens[5 * i]), tokens[5 * i + 1], (MeanOfTransport)int.Parse(tokens[5 * i + 2]), CPColor.FromHtml(tokens[5 * i + 3]), CPColor.FromHtml(tokens[5 * i + 4]));
 			sr.Dispose();
 		}
 		/// <summary>

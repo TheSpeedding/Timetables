@@ -296,6 +296,8 @@ if not exist $(TargetDir)loc mkdir $(TargetDir)loc
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.xslt" "$(TargetDir)xslt"
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.css" "$(TargetDir)css"
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.js" "$(TargetDir)js"
-xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(TargetDir)loc"</PostBuildEvent>
+xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(TargetDir)loc"
+
+xcopy /Y /I /E "$(SolutionDir)Timetables_Default_Settings\Desktop.xml" "$(TargetDir)settings.xml"</PostBuildEvent>
   </PropertyGroup>
 </Project>

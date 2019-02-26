@@ -35,18 +35,22 @@ namespace Timetables.Preprocessor
             /// Type of a vehicle serving the route.
             /// </summary>
             public RouteType Type { get; }
-            /// <summary>
-            /// Color that represents the route.
-            /// </summary>
-            public CPColor Color { get; }
+			/// <summary>
+			/// Color that represents the route.
+			/// </summary>
+			public CPColor Color { get; }
+			/// <summary>
+			/// Color that represents the route.
+			/// </summary>
+			public CPColor TextColor { get; }
 			/// <summary>
 			/// Route Info ID, Short Name, Long Name, Mean Of The Transport, Color.
 			/// </summary>
-			public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color.ToHex() + ";";
+			public override string ToString() => ID + ";" + ShortName + ";" + LongName + ";" + (int)Type + ";" + Color.ToHex() + ";" + TextColor.ToHex() + ";";
 			/// <summary>
 			/// Route Info ID, Short Name, Mean Of The Transport, Color.
 			/// </summary>
-			public string ToStringBasic() => ID + ";" + ShortName + ";" + (int)Type + ";" + Color.ToHex() + ";";
+			public string ToStringBasic() => ID + ";" + ShortName + ";" + (int)Type + ";" + Color.ToHex() + ";" + TextColor.ToHex() + ";";
 			/// <summary>
 			/// Initializes object.
 			/// </summary>
@@ -55,7 +59,8 @@ namespace Timetables.Preprocessor
 			/// <param name="longName">Long Name.</param>
 			/// <param name="type">Mean Of The Transport.</param>
 			/// <param name="color">Color.</param>
-			public RouteInfo(int id, string shortName, string longName, RouteType type, string color)
+			/// <param name="textColor">Text color.</param>
+			public RouteInfo(int id, string shortName, string longName, RouteType type, string color, string textColor)
             {
                 ID = id;
                 ShortName = shortName;
@@ -90,9 +95,15 @@ namespace Timetables.Preprocessor
 							break;
                     }
 
-                else
-                    Color = CPColor.FromHtml(color[0] == '#' ? color : "#" + color);
-            }
+				else
+					Color = CPColor.FromHtml(color[0] == '#' ? color : "#" + color);
+
+				if (textColor == "")
+					TextColor = CPColor.White;
+
+				else
+					TextColor = CPColor.FromHtml(textColor[0] == '#' ? textColor : "#" + textColor);
+			}
         }
 		protected Dictionary<string, RouteInfo> list = new Dictionary<string, RouteInfo>();
         /// <summary>
@@ -168,8 +179,10 @@ namespace Timetables.Preprocessor
             for (int i = 0; i < fieldNames.Length; i++)
                 dic.Add(fieldNames[i].Replace("\"", ""), i);
 
-            // These fields are required for our purpose.
-            if (!dic.ContainsKey("route_id")) throw new FormatException("Route ID field name missing.");
+			bool useDefaultColor = !dic.ContainsKey("route_text_color");
+
+			// These fields are required for our purpose.
+			if (!dic.ContainsKey("route_id")) throw new FormatException("Route ID field name missing.");
             if (!dic.ContainsKey("route_short_name")) throw new FormatException("Route short name field name missing.");
             if (!dic.ContainsKey("route_long_name")) throw new FormatException("Route long name field name missing.");
             if (!dic.ContainsKey("route_type")) throw new FormatException("Route type field name missing.");
@@ -187,8 +200,8 @@ namespace Timetables.Preprocessor
 					throw new FormatException("Invalid mean of transport.");
 
 				RouteInfo.RouteType type = (RouteInfo.RouteType)(1 << intType);
-
-                RouteInfo routeInfo = new RouteInfo(Count, tokens[dic["route_short_name"]], tokens[dic["route_long_name"]], type, tokens[dic["route_color"]]);
+				
+                RouteInfo routeInfo = new RouteInfo(Count, tokens[dic["route_short_name"]], tokens[dic["route_long_name"]], type, tokens[dic["route_color"]], useDefaultColor ? string.Empty : tokens[dic["route_text_color"]]);
 
                 list.Add(tokens[dic["route_id"]], routeInfo);
             }

@@ -30,7 +30,7 @@ Timetables::Client::RouterResponse^ Timetables::Interop::RouterManaged::ShowJour
 
 				jss->Add(gcnew Timetables::Client::TripSegment(js->source_stop().id(), js->target_stop().id(), js->outdated(), gcnew System::String(js->trip()->route().headsign().data()), 
 					gcnew System::String(js->trip()->route().info().short_name().data()), gcnew System::String(js->trip()->route().info().long_name().data()), 
-					js->trip()->route().info().color(), js->trip()->route().info().type(), departure_timestamp, arrival_timestamp, intStops));
+					js->trip()->route().info().color(), js->trip()->route().info().text_color(), js->trip()->route().info().type(), departure_timestamp, arrival_timestamp, intStops));
 
 			}
 		}

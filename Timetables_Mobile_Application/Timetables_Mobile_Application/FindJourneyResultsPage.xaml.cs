@@ -11,11 +11,15 @@ using Xamarin.Forms.Xaml;
 namespace Timetables.Application.Mobile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class FindJourneyResults : ContentPage
+	public partial class FindJourneyResultsPage : ContentPage
 	{
-		public FindJourneyResults(RouterResponse res)
+		private RouterResponse res;
+
+		public FindJourneyResultsPage(RouterResponse res)
 		{
 			InitializeComponent();
+
+			this.res = res;
 
 			resultsWebView.Scripting = new Scripting(resultsWebView);
 

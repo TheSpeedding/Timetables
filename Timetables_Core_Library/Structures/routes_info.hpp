@@ -15,15 +15,17 @@ namespace Timetables {
 			const std::wstring short_name_; // Short name of the route. E.g. A.
 			const std::wstring long_name_; // Long name of the rout. E.g. Depo Hostivaø - Nemocnice Motol.
 			std::size_t color_; // Color of the route used in GUI in HEX format.
+			std::size_t text_color_; // Color of the route used in GUI in HEX format.
 			const mean_of_transport type_; // Mean of the transport.
 		public:
-			route_info(const std::wstring& short_name, const std::wstring& long_name, mean_of_transport type, std::size_t color) :
-				short_name_(short_name), long_name_(long_name), type_(type), color_(color) {}
+			route_info(const std::wstring& short_name, const std::wstring& long_name, mean_of_transport type, std::size_t color, std::size_t text_color) :
+				short_name_(short_name), long_name_(long_name), type_(type), color_(color), text_color_(text_color) {}
 
 			inline const std::wstring& short_name() const { return short_name_; } // Short name of the route.
 			inline const std::wstring& long_name() const { return long_name_; } // Long name of the route.
 			inline const mean_of_transport type() const { return type_; } // Mean of the transport used in the route.
 			inline const std::size_t color() const { return color_; } // Color label of the route.
+			inline const std::size_t text_color() const { return text_color_; } // Color label of the route.
 		};
 
 		// Class collecting information about collection of routes info.

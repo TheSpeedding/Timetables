@@ -22,9 +22,9 @@ namespace Timetables.Server
 			{
 				while (!DataFeed.Loaded) ; // Temporary. Actually, this does nothing. Just forces data to be loaded (static class constructor). Without this, the data would be loaded when the first request approaches the server.
 			}
-			catch
+			catch (Exception ex)
 			{
-				Logging.Log("Fatal error. Data could not be processed.");
+				Logging.Log("Fatal error. Data could not be processed: " + ex.Message);
 				return;
 			}
 

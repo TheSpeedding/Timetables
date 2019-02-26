@@ -168,6 +168,8 @@ if not exist $(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Appli
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.xslt" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\xslt"
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.css" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\css"
 xcopy /Y /I /E "$(SolutionDir)Timetables_Webbrowser_Stuff\*.js" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\js"
-xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\loc"</PreBuildEvent>
+xcopy /Y /I /E "$(SolutionDir)Timetables_Localization\*.*" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\loc"
+
+xcopy /Y /I /E "$(SolutionDir)Timetables_Default_Settings\Mobile.xml" "$(SolutionDir)Timetables_Mobile_Application\Timetables_Mobile_Application.Android\Assets\settings.xml"</PreBuildEvent>
   </PropertyGroup>
 </Project>

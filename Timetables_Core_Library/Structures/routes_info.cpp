@@ -18,16 +18,16 @@ Timetables::Structures::routes_info::routes_info(std::wistream&& routes_info) {
 
 	list.reserve(size);
 
-	array<wstring, 5> tokens;
+	array<wstring, 6> tokens;
 
 	for (size_t i = 0; i < size; i++) { // Over all the entries.
 
-		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport, Color
+		// Entry format: RouteInfoID, ShortName, LongName, MeanOfTransport, Color, TextColor
 
-		for (size_t j = 0; j < 5; j++)
+		for (size_t j = 0; j < 6; j++)
 			std::getline(routes_info, tokens[j], wchar_t(';'));
 		
-		route_info r(tokens[1], tokens[2], mean_of_transport(stoi(tokens[3])), stoul(tokens[4], nullptr, 16));
+		route_info r(tokens[1], tokens[2], mean_of_transport(stoi(tokens[3])), stoul(tokens[4], nullptr, 16), stoul(tokens[5], nullptr, 16));
 		
 		list.push_back(move(r));
 

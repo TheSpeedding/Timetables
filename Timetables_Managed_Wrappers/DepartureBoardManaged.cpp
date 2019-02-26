@@ -16,7 +16,7 @@ Timetables::Client::DepartureBoardResponse^ Timetables::Interop::DepartureBoardM
 		unsigned long long departure_timestamp = departure.departure_time().timestamp(); // Recast from 32 bit to 64 bit if necessary. Timestamp is defined as time_t.
 
 		departures->Add(gcnew Timetables::Client::Departure(departure.stop().id(), departure.outdated(), gcnew System::String(departure.headsign().data()),
-			gcnew System::String(departure.line().short_name().data()), gcnew System::String(departure.line().long_name().data()), departure.line().color(), 
+			gcnew System::String(departure.line().short_name().data()), gcnew System::String(departure.line().long_name().data()), departure.line().color(), departure.line().text_color(),
 			departure.line().type(), departure_timestamp, intStops));
 	}
 	return gcnew Timetables::Client::DepartureBoardResponse(departures);

@@ -1,0 +1,16 @@
+<Timetables>
+  <RouterPort>27000</RouterPort>
+  <DepartureBoardPort>27001</DepartureBoardPort>
+  <BasicDataPort>27002</BasicDataPort>
+	<CoefficientUndergroundTransfersWithinSameLine/>
+	<CoefficientUndergroundTransfersWithinDifferentLines/>
+	<CoefficientUndergroundToSurfaceTransfer/>
+	<MaximalDurationOfTransfer>900</MaximalDurationOfTransfer>
+	<AverageWalkingSpeed/>
+  <DataFeeds>
+    <DataFeed>
+      <Name>Praha</Name>
+      <Link>http://data.pid.cz/PID_GTFS.zip</Link>
+    </DataFeed>
+  </DataFeeds>
+</Timetables>

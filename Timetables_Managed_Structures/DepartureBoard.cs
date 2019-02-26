@@ -131,6 +131,10 @@ namespace Timetables.Client
 		/// </summary>
 		public CPColor LineColor { get; set; }
 		/// <summary>
+		/// Color of the line used in GUI.
+		/// </summary>
+		public CPColor LineTextColor { get; set; }
+		/// <summary>
 		/// Mean of transportation.
 		/// </summary>
 		public MeanOfTransport MeanOfTransport { get; set; }
@@ -143,7 +147,7 @@ namespace Timetables.Client
 		/// </summary>
 		public List<IntermediateStop> IntermediateStops { get; set; }
 		internal Departure() { }
-		public Departure(int stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, int meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, int>> intStops)
+		public Departure(int stopID, bool outdated, string headsign, string lineLabel, string lineName, ulong lineColor, ulong lineTextColor, int meanOfTransport, ulong departureDateTime, List<KeyValuePair<ulong, int>> intStops)
 		{
 			StopID = stopID;
 			Outdated = outdated;
@@ -151,6 +155,7 @@ namespace Timetables.Client
 			LineLabel = lineLabel;
 			LineName = lineName;
 			LineColor = CPColor.FromHtml("#" + lineColor.ToString("X"));
+			LineTextColor = CPColor.FromHtml("#" + lineTextColor.ToString("X"));
 			MeanOfTransport = (MeanOfTransport)meanOfTransport;
 			DepartureDateTime = new DateTime(1970, 1, 1).AddSeconds(departureDateTime);
 

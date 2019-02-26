@@ -37,6 +37,7 @@
 									</xsl:attribute>
 									<xsl:attribute name="style">
 										background-color: <xsl:value-of select="./Departure/LineColor/@Hex"/>;
+										color: <xsl:value-of select="./Departure/LineTextColor/@Hex"/>;
 									</xsl:attribute>
 									<xsl:value-of select="./Departure/LineLabel/text()"/>
 								</span>

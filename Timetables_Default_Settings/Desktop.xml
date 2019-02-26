@@ -1,0 +1,12 @@
+<Timetables>
+  <Theme>0</Theme>
+  <Language>Czech</Language>
+  <OfflineMode>False</OfflineMode>
+  <ExtraEventsUri>https://pid.cz/feed/rss-mimoradnosti</ExtraEventsUri>
+  <LockoutsUri>https://pid.cz/feed/rss-vyluky</LockoutsUri>
+  <FullDataUri/>
+  <ServerIp>127.0.0.1</ServerIp>
+  <RouterPort>27000</RouterPort>
+  <DepartureBoardPort>27001</DepartureBoardPort>
+  <BasicDataPort>27002</BasicDataPort>
+</Timetables>
