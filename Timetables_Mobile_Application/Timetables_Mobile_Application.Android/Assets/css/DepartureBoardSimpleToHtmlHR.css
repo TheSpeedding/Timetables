@@ -98,3 +98,7 @@ ul.tools a {
 		text-align: right;
 		font-size: 110%;
 	}
+
+	.detail {
+		display: none;
+	}

@@ -42,13 +42,22 @@
 							<div class="label">
 								<span>
 									<xsl:attribute name="class">
-										<xsl:value-of select="./MeanOfTransport/text()"/>
+										<xsl:value-of select="./MeanOfTransport/text()"/> detailbox
 									</xsl:attribute>
 									<xsl:attribute name="style">
 										background-color: <xsl:value-of select="./LineColor/@Hex"/>;
 										color: <xsl:value-of select="./LineTextColor/@Hex"/>;
 									</xsl:attribute>
 									<xsl:value-of select="./LineLabel/text()"/>
+									<span class="detail">
+									 · 
+										<xsl:value-of select="./Headsign/text()"/>
+										 (
+										<span class="iso8601">
+											<xsl:value-of select="./DepartureDateTime/text()"/>
+										</span>
+										)
+									</span>
 								</span>								
 							</div>
 							<div class="headsign">

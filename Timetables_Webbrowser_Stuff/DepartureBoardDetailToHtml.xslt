@@ -81,7 +81,7 @@
 									<span class="iso8601">
 										<xsl:value-of select="./Arrival/text()"/>
 									</span>
-									 ·
+									 · 
 									<span class="station-id">
 										<xsl:value-of select="./StopID/text()"/>
 									</span>

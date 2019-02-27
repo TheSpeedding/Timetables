@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dotMorten.Xamarin.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Timetables.Client;
+using Timetables.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,14 +20,14 @@ namespace Timetables.Application.Mobile
 		{
 			InitializeComponent ();
 
-			BindingContext = new FindLineInfoPageViewModel();
+			BindingContext = new FindStationInfoPageViewModel();
 		}
 		private void OnCountSliderValueChanged(object sender, ValueChangedEventArgs e)
 		{
 			countSlider.Value = Math.Round(e.NewValue / 1.0);
 			countLabel.Text = countSlider.Value.ToString();
 		}
-		class FindLineInfoPageViewModel : INotifyPropertyChanged
+		class FindStationInfoPageViewModel : INotifyPropertyChanged
 		{
 			public Localization Localization { get; } = Settings.Localization;
 
@@ -51,16 +53,24 @@ namespace Timetables.Application.Mobile
 				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + stopEntry.Text);
 				return;
 			}
-			/*
-			var routerRequest = new RouterRequest(source.ID, target.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
-				(int)transfersSlider.Value, (int)countSlider.Value, Settings.WalkingSpeedCoefficient, Settings.GetMoT());
 
-			var routerResponse = await Request.SendRouterRequestAsync(routerRequest);
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = linePicker.SelectedItem == null ? null : DataFeedClient.Basic.RoutesInfo.FindByLabel(linePicker.SelectedItem.ToString());
 
-			await Navigation.PushAsync(new FindJourneyResults(routerResponse), true);*/
+			if (station == null || (route == null && linePicker.SelectedItem != null))
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + linePicker.SelectedItem.ToString());
+				return;
+			}
+
+			var dbRequest = new StationInfoRequest(station.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
+				(int)countSlider.Value, true, route == null ? -1 : route.ID);
+
+			var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
+
+			await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse), true);
 		}
-
-		private void StopEntryTextChanged(object sender, TextChangedEventArgs e)
+		
+		private void StopEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)
 		{
 			linePicker.Items.Clear();
 			var station = DataFeedClient.Basic.Stations.FindByName(stopEntry.Text);
@@ -68,6 +78,29 @@ namespace Timetables.Application.Mobile
 			if (station != null)
 				foreach (var item in station.GetThroughgoingRoutes().Select(r => r.Label).Distinct())
 					linePicker.Items.Add(item);
+
+			if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+			{
+				if (((AutoSuggestBox)sender).Text.Length > 2)
+				{
+					((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
+				}
+			}
+
+		}
+
+		private void StopEntrySuggestionChosen(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxSuggestionChosenEventArgs e)
+		{
+			((AutoSuggestBox)sender).Text = e.SelectedItem.ToString();
+		}
+
+		private void FindClosestStation(object sender, EventArgs e)
+		{
+			var station = DataFeedClient.Basic.Stations.FindClosestStation(AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition));
+			if (station != null)
+			{
+				stopEntry.Text = station.Name;
+			}
 		}
 	}
 }

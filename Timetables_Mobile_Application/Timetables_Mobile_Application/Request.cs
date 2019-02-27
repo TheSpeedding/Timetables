@@ -103,7 +103,101 @@ namespace Timetables.Application.Mobile
 
 			return routerResponse;
 		}
-		
+
+
+		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
+		{
+			// This cannot be done better since in each of the method we need information about specialized classes (caching, algorithm). 
+			// Actually, it could be done better (without code copies), but then the code would be unreadable and less efficient, too.
+
+			if (dbRequest.GetType() == typeof(StationInfoRequest))
+				return await SendDepartureBoardRequestAsync((StationInfoRequest)dbRequest);
+
+			else
+				return await SendDepartureBoardRequestAsync((LineInfoRequest)dbRequest);
+		}
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
+		{
+			DepartureBoardResponse dbResponse = null;
+
+			using (var dbProcessing = new DepartureBoardProcessing())
+			{
+				// TO-DO:
+				object cached = null;// StationInfoCached.Select(dbRequest.StopID);
+
+				if (cached == null /*|| cached.ShouldBeUpdated*/)
+				{
+					try
+					{
+						if (!await CheckBasicDataValidity()) return null;
+
+						// Process the request immediately so the user does not have to wait until the caching is completed.
+
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
+
+						// Then update the cache.
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+						//if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+							//Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+					}
+					catch (System.Net.WebException)
+					{
+						PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
+					}
+				}
+
+				else
+				{
+					// dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+				}
+			}
+
+			return dbResponse;
+		}
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
+		{
+			DepartureBoardResponse dbResponse = null;
+
+			using (var dbProcessing = new DepartureBoardProcessing())
+			{
+				// TO-DO:
+				object cached = null;// LineInfoCached.Select(dbRequest.RouteInfoID);
+
+				if (cached == null /*|| cached.ShouldBeUpdated*/)
+				{
+					try
+					{
+						if (!await CheckBasicDataValidity()) return null;
+
+						// Process the request immediately so the user does not have to wait until the caching is completed.
+
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
+
+						// Then update the cache.
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+						//if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+							//Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+					}
+					catch (System.Net.WebException)
+					{
+						PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
+					}
+				}
+
+				else
+				{
+					//dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+				}
+			}
+
+			return dbResponse;
+		}
+
 		/*
 		/// <summary>
 		/// Tries to obtain station info and return window with results.
@@ -145,126 +239,6 @@ namespace Timetables.Application.Mobile
 			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
 
 			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
-		}
-		public static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(DepartureBoardRequest dbRequest)
-		{
-			// This cannot be done better since in each of the method we need information about specialized classes (caching, algorithm). 
-			// Actually, it could be done better (without code copies), but then the code would be unreadable and less efficient, too.
-
-			if (dbRequest.GetType() == typeof(StationInfoRequest))
-				return await SendDepartureBoardRequestAsync((StationInfoRequest)dbRequest);
-
-			else
-				return await SendDepartureBoardRequestAsync((LineInfoRequest)dbRequest);
-		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
-		{
-			DepartureBoardResponse dbResponse = null;
-
-			if (DataFeedDesktop.OfflineMode)
-			{
-				await Task.Run(() =>
-				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
-					{
-						dbProcessing.ObtainDepartureBoard();
-						dbResponse = dbProcessing.ShowDepartureBoard();
-					}
-
-				});
-			}
-
-			else
-			{
-				using (var dbProcessing = new DepartureBoardProcessing())
-				{
-					var cached = StationInfoCached.Select(dbRequest.StopID);
-
-					if (cached == null || cached.ShouldBeUpdated)
-					{
-						try
-						{
-							if (!await CheckBasicDataValidity()) return null;
-
-							// Process the request immediately so the user does not have to wait until the caching is completed.
-
-							dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
-
-							// Then update the cache.
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-							if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
-								Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						}
-						catch (System.Net.WebException)
-						{
-							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-					}
-
-					else
-					{
-						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
-					}
-				}
-			}
-			return dbResponse;
-		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
-		{
-			DepartureBoardResponse dbResponse = null;
-
-			if (DataFeedDesktop.OfflineMode)
-			{
-				await Task.Run(() =>
-				{
-					using (var dbProcessing = new Interop.DepartureBoardManaged(DataFeedDesktop.Full, dbRequest))
-					{
-						dbProcessing.ObtainDepartureBoard();
-						dbResponse = dbProcessing.ShowDepartureBoard();
-					}
-
-				});
-			}
-
-			else
-			{
-				using (var dbProcessing = new DepartureBoardProcessing())
-				{
-					var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
-
-					if (cached == null || cached.ShouldBeUpdated)
-					{
-						try
-						{
-							if (!await CheckBasicDataValidity()) return null;
-
-							// Process the request immediately so the user does not have to wait until the caching is completed.
-
-							dbResponse = await dbProcessing.ProcessAsync(dbRequest, dbRequest.Count == -1 ? int.MaxValue : Settings.TimeoutDuration);
-
-							// Then update the cache.
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-							if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
-								Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-						}
-						catch (System.Net.WebException)
-						{
-							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-					}
-
-					else
-					{
-						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
-					}
-				}
-			}
-			return dbResponse;
 		}
 		/// <summary>
 		/// Caches the departures according to departure board request.

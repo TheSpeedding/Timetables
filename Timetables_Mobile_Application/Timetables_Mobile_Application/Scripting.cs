@@ -24,12 +24,34 @@ namespace Timetables.Application.Mobile
 		/// Shows detail of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		public void ShowJourneyDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new FindJourneyResults(page.Response.Journeys[index]), true)); 
+		public void ShowJourneyDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new FindJourneyResults(page.Response.Journeys[index]), true));
 		/// <summary>
 		/// Shows map of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
 		//public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
+	}
+
+	public class DepartureBoardScripting : Scripting
+	{
+		private DepartureBoardResultsPage page;
+
+		public DepartureBoardScripting(HybridWebView view, DepartureBoardResultsPage page) : base(view)
+		{
+			this.page = page;
+
+			view.RegisterCallback(nameof(ShowDepartureDetail), arg => { ShowDepartureDetail(int.Parse(arg)); return string.Empty; });
+		}
+		/// <summary>
+		/// Shows detail of the departure.
+		/// </summary>
+		/// <param name="index">Index of the departure.</param>
+		public void ShowDepartureDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new DepartureBoardResultsPage(page.Response.Departures[index]), true));
+		/// <summary>
+		/// Shows map of the departure.
+		/// </summary>
+		/// <param name="index">Index of the departure.</param>
+		//public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
 	}
 
 	// <summary>
