@@ -13,35 +13,37 @@ namespace Timetables.Application.Mobile.Droid
     [Activity(Label = "Timetables", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+		{
+			Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+			base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
+		protected override void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-
-			// Ask for permissions if not granted yet.
-			if ((int)Build.VERSION.SdkInt >= 23)
-			{
-				if (PackageManager.CheckPermission(Manifest.Permission.ReadExternalStorage, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.WriteExternalStorage, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.AccessNetworkState, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.AccessCoarseLocation, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.AccessFineLocation, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.Internet, PackageName) != Permission.Granted &&
-					PackageManager.CheckPermission(Manifest.Permission.AccessWifiState, PackageName) != Permission.Granted)
-				{
-					var permissions = new string[] {
+			
+			var permissions = new string[] {
 						Manifest.Permission.ReadExternalStorage,
 						Manifest.Permission.WriteExternalStorage,
 						Manifest.Permission.AccessNetworkState,
 						Manifest.Permission.AccessCoarseLocation,
 						Manifest.Permission.AccessFineLocation,
 						Manifest.Permission.Internet,
-						Manifest.Permission.AccessWifiState };
+						Manifest.Permission.AccessWifiState
+			};
 
-					RequestPermissions(permissions, 1);
+			foreach (var p in permissions)
+			{
+				if ((int)Build.VERSION.SdkInt >= 23)
+				{
+					if (PackageManager.CheckPermission(p, PackageName) != Permission.Granted)
+					{
+						RequestPermissions(new string[] { p }, 1);
+					}
 				}
 			}
 

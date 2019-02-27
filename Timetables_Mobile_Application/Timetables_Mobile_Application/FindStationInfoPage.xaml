@@ -1,21 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
-			 x:Class="Timetables.Application.Mobile.FindJourneyPage"
-             Title="{Binding Localization.FindJourney}">
+             x:Class="Timetables.Application.Mobile.FindStationInfoPage"
+             Title="{Binding Localization.FindDeparturesFromTheStation}">
 	<ScrollView>
 		<StackLayout Padding="10">
-			<Label Text="{Binding Localization.SourceStop}" />
-			<StackLayout Orientation="Horizontal">
-				<forms:AutoSuggestBox x:Name="sourceStopEntry" PlaceholderText="{Binding Localization.SourceStop}" HorizontalOptions="FillAndExpand"
-								  TextChanged="StopEntryTextChanged" SuggestionChosen="StopEntrySuggestionChosen" />
-				<ImageButton HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Source="@drawable/loc.png" Clicked="FindClosestStation" />
-			</StackLayout>
-
-			<Label Text="{Binding Localization.TargetStop}" />
-			<forms:AutoSuggestBox x:Name="targetStopEntry" PlaceholderText="{Binding Localization.TargetStop}" 
-								  TextChanged="StopEntryTextChanged" SuggestionChosen="StopEntrySuggestionChosen" />
+			<Label Text="{Binding Localization.Station}" />
+			<Entry x:Name="stopEntry" Placeholder="{Binding Localization.Station}" TextChanged="StopEntryTextChanged" />
 
 			<Label Text="{Binding Localization.LeavingTime}" />
 			<StackLayout Orientation="Horizontal">
@@ -23,12 +14,8 @@
 				<DatePicker x:Name="leavingTimeDatePicker" HorizontalOptions="FillAndExpand" Format="dd.MM.yyyy" Date="{Binding CurrentDateTime.Date}" />
 			</StackLayout>
 
-			<Label Text="{Binding Localization.TransfersCount}" />
-			<StackLayout Orientation="Horizontal">
-				<Slider x:Name="transfersSlider" Maximum="10" Minimum="0" Value="5" 
-						ThumbColor="#03A9F4" ValueChanged="OnTransfersSliderValueChanged" HorizontalOptions="FillAndExpand" />
-				<Label x:Name="transfersLabel" Text="5" HorizontalOptions="End" Margin="10,0" />
-			</StackLayout>
+			<Label Text="{Binding Localization.Line}" />
+			<Picker x:Name="linePicker" IsEnabled="False" />
 
 			<Label Text="{Binding Localization.Count}" />
 			<StackLayout Orientation="Horizontal" Margin="0,10">
@@ -46,7 +33,7 @@
 
 			<BoxView HeightRequest="1" BackgroundColor="Gray" Margin="0,15" />
 
-			<Label Text="{Binding Localization.FavoriteJourneys}" FontSize="Large" />			
+			<Label Text="{Binding Localization.FavoriteStations}" FontSize="Large" />
 		</StackLayout>
 	</ScrollView>
 </ContentPage>

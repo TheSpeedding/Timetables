@@ -103,19 +103,8 @@ namespace Timetables.Application.Mobile
 
 			return routerResponse;
 		}
-
+		
 		/*
-		/// <summary>
-		/// Gets everything ready for textbox auto-completion.
-		/// </summary>
-		/// <param name="tb">Textbox.</param>
-		/// <param name="content">Content.</param>
-		internal static void AutoCompleteTextBox(TextBox tb, string[] content)
-		{
-			tb.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			tb.AutoCompleteCustomSource.AddRange(content);
-			tb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-		}
 		/// <summary>
 		/// Tries to obtain station info and return window with results.
 		/// </summary>
