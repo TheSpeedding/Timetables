@@ -41,8 +41,8 @@ namespace Timetables.Application.Mobile
                     new MainPageMenuItem { Id = 1, Title = Localization.FindDeparturesFromTheStation, TargetType = typeof(FindStationInfoPage) },
 					new MainPageMenuItem { Id = 2, Title = Localization.FindInformationAboutLine, TargetType = typeof(FindLineInfoPage) },
 					new MainPageMenuItem { Id = 3, Title = Localization.ShowMap },
-					new MainPageMenuItem { Id = 4, Title = Localization.ExtraordinaryEvents },
-					new MainPageMenuItem { Id = 5, Title = Localization.Lockouts },
+					new MainPageMenuItem { Id = 4, Title = Localization.ExtraordinaryEvents, TargetType = typeof(ExtraordinaryEventsPage) },
+					new MainPageMenuItem { Id = 5, Title = Localization.Lockouts, TargetType = typeof(LockoutsPage) },
 					new MainPageMenuItem { Id = 6, Title = Localization.Settings }
 				});
             }

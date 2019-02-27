@@ -202,7 +202,7 @@
 			// settingsSaveFileDialog
 			// 
 			this.settingsSaveFileDialog.AddExtension = false;
-			this.settingsSaveFileDialog.DefaultExt = "settings";
+			this.settingsSaveFileDialog.DefaultExt = "xml";
 			this.settingsSaveFileDialog.FileName = "settings.xml";
 			// 
 			// sourcesLabel

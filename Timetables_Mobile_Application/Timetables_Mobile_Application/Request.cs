@@ -242,7 +242,7 @@ namespace Timetables.Application.Mobile
 				ForEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
 				ForEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
 				);
-		}
+		}*/
 		/// <summary>
 		/// Returns loading HTML string with customized text.
 		/// </summary>
@@ -282,9 +282,9 @@ body {
 </head>
 <body>
 <div class=""loader""></div>
-<h2>" + text + @"</h2>
+<h3>" + text + @"</h3>
 </body>
 </html>";
-	*/
+	
 	}
 }

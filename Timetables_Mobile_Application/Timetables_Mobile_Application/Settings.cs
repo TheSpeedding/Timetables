@@ -152,7 +152,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Loads the settings.
 		/// </summary>
-		public static async void Load()
+		public static void Load()
 		{
 			XmlDocument settings = new XmlDocument();
 			settings.Load(PlatformDependentSettings.GetStream(SettingsFile));
@@ -173,19 +173,28 @@ namespace Timetables.Application.Mobile
 
 			ExtraordinaryEvents = string.IsNullOrEmpty(settings.GetElementsByTagName("LockoutsUri")[0].InnerText) ? null : new Uri(settings.GetElementsByTagName("ExtraEventsUri")[0].InnerText);
 
-			AllowSubway = bool.Parse(settings.GetElementsByTagName("AllowSubway")[0].InnerText);
+			try
+			{
+				AllowSubway = bool.Parse(settings.GetElementsByTagName("AllowSubway")[0].InnerText);
 
-			AllowTram = bool.Parse(settings.GetElementsByTagName("AllowTram")[0].InnerText);
+				AllowTram = bool.Parse(settings.GetElementsByTagName("AllowTram")[0].InnerText);
 
-			AllowCablecar = bool.Parse(settings.GetElementsByTagName("AllowCablecar")[0].InnerText);
+				AllowCablecar = bool.Parse(settings.GetElementsByTagName("AllowCablecar")[0].InnerText);
 
-			AllowBus = bool.Parse(settings.GetElementsByTagName("AllowBus")[0].InnerText);
+				AllowBus = bool.Parse(settings.GetElementsByTagName("AllowBus")[0].InnerText);
 
-			AllowTrain = bool.Parse(settings.GetElementsByTagName("AllowTrain")[0].InnerText);
+				AllowTrain = bool.Parse(settings.GetElementsByTagName("AllowTrain")[0].InnerText);
 
-			AllowShip = bool.Parse(settings.GetElementsByTagName("AllowShip")[0].InnerText);
+				AllowShip = bool.Parse(settings.GetElementsByTagName("AllowShip")[0].InnerText);
 
-			WalkingSpeedCoefficient = double.Parse(settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText);
+				WalkingSpeedCoefficient = double.Parse(settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText);
+			}
+			catch
+			{
+				AllowSubway = true; AllowTram = true; AllowCablecar = true; AllowBus = true; AllowTrain = true; AllowShip = true;
+
+				WalkingSpeedCoefficient = 1.0;
+			}
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 			CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
