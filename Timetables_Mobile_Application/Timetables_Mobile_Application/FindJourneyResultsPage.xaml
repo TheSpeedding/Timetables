@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:mobile="clr-namespace:Timetables.Application.Mobile"
-			 x:Class="Timetables.Application.Mobile.FindJourneyResults"
+			 x:Class="Timetables.Application.Mobile.FindJourneyResultsPage"
              Title="{Binding Localization.FindJourney}">
     <ContentPage.Content>
         <StackLayout>

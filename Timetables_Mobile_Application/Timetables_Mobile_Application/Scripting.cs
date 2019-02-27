@@ -12,9 +12,9 @@ namespace Timetables.Application.Mobile
 {
 	public class JourneyScripting : Scripting
 	{
-		private FindJourneyResults page;
+		private FindJourneyResultsPage page;
 
-		public JourneyScripting(HybridWebView view, FindJourneyResults page) : base(view)
+		public JourneyScripting(HybridWebView view, FindJourneyResultsPage page) : base(view)
 		{
 			this.page = page;
 
@@ -24,7 +24,7 @@ namespace Timetables.Application.Mobile
 		/// Shows detail of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		public void ShowJourneyDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new FindJourneyResults(page.Response.Journeys[index]), true));
+		public void ShowJourneyDetail(int index) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new FindJourneyResultsPage(page.Response.Journeys[index]), true));
 		/// <summary>
 		/// Shows map of the journey.
 		/// </summary>

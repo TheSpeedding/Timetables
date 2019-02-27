@@ -200,47 +200,6 @@ namespace Timetables.Application.Mobile
 
 		/*
 		/// <summary>
-		/// Tries to obtain station info and return window with results.
-		/// </summary>
-		/// <param name="stationName">Station name.</param>
-		/// <param name="dt">Datetime.</param>
-		/// <param name="count">Number of departures.</param>
-		/// <param name="isStation">Indicates whether it is station or stop.</param>
-		/// <param name="routeLabel">Route label.</param>
-		/// <param name="win">Window with request.</param>
-		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> GetStationInfoWindowAsync(string stationName, DateTime dt, int count, bool isStation, string routeLabel, NewStationInfoWindow win)
-		{
-			Structures.Basic.StationsBasic.StationBasic station = GetStationFromString(stationName);
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
-
-			if (station == null || (route == null && !string.IsNullOrWhiteSpace(routeLabel))) return null;
-
-			var dbRequest = new StationInfoRequest(station.ID, dt, count, isStation, route == null ? -1 : route.ID);
-			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
-
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, station.Name, dt, true, win);
-		}
-		/// <summary>
-		/// Tries to obtain station info and return window with results.
-		/// </summary>
-		/// <param name="dt">Datetime.</param>
-		/// <param name="count">Number of departures.</param>
-		/// <param name="routeLabel">Route label.</param>
-		/// <param name="win">Window with request.</param>
-		/// <returns>Window with results.</returns>
-		public static async Task<DepartureBoardResultsWindow> GetLineInfoWindowAsync(DateTime dt, int count, string routeLabel, NewLineInfoWindow win)
-		{			
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = GetRouteInfoFromLabel(routeLabel);
-
-			if (route == null) return null;
-
-			var dbRequest = new LineInfoRequest(dt, count, route.ID);
-			var dbResponse = await SendDepartureBoardRequestAsync(dbRequest);
-
-			return dbResponse == null ? null : new DepartureBoardResultsWindow(dbResponse, routeLabel, dt, false, win);
-		}
-		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)

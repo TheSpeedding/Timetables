@@ -39,7 +39,7 @@ namespace Timetables.Application.Mobile
                 {
                     new MainPageMenuItem { Id = 0, Title = Localization.FindJourney, TargetType = typeof(FindJourneyPage) },
                     new MainPageMenuItem { Id = 1, Title = Localization.FindDeparturesFromTheStation, TargetType = typeof(FindStationInfoPage) },
-					new MainPageMenuItem { Id = 2, Title = Localization.FindInformationAboutLine },
+					new MainPageMenuItem { Id = 2, Title = Localization.FindInformationAboutLine, TargetType = typeof(FindLineInfoPage) },
 					new MainPageMenuItem { Id = 3, Title = Localization.ShowMap },
 					new MainPageMenuItem { Id = 4, Title = Localization.ExtraordinaryEvents },
 					new MainPageMenuItem { Id = 5, Title = Localization.Lockouts },

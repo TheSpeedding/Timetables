@@ -48,19 +48,11 @@ namespace Timetables.Application.Mobile
 		{
 			Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
 
-			if (station == null)
-			{
-				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + stopEntry.Text);
-				return;
-			}
+			if (station == null) return;
 
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = linePicker.SelectedItem == null ? null : DataFeedClient.Basic.RoutesInfo.FindByLabel(linePicker.SelectedItem.ToString());
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = linePicker.SelectedItem == null ? null : Request.GetRouteInfoFromLabel(linePicker.SelectedItem.ToString());
 
-			if (station == null || (route == null && linePicker.SelectedItem != null))
-			{
-				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + linePicker.SelectedItem.ToString());
-				return;
-			}
+			if (route == null && linePicker.SelectedItem != null) return;
 
 			var dbRequest = new StationInfoRequest(station.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
 				(int)countSlider.Value, true, route == null ? -1 : route.ID);

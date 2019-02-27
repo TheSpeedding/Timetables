@@ -11,10 +11,10 @@ using Xamarin.Forms.Xaml;
 namespace Timetables.Application.Mobile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class FindJourneyResults : ContentPage
+	public partial class FindJourneyResultsPage : ContentPage
 	{
 		public RouterResponse Response { get; }
-		public FindJourneyResults(Journey journey)
+		public FindJourneyResultsPage(Journey journey)
 		{
 			InitializeComponent();
 
@@ -31,7 +31,7 @@ namespace Timetables.Application.Mobile
 					)
 			};
 		}
-		public FindJourneyResults(RouterResponse res)
+		public FindJourneyResultsPage(RouterResponse res)
 		{
 			InitializeComponent();
 
