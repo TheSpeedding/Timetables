@@ -18,6 +18,10 @@ namespace Timetables.Application.Mobile
 		{
 			InitializeComponent();
 
+			Title = Settings.Localization.Journey + " " + 
+				DataFeedClient.Basic.Stops.FindByIndex(journey.JourneySegments.First().SourceStopID).ParentStation.Name + " - " +
+				DataFeedClient.Basic.Stops.FindByIndex(journey.JourneySegments.Last().TargetStopID).ParentStation.Name;
+
 			Response = new RouterResponse(new List<Journey> { journey });
 
 			resultsWebView.Scripting = new JourneyScripting(resultsWebView, this);
@@ -31,9 +35,11 @@ namespace Timetables.Application.Mobile
 					)
 			};
 		}
-		public FindJourneyResultsPage(RouterResponse res)
+		public FindJourneyResultsPage(RouterResponse res, string source, string target)
 		{
 			InitializeComponent();
+
+			Title = Settings.Localization.Journey + " " + source + " - " + target;
 
 			Response = res;
 			

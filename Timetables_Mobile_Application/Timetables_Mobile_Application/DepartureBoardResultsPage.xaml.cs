@@ -17,6 +17,8 @@ namespace Timetables.Application.Mobile
 		{
 			InitializeComponent();
 
+			Title = Settings.Localization.Departure + " " + dep.Headsign;
+
 			Response = new DepartureBoardResponse(new List<Departure> { dep });
 
 			resultsWebView.Scripting = new DepartureBoardScripting(resultsWebView, this);
@@ -30,9 +32,11 @@ namespace Timetables.Application.Mobile
 					)
 			};
 		}
-		public DepartureBoardResultsPage(DepartureBoardResponse res)
+		public DepartureBoardResultsPage(DepartureBoardResponse res, bool stationInfo, string name)
 		{
 			InitializeComponent();
+
+			Title = (stationInfo ? Settings.Localization.Station : Settings.Localization.Line) + " " + name;
 
 			Response = res;
 

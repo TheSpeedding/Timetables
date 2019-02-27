@@ -59,7 +59,7 @@ namespace Timetables.Application.Mobile
 
 			var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
 
-			await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse), true);
+			await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, true, station.Name), true);
 		}
 		
 		private void StopEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)

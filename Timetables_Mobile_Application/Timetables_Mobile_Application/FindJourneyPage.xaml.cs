@@ -82,7 +82,7 @@ namespace Timetables.Application.Mobile
 
 			var routerResponse = await Request.SendRouterRequestAsync(routerRequest);
 
-			await Navigation.PushAsync(new FindJourneyResultsPage(routerResponse), true);
+			await Navigation.PushAsync(new FindJourneyResultsPage(routerResponse, source.Name, target.Name), true);
 		}
 
 		private void StopEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)
