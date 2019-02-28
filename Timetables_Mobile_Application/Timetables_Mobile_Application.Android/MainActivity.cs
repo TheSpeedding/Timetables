@@ -53,6 +53,8 @@ namespace Timetables.Application.Mobile.Droid
 
 			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 
+			PlatformDependentSettings.GetLocalizations = () => Assets.List("loc");
+
 			PlatformDependentSettings.SetBasePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/");
 
 			PlatformDependentSettings.ShowMessage = (message) => Toast.MakeText(this, message, ToastLength.Long).Show();

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Timetables.Application.Mobile.SettingsPage"
+			 Title="{Binding Localization.Settings}">
+    <ContentPage.Content>
+        <StackLayout Margin="10">
+
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<Label Text="{Binding Localization.Language}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="0" />
+				<Picker x:Name="languagePicker" HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" />
+			</Grid>			
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

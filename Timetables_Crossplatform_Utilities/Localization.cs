@@ -146,7 +146,7 @@ namespace Timetables.Client
 		/// <returns>Localization object.</returns>
 		public static Localization GetTranslation(Tuple<Stream, string> info = null)
 		{
-			if (info == null) return new Localization();
+			if (info == null || info.Item2 == "English") return new Localization();
 
 			try
 			{

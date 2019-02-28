@@ -6,11 +6,4 @@
   <RouterPort>27000</RouterPort>
   <DepartureBoardPort>27001</DepartureBoardPort>
   <BasicDataPort>27002</BasicDataPort>
-	<AllowSubway>True</AllowSubway>
-	<AllowTram>True</AllowTram>
-	<AllowBus>True</AllowBus>
-	<AllowShip>True</AllowShip>
-	<AllowTrain>True</AllowTrain>
-	<AllowCablecar>True</AllowCablecar>
-	<WalkingSpeedCoefficient>1.0</WalkingSpeedCoefficient>
 </Timetables>

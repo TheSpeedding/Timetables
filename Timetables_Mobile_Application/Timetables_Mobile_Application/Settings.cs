@@ -17,15 +17,13 @@ namespace Timetables.Application.Mobile
 	internal static class PlatformDependentSettings
 	{
 		/// <summary>
-		/// Opens a filestream with given filename.
+		/// Gets localizations in assets.
 		/// </summary>
-		/// <param name="file">File.</param>
-		/// <returns>Filestream.</returns>
-		public delegate Stream GetStreamHandler(System.IO.FileInfo file);
+		public static Func<string[]> GetLocalizations { get; set; }
 		/// <summary>
 		/// Gets stream for the file.
 		/// </summary>
-		public static GetStreamHandler GetStream { get; set; }
+		public static Func<FileInfo, Stream> GetStream { get; set; }
 		/// <summary>
 		/// Callback to show a message to the user. 
 		/// </summary>
@@ -159,21 +157,30 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static void Load()
 		{
-#if !DEBUG
 			// First launch = copy settings from assets to temporary path.
 			if (!File.Exists(DataFeedClient.BasePath + SettingsFile))
-#endif
-			CopyFromAssets();
-			
+				CopyFromAssets();			
 
 			XmlDocument settings = new XmlDocument();
-			settings.Load(new StreamReader(DataFeedClient.BasePath + SettingsFile));
 
-			Localization = Localization.GetTranslation(new Tuple<Stream, string>(
-				PlatformDependentSettings.GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")),
-				settings.GetElementsByTagName("Language")?[0].InnerText));
+			try
+			{
+				settings.Load(DataFeedClient.BasePath + SettingsFile);
+			}
+			catch
+			{
+				CopyFromAssets();
+				settings.Load(DataFeedClient.BasePath + SettingsFile);
+			}
+
+			var locName = settings.GetElementsByTagName("Language")?[0].InnerText;
+			Localization = locName == "English" ?
+				Localization.GetTranslation("English") : 
+				Localization.GetTranslation(new Tuple<Stream, string>(
+					PlatformDependentSettings.GetStream(new FileInfo("loc/" + locName + ".xml")),
+					locName));
 			
-			bool SetIpAddress()
+			void SetIpAddress()
 			{
 				PlatformDependentSettings.ShowDialog("Enter server IP address.", ip => {
 					try {
@@ -182,8 +189,6 @@ namespace Timetables.Application.Mobile
 						LoadDataFeedAsync();
 					} catch { SetIpAddress(); }					
 				});
-
-				return Client.DataFeedClient.ServerIpAddress != IPAddress.None;
 			}
 
 			try
@@ -247,7 +252,7 @@ namespace Timetables.Application.Mobile
 			XmlDocument settings = new XmlDocument();
 			var fs = new FileStream(DataFeedClient.BasePath + SettingsFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-			settings.Load(fs);
+			settings.Load(new StreamReader(fs));
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -287,7 +292,9 @@ namespace Timetables.Application.Mobile
 
 			settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText = WalkingSpeedCoefficient.ToString();
 
-			settings.Save(fs);
+			fs.SetLength(0);
+
+			settings.Save(new StreamWriter(fs));
 		}
 		/// <summary>
 		/// Gets predefined means of transport that can be used.

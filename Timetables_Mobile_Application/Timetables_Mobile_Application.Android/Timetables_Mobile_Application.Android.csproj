@@ -112,9 +112,6 @@
     <AndroidAsset Include="Assets\css\DepartureBoardDetailToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\css\DepartureBoardInMapToHtml.css" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\css\DepartureBoardSimpleToHtmlLR.css" />
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\xslt\DepartureBoardDetailToHtml.xslt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\xslt\DepartureBoardInMapToHtml.xslt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\xslt\DepartureBoardSimpleToHtml.xslt" />
