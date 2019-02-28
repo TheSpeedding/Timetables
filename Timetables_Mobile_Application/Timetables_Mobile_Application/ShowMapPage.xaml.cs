@@ -32,6 +32,7 @@ namespace Timetables.Application.Mobile
 			public StopPin(StopsBasic.StopBasic stop) => Stop = stop;
 		}
 		private Dictionary<Pin, StopPin> markers = new Dictionary<Pin, StopPin>(); // Structure to assign stop to ping so it is possible to obtain earliest departure datetime.
+		private Queue<StopPin> queue = new Queue<StopPin>(); // Reset second click if needed.
 		private Func<StopsBasic.StopBasic, DateTime> findEarliestDeparture; // This varies throughout kinds of map.
 		private bool useStopNotStation; // False if opened from journey/departure window.
 		private double GetLargestDistanceBetweenStops(IEnumerable<StopsBasic.StopBasic> stops)
@@ -88,8 +89,11 @@ namespace Timetables.Application.Mobile
 					Position = new Xamarin.Forms.GoogleMaps.Position(stop.Latitude, stop.Longitude),
 					Label = stop.Name
 				};
-				map.Pins.Add(pin);
-				markers.Add(pin, new StopPin(stop));
+				if (!markers.ContainsKey(pin))
+				{
+					map.Pins.Add(pin);
+					markers.Add(pin, new StopPin(stop));
+				}
 			}
 			map.PinClicked += MapPinClicked;
 		}
@@ -97,14 +101,22 @@ namespace Timetables.Application.Mobile
 		private async void MapPinClicked(object sender, PinClickedEventArgs e)
 		{
 			var entry = markers[e.Pin];
-			foreach (var marker in markers) if (marker.Key != e.Pin) marker.Value.Reset();
+
+			while (queue.Count > 0)
+			{
+				var item = queue.Dequeue();
+				if (item != entry)
+					item.Reset();
+			}
+
+			queue.Enqueue(entry);
 
 			if (entry.SecondClick)
 			{
 				var stop = entry.Stop;
 				var dt = findEarliestDeparture(stop);
 				var res = await Request.SendDepartureBoardRequestAsync(new StationInfoRequest(useStopNotStation ? stop.ID : stop.ParentStation.ID, dt, 5, !useStopNotStation));
-				Device.BeginInvokeOnMainThread(async () => await Navigation.PushAsync(new DepartureBoardResultsPage(res, !useStopNotStation, stop.ParentStation.Name), true));
+				Device.BeginInvokeOnMainThread(async () => await Navigation.PushAsync(new DepartureBoardResultsPage(res, true, stop.ParentStation.Name), true));
 			}
 		}
 

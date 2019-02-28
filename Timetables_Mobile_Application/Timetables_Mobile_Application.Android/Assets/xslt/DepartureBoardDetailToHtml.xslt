@@ -70,7 +70,7 @@
 									<span class="iso8601">
 										<xsl:value-of select="./Departure/DepartureDateTime/text()"/>
 									</span>
-										· 
+									 · 
 									<span class="station-id">
 										<xsl:value-of select="./Departure/StopID/text()"/>
 									</span>
