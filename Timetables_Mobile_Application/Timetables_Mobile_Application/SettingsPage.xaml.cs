@@ -30,6 +30,15 @@ namespace Timetables.Application.Mobile
 			languagePicker.SelectedItem = (from object item in languagePicker.Items where item.ToString() == Settings.Localization.ToString() select item).First();
 
 			languagePicker.SelectedIndexChanged += LanguagePicker_SelectedIndexChanged;
+
+			speedSlider.Value = Settings.WalkingSpeedCoefficient * 100;
+
+			subwaySwitch.IsToggled = Settings.AllowSubway;
+			tramSwitch.IsToggled = Settings.AllowTram;
+			busSwitch.IsToggled = Settings.AllowBus;
+			trainSwitch.IsToggled = Settings.AllowTrain;
+			cablecarSwitch.IsToggled = Settings.AllowCablecar;
+			shipSwitch.IsToggled = Settings.AllowShip;
 		}
 
 		protected override void OnDisappearing()
@@ -62,6 +71,42 @@ namespace Timetables.Application.Mobile
 				Timetables.Client.Localization.GetTranslation(new Tuple<Stream, string>(
 				PlatformDependentSettings.GetStream(new FileInfo($"loc/{ name }.xml")), name));
 			PlatformDependentSettings.ShowMessage(Settings.Localization.RestartToApplyChanges);
+		}
+
+		private void SpeedSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+		{
+			speedSlider.Value = Math.Round(e.NewValue / 1.0);
+			Settings.WalkingSpeedCoefficient = speedSlider.Value / 100.0;
+		}
+
+		private void SubwaySwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowSubway = subwaySwitch.IsToggled;
+		}
+
+		private void TramSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowTram = tramSwitch.IsToggled;
+		}
+
+		private void BusSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowBus = busSwitch.IsToggled;
+		}
+
+		private void TrainSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowTrain = trainSwitch.IsToggled;
+		}
+
+		private void CablecarSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowCablecar = cablecarSwitch.IsToggled;
+		}
+
+		private void ShipSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.AllowShip = shipSwitch.IsToggled;
 		}
 	}
 }

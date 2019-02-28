@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<TransfersSpeed>Rychlost přestupů</TransfersSpeed>
 	<AlreadyCached>Tato položka je již mezi oblíbenými</AlreadyCached>
 	<MainMenu>Hlavní menu</MainMenu>
 	<Journey>Spojení</Journey>
