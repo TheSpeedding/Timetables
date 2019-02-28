@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,7 +14,14 @@ namespace Timetables.Application.Mobile
 
 			Settings.Load();
 
-			Settings.LoadDataFeedAsync();
+			try
+			{
+				Settings.LoadDataFeedAsync();
+			}
+			catch (WebException)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
+			}
 
 			MainPage = new MainPage();
 		}

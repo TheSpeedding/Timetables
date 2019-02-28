@@ -57,6 +57,19 @@ namespace Timetables.Application.Mobile.Droid
 
 			PlatformDependentSettings.ShowMessage = (message) => Toast.MakeText(this, message, ToastLength.Long).Show();
 
+			PlatformDependentSettings.ShowDialog = (message, action) =>
+			{
+				EditText et = new EditText(this);
+				AlertDialog.Builder ad = new AlertDialog.Builder(this);
+				ad.SetTitle(message);
+				ad.SetView(et);
+				ad.SetPositiveButton("Submit", (s, e) =>
+				{
+					action(et.Text);
+				});
+				ad.Show();
+			};
+
 			LoadApplication(new App());
         }
     }

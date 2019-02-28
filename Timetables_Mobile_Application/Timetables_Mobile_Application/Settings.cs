@@ -35,6 +35,10 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		/// <param name="path">Path.</param>
 		public static void SetBasePath(string path) => DataFeedClient.BasePath = path;
+		/// <summary>
+		/// Show dialog.
+		/// </summary>
+		public static Action<string, Action<string>> ShowDialog { get; set; }
 	}
 	/// <summary>
 	/// Settings for the application.
@@ -142,18 +146,54 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static double WalkingSpeedCoefficient { get; set; }
 		/// <summary>
+		/// Copies the settings file from assets to local directory.
+		/// </summary>
+		private static void CopyFromAssets()
+		{
+			using (var sw = new StreamWriter(DataFeedClient.BasePath + SettingsFile, false))
+			using (var sr = new StreamReader(PlatformDependentSettings.GetStream(SettingsFile)))
+				sw.Write(sr.ReadToEnd());
+		}
+		/// <summary>
 		/// Loads the settings.
 		/// </summary>
 		public static void Load()
 		{
+#if !DEBUG
+			// First launch = copy settings from assets to temporary path.
+			if (!File.Exists(DataFeedClient.BasePath + SettingsFile))
+#endif
+			CopyFromAssets();
+			
+
 			XmlDocument settings = new XmlDocument();
-			settings.Load(PlatformDependentSettings.GetStream(SettingsFile));
+			settings.Load(new StreamReader(DataFeedClient.BasePath + SettingsFile));
 
 			Localization = Localization.GetTranslation(new Tuple<Stream, string>(
 				PlatformDependentSettings.GetStream(new FileInfo("loc/" + settings.GetElementsByTagName("Language")?[0].InnerText + ".xml")),
 				settings.GetElementsByTagName("Language")?[0].InnerText));
 			
-			Client.DataFeedClient.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
+			bool SetIpAddress()
+			{
+				PlatformDependentSettings.ShowDialog("Enter server IP address.", ip => {
+					try {
+						Client.DataFeedClient.ServerIpAddress = IPAddress.Parse(ip);
+						Save();
+						LoadDataFeedAsync();
+					} catch { SetIpAddress(); }					
+				});
+
+				return Client.DataFeedClient.ServerIpAddress != IPAddress.None;
+			}
+
+			try
+			{
+				Client.DataFeedClient.ServerIpAddress = settings.GetElementsByTagName("ServerIp")[0].InnerText == string.Empty ? null : IPAddress.Parse(settings.GetElementsByTagName("ServerIp")[0].InnerText);
+			}
+			catch
+			{
+				SetIpAddress();
+			}
 
 			Client.DataFeedClient.RouterPortNumber = settings.GetElementsByTagName("RouterPort")[0].InnerText == string.Empty ? default(int) : int.Parse(settings.GetElementsByTagName("RouterPort")[0].InnerText);
 
@@ -205,7 +245,9 @@ namespace Timetables.Application.Mobile
 		public static void Save()
 		{
 			XmlDocument settings = new XmlDocument();
-			settings.Load(PlatformDependentSettings.GetStream(SettingsFile));
+			var fs = new FileStream(DataFeedClient.BasePath + SettingsFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+			settings.Load(fs);
 
 			void CreateElementIfNotExist(params string[] names)
 			{
@@ -245,7 +287,7 @@ namespace Timetables.Application.Mobile
 
 			settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText = WalkingSpeedCoefficient.ToString();
 
-			settings.Save(PlatformDependentSettings.GetStream(SettingsFile));
+			settings.Save(fs);
 		}
 		/// <summary>
 		/// Gets predefined means of transport that can be used.
