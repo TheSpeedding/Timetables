@@ -66,12 +66,7 @@ namespace Timetables.Structures.Basic
 		/// Gets the total number of stations.
 		/// </summary>
 		public int Count => Items.Length;
-
-		public object FindClosestStation(bool v)
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>

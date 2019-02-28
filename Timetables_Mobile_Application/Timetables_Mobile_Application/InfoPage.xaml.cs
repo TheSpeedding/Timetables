@@ -29,17 +29,16 @@ namespace Timetables.Application.Mobile
 				{
 					wc.Encoding = Encoding.UTF8;
 
-#if true // Async version, not blocking UI.					
 					var downloading = wc.DownloadStringTaskAsync(uri);
 
 					if (await Task.WhenAny(downloading, Task.Delay(Settings.TimeoutDuration)) == downloading && downloading.Status == TaskStatus.RanToCompletion)
-						resultsWebView.Source = new HtmlWebViewSource { Html = (await downloading).TransformToHtml(
-							PlatformDependentSettings.GetStream(xslt), PlatformDependentSettings.GetStream(css)) };
+						resultsWebView.Source = new HtmlWebViewSource
+						{
+							Html = (await downloading).TransformToHtml(
+							PlatformDependentSettings.GetStream(xslt), PlatformDependentSettings.GetStream(css))
+						};
 					else
 						throw new WebException();
-#else
-					resultsWebView.Source = new HtmlWebViewSource { Html = wc.DownloadString(uri).TransformToHtml(xslt.FullName, css.FullName) };
-#endif
 				}
 			}
 

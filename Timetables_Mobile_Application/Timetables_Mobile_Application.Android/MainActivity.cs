@@ -33,7 +33,9 @@ namespace Timetables.Application.Mobile.Droid
 						Manifest.Permission.AccessCoarseLocation,
 						Manifest.Permission.AccessFineLocation,
 						Manifest.Permission.Internet,
-						Manifest.Permission.AccessWifiState
+						Manifest.Permission.AccessWifiState,
+						Manifest.Permission.AccessMockLocation,
+						Manifest.Permission.AccessLocationExtraCommands
 			};
 
 			foreach (var p in permissions)
@@ -46,6 +48,8 @@ namespace Timetables.Application.Mobile.Droid
 					}
 				}
 			}
+
+			Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
 
 			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 

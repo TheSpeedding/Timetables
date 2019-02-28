@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 		{
 			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineTextBox.Text);
 
-			if (route == null) return;
+			if (route == null || LineInfoCached.Select(route.ID) != null) return;
 
 			var fav = new LineInfoCached(route.ID);
 

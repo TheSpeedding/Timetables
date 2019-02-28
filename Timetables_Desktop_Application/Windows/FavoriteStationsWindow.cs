@@ -36,7 +36,7 @@ namespace Timetables.Application.Desktop
 		{
 			Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stationTextBox.Text);
 
-			if (station == null) return;
+			if (station == null || StationInfoCached.Select(station.ID) != null) return;
 
 			var fav = new StationInfoCached(station.ID);
 

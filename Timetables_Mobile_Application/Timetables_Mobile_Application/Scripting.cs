@@ -19,6 +19,7 @@ namespace Timetables.Application.Mobile
 			this.page = page;
 
 			view.RegisterCallback(nameof(ShowJourneyDetail), arg => { ShowJourneyDetail(int.Parse(arg)); return string.Empty; });
+			view.RegisterCallback(nameof(ShowMap), arg => { ShowMap(arg == null ? 0 : int.Parse(arg)); return string.Empty; });
 		}
 		/// <summary>
 		/// Shows detail of the journey.
@@ -29,7 +30,7 @@ namespace Timetables.Application.Mobile
 		/// Shows map of the journey.
 		/// </summary>
 		/// <param name="index">Index of the journey.</param>
-		//public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Journeys[index]).Show(window.DockPanel, window.DockState);
+		public void ShowMap(int index = 0) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new ShowMapPage(page.Response.Journeys[index]), true));
 	}
 
 	public class DepartureBoardScripting : Scripting
@@ -41,6 +42,7 @@ namespace Timetables.Application.Mobile
 			this.page = page;
 
 			view.RegisterCallback(nameof(ShowDepartureDetail), arg => { ShowDepartureDetail(int.Parse(arg)); return string.Empty; });
+			view.RegisterCallback(nameof(ShowMap), arg => { ShowMap(arg == null ? 0 : int.Parse(arg)); return string.Empty; });
 		}
 		/// <summary>
 		/// Shows detail of the departure.
@@ -51,7 +53,7 @@ namespace Timetables.Application.Mobile
 		/// Shows map of the departure.
 		/// </summary>
 		/// <param name="index">Index of the departure.</param>
-		//public void ShowMap(int index = 0) => new ShowMapWindow(window.Results.Departures[index]).Show(window.DockPanel, window.DockState);
+		public void ShowMap(int index = 0) => Device.BeginInvokeOnMainThread(async () => await page.Navigation.PushAsync(new ShowMapPage(page.Response.Departures[index]), true));
 	}
 
 	// <summary>

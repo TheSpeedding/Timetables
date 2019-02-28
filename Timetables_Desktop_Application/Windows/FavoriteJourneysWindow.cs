@@ -38,7 +38,7 @@ namespace Timetables.Application.Desktop
 			Structures.Basic.StationsBasic.StationBasic source = Request.GetStationFromString(sourceTextBox.Text);
 			Structures.Basic.StationsBasic.StationBasic target = Request.GetStationFromString(targetTextBox.Text);
 
-			if (source == null || target == null) return;
+			if (source == null || target == null || JourneyCached.Select(source.ID, target.ID) != null) return;			
 
 			var fav = new JourneyCached(source.ID, target.ID);
 

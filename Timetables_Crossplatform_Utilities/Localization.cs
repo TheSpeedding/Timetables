@@ -16,6 +16,7 @@ namespace Timetables.Client
 	{
 		[XmlIgnore]
 		private string locName = "English";
+		public string AlreadyCached { get; set; } = "This item is already cached.";
 		public string MainMenu { get; set; } = "Main menu";
 		public string Journey { get; set; } = "Journey";
 		public string FindInformationAboutLine { get; set; } = "Find information about line";

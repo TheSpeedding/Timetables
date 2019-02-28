@@ -11,7 +11,7 @@ namespace Timetables.Client
 	public static class GoogleMaps
 	{
 		private static readonly string GoogleMapsApiKey = "AIzaSyB05TDGoGzSk_jzTvWYocWD_k1CiLuCgoY";
-		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Departure departure)
+		public static IEnumerable<StopsBasic.StopBasic> GetStops(this Departure departure)
 		{
 			yield return DataFeedClient.Basic.Stops.FindByIndex(departure.StopID);
 			foreach (var @is in departure.IntermediateStops)
@@ -29,7 +29,7 @@ namespace Timetables.Client
 			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.SourceStopID);
 			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.TargetStopID);
 		}
-		private static IEnumerable<StopsBasic.StopBasic> GetStops(this Journey journey)
+		public static IEnumerable<StopsBasic.StopBasic> GetStops(this Journey journey)
 		{
 			foreach (var js in journey.JourneySegments)
 			{
@@ -117,6 +117,7 @@ namespace Timetables.Client
     <style>
       #map {{
         height: 100%;
+		width: 100%;
       }}
       html, body {{
         height: 100%;
