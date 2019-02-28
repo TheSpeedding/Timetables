@@ -82,14 +82,6 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static FileInfo DepartureBoardSimpleCss => new FileInfo("css/DepartureBoardSimpleToHtmlLR.css");
 		/// <summary>
-		/// Path to departure board map XSLT stylesheet.
-		/// </summary>
-		public static FileInfo DepartureBoardInMapXslt => new FileInfo("xslt/DepartureBoardInMapToHtml.xslt");
-		/// <summary>
-		/// Path to departure board map CSS stylesheet.
-		/// </summary>
-		public static FileInfo DepartureBoardInMapCss => new FileInfo("css/DepartureBoardInMapToHtmlLR.css");
-		/// <summary>
 		/// Path to lockouts XSLT stylesheet.
 		/// </summary>
 		public static FileInfo LockoutsXslt => new FileInfo("xslt/LockoutsToHtml.xslt");

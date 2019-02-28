@@ -34,7 +34,7 @@ namespace Timetables.Application.Mobile
 		private Dictionary<Pin, StopPin> markers = new Dictionary<Pin, StopPin>(); // Structure to assign stop to ping so it is possible to obtain earliest departure datetime.
 		private Queue<StopPin> queue = new Queue<StopPin>(); // Reset second click if needed.
 		private Func<StopsBasic.StopBasic, DateTime> findEarliestDeparture; // This varies throughout kinds of map.
-		private bool useStopNotStation; // False if opened from journey/departure window.
+		private bool useStopNotStation; // False if open from journey/departure window.
 		private double GetLargestDistanceBetweenStops(IEnumerable<StopsBasic.StopBasic> stops)
 		{
 			double GetDistance(double Alat, double Alon, double Blat, double Blon)
@@ -77,7 +77,16 @@ namespace Timetables.Application.Mobile
 		}
 		private void DrawPolyline(IEnumerable<StopsBasic.StopBasic> stops, CPColor color)
 		{
+			Polyline line = new Polyline
+			{
+				StrokeColor = new Color((double)color.R / 255, (double)color.G / 255, (double)color.B / 255),
+				StrokeWidth = 4
+			};
 
+			foreach (var stop in stops)
+				line.Positions.Add(new Xamarin.Forms.GoogleMaps.Position(stop.Latitude, stop.Longitude));
+
+			map.Polylines.Add(line);
 		}
 		private void DrawMarkers(IEnumerable<StopsBasic.StopBasic> stops)
 		{
@@ -155,6 +164,8 @@ namespace Timetables.Application.Mobile
 			SetMapScope(stops, false, true);
 
 			DrawMarkers(stops);
+
+			DrawPolyline(stops, departure.LineColor);
 		}
 		public ShowMapPage(Journey journey)
 		{
@@ -187,6 +198,14 @@ namespace Timetables.Application.Mobile
 			SetMapScope(stops, false, true);
 
 			DrawMarkers(stops);
+
+			foreach (var js in journey.JourneySegments)
+			{
+				if (js is TripSegment)
+					DrawPolyline(((TripSegment)js).GetStops(), ((TripSegment)js).LineColor);
+				else
+					DrawPolyline(((FootpathSegment)js).GetStops(), CPColor.Gray);
+			}
 		}
 	}
 }

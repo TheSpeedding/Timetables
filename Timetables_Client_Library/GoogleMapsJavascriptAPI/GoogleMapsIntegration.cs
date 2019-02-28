@@ -17,14 +17,14 @@ namespace Timetables.Client
 			foreach (var @is in departure.IntermediateStops)
 				yield return DataFeedClient.Basic.Stops.FindByIndex(@is.StopID);
 		}
-		private static IEnumerable<StopsBasic.StopBasic> GetStops(this TripSegment ts)
+		public static IEnumerable<StopsBasic.StopBasic> GetStops(this TripSegment ts)
 		{
 			yield return DataFeedClient.Basic.Stops.FindByIndex(ts.SourceStopID);
 			foreach (var @is in ts.IntermediateStops)
 				yield return DataFeedClient.Basic.Stops.FindByIndex(@is.StopID);
 			yield return DataFeedClient.Basic.Stops.FindByIndex(ts.TargetStopID);
 		}
-		private static IEnumerable<StopsBasic.StopBasic> GetStops(this FootpathSegment fs)
+		public static IEnumerable<StopsBasic.StopBasic> GetStops(this FootpathSegment fs)
 		{
 			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.SourceStopID);
 			yield return DataFeedClient.Basic.Stops.FindByIndex(fs.TargetStopID);
