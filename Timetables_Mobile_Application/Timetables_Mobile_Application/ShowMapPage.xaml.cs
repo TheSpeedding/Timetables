@@ -15,6 +15,25 @@ namespace Timetables.Application.Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ShowMapPage : ContentPage
 	{
+		private class StopPin
+		{
+			private bool secondClick = false;
+			public StopsBasic.StopBasic Stop { get; }
+			public bool SecondClick
+			{
+				get
+				{
+					var val = secondClick;
+					secondClick = !secondClick;
+					return val;
+				}
+			}
+			public void Reset() => secondClick = false;
+			public StopPin(StopsBasic.StopBasic stop) => Stop = stop;
+		}
+		private Dictionary<Pin, StopPin> markers = new Dictionary<Pin, StopPin>(); // Structure to assign stop to ping so it is possible to obtain earliest departure datetime.
+		private Func<StopsBasic.StopBasic, DateTime> findEarliestDeparture; // This varies throughout kinds of map.
+		private bool useStopNotStation; // False if opened from journey/departure window.
 		private double GetLargestDistanceBetweenStops(IEnumerable<StopsBasic.StopBasic> stops)
 		{
 			double GetDistance(double Alat, double Alon, double Blat, double Blon)
@@ -63,31 +82,63 @@ namespace Timetables.Application.Mobile
 		{
 			foreach (var stop in stops)
 			{
-				map.Pins.Add(new Pin
+				var pin = new Pin
 				{
 					Type = PinType.Place,
 					Position = new Xamarin.Forms.GoogleMaps.Position(stop.Latitude, stop.Longitude),
-					Label = stop.ID.ToString()
-				});
+					Label = stop.Name
+				};
+				map.Pins.Add(pin);
+				markers.Add(pin, new StopPin(stop));
+			}
+			map.PinClicked += MapPinClicked;
+		}
+
+		private async void MapPinClicked(object sender, PinClickedEventArgs e)
+		{
+			var entry = markers[e.Pin];
+			foreach (var marker in markers) if (marker.Key != e.Pin) marker.Value.Reset();
+
+			if (entry.SecondClick)
+			{
+				var stop = entry.Stop;
+				var dt = findEarliestDeparture(stop);
+				var res = await Request.SendDepartureBoardRequestAsync(new StationInfoRequest(useStopNotStation ? stop.ID : stop.ParentStation.ID, dt, 5, !useStopNotStation));
+				Device.BeginInvokeOnMainThread(async () => await Navigation.PushAsync(new DepartureBoardResultsPage(res, !useStopNotStation, stop.ParentStation.Name), true));
 			}
 		}
+
 		public ShowMapPage()
 		{
 			InitializeComponent();
 
 			Title = Settings.Localization.Map;
 
+			useStopNotStation = true;
+
+			findEarliestDeparture = _ => DateTime.Now;
+
 			SetMapScope(DataFeedClient.Basic.Stops);
 
 			DrawMarkers(DataFeedClient.Basic.Stops);
 		}
-		public ShowMapPage(Departure dep)
+		public ShowMapPage(Departure departure)
 		{
 			InitializeComponent();
 
+			useStopNotStation = false;
+
+			findEarliestDeparture = stop =>
+			{
+				if (stop.ParentStation.ID == DataFeedClient.Basic.Stops.FindByIndex(departure.StopID).ParentStation.ID)
+					return departure.DepartureDateTime;
+				else
+					return departure.IntermediateStops.Find(s => DataFeedClient.Basic.Stops.FindByIndex(s.StopID).ParentStation.ID == stop.ParentStation.ID).Arrival;
+			};
+
 			Title = Settings.Localization.Map;
 
-			var stops = dep.GetStops();
+			var stops = departure.GetStops();
 
 			SetMapScope(stops, false, true);
 
@@ -96,6 +147,26 @@ namespace Timetables.Application.Mobile
 		public ShowMapPage(Journey journey)
 		{
 			InitializeComponent();
+
+			useStopNotStation = false;
+
+			findEarliestDeparture = stop =>
+			{
+				foreach (var js in journey.JourneySegments)
+				{
+					if (DataFeedClient.Basic.Stops.FindByIndex(js.SourceStopID).ParentStation.ID == stop.ParentStation.ID) return js.DepartureDateTime;
+
+					if (js is TripSegment)
+						foreach (var @is in (js as TripSegment).IntermediateStops)
+						{
+							if (DataFeedClient.Basic.Stops.FindByIndex(@is.StopID).ParentStation.ID == stop.ParentStation.ID) return @is.Arrival;
+						}
+
+					if (DataFeedClient.Basic.Stops.FindByIndex(js.TargetStopID).ParentStation.ID == stop.ParentStation.ID) return js.ArrivalDateTime;
+				}
+
+				throw new ArgumentException("Stop ID not found in the journey.");
+			};
 
 			Title = Settings.Localization.Map;
 
