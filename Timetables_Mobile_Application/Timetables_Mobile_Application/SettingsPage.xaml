@@ -18,6 +18,7 @@
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
 				<Label Text="{Binding Localization.Language}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="0" />

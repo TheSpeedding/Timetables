@@ -26,7 +26,7 @@ const std::vector<std::pair<std::size_t, const Timetables::Structures::stop*>> d
 
 void Timetables::Algorithms::station_info::obtain_departure_board() {
 	
-	// We have to find "count" departure from each stop of the station. This cannot be done better since we want to support showing departure board from map in mobile application.
+	// We have to find "count" departure from each stop of the station. This cannot be done better since we want to support showing departure board from map.
 
 	for (auto&& stop : stops_) {
 
@@ -68,13 +68,17 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 					date_time dep = date_time(((**it).trip().departure() + (**it).departure()) % DAY) // Time of the departure.
 						+ departure_date.date(); // Date of the departure.
 
-					found_departures_.push_back(departure(**it // Stop time.
-						, dep // Date time of the departure.
-						, s == outdated ? true : false));
+					if (dep >= earliest_departure_) {
 
-					latest_departure_in_this_round = &*(--found_departures_.cend());
+						found_departures_.push_back(departure(**it // Stop time.
+							, dep // Date time of the departure.
+							, s == outdated ? true : false));
 
-					counter++;
+						latest_departure_in_this_round = &*(--found_departures_.cend());
+
+						counter++;
+
+					}
 				}
 
 
@@ -126,13 +130,17 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 				date_time dep = date_time(it->departure()) // Time of the departure.
 					+ departure_date.date(); // Date of the departure.
 
-				found_departures_.push_back(departure(*it->stop_times().cbegin() // First stop time of the trip.
-					, dep // Date time of the departure.
-					, s == outdated ? true : false));
+				if (dep >= earliest_departure_) {
 
-				latest_departure_in_this_round = &*(--found_departures_.cend());
+					found_departures_.push_back(departure(*it->stop_times().cbegin() // First stop time of the trip.
+						, dep // Date time of the departure.
+						, s == outdated ? true : false));
 
-				counter++;
+					latest_departure_in_this_round = &*(--found_departures_.cend());
+
+					counter++;
+				}
+
 			}
 
 			it++;
