@@ -22,6 +22,11 @@ namespace Timetables.Application.Mobile
             InitializeComponent();
 
 			BindingContext = new FindJourneyPageViewModel();
+			
+			foreach (var cached in JourneyCached.FetchJourneyData())
+			{
+				favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, cached, sourceStopEntry, targetStopEntry));
+			}
 		}
 		private void OnCountSliderValueChanged(object sender, ValueChangedEventArgs e)
 		{
@@ -109,6 +114,34 @@ namespace Timetables.Application.Mobile
 			{
 				sourceStopEntry.Text = station.Name;
 			}
+		}
+
+		private void FavoritesButtonClicked(object sender, EventArgs e)
+		{
+			Structures.Basic.StationsBasic.StationBasic source = Request.GetStationFromString(sourceStopEntry.Text);
+			Structures.Basic.StationsBasic.StationBasic target = Request.GetStationFromString(targetStopEntry.Text); 
+			
+			if (source == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + sourceStopEntry.Text);
+				return;
+			}
+
+			if (target == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + targetStopEntry.Text);
+				return;
+			}
+
+			if (JourneyCached.Select(source.ID, target.ID) != null) return;
+
+			var fav = new JourneyCached(source.ID, target.ID);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			Request.CacheJourneyAsync(fav.ConstructNewRequest());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+			favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, sourceStopEntry, targetStopEntry));
 		}
 	}
 }

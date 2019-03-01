@@ -10,7 +10,7 @@
 			<StackLayout Orientation="Horizontal">
 				<forms:AutoSuggestBox x:Name="stopEntry" PlaceholderText="{Binding Localization.Station}" HorizontalOptions="FillAndExpand"
 								  TextChanged="StopEntryTextChanged" SuggestionChosen="StopEntrySuggestionChosen" />
-				<ImageButton HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Source="@drawable/loc.png" Clicked="FindClosestStation" />
+				<ImageButton BackgroundColor="#00000000" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Source="@drawable/loc.png" Clicked="FindClosestStation" />
 			</StackLayout>
 
 			<Label Text="{Binding Localization.LeavingTime}" />

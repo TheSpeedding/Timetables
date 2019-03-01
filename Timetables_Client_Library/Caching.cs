@@ -21,7 +21,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Directory where the cached files are saved.
 		/// </summary>
-		protected static readonly string cachedFilesDirectory = "cached/";
+		protected static readonly string cachedFilesDirectory = DataFeedClient.BasePath +  "cached/";
 		/// <summary>
 		/// Path to the file with cached data.
 		/// </summary>

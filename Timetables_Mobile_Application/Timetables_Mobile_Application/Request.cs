@@ -65,11 +65,10 @@ namespace Timetables.Application.Mobile
 
 		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
 		{
-			// TO-DO:
 			RouterResponse routerResponse = null;
-			object cached = null;// JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
+			var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
 
-			if (cached == null /*|| cached.ShouldBeUpdated*/)
+			if (cached == null || cached.ShouldBeUpdated)
 			{
 				using (var routerProcessing = new RouterProcessing())
 				{
@@ -84,8 +83,8 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						//if (cached != null && cached.ShouldBeUpdated && routerRequest.Count != -1)
-							//Task.Run(async () => cached.UpdateCache(await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+						if (cached != null && cached.ShouldBeUpdated && routerRequest.Count != -1)
+							Task.Run(async () => cached.UpdateCache(await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 					}
@@ -98,7 +97,7 @@ namespace Timetables.Application.Mobile
 
 			else
 			{
-				//routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+				routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
 			}
 
 			return routerResponse;
@@ -122,10 +121,9 @@ namespace Timetables.Application.Mobile
 
 			using (var dbProcessing = new DepartureBoardProcessing())
 			{
-				// TO-DO:
-				object cached = null;// StationInfoCached.Select(dbRequest.StopID);
+				var cached = StationInfoCached.Select(dbRequest.StopID);
 
-				if (cached == null /*|| cached.ShouldBeUpdated*/)
+				if (cached == null || cached.ShouldBeUpdated)
 				{
 					try
 					{
@@ -138,8 +136,8 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						//if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
-							//Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+							Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 					}
 					catch (System.Net.WebException)
@@ -150,7 +148,7 @@ namespace Timetables.Application.Mobile
 
 				else
 				{
-					// dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+					dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
 				}
 			}
 
@@ -162,10 +160,9 @@ namespace Timetables.Application.Mobile
 
 			using (var dbProcessing = new DepartureBoardProcessing())
 			{
-				// TO-DO:
-				object cached = null;// LineInfoCached.Select(dbRequest.RouteInfoID);
+				var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
 
-				if (cached == null /*|| cached.ShouldBeUpdated*/)
+				if (cached == null || cached.ShouldBeUpdated)
 				{
 					try
 					{
@@ -178,8 +175,8 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						//if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
-							//Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
+						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+							Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 					}
@@ -191,14 +188,14 @@ namespace Timetables.Application.Mobile
 
 				else
 				{
-					//dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+					dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
 				}
 			}
 
 			return dbResponse;
 		}
 
-		/*
+		
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
@@ -214,17 +211,17 @@ namespace Timetables.Application.Mobile
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
-			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
+			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest)) != null;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
 		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
-			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
+			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest)) != null;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
 		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest)) != null;
+			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest)) != null;
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>
@@ -242,7 +239,7 @@ namespace Timetables.Application.Mobile
 				ForEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
 				ForEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
 				);
-		}*/
+		}
 		/// <summary>
 		/// Returns loading HTML string with customized text.
 		/// </summary>
