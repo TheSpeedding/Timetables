@@ -24,10 +24,24 @@ namespace Timetables.Application.Mobile
 			firstSuggestBox = source;
 		}
 		public FavoriteItemContentView(StackLayout sl, ScrollView sv, AutoSuggestBox source, AutoSuggestBox target) : this (sl, sv, source) => secondSuggestBox = target;
-		public FavoriteItemContentView(StackLayout sl, ScrollView sv, JourneyCached item, AutoSuggestBox source, AutoSuggestBox target) : this (sl, sv, source, target)
+		public FavoriteItemContentView(StackLayout sl, ScrollView sv, JourneyCached item, AutoSuggestBox source, AutoSuggestBox target) : this(sl, sv, source, target)
 		{
 			firstLabel.Text = item.SourceStation.Name;
 			secondLabel.Text = item.TargetStation.Name;
+
+			removeButton.Clicked += (s, e) => item.Remove();
+		}
+		public FavoriteItemContentView(StackLayout sl, ScrollView sv, StationInfoCached item, AutoSuggestBox source) : this(sl, sv, source)
+		{
+			firstLabel.Text = item.Station.Name;
+			secondLabel.IsVisible = false;
+
+			removeButton.Clicked += (s, e) => item.Remove();
+		}
+		public FavoriteItemContentView(StackLayout sl, ScrollView sv, LineInfoCached item, AutoSuggestBox source) : this(sl, sv, source)
+		{
+			firstLabel.Text = item.Route.Label;
+			secondLabel.IsVisible = false;
 
 			removeButton.Clicked += (s, e) => item.Remove();
 		}

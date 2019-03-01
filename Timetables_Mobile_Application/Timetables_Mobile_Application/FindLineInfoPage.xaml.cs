@@ -71,5 +71,27 @@ namespace Timetables.Application.Mobile
 		{
 			((AutoSuggestBox)sender).Text = e.SelectedItem.ToString();
 		}
+
+		private void FavoritesButtonClicked(object sender, EventArgs e)
+		{
+			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineEntry.Text);
+
+			if (route == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + lineEntry.Text);
+				return;
+			}
+
+			if (LineInfoCached.Select(route.ID) != null) return;
+
+			var fav = new LineInfoCached(route.ID);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+			favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, lineEntry));
+
+		}
 	}
 }

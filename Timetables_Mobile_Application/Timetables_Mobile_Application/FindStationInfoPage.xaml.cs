@@ -94,5 +94,27 @@ namespace Timetables.Application.Mobile
 				stopEntry.Text = station.Name;
 			}
 		}
+
+		private void FavoritesButtonClicked(object sender, EventArgs e)
+		{
+			Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
+
+			if (station == null)
+			{
+				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + stopEntry.Text);
+				return;
+			}
+
+			if (StationInfoCached.Select(station.ID) != null) return;
+
+			var fav = new StationInfoCached(station.ID);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+			favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, stopEntry));
+
+		}
 	}
 }

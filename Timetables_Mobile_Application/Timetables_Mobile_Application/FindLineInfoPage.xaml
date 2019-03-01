@@ -4,7 +4,7 @@
 			 xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
 			 x:Class="Timetables.Application.Mobile.FindLineInfoPage"
              Title="{Binding Localization.FindInformationAboutLine}">
-	<ScrollView>
+	<ScrollView x:Name="scrollView">
 		<StackLayout Padding="10">
 			<Label Text="{Binding Localization.Line}" />
 			<forms:AutoSuggestBox x:Name="lineEntry" PlaceholderText="{Binding Localization.Line}" HorizontalOptions="FillAndExpand"
@@ -24,7 +24,7 @@
 			</StackLayout>
 
 			<StackLayout Orientation="Horizontal">
-				<Button Text="{Binding Localization.AddToFavorites}" TextColor="White"
+				<Button Text="{Binding Localization.AddToFavorites}" TextColor="White" Clicked="FavoritesButtonClicked"
 						HorizontalOptions="FillAndExpand" BorderColor="#03A9F4" BorderRadius="15" BorderWidth="2" BackgroundColor="#03A9F4" />
 				<Button Text="{Binding Localization.Find}" TextColor = "White" Clicked="FindButtonClicked"
 						HorizontalOptions="FillAndExpand" BorderColor="#03A9F4" BorderRadius="15" BorderWidth="2" BackgroundColor="#03A9F4" />
@@ -33,6 +33,7 @@
 			<BoxView HeightRequest="1" BackgroundColor="Gray" Margin="0,15" />
 
 			<Label Text="{Binding Localization.FavoriteLines}" FontSize="Large" />
+			<StackLayout x:Name="favoritesStackLayout" />
 		</StackLayout>
 	</ScrollView>
 </ContentPage>
