@@ -45,15 +45,6 @@ namespace Timetables.Application.Mobile
 
 			public DateTime CurrentDateTime { get; } = DateTime.Now;
 
-			public ObservableCollection<Structures.Basic.StationsBasic.StationBasic> StationCollection { get; set; }
-
-			public FindJourneyPageViewModel()
-			{
-				StationCollection = new ObservableCollection<Structures.Basic.StationsBasic.StationBasic>();
-				foreach (var station in DataFeedClient.Basic.Stations)
-					StationCollection.Add(station);
-			}
-
 			#region INotifyPropertyChanged Implementation
 			public event PropertyChangedEventHandler PropertyChanged;
 			void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -94,10 +85,7 @@ namespace Timetables.Application.Mobile
 		{
 			if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
 			{
-				if (((AutoSuggestBox)sender).Text.Length > 2)
-				{
-					((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
-				}
+				((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
 			}
 
 		}

@@ -16,17 +16,50 @@ namespace Timetables.Application.Mobile.Droid
     {
 		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
 		{
-			Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 			base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+			bool isPermissionForAllGranted = false;
+			if (grantResults.Length > 0 && permissions.Length == grantResults.Length)
+			{
+				for (int i = 0; i < permissions.Length; i++)
+				{
+					if (grantResults[i] == Permission.Granted)
+					{
+						isPermissionForAllGranted = true;
+					}
+					else
+					{
+						isPermissionForAllGranted = false;
+					}
+				}
+			}
+
+			else
+			{
+				isPermissionForAllGranted = true;
+			}
+
+			if (isPermissionForAllGranted)
+			{
+				RunApp(savedInstanceState);
+			}
 		}
+
+		private Bundle savedInstanceState;
+
 		protected override void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-			
+
+			this.savedInstanceState = savedInstanceState;
+
+			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+			bool permissionsGranted = false;
+
 			var permissions = new string[] {
 						Manifest.Permission.ReadExternalStorage,
 						Manifest.Permission.WriteExternalStorage,
@@ -34,22 +67,40 @@ namespace Timetables.Application.Mobile.Droid
 						Manifest.Permission.AccessCoarseLocation,
 						Manifest.Permission.AccessFineLocation,
 						Manifest.Permission.Internet,
-						Manifest.Permission.AccessWifiState,
-						Manifest.Permission.AccessMockLocation,
-						Manifest.Permission.AccessLocationExtraCommands
+						Manifest.Permission.AccessWifiState
 			};
 
-			foreach (var p in permissions)
+			if ((int)Build.VERSION.SdkInt >= 23)
 			{
-				if ((int)Build.VERSION.SdkInt >= 23)
+				if (
+					PackageManager.CheckPermission(permissions[0], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[1], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[2], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[3], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[4], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[5], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[6], PackageName) == Permission.Granted)
 				{
-					if (PackageManager.CheckPermission(p, PackageName) != Permission.Granted)
-					{
-						RequestPermissions(new string[] { p }, 1);
-					}
+					permissionsGranted = true;					
+				}
+				else
+				{
+					RequestPermissions(permissions, 1);
 				}
 			}
 
+			else
+			{
+				permissionsGranted = true; // Permissions granted during installation.
+			}
+
+			if (permissionsGranted)
+				RunApp(savedInstanceState);
+						
+        }
+
+		private void RunApp(Bundle savedInstanceState)
+		{
 			Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
 
 			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
@@ -73,7 +124,19 @@ namespace Timetables.Application.Mobile.Droid
 				ad.Show();
 			};
 
+#if DEBUG
 			LoadApplication(new App());
-        }
+#else
+			try
+			{
+				LoadApplication(new App());
+			}
+			catch (Exception ex)
+			{
+				PlatformDependentSettings.ShowMessage(ex.Message);
+				throw;
+			}
+#endif
+		}
     }
 }

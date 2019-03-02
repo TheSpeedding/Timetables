@@ -32,7 +32,12 @@ namespace Timetables.Application.Mobile
 		/// Sets the base path to the given path.
 		/// </summary>
 		/// <param name="path">Path.</param>
-		public static void SetBasePath(string path) => DataFeedClient.BasePath = path;
+		public static void SetBasePath(string path)
+		{
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+			DataFeedClient.BasePath = path;
+		}
 		/// <summary>
 		/// Show dialog.
 		/// </summary>

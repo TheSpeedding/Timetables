@@ -10,9 +10,9 @@
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="64*" />
-						<ColumnDefinition Width="18*" />
-						<ColumnDefinition Width="18*" />
+						<ColumnDefinition Width="75*" />
+						<ColumnDefinition Width="15*" />
+						<ColumnDefinition Width="15*" />
 					</Grid.ColumnDefinitions>
 
 					<StackLayout VerticalOptions="Center" Grid.Column="0" Grid.Row="0">

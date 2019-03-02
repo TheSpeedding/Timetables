@@ -73,10 +73,7 @@ namespace Timetables.Application.Mobile
 
 			if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
 			{
-				if (((AutoSuggestBox)sender).Text.Length > 2)
-				{
-					((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
-				}
+				((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
 			}
 
 		}
