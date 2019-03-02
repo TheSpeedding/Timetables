@@ -210,18 +210,18 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
-			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest)) != null;
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => IsConnectedToWiFi ?
+			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
-			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest)) != null;
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => IsConnectedToWiFi ?
+			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest)) != null;
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => IsConnectedToWiFi ?
+			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest)) != null : false;
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>
@@ -239,6 +239,19 @@ namespace Timetables.Application.Mobile
 				ForEachFetchedResult(LineInfoCached.FetchLineInfoData(), CacheDepartureBoardAsync),
 				ForEachFetchedResult(JourneyCached.FetchJourneyData(), CacheJourneyAsync)
 				);
+		}
+		/// <summary>
+		/// Returns whether the device is connected to WiFi network.
+		/// </summary>
+		public static bool IsConnectedToWiFi
+		{
+			get
+			{
+				foreach (var connection in Plugin.Connectivity.CrossConnectivity.Current.ConnectionTypes)
+					if (connection == Plugin.Connectivity.Abstractions.ConnectionType.WiFi)
+						return true;
+				return false;
+			}
 		}
 		/// <summary>
 		/// Returns loading HTML string with customized text.

@@ -27,18 +27,19 @@ namespace Timetables.Application.Mobile
 		}
 
 		protected override void OnStart()
-		{
-			// Handle when your app starts
-		}
-
-		protected override void OnSleep()
-		{
-			// Handle when your app sleeps
+		{			
+			if (Request.IsConnectedToWiFi)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.UpdateCachedResultsAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		}
 
 		protected override void OnResume()
 		{
-			// Handle when your app resumes
+			if (Request.IsConnectedToWiFi)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.UpdateCachedResultsAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		}
 	}
 }
