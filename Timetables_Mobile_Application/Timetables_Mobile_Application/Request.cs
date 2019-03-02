@@ -210,17 +210,17 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => IsConnectedToWiFi ?
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => CanBeCached ?
 			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => IsConnectedToWiFi ?
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => CanBeCached ?
 			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => IsConnectedToWiFi ?
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => CanBeCached ?
 			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest)) != null : false;
 		/// <summary>
 		/// Updates all the cached results.
@@ -241,15 +241,19 @@ namespace Timetables.Application.Mobile
 				);
 		}
 		/// <summary>
-		/// Returns whether the device is connected to WiFi network.
+		/// Returns whether the device can cache the result.
 		/// </summary>
-		public static bool IsConnectedToWiFi
+		public static bool CanBeCached
 		{
 			get
 			{
+				if (Settings.UseCellularsToUpdateCache) return true;
+
+				// Cache results only if connected to Wi-Fi network.
 				foreach (var connection in Plugin.Connectivity.CrossConnectivity.Current.ConnectionTypes)
 					if (connection == Plugin.Connectivity.Abstractions.ConnectionType.WiFi)
 						return true;
+
 				return false;
 			}
 		}

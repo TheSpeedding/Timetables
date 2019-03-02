@@ -4,61 +4,68 @@
              x:Class="Timetables.Application.Mobile.SettingsPage"
 			 Title="{Binding Localization.Settings}">
     <ContentPage.Content>
-        <StackLayout Margin="10">
+		<ScrollView>
+			<StackLayout Margin="10">
 
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
 
-				<Label Text="{Binding Localization.Language}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="0" />
-				<Picker x:Name="languagePicker" HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" />
+					<Label Text="{Binding Localization.Language}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="0" />
+					<Picker x:Name="languagePicker" HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" />
 
 
-				<Label Text="{Binding Localization.TransfersSpeed}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="1" />
-				<StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
-					<Slider x:Name="speedSlider" Maximum="150" Minimum="50" Value="100" 
+					<Label Text="{Binding Localization.TransfersSpeed}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="1" />
+					<StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+						<Slider x:Name="speedSlider" Maximum="150" Minimum="50" Value="100" 
 						ThumbColor="#03A9F4" ValueChanged="SpeedSlider_ValueChanged" HorizontalOptions="FillAndExpand" />
-					<StackLayout Orientation="Horizontal">
-						<Label Text="{Binding Localization.SlowSpeed}" FontSize="Micro" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" VerticalOptions="CenterAndExpand" />
-						<Label Text="{Binding Localization.FastSpeed}" FontSize="Micro" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" VerticalOptions="CenterAndExpand" />
+						<StackLayout Orientation="Horizontal">
+							<Label Text="{Binding Localization.SlowSpeed}" FontSize="Micro" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" VerticalOptions="CenterAndExpand" />
+							<Label Text="{Binding Localization.FastSpeed}" FontSize="Micro" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" VerticalOptions="CenterAndExpand" />
+						</StackLayout>
 					</StackLayout>
-				</StackLayout>
 
 
-				<Label Text="{Binding Localization.Subway}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="2" />
-				<Switch x:Name="subwaySwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="2" Toggled="SubwaySwitch_Toggled" HorizontalOptions="EndAndExpand" />
-
-				
-				<Label Text="{Binding Localization.Tram}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="3" />
-				<Switch x:Name="tramSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="3" Toggled="TramSwitch_Toggled" HorizontalOptions="EndAndExpand" />
-				
-				
-				<Label Text="{Binding Localization.Bus}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="4" />
-				<Switch x:Name="busSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="4" Toggled="BusSwitch_Toggled" HorizontalOptions="EndAndExpand" />
-
-				
-				<Label Text="{Binding Localization.Train}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="5" />
-				<Switch x:Name="trainSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="5" Toggled="TrainSwitch_Toggled" HorizontalOptions="EndAndExpand" />
-
-				
-				<Label Text="{Binding Localization.Cablecar}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="6" />
-				<Switch x:Name="cablecarSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="6" Toggled="CablecarSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+					<Label Text="{Binding Localization.Subway}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="2" />
+					<Switch x:Name="subwaySwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="2" Toggled="SubwaySwitch_Toggled" HorizontalOptions="EndAndExpand" />
 
 
-				<Label Text="{Binding Localization.Ship}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="7" />
-				<Switch x:Name="shipSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="7" Toggled="ShipSwitch_Toggled" HorizontalOptions="EndAndExpand" />
-			</Grid>			
-        </StackLayout>
+					<Label Text="{Binding Localization.Tram}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="3" />
+					<Switch x:Name="tramSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="3" Toggled="TramSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+
+
+					<Label Text="{Binding Localization.Bus}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="4" />
+					<Switch x:Name="busSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="4" Toggled="BusSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+
+
+					<Label Text="{Binding Localization.Train}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="5" />
+					<Switch x:Name="trainSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="5" Toggled="TrainSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+
+
+					<Label Text="{Binding Localization.Cablecar}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="6" />
+					<Switch x:Name="cablecarSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="6" Toggled="CablecarSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+
+
+					<Label Text="{Binding Localization.Ship}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="7" />
+					<Switch x:Name="shipSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="7" Toggled="ShipSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+
+
+					<Label Text="{Binding Localization.UseCellularsToCache}" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="8" />
+					<Switch x:Name="wifiSwitch" OnColor="#03A9F4" Grid.Column="1" Grid.Row="8" Toggled="WifiSwitch_Toggled" HorizontalOptions="EndAndExpand" />
+				</Grid>
+			</StackLayout>
+		</ScrollView>
     </ContentPage.Content>
 </ContentPage>

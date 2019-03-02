@@ -44,6 +44,10 @@ namespace Timetables.Application.Mobile
 	internal static class Settings
 	{
 		/// <summary>
+		/// If set to false, cache is updated using Wi-Fi only.
+		/// </summary>
+		public static bool UseCellularsToUpdateCache { get; set; } = false;
+		/// <summary>
 		/// Reference to the settings file location.
 		/// </summary>
 		public static FileInfo SettingsFile { get; } = new FileInfo("settings.xml");
@@ -144,6 +148,11 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static double WalkingSpeedCoefficient { get; set; }
 		/// <summary>
+		/// Specifies how often should cache try to refresh.
+		/// </summary>
+		[Obsolete("Unused at the moment.")]
+		public static TimeSpan CacheRefreshTime { get; } = TimeSpan.FromHours(2);
+		/// <summary>
 		/// Copies the settings file from assets to local directory.
 		/// </summary>
 		private static void CopyFromAssets()
@@ -225,12 +234,16 @@ namespace Timetables.Application.Mobile
 				AllowShip = bool.Parse(settings.GetElementsByTagName("AllowShip")[0].InnerText);
 
 				WalkingSpeedCoefficient = double.Parse(settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText);
+
+				UseCellularsToUpdateCache = bool.Parse(settings.GetElementsByTagName("UseCellularsToUpdateCache")[0].InnerText);
 			}
 			catch
 			{
 				AllowSubway = true; AllowTram = true; AllowCablecar = true; AllowBus = true; AllowTrain = true; AllowShip = true;
 
 				WalkingSpeedCoefficient = 1.0;
+
+				UseCellularsToUpdateCache = false;
 			}
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -262,7 +275,7 @@ namespace Timetables.Application.Mobile
 			}
 
 			CreateElementIfNotExist("Language", "ExtraEventsUri", "LockoutsUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort",
-				"AllowSubway", "AllowTram", "AllowCablecar", "AllowBus", "AllowTrain", "AllowShip", "WalkingSpeedCoefficient");
+				"AllowSubway", "AllowTram", "AllowCablecar", "AllowBus", "AllowTrain", "AllowShip", "WalkingSpeedCoefficient", "UseCellularsToUpdateCache");
 
 			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 			
@@ -291,6 +304,8 @@ namespace Timetables.Application.Mobile
 			settings.GetElementsByTagName("AllowShip")[0].InnerText = AllowShip.ToString();
 
 			settings.GetElementsByTagName("WalkingSpeedCoefficient")[0].InnerText = WalkingSpeedCoefficient.ToString();
+
+			settings.GetElementsByTagName("UseCellularsToUpdateCache")[0].InnerText = UseCellularsToUpdateCache.ToString();
 
 			fs.SetLength(0);
 

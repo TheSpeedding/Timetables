@@ -39,6 +39,7 @@ namespace Timetables.Application.Mobile
 			trainSwitch.IsToggled = Settings.AllowTrain;
 			cablecarSwitch.IsToggled = Settings.AllowCablecar;
 			shipSwitch.IsToggled = Settings.AllowShip;
+			wifiSwitch.IsToggled = Settings.UseCellularsToUpdateCache;
 		}
 
 		protected override void OnDisappearing()
@@ -107,6 +108,11 @@ namespace Timetables.Application.Mobile
 		private void ShipSwitch_Toggled(object sender, ToggledEventArgs e)
 		{
 			Settings.AllowShip = shipSwitch.IsToggled;
+		}
+
+		private void WifiSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			Settings.UseCellularsToUpdateCache = wifiSwitch.IsToggled;
 		}
 	}
 }
