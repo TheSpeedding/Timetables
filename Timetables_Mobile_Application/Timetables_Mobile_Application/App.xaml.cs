@@ -38,5 +38,7 @@ namespace Timetables.Application.Mobile
 		protected override void OnStart() => CacheIfPossible();
 
 		protected override void OnResume() => CacheIfPossible();
+
+		protected override void OnSleep() => Settings.Save();
 	}
 }

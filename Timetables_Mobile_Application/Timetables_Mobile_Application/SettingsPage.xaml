@@ -32,8 +32,8 @@
 						<Slider x:Name="speedSlider" Maximum="150" Minimum="50" Value="100" 
 						ThumbColor="#03A9F4" ValueChanged="SpeedSlider_ValueChanged" HorizontalOptions="FillAndExpand" />
 						<StackLayout Orientation="Horizontal">
-							<Label Text="{Binding Localization.SlowSpeed}" FontSize="Micro" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" VerticalOptions="CenterAndExpand" />
-							<Label Text="{Binding Localization.FastSpeed}" FontSize="Micro" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" VerticalOptions="CenterAndExpand" />
+							<Label Text="{Binding Localization.FastSpeed}" FontSize="Micro" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" VerticalOptions="CenterAndExpand" />
+							<Label Text="{Binding Localization.SlowSpeed}" FontSize="Micro" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" VerticalOptions="CenterAndExpand" />
 						</StackLayout>
 					</StackLayout>
 

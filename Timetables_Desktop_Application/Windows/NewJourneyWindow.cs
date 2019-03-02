@@ -99,13 +99,13 @@ namespace Timetables.Application.Desktop
 		private double GetTransferCoefficient()
 		{
 			if (slowButton.Checked)
-				return 0.5;
+				return 1.5;
 
 			if (mediumButton.Checked)
 				return 1;
 
 			if (fastButton.Checked)
-				return 1.5;
+				return 0.5;
 
 			throw new InvalidOperationException();
 		}

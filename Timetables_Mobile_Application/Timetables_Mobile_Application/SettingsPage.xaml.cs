@@ -42,6 +42,8 @@ namespace Timetables.Application.Mobile
 			wifiSwitch.IsToggled = Settings.UseCellularsToUpdateCache;
 		}
 
+		~SettingsPage() => OnDisappearing();
+
 		protected override void OnDisappearing()
 		{
 			base.OnDisappearing();
