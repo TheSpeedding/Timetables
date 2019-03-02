@@ -20,6 +20,11 @@ namespace Timetables.Application.Mobile
 			InitializeComponent ();
 
 			BindingContext = new FindStationInfoPageViewModel();
+
+			foreach (var cached in LineInfoCached.FetchLineInfoData())
+			{
+				favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, cached, lineEntry));
+			}
 		}
 		private void OnCountSliderValueChanged(object sender, ValueChangedEventArgs e)
 		{
