@@ -27,6 +27,7 @@ namespace Timetables.Application.Mobile
 			MainPage = new MainPage();
 		}
 
+		[Obsolete("Currently unused due to ConnectivityTypeChanged event.")]
 		private static void CacheIfPossible()
 		{
 			if (Request.CanBeCached)
@@ -34,11 +35,7 @@ namespace Timetables.Application.Mobile
 				Request.UpdateCachedResultsAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		}
-
-		protected override void OnStart() => CacheIfPossible();
-
-		protected override void OnResume() => CacheIfPossible();
-
+		
 		protected override void OnSleep() => Settings.Save();
 	}
 }
