@@ -52,11 +52,9 @@
 									<span class="detail">
 									 · 
 										<xsl:value-of select="./Headsign/text()"/>
-										 (
-										<span class="iso8601">
+										 (<span class="iso8601">
 											<xsl:value-of select="./DepartureDateTime/text()"/>
-										</span>
-										)
+										</span>)
 									</span>
 								</span>								
 							</div>

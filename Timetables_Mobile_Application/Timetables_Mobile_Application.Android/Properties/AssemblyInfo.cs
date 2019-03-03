@@ -37,6 +37,7 @@ using Android.App;
 [assembly: UsesPermission(Android.Manifest.Permission.AccessFineLocation)]
 [assembly: UsesPermission(Android.Manifest.Permission.Internet)]
 [assembly: UsesPermission(Android.Manifest.Permission.AccessWifiState)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReceiveBootCompleted)]
 
 #if DEBUG
 [assembly: Application(Debuggable = true)]

@@ -58,9 +58,12 @@ namespace Timetables.Application.Mobile
 			var dbRequest = new LineInfoRequest(leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
 				(int)countSlider.Value, route.ID);
 
+			findButton.IsEnabled = false;
 			var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
+			findButton.IsEnabled = true;
 
-			await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, false, route.Label), true);
+			if (dbResponse != null)
+				await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, false, route.Label), true);
 		}
 
 		private void LineEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)

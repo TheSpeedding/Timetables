@@ -136,7 +136,8 @@ namespace Timetables.Server
 				{
 					case ServerSignal.Abort:
 						Logging.Log("Request to stop the server received.");
-						return;
+						Environment.Exit(0); // This is not obviously the best solution.
+						break;
 					case ServerSignal.ForceUpdate:
 						Logging.Log("Request to force data update received.");
 						DataFeed.Download(true);

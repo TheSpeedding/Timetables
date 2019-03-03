@@ -281,11 +281,11 @@ namespace Timetables.Application.Desktop
 
 			else
 			{
-				var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
-
-				if (cached == null || cached.ShouldBeUpdated)
+				using (var routerProcessing = new RouterProcessing())
 				{
-					using (var routerProcessing = new RouterProcessing())
+					var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
+
+					if (cached == null || cached.ShouldBeUpdated)
 					{
 						try
 						{
@@ -307,12 +307,12 @@ namespace Timetables.Application.Desktop
 						{
 							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
-					}
-				}
+					}				
 
-				else
-				{
-					routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+					else
+					{
+						routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+					}
 				}
 			}
 

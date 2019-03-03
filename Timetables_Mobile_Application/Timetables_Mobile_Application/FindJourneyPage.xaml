@@ -40,7 +40,7 @@
 			<StackLayout Orientation="Horizontal">
 				<Button Text="{Binding Localization.AddToFavorites}" TextColor="White" Clicked="FavoritesButtonClicked"
 						HorizontalOptions="FillAndExpand" BorderColor="#03A9F4" BorderRadius="15" BorderWidth="2" BackgroundColor="#03A9F4" />
-				<Button Text="{Binding Localization.Find}" TextColor = "White" Clicked="FindButtonClicked"
+				<Button x:Name="findButton" Text="{Binding Localization.Find}" TextColor = "White" Clicked="FindButtonClicked"
 						HorizontalOptions="FillAndExpand" BorderColor="#03A9F4" BorderRadius="15" BorderWidth="2" BackgroundColor="#03A9F4" />
 			</StackLayout>
 

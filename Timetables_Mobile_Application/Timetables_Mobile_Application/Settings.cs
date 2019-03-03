@@ -29,6 +29,10 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static Action<string> ShowMessage { get; set; }
 		/// <summary>
+		/// Shows dialog. This is a delegate to a method, where the first argument is a text to be shown and the second argument is an action to be performed when the submit button is clicked, where the argument is content of the user input.
+		/// </summary>
+		public static Action<string, Action<string>> ShowDialog { get; set; }
+		/// <summary>
 		/// Sets the base path to the given path.
 		/// </summary>
 		/// <param name="path">Path.</param>
@@ -38,10 +42,6 @@ namespace Timetables.Application.Mobile
 				Directory.CreateDirectory(path);
 			DataFeedClient.BasePath = path;
 		}
-		/// <summary>
-		/// Show dialog.
-		/// </summary>
-		public static Action<string, Action<string>> ShowDialog { get; set; }
 	}
 	/// <summary>
 	/// Settings for the application.
@@ -155,7 +155,6 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Specifies how often should cache try to refresh.
 		/// </summary>
-		[Obsolete("Unused at the moment.")]
 		public static TimeSpan CacheRefreshTime { get; } = TimeSpan.FromHours(2);
 		/// <summary>
 		/// Copies the settings file from assets to local directory.
@@ -315,6 +314,8 @@ namespace Timetables.Application.Mobile
 			fs.SetLength(0);
 
 			settings.Save(new StreamWriter(fs));
+
+			fs.Close();
 		}
 		/// <summary>
 		/// Gets predefined means of transport that can be used.

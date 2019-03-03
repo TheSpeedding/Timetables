@@ -53,7 +53,7 @@ namespace Timetables.Application.Mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-
+			
 			this.savedInstanceState = savedInstanceState;
 
 			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -67,7 +67,8 @@ namespace Timetables.Application.Mobile.Droid
 						Manifest.Permission.AccessCoarseLocation,
 						Manifest.Permission.AccessFineLocation,
 						Manifest.Permission.Internet,
-						Manifest.Permission.AccessWifiState
+						Manifest.Permission.AccessWifiState,
+						Manifest.Permission.ReceiveBootCompleted
 			};
 
 			if ((int)Build.VERSION.SdkInt >= 23)
@@ -79,7 +80,8 @@ namespace Timetables.Application.Mobile.Droid
 					PackageManager.CheckPermission(permissions[3], PackageName) == Permission.Granted &&
 					PackageManager.CheckPermission(permissions[4], PackageName) == Permission.Granted &&
 					PackageManager.CheckPermission(permissions[5], PackageName) == Permission.Granted &&
-					PackageManager.CheckPermission(permissions[6], PackageName) == Permission.Granted)
+					PackageManager.CheckPermission(permissions[6], PackageName) == Permission.Granted &&
+					PackageManager.CheckPermission(permissions[7], PackageName) == Permission.Granted)
 				{
 					permissionsGranted = true;					
 				}
@@ -102,7 +104,7 @@ namespace Timetables.Application.Mobile.Droid
 		private void RunApp(Bundle savedInstanceState)
 		{
 			Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
-
+					   
 			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 
 			PlatformDependentSettings.GetLocalizations = () => Assets.List("loc");
@@ -122,6 +124,28 @@ namespace Timetables.Application.Mobile.Droid
 					action(et.Text);
 				});
 				ad.Show();
+			};
+
+			bool firstCall = false; // ConnectivityTypeChanged event is broken, it's called twice everytime the type is changed.
+
+			Plugin.Connectivity.CrossConnectivity.Current.ConnectivityTypeChanged += async (s, e) =>
+			{
+				firstCall = !firstCall;
+
+				if (!firstCall) return;
+
+				bool isWifi = false;
+				
+				foreach (var connectionType in e.ConnectionTypes)
+					if (connectionType == Plugin.Connectivity.Abstractions.ConnectionType.WiFi)
+						isWifi = true;
+
+				if (isWifi)
+					try
+					{
+						await Request.UpdateCachedResultsAsync(true);
+					}
+					catch { }
 			};
 
 #if DEBUG

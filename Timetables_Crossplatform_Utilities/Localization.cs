@@ -16,6 +16,7 @@ namespace Timetables.Client
 	{
 		[XmlIgnore]
 		private string locName = "English";
+		public string Loading { get; set; } = "Loading...";
 		public string UseCellularsToCache { get; set; } = "Use cellular data to cache";
 		public string TransfersSpeed { get; set; } = "Transfers speed";
 		public string AlreadyCached { get; set; } = "This item is already cached.";

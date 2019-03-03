@@ -76,9 +76,12 @@ namespace Timetables.Application.Mobile
 			var routerRequest = new RouterRequest(source.ID, target.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time), 
 				(int)transfersSlider.Value, (int)countSlider.Value, Settings.WalkingSpeedCoefficient, Settings.GetMoT());
 
+			findButton.IsEnabled = false;
 			var routerResponse = await Request.SendRouterRequestAsync(routerRequest);
+			findButton.IsEnabled = true;
 
-			await Navigation.PushAsync(new FindJourneyResultsPage(routerResponse, source.Name, target.Name), true);
+			if (routerResponse != null)
+				await Navigation.PushAsync(new FindJourneyResultsPage(routerResponse, source.Name, target.Name), true);
 		}
 
 		private void StopEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)

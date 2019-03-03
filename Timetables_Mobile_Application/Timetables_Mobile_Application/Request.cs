@@ -63,14 +63,15 @@ namespace Timetables.Application.Mobile
 			return true;
 		}
 
-		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
+		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest, bool forceCache = false)
 		{
 			RouterResponse routerResponse = null;
-			var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
 
-			if (cached == null || cached.ShouldBeUpdated)
+			using (var routerProcessing = new RouterProcessing())
 			{
-				using (var routerProcessing = new RouterProcessing())
+				var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
+
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{
@@ -93,11 +94,11 @@ namespace Timetables.Application.Mobile
 						PlatformDependentSettings.ShowMessage(Settings.Localization.UnreachableHost);
 					}
 				}
-			}
 
-			else
-			{
-				routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+				else
+				{
+					routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+				}
 			}
 
 			return routerResponse;
@@ -115,7 +116,7 @@ namespace Timetables.Application.Mobile
 			else
 				return await SendDepartureBoardRequestAsync((LineInfoRequest)dbRequest);
 		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest, bool forceCache = false)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -123,7 +124,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = StationInfoCached.Select(dbRequest.StopID);
 
-				if (cached == null || cached.ShouldBeUpdated)
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{
@@ -154,7 +155,7 @@ namespace Timetables.Application.Mobile
 
 			return dbResponse;
 		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest, bool forceCache = false)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -162,7 +163,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
 
-				if (cached == null || cached.ShouldBeUpdated)
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{
@@ -199,39 +200,39 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest)
+		public static async Task<bool> CacheDepartureBoardAsync(DepartureBoardRequest dbRequest, bool forceUpdate = false)
 		{
 			if (dbRequest.GetType() == typeof(StationInfoRequest))
-				return await CacheDepartureBoardAsync((StationInfoRequest)dbRequest);
+				return await CacheDepartureBoardAsync((StationInfoRequest)dbRequest, forceUpdate);
 
 			else
-				return await CacheDepartureBoardAsync((LineInfoRequest)dbRequest);
+				return await CacheDepartureBoardAsync((LineInfoRequest)dbRequest, forceUpdate);
 		}
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => CanBeCached ?
-			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest, bool forceUpdate = false) => CanBeCached ?
+			StationInfoCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(dbRequest.StopID), await SendDepartureBoardRequestAsync(dbRequest, forceUpdate)) != null : false;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => CanBeCached ?
-			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest)) != null : false;
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest, bool forceUpdate = false) => CanBeCached ?
+			LineInfoCached.CacheResults(DataFeedClient.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), await SendDepartureBoardRequestAsync(dbRequest, forceUpdate)) != null : false;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => CanBeCached ?
-			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest)) != null : false;
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest, bool forceUpdate = false) => CanBeCached ?
+			JourneyCached.CacheResults(DataFeedClient.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedClient.Basic.Stations.FindByIndex(routerRequest.TargetStationID), await SendRouterRequestAsync(routerRequest, forceUpdate)) != null : false;
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>
 		public static async Task UpdateCachedResultsAsync(bool forceUpdate = false)
 		{
-			async Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			async Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, bool, Task> processAsync) where Res : ResponseBase where Req : RequestBase
 			{
 				foreach (var fetched in collection)
 					if (forceUpdate || fetched.ShouldBeUpdated)
-						await processAsync(fetched.ConstructNewRequest());
+						await processAsync(fetched.ConstructNewRequest(), forceUpdate);
 			}
 
 			await Task.WhenAll(

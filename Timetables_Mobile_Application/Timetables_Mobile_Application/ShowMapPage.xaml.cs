@@ -125,7 +125,8 @@ namespace Timetables.Application.Mobile
 				var stop = entry.Stop;
 				var dt = findEarliestDeparture(stop);
 				var res = await Request.SendDepartureBoardRequestAsync(new StationInfoRequest(useStopNotStation ? stop.ID : stop.ParentStation.ID, dt, 5, !useStopNotStation));
-				Device.BeginInvokeOnMainThread(async () => await Navigation.PushAsync(new DepartureBoardResultsPage(res, true, stop.ParentStation.Name), true));
+				if (res != null)
+					Device.BeginInvokeOnMainThread(async () => await Navigation.PushAsync(new DepartureBoardResultsPage(res, true, stop.ParentStation.Name), true));
 			}
 		}
 
