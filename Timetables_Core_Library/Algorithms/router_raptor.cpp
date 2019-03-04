@@ -256,10 +256,10 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 		
 		if (!search_by_arrival_ && fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
-
-		// Temporal bugfix so the algorithm is not stuck at the point while searching by maximal arrival. Also ensures that requested count of journeys will be found.
+		
 		inc_time = previous_fastest_journey->arrival_time() >= current_fastest_journey->arrival_time() ? 
 			date_time::difference(previous_fastest_journey->arrival_time(), current_fastest_journey->arrival_time()) + 2 * inc_time + MINUTE : SECOND;
+
 		if (inc_time > DAY) 
 			break;
 
@@ -289,12 +289,21 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		marked_stops_.insert(stop); // 5th row of pseudocode.
 		journeys_[0][stop].reset(new footpath_segment(departure, *stop, *stop, 0, nullptr)); // 4th row of pseudocode.
 
-		// We are also to reach the stops that are connected with footpaths.
+		// We are also able to reach the stops that are connected with footpaths.
 
 		for (auto&& footpath : stop->footpaths()) {
 			if (&footpath.second->parent_station() != &source_) {
-				marked_stops_.insert(footpath.second);
-				journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, (int)(footpath.first * transfers_coefficient_) + 1), *stop, *footpath.second, (int)(footpath.first * transfers_coefficient_) + 1, nullptr));
+
+				bool suitable = true;
+
+				for (auto&& route : footpath.second->throughgoing_routes())
+					if (route->contains_station(source_))
+						suitable = false;
+				
+				if (suitable) {
+					marked_stops_.insert(footpath.second);
+					journeys_[0][footpath.second].reset(new footpath_segment(date_time(departure, (int)(footpath.first * transfers_coefficient_) + 1), *stop, *footpath.second, (int)(footpath.first * transfers_coefficient_) + 1, nullptr));	
+				}
 			}
 		}
 	}

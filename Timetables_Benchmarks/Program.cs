@@ -38,9 +38,7 @@ namespace Timetables.Benchmarks
 			}
 				WriteLine();
 
-			Client.AsyncHelpers.RunSync(() => RunComplexJourneyBenchmark("Horčičkova", "Letiště"));
-
-			Client.AsyncHelpers.RunSync(() => RunComplexJourneyBenchmark("Roztyly", "Dejvická"));
+			Client.AsyncHelpers.RunSync(() => RunComplexJourneyBenchmark("", ""));
 		}
 
 		async static Task RunComplexJourneyBenchmark(string source, string target)
