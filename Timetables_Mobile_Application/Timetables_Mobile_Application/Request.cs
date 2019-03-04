@@ -75,7 +75,7 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return null;
+						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(routerRequest);
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -128,7 +128,7 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return null;
+						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(dbRequest);
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -167,7 +167,7 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return null;
+						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(dbRequest);
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
