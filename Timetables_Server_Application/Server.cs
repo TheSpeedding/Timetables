@@ -199,12 +199,14 @@ namespace Timetables.Server
 	/// </summary>
 	public sealed class RouterServer : Server
 	{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		/// <summary>
 		/// Initializes new instance of router server.
 		/// </summary>
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public RouterServer(IPAddress address, int port) => CreateServer((TcpClient client) => new RouterProcessing(client).ProcessAsync(), address, port);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 	}
 
 	/// <summary>
@@ -212,12 +214,14 @@ namespace Timetables.Server
 	/// </summary>
 	public sealed class BasicDataFeedServer : Server
 	{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		/// <summary>
 		/// Initializes new instance of basic data feed server.
 		/// </summary>
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public BasicDataFeedServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DataFeedProcessing(client).ProcessAsync(), address, port);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 	}
 
 	/// <summary>
@@ -225,11 +229,13 @@ namespace Timetables.Server
 	/// </summary>
 	public sealed class DepartureBoardServer : Server
 	{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		/// <summary>
 		/// Initializes new instance of departure board server.
 		/// </summary>
 		/// <param name="address">IP address.</param>
 		/// <param name="port">Port number.</param>
 		public DepartureBoardServer(IPAddress address, int port) => CreateServer((TcpClient client) => new DepartureBoardProcessing(client).ProcessAsync(), address, port);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 	}
 }

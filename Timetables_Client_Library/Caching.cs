@@ -29,7 +29,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Parses the tokens from the filename.
 		/// </summary>
-		protected static IEnumerable<int> GetTokensFromFileName(string fileName) => fileName.Split('.')[0].Split('-').Skip(1).Select(x => int.Parse(x));
+		protected static IEnumerable<int> GetTokensFromFileName(string fileName) => fileName.Split('.')[fileName.Count(x => x == '.') - 1].Split('-').Skip(1).Select(x => int.Parse(x));
 		/// <summary>
 		/// Loads cached data from the file.
 		/// </summary>
