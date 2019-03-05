@@ -284,7 +284,7 @@ namespace Timetables.Client
 					}
 				}
 
-				if (isSuitable)
+				if (isSuitable && RequestBase.ConvertDateTimeToUnixTimestamp(journey.DepartureDateTime) >= request.EarliestDepartureDateTime)
 					results.Add(journey);
 
 				if (results.Count == request.Count)

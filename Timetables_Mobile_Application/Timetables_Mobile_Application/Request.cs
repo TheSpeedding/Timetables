@@ -228,11 +228,14 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static async Task UpdateCachedResultsAsync(bool forceUpdate = false)
 		{
-			async Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, bool, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, bool, Task> processAsync) where Res : ResponseBase where Req : RequestBase
 			{
-				foreach (var fetched in collection)
-					if (forceUpdate || fetched.ShouldBeUpdated)
-						await processAsync(fetched.ConstructNewRequest(), forceUpdate);
+				return Task.Run(() =>
+				{
+					foreach (var fetched in collection)
+						if (forceUpdate || fetched.ShouldBeUpdated)
+							processAsync(fetched.ConstructNewRequest(), forceUpdate);
+				});
 			}
 
 			await Task.WhenAll(
