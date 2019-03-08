@@ -57,10 +57,10 @@ namespace Timetables.Server
 		}
 		static DataFeed()
 		{
-			Preprocessor.DataFeed.DataProcessing += LoadingProgressCallback;
-			Preprocessor.DataFeed.DataErrors += ErrorsCallback;
+			Preprocessor.DataFeed.DataProcessing += Logging.LoadingProgressCallback;
+			Preprocessor.DataFeed.DataErrors += Logging.ErrorsCallback;
 
-			AutoUpdate.Update += AutoUpdateCallback;
+			AutoUpdate.Update += Logging.AutoUpdateCallback;
 
 			if (IsUpdateNeeded)
 				Download(IsUpdateNeeded);
@@ -71,21 +71,6 @@ namespace Timetables.Server
 				Load();
 			}
 		}
-		/// <summary>
-		/// Callback to log preprocessor actions.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		private static void LoadingProgressCallback(string message) => Logging.Log($"Preprocessor: { message }");
-		/// <summary>
-		/// Callback to log auto-updater actions.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		private static void AutoUpdateCallback(string message) => Logging.Log($"Auto update: { message }");
-		/// <summary>
-		/// Callback to log warnings in preprocessor.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		private static void ErrorsCallback(string message) => Logging.Log($"Preprocessor warning: { message }");
 
 		/// <summary>
 		/// Loads data while starting the application.

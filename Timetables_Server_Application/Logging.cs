@@ -15,7 +15,7 @@ namespace Timetables.Server
 		/// <summary>
 		/// Writer that is the server logging into.
 		/// </summary>
-		public static TextWriter FileForLogging { get; } = new StreamWriter(".log", true) { AutoFlush = true };
+		public static TextWriter FileForLogging { get; } = TextWriter.Synchronized(new StreamWriter(".log", true) { AutoFlush = true });
 		/// <summary>
 		/// Delegate used to log some information.
 		/// </summary>
@@ -36,7 +36,21 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="message">Message to be logged.</param>
 		public static void Log(this string message) => LoggingEvent?.Invoke(message);
-
 		public static void Dispose() => FileForLogging.Dispose();
+		/// <summary>
+		/// Callback to log preprocessor actions.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		internal static void LoadingProgressCallback(string message) => Log($"Preprocessor: { message }");
+		/// <summary>
+		/// Callback to log auto-updater actions.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		internal static void AutoUpdateCallback(string message) => Log($"Auto update: { message }");
+		/// <summary>
+		/// Callback to log warnings in preprocessor.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		internal static void ErrorsCallback(string message) => Log($"Preprocessor warning: { message }");
 	}
 }
