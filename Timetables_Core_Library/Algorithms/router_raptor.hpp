@@ -1,6 +1,8 @@
 #ifndef ROUTER_RAPTOR_HPP
 #define ROUTER_RAPTOR_HPP
 
+#define BENCHMARK
+
 #include <memory> // Polymorphism.
 #include <vector> // Used in journeys.
 #include <map> // Structure for algorithm
@@ -44,6 +46,12 @@ namespace Timetables {
 			void traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop); // Traverses one route.
 			std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> // Returns pointer to the trip and starting date of the trip.
 				find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index); // Finds the earliest trip that can be caught in given stop. 
+		
+#ifdef BENCHMARK
+			std::size_t total_marked_stops_ = 0;
+			std::size_t total_traversed_routes_ = 0;
+			std::size_t total_et_calls_ = 0;
+#endif
 		public:
 			router_raptor(const Timetables::Structures::data_feed& feed, const std::size_t source_id, const std::size_t target_id, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers, double coef = 1, Timetables::Structures::mean_of_transport mot = static_cast<Timetables::Structures::mean_of_transport>(255)) :
 				max_transfers_(transfers + 1), count_(count), earliest_departure_(earliest_departure), source_(feed.stations().at(source_id)),
@@ -56,6 +64,12 @@ namespace Timetables {
 			virtual void obtain_journeys() override; // Obtains given count of the best journeys.
 
 			virtual const std::set<Timetables::Structures::journey>& show_journeys() const override { return fastest_journeys_; } // Shows the best journeys found by the algorithm.
+
+#ifdef BENCHMARK
+			std::size_t total_marked_stops() const { return total_marked_stops_; }
+			std::size_t total_traversed_routes() const { return total_traversed_routes_; }
+			std::size_t total_et_calls() const { return total_et_calls_; }
+#endif
 		};
 	}
 }

@@ -58,14 +58,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Mobile_Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Crossplatform_Utilities", "Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj", "{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Benchmarks", "Timetables_Benchmarks\Timetables_Benchmarks.csproj", "{65D6495B-A80E-4213-B079-F95632C5B04A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Default_Settings", "Timetables_Default_Settings", "{12E09C9D-342A-4FC8-9D03-E164BC9EBD6B}"
 	ProjectSection(SolutionItems) = preProject
 		Timetables_Default_Settings\Desktop.xml = Timetables_Default_Settings\Desktop.xml
 		Timetables_Default_Settings\Mobile.xml = Timetables_Default_Settings\Mobile.xml
 		Timetables_Default_Settings\Server.xml = Timetables_Default_Settings\Server.xml
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Benchmarks", "Timetables_Benchmarks\Timetables_Benchmarks.vcxproj", "{49A4A10C-19FD-4AF3-A843-597662E32A74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -213,18 +213,16 @@ Global
 		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x64.Build.0 = Release|Any CPU
 		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x86.Build.0 = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|x64.Build.0 = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Debug|x86.Build.0 = Debug|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|x64.ActiveCfg = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|x64.Build.0 = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|x86.ActiveCfg = Release|Any CPU
-		{65D6495B-A80E-4213-B079-F95632C5B04A}.Release|x86.Build.0 = Release|Any CPU
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x64.ActiveCfg = Debug|x64
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x64.Build.0 = Debug|x64
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x86.ActiveCfg = Debug|Win32
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x86.Build.0 = Debug|Win32
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|Any CPU.ActiveCfg = Release|Win32
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x64.ActiveCfg = Release|x64
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x64.Build.0 = Release|x64
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x86.ActiveCfg = Release|Win32
+		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

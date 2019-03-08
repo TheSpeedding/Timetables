@@ -14,6 +14,10 @@ void Timetables::Algorithms::router_raptor::accumulate_routes() {
 
 	for (auto&& stop : marked_stops_) { // 8th row of pseudocode.
 
+#ifdef BENCHMARK
+		++total_marked_stops_;
+#endif
+
 		for (auto&& route : stop->throughgoing_routes()) { // 9th row of pseudocode.
 			
 			if (static_cast<int>(mot_ & route->info().type()) != 0) { // Flag for this mean of transport is set on. Continue with accumulating.
@@ -56,6 +60,7 @@ void Timetables::Algorithms::router_raptor::traverse_each_route() {
 	for (auto&& item : active_routes_)
 		traverse_route(*item.first, *item.second);
 #endif
+
 }
 
 void Timetables::Algorithms::router_raptor::look_at_footpaths() {
@@ -115,6 +120,10 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 }
 
 void Timetables::Algorithms::router_raptor::traverse_route(const Timetables::Structures::route& current_route, const Timetables::Structures::stop& starting_stop) {
+
+#ifdef BENCHMARK
+		++total_traversed_routes_;
+#endif
 
 	const trip* current_trip = nullptr; // 16th row of pseudocode.
 	date_time date_for_current_trip;
@@ -204,6 +213,10 @@ void Timetables::Algorithms::router_raptor::traverse_route(const Timetables::Str
 }
 
 std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_time, Timetables::Structures::service_state> Timetables::Algorithms::router_raptor::find_earliest_trip(const Timetables::Structures::route& route, const Timetables::Structures::date_time& arrival, std::size_t stop_index) {
+
+#ifdef BENCHMARK
+	++total_et_calls_;
+#endif
 
 	date_time new_departure_date = arrival.date();
 	size_t days = 0;

@@ -57,7 +57,7 @@ bool Timetables::Structures::journey::operator< (const Timetables::Structures::j
 
 	// Ok, they are identical.
 
-	return false;
+	return arrival_time() < other.arrival_time();
 }
 
 std::shared_ptr<journey_segment> Timetables::Structures::trip_segment::find_later_departure(const Timetables::Structures::date_time& latest_arrival) const {

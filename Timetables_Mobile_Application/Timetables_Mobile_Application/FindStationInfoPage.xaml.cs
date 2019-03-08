@@ -51,39 +51,56 @@ namespace Timetables.Application.Mobile
 		}
 		private async void FindButtonClicked(object sender, EventArgs e)
 		{
-			Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
+			try
+			{
+				Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
 
-			if (station == null) return;
+				if (station == null) return;
 
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = linePicker.SelectedItem == null ? null : Request.GetRouteInfoFromLabel(linePicker.SelectedItem.ToString());
+				Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = linePicker.SelectedItem == null ? null : Request.GetRouteInfoFromLabel(linePicker.SelectedItem.ToString());
 
-			if (route == null && linePicker.SelectedItem != null) return;
+				if (route == null && linePicker.SelectedItem != null) return;
 
-			var dbRequest = new StationInfoRequest(station.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
-				(int)countSlider.Value, true, route == null ? -1 : route.ID);
+				var dbRequest = new StationInfoRequest(station.ID, leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
+					(int)countSlider.Value, true, route == null ? -1 : route.ID);
 
-			findButton.IsEnabled = false;
-			var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
-			findButton.IsEnabled = true;
+				findButton.IsEnabled = false;
+				var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
+				findButton.IsEnabled = true;
 
-			if (dbResponse != null)
-				await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, true, station.Name), true);
+				if (dbResponse != null)
+					await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, true, station.Name), true);
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			}
 		}
 		
 		private void StopEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)
 		{
-			linePicker.Items.Clear();
-			var station = DataFeedClient.Basic.Stations.FindByName(stopEntry.Text);
-			linePicker.IsEnabled = station != null;
-			if (station != null)
-				foreach (var item in station.GetThroughgoingRoutes().Select(r => r.Label).Distinct())
-					linePicker.Items.Add(item);
-
-			if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+			try
 			{
-				((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
-			}
+				linePicker.Items.Clear();
+				var station = DataFeedClient.Basic.Stations.FindByName(stopEntry.Text);
+				linePicker.IsEnabled = station != null;
+				if (station != null)
+					foreach (var item in station.GetThroughgoingRoutes().Select(r => r.Label).Distinct())
+						linePicker.Items.Add(item);
 
+				if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+				{
+					((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.Stations.Where(x => x.Name.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToList();
+				}
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			}
 		}
 
 		private void StopEntrySuggestionChosen(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxSuggestionChosenEventArgs e)
@@ -93,33 +110,50 @@ namespace Timetables.Application.Mobile
 
 		private void FindClosestStation(object sender, EventArgs e)
 		{
-			var station = DataFeedClient.Basic.Stations.FindClosestStation(AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition));
-			if (station != null)
+			try
 			{
-				stopEntry.Text = station.Name;
+				var station = DataFeedClient.Basic.Stations.FindClosestStation(AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition));
+				if (station != null)
+				{
+					stopEntry.Text = station.Name;
+				}
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 			}
 		}
 
 		private void FavoritesButtonClicked(object sender, EventArgs e)
 		{
-			Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
-
-			if (station == null)
+			try
 			{
-				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + stopEntry.Text);
-				return;
-			}
+				Structures.Basic.StationsBasic.StationBasic station = Request.GetStationFromString(stopEntry.Text);
 
-			if (StationInfoCached.Select(station.ID) != null) return;
+				if (station == null)
+				{
+					PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindStation + ": " + stopEntry.Text);
+					return;
+				}
 
-			var fav = new StationInfoCached(station.ID);
+				if (StationInfoCached.Select(station.ID) != null) return;
+
+				var fav = new StationInfoCached(station.ID);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+				Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-			favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, stopEntry));
-
+				favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, stopEntry));
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			}
 		}
 	}
 }

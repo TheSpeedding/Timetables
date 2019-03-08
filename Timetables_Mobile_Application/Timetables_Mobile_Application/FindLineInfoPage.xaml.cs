@@ -50,29 +50,45 @@ namespace Timetables.Application.Mobile
 		}
 		private async void FindButtonClicked(object sender, EventArgs e)
 		{
+			try
+			{
+				Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineEntry.Text);
 
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineEntry.Text);
+				if (route == null) return;
 
-			if (route == null) return;
+				var dbRequest = new LineInfoRequest(leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
+					(int)countSlider.Value, route.ID);
 
-			var dbRequest = new LineInfoRequest(leavingTimeDatePicker.Date.Add(leavingTimeTimePicker.Time),
-				(int)countSlider.Value, route.ID);
+				findButton.IsEnabled = false;
+				var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
+				findButton.IsEnabled = true;
 
-			findButton.IsEnabled = false;
-			var dbResponse = await Request.SendDepartureBoardRequestAsync(dbRequest);
-			findButton.IsEnabled = true;
-
-			if (dbResponse != null)
-				await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, false, route.Label), true);
+				if (dbResponse != null)
+					await Navigation.PushAsync(new DepartureBoardResultsPage(dbResponse, false, route.Label), true);
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			}
 		}
 
 		private void LineEntryTextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)
 		{
 			if (e.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
 			{
-				((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.RoutesInfo.Where(x => x.Label.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Label).ToList();
+				try
+				{
+					((AutoSuggestBox)sender).ItemsSource = DataFeedClient.Basic.RoutesInfo.Where(x => x.Label.StartsWith(((AutoSuggestBox)sender).Text, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Label).ToList();
+				}
+				catch
+				{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+					Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				}
 			}
-
 		}
 
 		private void LineEntrySuggestionChosen(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxSuggestionChosenEventArgs e)
@@ -82,23 +98,32 @@ namespace Timetables.Application.Mobile
 
 		private void FavoritesButtonClicked(object sender, EventArgs e)
 		{
-			Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineEntry.Text);
-
-			if (route == null)
+			try
 			{
-				PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + lineEntry.Text);
-				return;
-			}
+				Structures.Basic.RoutesInfoBasic.RouteInfoBasic route = Request.GetRouteInfoFromLabel(lineEntry.Text);
 
-			if (LineInfoCached.Select(route.ID) != null) return;
+				if (route == null)
+				{
+					PlatformDependentSettings.ShowMessage(Settings.Localization.UnableToFindRouteInfo + ": " + lineEntry.Text);
+					return;
+				}
 
-			var fav = new LineInfoCached(route.ID);
+				if (LineInfoCached.Select(route.ID) != null) return;
+
+				var fav = new LineInfoCached(route.ID);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
+				Request.CacheDepartureBoardAsync(fav.ConstructNewRequest());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-			favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, lineEntry));
+				favoritesStackLayout.Children.Add(new FavoriteItemContentView(favoritesStackLayout, scrollView, fav, lineEntry));
+			}
+			catch
+			{
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				Request.CheckBasicDataValidity();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			}
 
 		}
 	}
