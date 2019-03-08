@@ -261,11 +261,7 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 	time_t inc_time = SECOND;
 
 	for (/*size_t i = 1*/; search_by_arrival_ ? previous_fastest_journey->arrival_time() < maximal_arrival_ : /*i* < count_*/ true; /*i++*/) {
-
-#ifdef BENCHMARK
-		++total_rounds_;
-#endif
-
+		
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), inc_time));
 
 		if (current_fastest_journey == nullptr) // No journey found.
@@ -326,6 +322,10 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 	}
 
 	for (size_t k = 1; marked_stops_.size() > 0 && k < max_transfers_ + 1; k++) { // 6th && 28th && 29th row of pseudocode.
+
+#ifdef BENCHMARK
+		++total_rounds_;
+#endif
 
 		journeys_.push_back(map<const stop*, shared_ptr<journey_segment>>());
 
