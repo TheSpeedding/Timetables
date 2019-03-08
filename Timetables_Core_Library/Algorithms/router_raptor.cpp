@@ -262,6 +262,10 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 
 	for (/*size_t i = 1*/; search_by_arrival_ ? previous_fastest_journey->arrival_time() < maximal_arrival_ : /*i* < count_*/ true; /*i++*/) {
 
+#ifdef BENCHMARK
+		++total_rounds_;
+#endif
+
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), inc_time));
 
 		if (current_fastest_journey == nullptr) // No journey found.

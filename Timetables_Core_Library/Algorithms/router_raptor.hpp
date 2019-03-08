@@ -51,6 +51,7 @@ namespace Timetables {
 			std::size_t total_marked_stops_ = 0;
 			std::size_t total_traversed_routes_ = 0;
 			std::size_t total_et_calls_ = 0;
+			std::size_t total_rounds_ = 0;
 #endif
 		public:
 			router_raptor(const Timetables::Structures::data_feed& feed, const std::size_t source_id, const std::size_t target_id, const Timetables::Structures::date_time& earliest_departure, const std::size_t count, const std::size_t transfers, double coef = 1, Timetables::Structures::mean_of_transport mot = static_cast<Timetables::Structures::mean_of_transport>(255)) :
@@ -69,6 +70,7 @@ namespace Timetables {
 			std::size_t total_marked_stops() const { return total_marked_stops_; }
 			std::size_t total_traversed_routes() const { return total_traversed_routes_; }
 			std::size_t total_et_calls() const { return total_et_calls_; }
+			std::size_t total_rounds() const { return total_rounds_; }
 #endif
 		};
 	}

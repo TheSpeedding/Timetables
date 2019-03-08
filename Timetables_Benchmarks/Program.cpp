@@ -15,8 +15,8 @@ using namespace std;
 using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
-static tuple<double, size_t, size_t, size_t> run_one_iteration(const data_feed& feed, size_t A, size_t B, const date_time& dep) {
-	router_raptor r(feed, A, B, dep, 50, 10);
+static tuple<double, size_t, size_t, size_t, size_t> run_one_iteration(const data_feed& feed, size_t A, size_t B, const date_time& dep) {
+	router_raptor r(feed, A, B, dep, 50, 10000);
 
 	auto start = chrono::high_resolution_clock::now();
 
@@ -28,8 +28,9 @@ static tuple<double, size_t, size_t, size_t> run_one_iteration(const data_feed& 
 	auto et_calls = r.total_et_calls();
 	auto marked_stops = r.total_marked_stops();
 	auto routes_traversed = r.total_traversed_routes();
+	auto rounds = r.total_rounds();
 
-	return make_tuple(duration, et_calls, marked_stops, routes_traversed);
+	return make_tuple(duration, et_calls, marked_stops, routes_traversed, rounds);
 }
 
 static void run_round(const data_feed& feed, size_t A, size_t B, const date_time& de, size_t iterations) {
@@ -37,21 +38,21 @@ static void run_round(const data_feed& feed, size_t A, size_t B, const date_time
 	size_t et_calls = 0;
 	size_t marked_stops = 0;
 	size_t routes_traversed = 0;
+	size_t rounds = 0;
 
 	cout << endl << "Running " + to_string(iterations) + " iterations with EDT at " << de << "." << endl;
 
 	for (size_t i = 0; i < iterations; ++i) {
 		auto res = run_one_iteration(feed, A, B, de);
 
-		// cout << "Time: " + to_string(get<0>(res)) + " ms. ET calls: " + to_string(get<1>(res)) + ". Marked stops: " + to_string(get<2>(res)) + ". Routes traversed: " + to_string(get<3>(res)) + "." << endl;
-		
 		duration += get<0>(res);
 		et_calls += get<1>(res);
 		marked_stops += get<2>(res);
 		routes_traversed += get<3>(res);
+		rounds += get<4>(res);
 	}
 
-	cout << endl << "Averages (per 50 journeys):" << endl << " Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ".";
+	cout << endl << "Averages (per 50 journeys):" << endl << " Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ". Total rounds: " << to_string(rounds / iterations) << ".";
 
 }
 
