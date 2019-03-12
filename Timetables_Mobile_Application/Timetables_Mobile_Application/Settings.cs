@@ -153,10 +153,6 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static double WalkingSpeedCoefficient { get; set; }
 		/// <summary>
-		/// Specifies how often should cache try to refresh.
-		/// </summary>
-		public static TimeSpan CacheRefreshTime { get; } = TimeSpan.FromHours(2);
-		/// <summary>
 		/// Copies the settings file from assets to local directory.
 		/// </summary>
 		private static void CopyFromAssets()

@@ -97,8 +97,8 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 			}
 
-			if ((arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
-				(arrival_time_A->second->trip() != nullptr && min < arrival_time_B->second->arrival_at_target())) && // We can improve the arrival to the stop and the previous segment is not a footpath.
+			if (arrival_time_A->second->trip() != nullptr && (arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
+				min < arrival_time_B->second->arrival_at_target()) && // We can improve the arrival to the stop.
 				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
 
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
@@ -260,14 +260,11 @@ void Timetables::Algorithms::router_raptor::obtain_journeys() {
 
 	time_t inc_time = SECOND;
 
-	for (/*size_t i = 1*/; search_by_arrival_ ? previous_fastest_journey->arrival_time() < maximal_arrival_ : /*i* < count_*/ true; /*i++*/) {
+	for (size_t i = 1; search_by_arrival_ ? previous_fastest_journey->arrival_time() < maximal_arrival_ : i < count_; i++) {
 		
 		const journey* current_fastest_journey = obtain_journey(date_time(previous_fastest_journey->departure_time(), inc_time));
 
 		if (current_fastest_journey == nullptr) // No journey found.
-			break;
-		
-		if (!search_by_arrival_ && fastest_journeys_.size() >= count_ + 1 && previous_fastest_journey < current_fastest_journey) // Number of total journeys reached. We have found some journey but it is worse than each from the previous one. No point of continuing.
 			break;
 		
 		inc_time = previous_fastest_journey->arrival_time() >= current_fastest_journey->arrival_time() ? 

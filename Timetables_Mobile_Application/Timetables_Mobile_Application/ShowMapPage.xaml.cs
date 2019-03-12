@@ -58,7 +58,17 @@ namespace Timetables.Application.Mobile
 		{
 			double lat, lon, distance;
 
-			var loc = AsyncHelpers.RunSync(DataFeedClient.GeoWatcher.GetCurrentPosition);
+			var loc = new Utilities.Position(double.NaN, double.NaN);
+
+			try
+			{
+				loc = AsyncHelpers.RunSync(DataFeedClient.GeoWatcher.GetCurrentPosition);
+			}
+			catch
+			{
+				zoomAtCurrentLoc = false;
+				PlatformDependentSettings.ShowMessage(Settings.Localization.PositioningNeeded);
+			}
 
 			if (!zoomAtCurrentLoc || double.IsNaN(loc.Latitude) || double.IsNaN(loc.Longitude))
 			{

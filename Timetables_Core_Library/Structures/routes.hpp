@@ -18,7 +18,7 @@ namespace Timetables {
 		private:
 			std::wstring headsign_; // Headsign of the route.
 			const route_info& info_; // Basic info for the route.
-			std::vector<const stop*> stops_sequence_; // Stops that the route goes through
+			std::vector<const stop*> stops_sequence_; // Stops that the route goes through.
 			std::vector<trip> trips_; // Trips which are sorted by departure.
 		public:
 			route(const route_info& info, std::size_t number_of_stops, const std::wstring& headsign, std::size_t number_of_trips) : info_(info), headsign_(headsign) {

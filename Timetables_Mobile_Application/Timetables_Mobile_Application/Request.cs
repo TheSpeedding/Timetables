@@ -84,7 +84,7 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						if (cached != null && cached.ShouldBeUpdated && routerRequest.Count != -1)
+						if (cached != null && cached.ShouldBeUpdated && routerRequest.Count != -1 && CanBeCached)
 							Task.Run(async () => cached.UpdateCache(await routerProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
@@ -137,7 +137,7 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1 && CanBeCached)
 							Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 					}
@@ -176,7 +176,7 @@ namespace Timetables.Application.Mobile
 						// Then update the cache.
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1)
+						if (cached != null && cached.ShouldBeUpdated && dbRequest.Count != -1 && CanBeCached)
 							Task.Run(async () => cached.UpdateCache(await dbProcessing.ProcessAsync(cached.ConstructNewRequest(), int.MaxValue)));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 

@@ -16,6 +16,7 @@ namespace Timetables.Client
 	{
 		[XmlIgnore]
 		private string locName = "English";
+		public string PositioningNeeded { get; set; } = "You have to enable positioning to use this feature.";
 		public string Loading { get; set; } = "Loading...";
 		public string UseCellularsToCache { get; set; } = "Use cellular data to cache";
 		public string TransfersSpeed { get; set; } = "Transfers speed";

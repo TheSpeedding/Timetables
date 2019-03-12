@@ -112,7 +112,18 @@ namespace Timetables.Application.Mobile
 		{
 			try
 			{
-				var station = DataFeedClient.Basic.Stations.FindClosestStation(AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition));
+				Utilities.Position pos = new Position();
+
+				try
+				{
+					pos = AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition);
+				}
+				catch
+				{
+					PlatformDependentSettings.ShowMessage(Settings.Localization.PositioningNeeded);
+				}
+
+				var station = DataFeedClient.Basic.Stations.FindClosestStation(pos);
 				if (station != null)
 				{
 					stopEntry.Text = station.Name;

@@ -16,7 +16,7 @@ using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
 static tuple<double, size_t, size_t, size_t, size_t> run_one_iteration(const data_feed& feed, size_t A, size_t B, const date_time& dep) {
-	router_raptor r(feed, A, B, dep, 50, 10000);
+	router_raptor r(feed, A, B, dep, 25, 10000);
 
 	auto start = chrono::high_resolution_clock::now();
 
@@ -40,10 +40,12 @@ static void run_round(const data_feed& feed, size_t A, size_t B, const date_time
 	size_t routes_traversed = 0;
 	size_t rounds = 0;
 
-	cout << endl << "Running " + to_string(iterations) + " iterations with EDT at " << de << "." << endl;
+	cout << endl << endl << "Running " + to_string(iterations) + " iterations with EDT at " << de << "." << endl;
 
 	for (size_t i = 0; i < iterations; ++i) {
 		auto res = run_one_iteration(feed, A, B, de);
+
+		cout << i << " ";
 
 		duration += get<0>(res);
 		et_calls += get<1>(res);
@@ -52,7 +54,7 @@ static void run_round(const data_feed& feed, size_t A, size_t B, const date_time
 		rounds += get<4>(res);
 	}
 
-	cout << endl << "Averages (per 50 journeys):" << endl << " Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ". Total rounds: " << to_string(rounds / iterations) << ".";
+	cout << endl << endl << "Averages (per 25 journeys):" << endl << "Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ". Total rounds: " << to_string(rounds / iterations) << ".";
 
 }
 
@@ -64,6 +66,18 @@ static void run_benchmark(const data_feed& feed, size_t A, size_t B) {
 	run_round(feed, A, B, date_time(date_time::now().date(), HOUR * 2), 100);
 	run_round(feed, A, B, date_time(date_time::now().date(), HOUR * 8), 100);
 	run_round(feed, A, B, date_time(date_time::now().date(), HOUR * 13), 100);
+
+	router_raptor r(feed, A, B, date_time::now().date(), date_time(date_time::now().date(), DAY), 10000);
+
+	auto start = chrono::high_resolution_clock::now();
+
+	r.obtain_journeys();
+
+	auto end = std::chrono::high_resolution_clock::now();
+
+	auto duration = std::chrono::duration<double, std::milli>(end - start).count();
+
+	cout << endl << endl << "Caching results: Time: " + to_string(duration) + " ms." << endl;
 }
 
 int main() {
@@ -74,7 +88,7 @@ int main() {
 	locale::global(locale("Czech"));
 
 	data_feed feed;
-
+	
 	cout << "Data loaded successfully." << endl;
 
 	run_benchmark(feed, feed.stations().find_index(L"Pod Jezerkou"), feed.stations().find_index(L"Malostranské námìstí"));

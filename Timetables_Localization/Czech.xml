@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<PositioningNeeded>Pro fungování této služby je nutné povolit určování polohy v nastavení telefonu.</PositioningNeeded>
 	<Loading>Probíhá načítání dat...</Loading>
 	<UseCellularsToCache>Používat data pro cachování</UseCellularsToCache>
 	<TransfersSpeed>Rychlost přestupů</TransfersSpeed>
