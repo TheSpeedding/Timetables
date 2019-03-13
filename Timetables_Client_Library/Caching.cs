@@ -52,9 +52,12 @@ namespace Timetables.Client
 			{
 				try
 				{
-					return XDocument.Load(pathToFile).Descendants().First().Descendants().Last().IsEmpty ||
-					DateTime.Parse(XDocument.Load(pathToFile).Descendants("CreatedAt").First().Value)
-					.Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
+					var doc = XDocument.Load(pathToFile);
+					var results = doc.Root.Descendants(doc.Root.Name == nameof(RouterResponse) ? nameof(RouterResponse.Journeys) : nameof(DepartureBoardResponse.Departures)).First();
+					var createdAt = DateTime.Parse(doc.Descendants(nameof(ResponseBase.CreatedAt)).First().Value);
+					var expired = createdAt.Add(DataFeedClient.TimeToCacheFor).Subtract(DataFeedClient.TimeToUpdateCachedBeforeExpiration) <= DateTime.Now;
+					return results.IsEmpty || expired;
+
 				}
 				catch
 				{
