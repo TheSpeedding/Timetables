@@ -71,7 +71,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
 
-				if (cached == null || (cached.ShouldBeUpdated || forceCache))
+				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
 				{
 					try
 					{
@@ -97,7 +97,7 @@ namespace Timetables.Application.Mobile
 
 				else
 				{
-					routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+					routerResponse = cached?.FindResultsSatisfyingRequest(routerRequest);
 				}
 			}
 
@@ -124,7 +124,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = StationInfoCached.Select(dbRequest.StopID);
 
-				if (cached == null || (cached.ShouldBeUpdated || forceCache))
+				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
 				{
 					try
 					{
@@ -149,7 +149,7 @@ namespace Timetables.Application.Mobile
 
 				else
 				{
-					dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+					dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
 				}
 			}
 
@@ -163,7 +163,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
 
-				if (cached == null || (cached.ShouldBeUpdated || forceCache))
+				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
 				{
 					try
 					{
@@ -189,7 +189,7 @@ namespace Timetables.Application.Mobile
 
 				else
 				{
-					dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+					dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
 				}
 			}
 
