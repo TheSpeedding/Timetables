@@ -71,7 +71,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
 
-				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{
@@ -124,7 +124,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = StationInfoCached.Select(dbRequest.StopID);
 
-				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{
@@ -163,7 +163,7 @@ namespace Timetables.Application.Mobile
 			{
 				var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
 
-				if (cached == null || ((cached.ShouldBeUpdated && CanBeCached) || forceCache))
+				if (cached == null || (cached.ShouldBeUpdated || forceCache))
 				{
 					try
 					{

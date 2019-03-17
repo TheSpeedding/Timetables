@@ -93,7 +93,6 @@ int main() {
 
 	run_benchmark(feed, feed.stations().find_index(L"Pod Jezerkou"), feed.stations().find_index(L"Malostranské námìstí"));
 	run_benchmark(feed, feed.stations().find_index(L"Horèièkova"), feed.stations().find_index(L"Letištì"));
-	run_benchmark(feed, feed.stations().find_index(L"Kladno,Americká"), feed.stations().find_index(L"Benešov,Pekárny"));
 
 	return 0;
 }

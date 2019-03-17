@@ -169,7 +169,7 @@ namespace Timetables.Application.Desktop
 	public class DepartureBoardScripting : Scripting
 	{
 		private DepartureBoardResultsWindow window;
-		private bool isStationInfo;
+		private readonly bool isStationInfo;
 
 		/// <summary>
 		/// Initializes the object.

@@ -26,10 +26,8 @@ namespace Timetables.Application.Mobile.Droid
 	}
 	public class HybridWebViewRenderer : ViewRenderer<HybridWebView, Android.Webkit.WebView>
 	{
-		private Context context;
-
+		private readonly Context context;
 		public HybridWebViewRenderer(Context context) : base(context) => this.context = context;
-
 		protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
 		{
 			base.OnElementChanged(e);
