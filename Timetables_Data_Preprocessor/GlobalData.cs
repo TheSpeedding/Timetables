@@ -39,8 +39,8 @@ namespace Timetables.Preprocessor
 			catch
 			{
 				CoefficientUndergroundTransfersWithinSameLine = 0.5;
-				CoefficientUndergroundTransfersWithinDifferentLines = 1.5;
-				CoefficientUndergroundToSurfaceTransfer = 2;
+				CoefficientUndergroundTransfersWithinDifferentLines = 2;
+				CoefficientUndergroundToSurfaceTransfer = 3;
 				MaximalDurationOfTransfer = 600; 
 				AverageWalkingSpeed = 0.9;
 
