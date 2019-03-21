@@ -16,7 +16,7 @@ using namespace Timetables::Structures;
 using namespace Timetables::Algorithms;
 
 static tuple<double, size_t, size_t, size_t, size_t> run_one_iteration(const data_feed& feed, size_t A, size_t B, const date_time& dep) {
-	router_raptor r(feed, A, B, dep, 25, 10000);
+	router_raptor r(feed, A, B, dep, 10, 10000);
 
 	auto start = chrono::high_resolution_clock::now();
 
@@ -54,7 +54,7 @@ static void run_round(const data_feed& feed, size_t A, size_t B, const date_time
 		rounds += get<4>(res);
 	}
 
-	cout << endl << endl << "Averages (per 25 journeys):" << endl << "Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ". Total rounds: " << to_string(rounds / iterations) << ".";
+	cout << endl << endl << "Averages (per 10 journeys):" << endl << "Time: " + to_string(duration / iterations) + " ms. ET calls: " + to_string(et_calls / iterations) + ". Marked stops: " + to_string(marked_stops / iterations) + ". Routes traversed: " + to_string(routes_traversed / iterations) + ". Total rounds: " << to_string(rounds / iterations) << ".";
 
 }
 

@@ -17,16 +17,18 @@ namespace Timetables {
 			friend class route; // We need to reserve some space in vector due to move command and this should not be a part of API.
 		private:
 			const int departure_time_; // Departure from the first stop in the trip. Seconds since midnight.
+			const int days_overhead_; // Departure time / 86400.
 			std::vector<stop_time> stop_times_; // List of the stop times included in this trip.
 			const route& route_; // Reference to the route serving this trip.
 			const service& service_; // Reference to the service that give us operating days for the trip.
 		public:
-			trip(const service& service, const route& route, int departure) : service_(service), departure_time_(departure), route_(route) {}
+			trip(const service& service, const route& route, int departure) : service_(service), departure_time_(departure % 86400), days_overhead_(departure / 86400), route_(route) {}
 
 			inline const std::vector<stop_time>& stop_times() const { return stop_times_; } // Gets list of stop times belonging to the trip.
 			inline const route& route() const { return route_; } // Gets information about route.
 			inline const service& service() const { return service_; } // Gets service for this trip.
 			inline const int departure() const { return departure_time_; } // Gets departure from the first stop of the trip, seconds since midnight.
+			inline const int days_overhead() const { return days_overhead_; } // Gets days overhead so the service can be computed correctly.
 
 			date_time find_departure_time_from_station(const station& s) const;
 			

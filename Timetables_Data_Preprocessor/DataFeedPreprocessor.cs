@@ -19,9 +19,9 @@ namespace Timetables.Preprocessor
         Trips Trips { get; }
         StopTimes StopTimes { get; }
         Routes Routes { get; }
-		Footpaths Footpaths { set; get; }
-		DateTime ExpirationDate { set; get; }
-        void CreateDataFeed(string path);
+		Footpaths Footpaths { get; }
+		DateTime ExpirationDate { get; set; }
+		void CreateDataFeed(string path);
 		void CreateBasicData(string path);
     }
 	/// <summary>

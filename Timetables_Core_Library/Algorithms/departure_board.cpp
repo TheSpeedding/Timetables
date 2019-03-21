@@ -56,7 +56,7 @@ void Timetables::Algorithms::station_info::obtain_departure_board() {
 			}
 
 			// Check if the stop-time (trip respectively) is operating in required date.
-			service_state s = (**it).is_operating_in_date_time(departure_date + (**it).departure_since_midnight() % DAY); // We will determine expected date time of departure and then look back to trip beginning day if it operates.
+			service_state s = (**it).is_operating_in_date_time(departure_date + ((**it).trip().days_overhead() * DAY) + ((**it).departure_since_midnight() % DAY)); // We will determine expected date time of departure and then look back to trip beginning day if it operates.
 
 			// Check if the departure does not leave before required time.
 			if ((days > 0 || (days == 0 && date_time((**it).departure_since_midnight()) >= departure_time)) && s != not_operating)
@@ -122,7 +122,7 @@ void Timetables::Algorithms::line_info::obtain_departure_board() {
 			}
 
 			// Check if the stop-time (trip respectively) is operating in required date.
-			service_state s = it->service().is_operating_in_date(departure_date);
+			service_state s = it->service().is_operating_in_date(departure_date + it->days_overhead() * DAY);
 			
 			// Check if the departure does not leave before required time.
 			if ((days > 0 || (days == 0 && date_time(it->departure()) >= departure_time)) && s != not_operating) {

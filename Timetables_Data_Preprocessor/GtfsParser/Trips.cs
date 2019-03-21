@@ -47,7 +47,7 @@ namespace Timetables.Preprocessor
 			/// Compares this instance to a specified Trip object and returns and indication of their relative values.
 			/// </summary>
 			/// <param name="other">Trip to compare.</param>
-			public int CompareTo(Trip other) => DepartureTime.CompareTo(other.DepartureTime);
+			public int CompareTo(Trip other) => (DepartureTime % 86400).CompareTo(other.DepartureTime % 86400);
 			/// <summary>
 			/// Initializes object.
 			/// </summary>

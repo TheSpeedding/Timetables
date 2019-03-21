@@ -237,7 +237,7 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 
 		if (new_departure_date_time >= arrival) {
 
-			service_state s = st.is_operating_in_date_time(new_departure_date_time);
+			service_state s = st.is_operating_in_date_time(date_time(new_departure_date_time, st.trip().days_overhead() * DAY));
 
 			if (s != not_operating)
 				return make_tuple(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()), s);
