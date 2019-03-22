@@ -1,6 +1,11 @@
 #ifndef MACROS_HPP
 #define MACROS_HPP
 
+#define SECOND 1
+#define MINUTE 60
+#define HOUR 3600
+#define DAY 86400
+
 #define BENCHMARK
 
 // #define MEMORY_OPTIMIZED

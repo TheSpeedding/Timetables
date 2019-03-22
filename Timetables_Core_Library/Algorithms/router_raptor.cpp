@@ -1,4 +1,5 @@
 #include "../Algorithms/router_raptor.hpp"
+#include <algorithm>
 // #include <tbb/tbb.h>
 #define PARALLEL_VERSION false
 
@@ -218,33 +219,53 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 	++total_et_calls_;
 #endif
 
+	// Something like improved binary search, works in log n in average case although it looks weird.
+
 	date_time new_departure_date = arrival.date();
 	size_t days = 0;
 
+	while (days < 7) {
+		auto item = std::lower_bound(route.trips().cbegin(), route.trips().cend(), arrival, [&] (const trip& fst, const date_time& snd) {
+			const stop_time& st = *(fst.stop_times().cbegin() + stop_index);
+
+			date_time new_departure_date_timeFst(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() % DAY);
+
+			return new_departure_date_timeFst < snd;
+		});
+
+		if (item != route.trips().cend()) {
+
+			for (auto it = item; days < 7; ++it) {
+
+				if (it == route.trips().cend()) {
+					it = route.trips().cbegin();
+					days++;
+					new_departure_date = date_time(new_departure_date, DAY);
+				}
+
+				const stop_time& st = *(it->stop_times().cbegin() + stop_index);
+
+				date_time new_departure_date_time(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() % DAY);
+
+				if (new_departure_date_time >= arrival) {
+
+					service_state s = st.is_operating_in_date_time(date_time(new_departure_date_time, st.trip().days_overhead() * DAY));
+
+					if (s != not_operating)
+						return make_tuple(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()), s);
+				}
+
+			}
+
+			break;
+		}
+
+		days++;
+		new_departure_date = date_time(new_departure_date, DAY);
+	}
+
 	// Searches for trip in horizon of a week. If not found, terminates looking for a journey using this route.
 
-	for (auto it = route.trips().cbegin(); days < 7; ++it) {
-
-		if (it == route.trips().cend()) {
-			it = route.trips().cbegin();
-			days++;
-			new_departure_date = date_time(new_departure_date, DAY);
-		}
-
-		const stop_time& st = *(it->stop_times().cbegin() + stop_index);
-
-		date_time new_departure_date_time(date_time(new_departure_date, DAY * (st.departure_since_midnight() / DAY)), st.departure_since_midnight() % DAY);
-
-		if (new_departure_date_time >= arrival) {
-
-			service_state s = st.is_operating_in_date_time(date_time(new_departure_date_time, st.trip().days_overhead() * DAY));
-
-			if (s != not_operating)
-				return make_tuple(&*it, date_time(new_departure_date_time, (-1) * st.departure_since_midnight()), s);
-
-		}
-
-	}
 
 	return make_tuple(nullptr, 0, not_operating);
 }

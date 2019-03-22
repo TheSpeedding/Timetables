@@ -6,11 +6,6 @@
 #include <ctime> // A need for time_t.
 #include <boost/date_time/posix_time/posix_time.hpp> // Using ptime class.
 
-#define SECOND 1
-#define MINUTE 60
-#define HOUR 3600
-#define DAY 86400
-
 namespace Timetables {
 	namespace Structures {
 		// Class that collects information about date time.
