@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Algorithms/departure_board.hpp" />
     <ClInclude Include="Algorithms\router_base.hpp" />
+    <ClInclude Include="macros_definition.hpp" />
     <ClInclude Include="Structures/journey.hpp" />
     <ClInclude Include="Structures/data_feed.hpp" />
     <ClInclude Include="Algorithms\router_raptor.hpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="Structures/stop_time.hpp" />
     <ClInclude Include="Structures/trips.hpp" />
     <ClInclude Include="Structures/date_time.hpp" />
+    <ClInclude Include="Structures\labels_structure.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms/departure_board.cpp" />

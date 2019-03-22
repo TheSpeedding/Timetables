@@ -1,6 +1,7 @@
 #ifndef SERVICES_HPP
 #define SERVICES_HPP
 
+#include "../macros_definition.hpp"
 #include "../Structures/date_time.hpp" // Dealing with date time.
 #include <map> // Data structure for extraordinary events.
 #include <vector> // Data structure for services.

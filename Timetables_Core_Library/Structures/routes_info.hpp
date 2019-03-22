@@ -1,6 +1,7 @@
 #ifndef ROUTES_INFO_HPP
 #define ROUTES_INFO_HPP
 
+#include "../macros_definition.hpp"
 #include <vector> // Data structure for routes info.
 #include <string> // Used for names.
 

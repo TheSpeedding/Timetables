@@ -1,6 +1,7 @@
 ﻿#ifndef TRIP_HPP
 #define TRIP_HPP
 
+#include "../macros_definition.hpp"
 #include "../Structures/services.hpp" // Reference to the service in Trip class.
 #include "../Structures/routes_info.hpp" // Reference to the routes info in Trips class ctor.
 #include "../Structures/stops.hpp" // Reference to the stops in SetTimetables method.

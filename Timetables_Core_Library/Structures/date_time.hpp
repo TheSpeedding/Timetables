@@ -1,6 +1,7 @@
 #ifndef UTILITIES_HPP
 #define UTILITIES_HPP
 
+#include "../macros_definition.hpp"
 #include <string> // Date time parsing. 
 #include <ctime> // A need for time_t.
 #include <boost/date_time/posix_time/posix_time.hpp> // Using ptime class.

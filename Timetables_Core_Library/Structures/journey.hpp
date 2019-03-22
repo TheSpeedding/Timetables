@@ -1,6 +1,7 @@
 #ifndef JOURNEY_HPP
 #define JOURNEY_HPP
 
+#include "../macros_definition.hpp"
 #include <memory> // Polymorphism.
 #include <vector> // Used in journeys.
 #include "stop_time.hpp" // Used in journeys.

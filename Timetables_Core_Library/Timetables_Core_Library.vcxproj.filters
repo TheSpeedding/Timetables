@@ -66,6 +66,12 @@
     <ClInclude Include="Algorithms\router_base.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="Structures\labels_structure.hpp">
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="macros_definition.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms/departure_board.cpp">

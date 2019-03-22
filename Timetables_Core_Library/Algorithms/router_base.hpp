@@ -1,6 +1,7 @@
 #ifndef ROUTER_BASE_HPP
 #define ROUTER_BASE_HPP
 
+#include "../macros_definition.hpp"
 #include <set>
 #include "../Structures/journey.hpp"
 

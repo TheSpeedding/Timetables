@@ -1,6 +1,7 @@
 #ifndef STATIONS_HPP
 #define STATIONS_HPP
 
+#include "../macros_definition.hpp"
 #include <vector> // Data sctructure for stations.
 #include <string> // A need for names.
 #include <algorithm> // Required for finding the station.

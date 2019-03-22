@@ -1,0 +1,9 @@
+#ifndef MACROS_HPP
+#define MACROS_HPP
+
+#define BENCHMARK
+
+// #define MEMORY_OPTIMIZED
+#define PERFORMANCE_OPTIMIZED
+
+#endif

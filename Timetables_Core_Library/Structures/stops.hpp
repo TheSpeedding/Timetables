@@ -1,6 +1,7 @@
 #ifndef STOPS_HPP
 #define STOPS_HPP
 
+#include "../macros_definition.hpp"
 #include "../Structures/date_time.hpp" // Dealing with time.
 #include "../Structures/stations.hpp" // Reference to the parent station in stop.
 #include "../Structures/routes.hpp" // Reference to the route in stop (throughgoing routes).

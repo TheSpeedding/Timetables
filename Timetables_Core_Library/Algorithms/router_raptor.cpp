@@ -291,7 +291,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 	active_routes_.clear();
 	journeys_.clear();
 
-	journeys_.push_back(map<const stop*, shared_ptr<journey_segment>>());
+	journeys_.push_back(labels_struct<shared_ptr<journey_segment>>(feed_));
 
 	// Using 0 trips we are able to reach all the stops in the station in departure time (meaning 0 seconds).
 
@@ -324,7 +324,7 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		++total_rounds_;
 #endif
 
-		journeys_.push_back(map<const stop*, shared_ptr<journey_segment>>());
+		journeys_.push_back(labels_struct<shared_ptr<journey_segment>>(feed_));
 
 		accumulate_routes();
 		traverse_each_route();

@@ -1,6 +1,7 @@
 #ifndef DATA_FEED_HPP
 #define DATA_FEED_HPP
 
+#include "../macros_definition.hpp"
 #include "../Structures/services.hpp"
 #include "../Structures/routes_info.hpp"
 #include "../Structures/routes.hpp"

@@ -1,6 +1,7 @@
 #ifndef STOP_TIME_HPP
 #define STOP_TIME_HPP
 
+#include "../macros_definition.hpp"
 #include "../Structures/date_time.hpp" // Extension methods for datetime.
 #include "../Structures/trips.hpp" // Reference to the trip in stop time class.
 #include "../Structures/stops.hpp" // Reference to the stop in stop time class.
