@@ -27,7 +27,13 @@ namespace Timetables.Configurator
 				}
 
 				foreach (var feed in (JArray)JObject.Parse(jsonDoc)["results"]["feeds"])
-					dataFeedsListBox.Items.Add(new FeedItem { Name = (string)feed["t"], Link = (string)feed["u"]["d"] });
+				{
+					if (feed["u"].HasValues)
+					{
+						var values = feed["u"].Values();
+						dataFeedsListBox.Items.Add(new FeedItem { Name = (string)feed["t"], Link = (string)feed["u"].Last });
+					}
+				}
 			}
 			catch
 			{
