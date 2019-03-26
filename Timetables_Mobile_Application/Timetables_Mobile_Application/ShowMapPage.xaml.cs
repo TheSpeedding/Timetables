@@ -35,25 +35,6 @@ namespace Timetables.Application.Mobile
 		private Queue<StopPin> queue = new Queue<StopPin>(); // Reset second click if needed.
 		private Func<StopsBasic.StopBasic, DateTime> findEarliestDeparture; // This varies throughout kinds of map.
 		private bool useStopNotStation; // False if open from journey/departure window.
-		private double GetLargestDistanceBetweenStops(IEnumerable<StopsBasic.StopBasic> stops)
-		{
-			double GetDistance(double Alat, double Alon, double Blat, double Blon)
-			{
-				double DegreesToRadians(double degrees) => (Math.PI / 180) * degrees;
-
-				// Using Haversine formula. 
-				double AlatR = DegreesToRadians(Alat);
-				double AlonR = DegreesToRadians(Alon);
-				double BlatR = DegreesToRadians(Blat);
-				double BlonR = DegreesToRadians(Blon);
-				double u = Math.Sin((BlatR - AlatR) / 2);
-				double v = Math.Sin((BlonR - AlonR) / 2);
-				return 500 + 2 * 6371 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000;
-			}
-
-			return stops.Max(A => stops.Max(B => GetDistance(A.Latitude, A.Longitude, B.Latitude, B.Longitude)));
-
-		}
 		private void SetMapScope(IEnumerable<StopsBasic.StopBasic> stops, bool zoomAtCurrentLoc = true, bool adaptiveZoom = false)
 		{
 			double lat, lon, distance;
@@ -74,7 +55,7 @@ namespace Timetables.Application.Mobile
 			{
 				lat = stops.GetAverageLatitude();
 				lon = stops.GetAverageLongitude();
-				distance = adaptiveZoom ? GetLargestDistanceBetweenStops(stops) / 2 : 1000;
+				distance = adaptiveZoom ? 10000 : 1000;
 			}
 			else
 			{

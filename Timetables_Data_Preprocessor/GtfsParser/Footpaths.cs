@@ -19,22 +19,35 @@ namespace Timetables.Preprocessor
         /// <returns>Representation of angle in radians.</returns>
         public static double DegreesToRadians(this double degrees) => (Math.PI / 180) * degrees;
         /// <summary>
-        /// Gets a walking time between two stops using Haversine formula.
+        /// Gets a walking time between two stops.
         /// </summary>
         /// <param name="A">First stop.</param>
         /// <param name="B">Second stop.</param>
         /// <returns>Walking time in seconds.</returns>
         public static int GetWalkingTime(this Stops.Stop A, Stops.Stop B)
-        {
-            // Using Haversine formula. 
-            double AlatR = A.Location.Item1.DegreesToRadians();
-            double AlonR = A.Location.Item2.DegreesToRadians();
-            double BlatR = B.Location.Item1.DegreesToRadians();
-            double BlonR = B.Location.Item2.DegreesToRadians();
-            double u = Math.Sin((BlatR - AlatR) / 2);
-            double v = Math.Sin((BlonR - AlonR) / 2);
-            return (int)(2 * 6371 * Math.Asin(Math.Sqrt(u * u + Math.Cos(AlatR) * Math.Cos(BlatR) * v * v)) * 1000 * (1 / GlobalData.AverageWalkingSpeed));
+		{
+			var deltaLatitudeDistance = Math.Abs(Math.Abs(A.Location.Item1) - Math.Abs(B.Location.Item1)) * OneDegreeLatitudeLength; // Meters.
+			var deltaLongitudeDistance = Math.Abs(Math.Abs(A.Location.Item2) - Math.Abs(B.Location.Item2)) * OneDegreeLatitudeLength; // Meters.
+
+			return (int) (Math.Sqrt(Math.Pow(deltaLatitudeDistance, 2) + Math.Pow(deltaLongitudeDistance, 2)) / GlobalData.AverageWalkingSpeed); // Pythagorean theoream.
         }
+		/// <summary>
+		/// Recomputes average 1° distance for specified stops.
+		/// </summary>
+		public static void RecomputeAverageLatitudeAndLongitudeLength(params Stops[] stopsLists)
+		{
+			var averageLat = stopsLists.Average(x => x.Average(y => y.Value.Location.Item1));
+			var averageLong = stopsLists.Average(x => x.Average(y => y.Value.Location.Item2));
+			OneDegreeLongitudeLength = Math.Cos(averageLong.DegreesToRadians()) * 111321; // 111321 is longitude length at the equator.
+		}
+		/// <summary>
+		/// In meters.
+		/// </summary>
+		private static double OneDegreeLatitudeLength { get; } = 111000; // Given by Earth properties.
+		/// <summary>
+		/// In meters.
+		/// </summary>
+		private static double OneDegreeLongitudeLength { get; set; }
     }
 	/// <summary>
 	/// Abstract class for footpaths collecting information about footpaths.
@@ -103,9 +116,13 @@ namespace Timetables.Preprocessor
 		/// <param name="other">The other collection that should be merged.</param>
 		public void MergeCollections(Footpaths other, Stops stopsA, Stops stopsB)
 		{
+			FootpathsExtensions.RecomputeAverageLatitudeAndLongitudeLength(stopsA, stopsB);
+
 			foreach (var footpath in other)
 				list.Add(footpath);
+
 			other = null;
+
 			foreach (var A in stopsA)
 				foreach (var B in stopsB)
 				{
@@ -125,8 +142,10 @@ namespace Timetables.Preprocessor
 		/// </summary>
 		/// <param name="stops">Stops.</param>
 		public GtfsFootpaths(Stops stops)
-        {
-            foreach (var A in stops)
+		{
+			FootpathsExtensions.RecomputeAverageLatitudeAndLongitudeLength(stops);
+
+			foreach (var A in stops)
                 foreach (var B in stops)
                 {
                     int walkingTime = A.Value.GetWalkingTime(B.Value);
