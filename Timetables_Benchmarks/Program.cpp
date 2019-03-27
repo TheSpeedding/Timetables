@@ -80,6 +80,19 @@ static void run_benchmark(const data_feed& feed, size_t A, size_t B) {
 	cout << endl << endl << "Caching results: Time: " + to_string(duration) + " ms." << endl;
 }
 
+static void run_extended_round(const data_feed& feed, size_t A, size_t B, date_time dep) {
+	cout << "EDT at " << dep << "." << endl;
+	router_raptor r(feed, A, B, dep, 1, 10000);
+	r.obtain_journeys();
+}
+
+static void run_extended_benchmark(const data_feed& feed, size_t A, size_t B) {
+	wcout << endl << endl << L"Stations " << feed.stations().at(A).name() << L" and " << feed.stations().at(B).name() << L"." << endl;
+	run_extended_round(feed, A, B, date_time(date_time::now().date(), HOUR * 2));
+	run_extended_round(feed, A, B, date_time(date_time::now().date(), HOUR * 8));
+	run_extended_round(feed, A, B, date_time(date_time::now().date(), HOUR * 13));
+}
+
 int main() {
 	setlocale(LC_ALL, "");
 	SetConsoleCP(GetACP());
@@ -93,6 +106,12 @@ int main() {
 
 	run_benchmark(feed, feed.stations().find_index(L"Pod Jezerkou"), feed.stations().find_index(L"Malostranské námìstí"));
 	run_benchmark(feed, feed.stations().find_index(L"Horèièkova"), feed.stations().find_index(L"Letištì"));
+
+	run_extended_benchmark(feed, feed.stations().find_index(L"Pod Jezerkou"), feed.stations().find_index(L"Malostranské námìstí"));
+	run_extended_benchmark(feed, feed.stations().find_index(L"Horèièkova"), feed.stations().find_index(L"Letištì"));
+
+	char c;
+	cin >> c;
 
 	return 0;
 }

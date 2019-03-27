@@ -75,7 +75,11 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(routerRequest);
+						if (!await CheckBasicDataValidity())
+						{
+							var results = cached?.FindResultsSatisfyingRequest(routerRequest);
+							return results?.Journeys.Count == 0 ? null : results;
+						}
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -98,6 +102,8 @@ namespace Timetables.Application.Mobile
 				else
 				{
 					routerResponse = cached?.FindResultsSatisfyingRequest(routerRequest);
+					if (routerResponse?.Journeys.Count == 0)
+						routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 				}
 			}
 
@@ -128,7 +134,11 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(dbRequest);
+						if (!await CheckBasicDataValidity())
+						{
+							var results = cached?.FindResultsSatisfyingRequest(dbRequest);
+							return results?.Departures.Count == 0 ? null : results;
+						}
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -150,6 +160,8 @@ namespace Timetables.Application.Mobile
 				else
 				{
 					dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
+					if (dbResponse?.Departures.Count == 0)
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 				}
 			}
 
@@ -167,7 +179,11 @@ namespace Timetables.Application.Mobile
 				{
 					try
 					{
-						if (!await CheckBasicDataValidity()) return cached?.FindResultsSatisfyingRequest(dbRequest);
+						if (!await CheckBasicDataValidity())
+						{
+							var results = cached?.FindResultsSatisfyingRequest(dbRequest);
+							return results?.Departures.Count == 0 ? null : results;
+						}
 
 						// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -190,6 +206,8 @@ namespace Timetables.Application.Mobile
 				else
 				{
 					dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
+					if (dbResponse?.Departures.Count == 0)
+						dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 				}
 			}
 

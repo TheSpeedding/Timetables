@@ -1,5 +1,4 @@
 <Timetables>
-  <Theme>0</Theme>
   <Language>Czech</Language>
   <OfflineMode>False</OfflineMode>
   <ExtraEventsUri>https://pid.cz/feed/rss-mimoradnosti</ExtraEventsUri>

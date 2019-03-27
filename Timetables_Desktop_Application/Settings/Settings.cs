@@ -141,19 +141,26 @@ namespace Timetables.Application.Desktop
 
 			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
 
-			switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
+			try
 			{
-				case '0':
-					Theme = new Themes.BlueTheme();
-					break;
-				case '1':
-					Theme = new Themes.DarkTheme();
-					break;
-				case '2':
-					Theme = new Themes.LightTheme();
-					break;
-				default:
-					throw new ArgumentException();
+				switch (settings.GetElementsByTagName("Theme")[0].InnerText[0])
+				{
+					case '0':
+						Theme = new Themes.BlueTheme();
+						break;
+					case '1':
+						Theme = new Themes.DarkTheme();
+						break;
+					case '2':
+						Theme = new Themes.LightTheme();
+						break;
+					default:
+						throw new ArgumentException();
+				}
+			}
+			catch
+			{
+				Theme = new Themes.BlueTheme();
 			}
 
 			Client.DataFeedDesktop.OfflineMode = bool.Parse(settings.GetElementsByTagName("OfflineMode")?[0].InnerText);

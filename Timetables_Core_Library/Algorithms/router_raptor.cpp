@@ -344,6 +344,12 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 #ifdef BENCHMARK
 		++total_rounds_;
 #endif
+#ifdef EXTENDED_BENCHMARK
+		auto tmp_total_et_calls_ = total_et_calls_;
+		auto tmp_total_traversed_routes_ = total_traversed_routes_;
+		auto tmp_total_marked_stops_ = total_marked_stops_;
+#endif
+
 
 		journeys_.push_back(labels_struct<shared_ptr<journey_segment>>(feed_));
 
@@ -351,6 +357,10 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 		traverse_each_route();
 		look_at_footpaths();
 
+#ifdef EXTENDED_BENCHMARK
+		std::cout << "   End of round " << k << ". ET calls: " + std::to_string(total_et_calls_ - tmp_total_et_calls_) + ". Marked stops: " + std::to_string(total_marked_stops_ - tmp_total_marked_stops_) + ". Routes traversed: " + std::to_string(total_traversed_routes_ - tmp_total_traversed_routes_) + "." << std::endl;
+
+#endif
 	}
 
 	// Adds all the suitable journeys to the map.

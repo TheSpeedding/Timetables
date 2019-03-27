@@ -6,7 +6,8 @@
 #define HOUR 3600
 #define DAY 86400
 
-#define BENCHMARK
+// #define BENCHMARK
+// #define EXTENDED_BENCHMARK // uses std::cout
 
 // #define MEMORY_OPTIMIZED
 #define PERFORMANCE_OPTIMIZED

@@ -181,7 +181,11 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
-							if (!await CheckBasicDataValidity()) return null;
+							if (!await CheckBasicDataValidity())
+							{
+								var results = cached?.FindResultsSatisfyingRequest(dbRequest);
+								return results?.Departures.Count == 0 ? null : results;
+							}
 
 							// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -202,7 +206,9 @@ namespace Timetables.Application.Desktop
 
 					else
 					{
-						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+						dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
+						if (dbResponse?.Departures.Count == 0)
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 					}
 				}
 			}
@@ -235,7 +241,11 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
-							if (!await CheckBasicDataValidity()) return null;
+							if (!await CheckBasicDataValidity())
+							{
+								var results = cached?.FindResultsSatisfyingRequest(dbRequest);
+								return results?.Departures.Count == 0 ? null : results;
+							}
 
 							// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -257,7 +267,9 @@ namespace Timetables.Application.Desktop
 
 					else
 					{
-						dbResponse = cached.FindResultsSatisfyingRequest(dbRequest);
+						dbResponse = cached?.FindResultsSatisfyingRequest(dbRequest);
+						if (dbResponse?.Departures.Count == 0)
+							dbResponse = await dbProcessing.ProcessAsync(dbRequest, Settings.TimeoutDuration);
 					}
 				}
 			}
@@ -289,7 +301,11 @@ namespace Timetables.Application.Desktop
 					{
 						try
 						{
-							if (!await CheckBasicDataValidity()) return null;
+							if (!await CheckBasicDataValidity())
+							{
+								var results = cached?.FindResultsSatisfyingRequest(routerRequest);
+								return results?.Journeys.Count == 0 ? null : results;
+							}
 
 							// Process the request immediately so the user does not have to wait until the caching is completed.
 
@@ -311,7 +327,9 @@ namespace Timetables.Application.Desktop
 
 					else
 					{
-						routerResponse = cached.FindResultsSatisfyingRequest(routerRequest);
+						routerResponse = cached?.FindResultsSatisfyingRequest(routerRequest);
+						if (routerResponse?.Journeys.Count == 0)
+							routerResponse = await routerProcessing.ProcessAsync(routerRequest, Settings.TimeoutDuration);
 					}
 				}
 			}
@@ -349,11 +367,14 @@ namespace Timetables.Application.Desktop
 		/// </summary>
 		public static async Task UpdateCachedResultsAsync(bool forceUpdate = false)
 		{
-			async Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
 			{
-				foreach (var fetched in collection)
-					if (forceUpdate || fetched.ShouldBeUpdated)
-						await processAsync(fetched.ConstructNewRequest());
+				return Task.Run(() =>
+				{
+					foreach (var fetched in collection)
+						if (forceUpdate || fetched.ShouldBeUpdated)
+							processAsync(fetched.ConstructNewRequest());
+				});
 			}
 
 			await Task.WhenAll(

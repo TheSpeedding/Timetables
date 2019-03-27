@@ -22,6 +22,7 @@ namespace Timetables.Client
 		/// </summary>
 		/// <param name="doc">Document with stop IDs.</param>
 		/// <returns>Document with stop names.</returns>
+		[Obsolete]
 		private static XmlDocument ReplaceStopIdsWithNames(this XmlDocument doc)
 		{
 			XDocument xDoc = XDocument.Load(new XmlNodeReader(doc));
