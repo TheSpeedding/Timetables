@@ -123,7 +123,7 @@ namespace Timetables.Application.Mobile
 		/// <summary>
 		/// Timeout duration while waiting for connection with the server.
 		/// </summary>
-		public static int TimeoutDuration { get; } = 15000;
+		public static int TimeoutDuration { get; } = 5000;
 		/// <summary>
 		/// Determines whether subway is allowed in search results.
 		/// </summary>

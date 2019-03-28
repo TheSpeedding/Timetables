@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Timetables_Benchmarks")]
-
 namespace Timetables.Server
 {
 	static class Program

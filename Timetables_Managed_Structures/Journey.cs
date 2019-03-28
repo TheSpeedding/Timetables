@@ -119,7 +119,7 @@ namespace Timetables.Client
 		/// </summary>
 		public class WaitingTimesComparer : IComparer<Journey>
 		{
-			public int Compare(Journey x, Journey y) => x.TransfersCount.CompareTo(y.TransfersCount);
+			public int Compare(Journey x, Journey y) => x.GetWaitingTime().CompareTo(y.GetWaitingTime());
 		}
 	}
 

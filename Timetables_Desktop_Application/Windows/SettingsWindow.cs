@@ -31,8 +31,8 @@ namespace Timetables.Application.Desktop
 			themeComboBox.Items.Add(Settings.Localization.LightTheme);
 
 			if (Settings.Theme is  Themes.BlueTheme) themeComboBox.SelectedIndex = 0;
-			if (Settings.Theme is  Themes.DarkTheme) themeComboBox.SelectedIndex = 1;
-			if (Settings.Theme is Themes.LightTheme) themeComboBox.SelectedIndex = 2;
+			if (Settings.Theme is  Themes.DarkTheme) themeComboBox.SelectedIndex = 2;
+			if (Settings.Theme is Themes.LightTheme) themeComboBox.SelectedIndex = 1;
 
 			languageComboBox.Items.Add("English");
 
@@ -53,10 +53,10 @@ namespace Timetables.Application.Desktop
 				case 0:
 					Settings.Theme = new Themes.BlueTheme();
 					break;
-				case 1:
+				case 2:
 					Settings.Theme = new Themes.DarkTheme();
 					break;
-				case 2:
+				case 1:
 					Settings.Theme = new Themes.LightTheme();
 					break;
 				default:

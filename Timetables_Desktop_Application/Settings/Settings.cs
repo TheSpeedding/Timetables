@@ -148,10 +148,10 @@ namespace Timetables.Application.Desktop
 					case '0':
 						Theme = new Themes.BlueTheme();
 						break;
-					case '1':
+					case '2':
 						Theme = new Themes.DarkTheme();
 						break;
-					case '2':
+					case '1':
 						Theme = new Themes.LightTheme();
 						break;
 					default:
@@ -201,8 +201,8 @@ namespace Timetables.Application.Desktop
 			CreateElementIfNotExist("Theme", "Language", "OfflineMode", "ExtraEventsUri", "LockoutsUri", "FullDataUri", "ServerIp", "RouterPort", "DepartureBoardPort", "BasicDataPort");
 
 			if (Theme is  Themes.BlueTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "0";
-			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
-			if (Theme is Themes.LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
+			if (Theme is  Themes.DarkTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "2";
+			if (Theme is Themes.LightTheme) settings.GetElementsByTagName("Theme")[0].InnerText = "1";
 
 			settings.GetElementsByTagName("Language")[0].InnerText = Localization.ToString();
 

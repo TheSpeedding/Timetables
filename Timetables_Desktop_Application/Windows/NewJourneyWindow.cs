@@ -18,7 +18,7 @@ namespace Timetables.Application.Desktop
 	{
 		private class CustomJourneyComparer
 		{
-			private string name;
+			private readonly string name;
 			public IComparer<Journey> Comparer { get; }
 			public CustomJourneyComparer(IComparer<Journey> comp, string name)
 			{
