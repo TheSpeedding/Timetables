@@ -76,21 +76,29 @@ namespace Timetables.Application.Desktop
 
 				}
 
-				SmtpClient client = new SmtpClient
+				try
 				{
-					Port = 25,
-					DeliveryMethod = SmtpDeliveryMethod.Network,
-					UseDefaultCredentials = false,
-					Host = "smtp.gmail.com"
-				};
 
-				MailMessage mail = new MailMessage(UnhandledExceptionMailSendTo, UnhandledExceptionMailSendTo)
+					SmtpClient client = new SmtpClient
+					{
+						Port = 587,
+						EnableSsl = true,
+						Credentials = new System.Net.NetworkCredential("timetablesmffuk", "timetables2018ksi"),
+						Host = "smtp.gmail.com"
+					};
+
+					MailMessage mail = new MailMessage(UnhandledExceptionMailSendTo, UnhandledExceptionMailSendTo)
+					{
+						Subject = "Timetables Desktop Application - Unhandled exception",
+						Body = messageText
+					};
+
+					client.Send(mail);
+				}
+				catch
 				{
-					Subject = "Timetables Desktop Application - Unhandled exception",
-					Body = messageText
-				};
 
-				client.Send(mail);				
+				}
 			}
 		}
 

@@ -154,7 +154,7 @@ namespace Timetables.Application.Desktop
 			else
 				return await SendDepartureBoardRequestAsync((LineInfoRequest)dbRequest);
 		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest)
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(StationInfoRequest dbRequest, bool forceCache = false)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -177,7 +177,7 @@ namespace Timetables.Application.Desktop
 				{
 					var cached = StationInfoCached.Select(dbRequest.StopID);
 
-					if (cached == null || cached.ShouldBeUpdated)
+					if (cached == null || (cached.ShouldBeUpdated || forceCache))
 					{
 						try
 						{
@@ -214,7 +214,7 @@ namespace Timetables.Application.Desktop
 			}
 			return dbResponse;
 		}
-		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest)
+		private static async Task<DepartureBoardResponse> SendDepartureBoardRequestAsync(LineInfoRequest dbRequest, bool forceCache = false)
 		{
 			DepartureBoardResponse dbResponse = null;
 
@@ -237,7 +237,7 @@ namespace Timetables.Application.Desktop
 				{
 					var cached = LineInfoCached.Select(dbRequest.RouteInfoID);
 
-					if (cached == null || cached.ShouldBeUpdated)
+					if (cached == null || (cached.ShouldBeUpdated || forceCache))
 					{
 						try
 						{
@@ -275,7 +275,7 @@ namespace Timetables.Application.Desktop
 			}
 			return dbResponse;
 		}
-		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest)
+		public static async Task<RouterResponse> SendRouterRequestAsync(RouterRequest routerRequest, bool forceCache = false)
 		{
 			RouterResponse routerResponse = null;
 
@@ -297,7 +297,7 @@ namespace Timetables.Application.Desktop
 				{
 					var cached = JourneyCached.Select(routerRequest.SourceStationID, routerRequest.TargetStationID);
 
-					if (cached == null || cached.ShouldBeUpdated)
+					if (cached == null || (cached.ShouldBeUpdated || forceCache))
 					{
 						try
 						{
@@ -350,30 +350,30 @@ namespace Timetables.Application.Desktop
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest) => 
-			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
+		private static async Task<bool> CacheDepartureBoardAsync(StationInfoRequest dbRequest, bool forceCache = false) => 
+			StationInfoCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(dbRequest.StopID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest, forceCache)) != null;
 		/// <summary>
 		/// Caches the departures according to departure board request.
 		/// </summary>
-		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest) => 
-			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest)) != null;
+		private static async Task<bool> CacheDepartureBoardAsync(LineInfoRequest dbRequest, bool forceCache = false) => 
+			LineInfoCached.CacheResults(DataFeedDesktop.Basic.RoutesInfo.FindByIndex(dbRequest.RouteInfoID), DataFeedDesktop.OfflineMode ? new DepartureBoardResponse() : await SendDepartureBoardRequestAsync(dbRequest, forceCache)) != null;
 		/// <summary>
 		/// Caches the journeys according to router request.
 		/// </summary>
-		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest) => 
-			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest)) != null;
+		public static async Task<bool> CacheJourneyAsync(RouterRequest routerRequest, bool forceCache = false) => 
+			JourneyCached.CacheResults(DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.SourceStationID), DataFeedDesktop.Basic.Stations.FindByIndex(routerRequest.TargetStationID), DataFeedDesktop.OfflineMode ? new RouterResponse() : await SendRouterRequestAsync(routerRequest, forceCache)) != null;
 		/// <summary>
 		/// Updates all the cached results.
 		/// </summary>
 		public static async Task UpdateCachedResultsAsync(bool forceUpdate = false)
 		{
-			Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, Task> processAsync) where Res : ResponseBase where Req : RequestBase
+			Task ForEachFetchedResult<Res, Req>(IEnumerable<CachedData<Res, Req>> collection, Func<Req, bool, Task> processAsync) where Res : ResponseBase where Req : RequestBase
 			{
 				return Task.Run(() =>
 				{
 					foreach (var fetched in collection)
 						if (forceUpdate || fetched.ShouldBeUpdated)
-							processAsync(fetched.ConstructNewRequest());
+							processAsync(fetched.ConstructNewRequest(), forceUpdate);
 				});
 			}
 

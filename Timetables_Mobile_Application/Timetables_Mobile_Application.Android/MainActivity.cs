@@ -8,12 +8,15 @@ using Android.Widget;
 using Android.OS;
 using Android;
 using Android.Content;
+using System.Net.Mail;
+using Timetables.Client;
 
 namespace Timetables.Application.Mobile.Droid
 {
 	[Activity(Label = "Timetables", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
-    {
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+	{
+		private static MailAddress UnhandledExceptionMailSendTo { get; } = new MailAddress("thespeedding@gmail.com");
 		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
 		{
 			base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -48,12 +51,12 @@ namespace Timetables.Application.Mobile.Droid
 		private Bundle savedInstanceState;
 
 		protected override void OnCreate(Bundle savedInstanceState)
-        {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
+		{
+			TabLayoutResource = Resource.Layout.Tabbar;
+			ToolbarResource = Resource.Layout.Toolbar;
 
-            base.OnCreate(savedInstanceState);
-			
+			base.OnCreate(savedInstanceState);
+
 			this.savedInstanceState = savedInstanceState;
 
 			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -83,7 +86,7 @@ namespace Timetables.Application.Mobile.Droid
 					PackageManager.CheckPermission(permissions[6], PackageName) == Permission.Granted &&
 					PackageManager.CheckPermission(permissions[7], PackageName) == Permission.Granted)
 				{
-					permissionsGranted = true;					
+					permissionsGranted = true;
 				}
 				else
 				{
@@ -98,18 +101,18 @@ namespace Timetables.Application.Mobile.Droid
 
 			if (permissionsGranted)
 				RunApp(savedInstanceState);
-						
-        }
+
+		}
 
 		private void RunApp(Bundle savedInstanceState)
 		{
 			Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
-					   
+
 			PlatformDependentSettings.GetStream = (fileInfo) => Assets.Open(fileInfo.FullName.Substring(1));
 
 			PlatformDependentSettings.GetLocalizations = () => Assets.List("loc");
 
-			PlatformDependentSettings.SetBasePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/");
+			PlatformDependentSettings.BasePath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/timetables/";
 
 			PlatformDependentSettings.ShowMessage = (message) => Toast.MakeText(this, message, ToastLength.Long).Show();
 
@@ -126,28 +129,6 @@ namespace Timetables.Application.Mobile.Droid
 				ad.Show();
 			};
 
-			bool firstCall = false; // ConnectivityTypeChanged event is broken, it's called twice everytime the type is changed.
-
-			Plugin.Connectivity.CrossConnectivity.Current.ConnectivityTypeChanged += async (s, e) =>
-			{
-				firstCall = !firstCall;
-
-				if (!firstCall) return;
-
-				bool isWifi = false;
-				
-				foreach (var connectionType in e.ConnectionTypes)
-					if (connectionType == Plugin.Connectivity.Abstractions.ConnectionType.WiFi)
-						isWifi = true;
-
-				if (isWifi)
-					try
-					{
-						await Request.UpdateCachedResultsAsync(true);
-					}
-					catch { }
-			};
-
 #if DEBUG
 			LoadApplication(new App());
 #else
@@ -158,9 +139,53 @@ namespace Timetables.Application.Mobile.Droid
 			catch (Exception ex)
 			{
 				PlatformDependentSettings.ShowMessage(ex.Message);
+				ReportUnhandledExceptionCallback(ex);
 				throw;
 			}
 #endif
 		}
-    }
+
+		/// <summary>
+		/// Callback to send a report about unhandled exception.
+		/// </summary>
+		internal static void ReportUnhandledExceptionCallback(Exception e)
+		{
+			string messageText = e.Message + System.Environment.NewLine + e.StackTrace;
+
+			try
+			{
+				using (var sr = new System.IO.StreamReader(DataFeedClient.BasePath + Settings.SettingsFile))
+					messageText += System.Environment.NewLine + sr.ReadToEnd();
+			}
+			catch
+			{
+
+			}
+
+			try
+			{
+#pragma warning disable CS0618 // Type or member is obsolete
+				SmtpClient client = new SmtpClient
+#pragma warning restore CS0618 // Type or member is obsolete
+				{
+					Port = 587,
+					EnableSsl = true,
+					Credentials = new System.Net.NetworkCredential("timetablesmffuk", "timetables2018ksi"),
+					Host = "smtp.gmail.com"
+				};
+
+				MailMessage mail = new MailMessage(UnhandledExceptionMailSendTo, UnhandledExceptionMailSendTo)
+				{
+					Subject = "Timetables Mobile Application - Unhandled exception",
+					Body = messageText
+				};
+
+				client.Send(mail);
+			}
+			catch
+			{
+
+			}
+		}
+	}
 }

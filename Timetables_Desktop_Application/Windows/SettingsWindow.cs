@@ -16,10 +16,10 @@ namespace Timetables.Application.Desktop
 
 			Settings.Theme.Apply(this);
 
-			Name = Settings.Localization.Settings;
+			Text = Settings.Localization.Settings;
 
 			languageLabel.Text = Settings.Localization.Language;
-			themeLabel.Text = Settings.Localization.Theme;
+			themeLabel.Text = Settings.Localization.Theme; 
 
 			dataDownloadButton.Text = Settings.Localization.ForceDataDownload;
 			cacheButton.Text = Settings.Localization.ForceCachedDataUpdate;
@@ -101,8 +101,7 @@ namespace Timetables.Application.Desktop
 		{
 			try
 			{
-				await Request.UpdateCachedResultsAsync(true); // TO-DO: Temporary bugfix. This deletes the data, in the next call the data will be updated. The problem is probably in overwriting files.
-				await Request.UpdateCachedResultsAsync(true);
+				await Request.UpdateCachedResultsAsync(true); 
 			}
 			catch
 			{

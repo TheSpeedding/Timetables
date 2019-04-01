@@ -63,7 +63,14 @@ namespace Timetables.Client
 			{
 				Send(request);
 
-				response = await Task.Run(() => Receive());
+				try
+				{
+					response = await Task.Run(() => Receive());
+				}
+				catch
+				{
+					throw new WebException("Server offline.");
+				}
 			}
 
 			else

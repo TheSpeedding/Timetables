@@ -2,7 +2,7 @@
 <Localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<PositioningNeeded>Pro fungování této služby je nutné povolit určování polohy v nastavení telefonu.</PositioningNeeded>
 	<Loading>Probíhá načítání dat...</Loading>
-	<UseCellularsToCache>Používat data pro cachování</UseCellularsToCache>
+	<UseCellularsToCache>Používat data pro aktualizaci oblíbených položek</UseCellularsToCache>
 	<TransfersSpeed>Rychlost přestupů</TransfersSpeed>
 	<AlreadyCached>Tato položka je již mezi oblíbenými</AlreadyCached>
 	<MainMenu>Hlavní menu</MainMenu>
@@ -91,7 +91,7 @@
 	<DataDownloadedSuccessfully>Data úspěšně aktualizována.</DataDownloadedSuccessfully>
 	<Headsign>Směr</Headsign>
 	<GetLineInfo>Najít informace o lince</GetLineInfo>
-	<ForceCachedDataUpdate>Aktualizovat cache</ForceCachedDataUpdate>
+	<ForceCachedDataUpdate>Aktualizovat oblíbené</ForceCachedDataUpdate>
 	<FavoriteLines>Oblíbené linky</FavoriteLines>
 	<FavoriteStations>Oblíbené stanice</FavoriteStations>
 </Localization>

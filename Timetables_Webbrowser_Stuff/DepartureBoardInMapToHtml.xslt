@@ -10,9 +10,11 @@
 			<body id="departure-board-type">
 				<div class="content">
 					<div class="title">
-						<span class="station-id">
-							<xsl:value-of select="//Departure/StopID/text()"/>
-						</span>
+						<xsl:if test="//Departure">
+							<span class="station-id">
+								<xsl:value-of select="//Departure/StopID/text()"/>
+							</span>
+						</xsl:if>
 						<xsl:if test="not(//Departure)">
 							<div id="no-departures"></div>
 						</xsl:if>

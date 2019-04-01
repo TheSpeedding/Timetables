@@ -27,9 +27,8 @@ namespace Timetables.Application.Desktop
 
 			Settings.Theme.PanelTheme.Apply(mainDockPanel);
 			Settings.Theme.MenuTheme.Apply(mainMenuStrip);
-			Settings.Theme.Apply(this);
 		}
-
+		
 		private void settingsToolStripMenuItem_Click(object sender, EventArgs e) => new SettingsWindow().ShowDialog();
 
 		private void findDeparturesToolStripMenuItem_Click(object sender, EventArgs e) => new NewStationInfoWindow().Show(mainDockPanel, DockState.Document);

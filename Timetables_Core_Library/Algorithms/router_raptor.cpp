@@ -272,6 +272,8 @@ std::tuple<const Timetables::Structures::trip*, Timetables::Structures::date_tim
 
 void Timetables::Algorithms::router_raptor::obtain_journeys() {
 
+	if (&source_ == &target_) return;
+
 	const journey* previous_fastest_journey = obtain_journey(earliest_departure_);
 
 	// We tried to search a journey but no journeys found. No point of continue.
@@ -359,7 +361,6 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 #ifdef EXTENDED_BENCHMARK
 		std::cout << "   End of round " << k << ". ET calls: " + std::to_string(total_et_calls_ - tmp_total_et_calls_) + ". Marked stops: " + std::to_string(total_marked_stops_ - tmp_total_marked_stops_) + ". Routes traversed: " + std::to_string(total_traversed_routes_ - tmp_total_traversed_routes_) + "." << std::endl;
-
 #endif
 	}
 

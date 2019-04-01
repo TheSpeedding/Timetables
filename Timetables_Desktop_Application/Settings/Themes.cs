@@ -42,7 +42,25 @@ namespace Timetables.Application.Desktop.Themes
 		public void Apply(Form form)
 		{
 			form.BackColor = BackColor;
-			form.ForeColor = ForeColor;
+			form.ForeColor = ForeColor; 
+			
+			if (form.GetType() != typeof(MainWindow))
+				SetColorRecursively(form);
+		}
+		private void SetColorRecursively(object obj)
+		{
+			var controls = (Control.ControlCollection)obj?.GetType().GetProperty("Controls")?.GetValue(obj);
+			
+			foreach (var control in controls)
+			{
+				if (!(control is TextBox) && !(control is NumericUpDown) && !(control is ComboBox))
+				{
+					(control as Control).ForeColor = ForeColor;
+					(control as Control).BackColor = BackColor;
+					SetColorRecursively(control);
+					(control as Control).Invalidate();
+				}
+			}
 		}
 	}
 
@@ -177,11 +195,13 @@ namespace Timetables.Application.Desktop.Themes
 		{
 			menuStrip.BackColor = Palette.DefaultBackColor;
 			menuStrip.ForeColor = Palette.TextColor;
-
+			
+			/*
 			foreach (var y in menuStrip.Items)
 				foreach (var x in (y as ToolStripMenuItem).DropDownItems)
 					if (x is ToolStripDropDownItem)
 						((ToolStripDropDownItem)x).ForeColor = Palette.TextColor;
+			*/
 
 			menuStrip.Renderer = Renderer;
 		}

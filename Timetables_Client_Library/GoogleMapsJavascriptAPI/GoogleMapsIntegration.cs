@@ -82,7 +82,16 @@ namespace Timetables.Client
 			double lat, lon;
 			int zoom;
 
-			var loc = AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition);
+			Position loc = new Position();
+
+			try
+			{
+				loc = AsyncHelpers.RunSync<Position>(DataFeedClient.GeoWatcher.GetCurrentPosition);
+			}
+			catch
+			{
+
+			}
 
 			if (double.IsNaN(loc.Latitude) || double.IsNaN(loc.Longitude))
 			{

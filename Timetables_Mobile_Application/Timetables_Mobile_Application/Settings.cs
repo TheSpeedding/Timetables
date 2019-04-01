@@ -33,14 +33,20 @@ namespace Timetables.Application.Mobile
 		/// </summary>
 		public static Action<string, Action<string>> ShowDialog { get; set; }
 		/// <summary>
-		/// Sets the base path to the given path.
+		/// Base path to the data folder.
 		/// </summary>
-		/// <param name="path">Path.</param>
-		public static void SetBasePath(string path)
+		public static string BasePath
 		{
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-			DataFeedClient.BasePath = path;
+			get
+			{
+				return DataFeedClient.BasePath;
+			}
+			set
+			{
+				if (!Directory.Exists(value))
+					Directory.CreateDirectory(value);
+				DataFeedClient.BasePath = value;
+			}
 		}
 	}
 	/// <summary>

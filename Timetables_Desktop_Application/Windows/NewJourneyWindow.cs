@@ -33,7 +33,7 @@ namespace Timetables.Application.Desktop
 		public NewJourneyWindow(string source = "", string target = "")
 		{
 			InitializeComponent();
-			Settings.Theme.Apply(this);
+			Settings.Theme.Apply(this); 
 
 			Text = Settings.Localization.NewJourney;
 

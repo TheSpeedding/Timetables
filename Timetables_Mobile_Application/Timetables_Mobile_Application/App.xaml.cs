@@ -11,6 +11,28 @@ namespace Timetables.Application.Mobile
 	{
 		public App()
 		{
+			bool firstCall = false; // ConnectivityTypeChanged event is broken, it's called twice everytime the type is changed.
+
+			Plugin.Connectivity.CrossConnectivity.Current.ConnectivityTypeChanged += async (s, e) =>
+			{
+				firstCall = !firstCall;
+
+				if (!firstCall) return;
+
+				bool isWifi = false;
+
+				foreach (var connectionType in e.ConnectionTypes)
+					if (connectionType == Plugin.Connectivity.Abstractions.ConnectionType.WiFi)
+						isWifi = true;
+
+				if (isWifi)
+					try
+					{
+						await Request.UpdateCachedResultsAsync(true);
+					}
+					catch { }
+			};
+
 			InitializeComponent();
 
 			Settings.Load();
