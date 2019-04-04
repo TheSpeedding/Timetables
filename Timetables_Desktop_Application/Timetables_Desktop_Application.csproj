@@ -249,10 +249,6 @@
       <Project>{7d416d6b-719f-44d7-b641-30971b064a76}</Project>
       <Name>Timetables_Client_Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj">
-      <Project>{a492f425-5484-4b3e-a6a7-cec957a4df4f}</Project>
-      <Name>Timetables_Crossplatform_Utilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Timetables_Data_Preprocessor\Timetables_Data_Preprocessor.csproj">
       <Project>{e64fc3af-7b0d-438d-9faa-5d4c7aff945b}</Project>
       <Name>Timetables_Data_Preprocessor</Name>

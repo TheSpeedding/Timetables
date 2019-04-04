@@ -56,8 +56,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Mobile_Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Mobile_Application", "Timetables_Mobile_Application\Timetables_Mobile_Application\Timetables_Mobile_Application.csproj", "{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetables_Crossplatform_Utilities", "Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj", "{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Default_Settings", "Timetables_Default_Settings", "{12E09C9D-342A-4FC8-9D03-E164BC9EBD6B}"
 	ProjectSection(SolutionItems) = preProject
 		Timetables_Default_Settings\Desktop.xml = Timetables_Default_Settings\Desktop.xml
@@ -201,18 +199,6 @@ Global
 		{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6}.Release|x64.Build.0 = Release|Any CPU
 		{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6}.Release|x86.Build.0 = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|x64.Build.0 = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Debug|x86.Build.0 = Debug|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x64.ActiveCfg = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x64.Build.0 = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x86.ActiveCfg = Release|Any CPU
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F}.Release|x86.Build.0 = Release|Any CPU
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x64.ActiveCfg = Debug|x64
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Debug|x64.Build.0 = Debug|x64
@@ -240,7 +226,6 @@ Global
 		{B97F2CEA-A78F-427A-8D98-9F4E1C4D7948} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{0B77AAA8-EC2D-48ED-BBC0-756E457F0243} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
-		{A492F425-5484-4B3E-A6A7-CEC957A4DF4F} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{12E09C9D-342A-4FC8-9D03-E164BC9EBD6B} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

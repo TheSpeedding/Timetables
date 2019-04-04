@@ -43,18 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClasses.cs" />
-    <Compile Include="DepartureBoard.cs" />
-    <Compile Include="Journey.cs" />
-    <Compile Include="MeanOfTransport.cs" />
+    <Compile Include="Structures\BaseClasses.cs" />
+    <Compile Include="Structures\DepartureBoard.cs" />
+    <Compile Include="Structures\Journey.cs" />
+    <Compile Include="Structures\MeanOfTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Router.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Timetables_Crossplatform_Utilities\Timetables_Crossplatform_Utilities.csproj">
-      <Project>{a492f425-5484-4b3e-a6a7-cec957a4df4f}</Project>
-      <Name>Timetables_Crossplatform_Utilities</Name>
-    </ProjectReference>
+    <Compile Include="Structures\Router.cs" />
+    <Compile Include="Utilities\CPColor.cs" />
+    <Compile Include="Utilities\CPGeolocator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
