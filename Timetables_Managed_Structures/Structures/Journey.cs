@@ -50,7 +50,7 @@ namespace Timetables.Client
 		/// <summary>
 		/// Indicates whether journey uses outdated timetables.
 		/// </summary>
-		public bool Outdated { get { foreach (var js in JourneySegments) if ((js as TripSegment).Outdated) return true; return false; } }
+		public bool Outdated { get { foreach (var js in JourneySegments) if ((js is TripSegment) && ((TripSegment)js).Outdated) return true; return false; } }
 		/// <summary>
 		/// Returns number of transfers.
 		/// </summary>

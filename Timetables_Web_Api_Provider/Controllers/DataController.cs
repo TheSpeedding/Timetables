@@ -14,16 +14,18 @@ namespace Timetables.Server.Web.Controllers
 		[Route("Data/Stations/{Name}")]
 		public IEnumerable<StationBasicSerializable> Get(string Name)
 		{
-			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 			return DataFeedClient.Basic.Stations.FindByPartOfName(Name).Select(x => new StationBasicSerializable { ID = x.ID, Name = x.Name });
 		}
+		static StationDataController()
+		{ 
+			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
+		}
 	}
-	public class ThroughgoingRoutesDataController : ApiController
+	public class ThroughgoingLinesDataController : ApiController
 	{
 		[Route("Data/Station/{Name}/Lines")]
 		public IEnumerable<LineBasicSerializable> Get(string Name)
 		{
-			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 			try
 			{
 				return DataFeedClient.Basic.Stations.FindByName(Name).GetThroughgoingRoutes().Select(x => new LineBasicSerializable { ID = x.ID, Label = x.Label });
@@ -33,14 +35,22 @@ namespace Timetables.Server.Web.Controllers
 				return new List<LineBasicSerializable>();
 			}
 		}
+		static ThroughgoingLinesDataController()
+		{
+			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
+		}
 	}
 	public class LineDataController : ApiController
 	{
 		[Route("Data/Lines/{Name}")]
 		public IEnumerable<LineBasicSerializable> Get(string Name)
 		{
-			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 			return DataFeedClient.Basic.RoutesInfo.FindByPartOfLabel(Name).Select(x => new LineBasicSerializable { ID = x.ID, Label = x.Label });
+		}
+
+		static LineDataController()
+		{
+			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 		}
 	}
 	public class StopDataController : ApiController
@@ -48,8 +58,23 @@ namespace Timetables.Server.Web.Controllers
 		[Route("Data/Stops")]
 		public IEnumerable<StopBasicSerializable> Get()
 		{
-			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 			return DataFeedClient.Basic.Stops.Select(x => new StopBasicSerializable { ID = x.ID, Name = x.ParentStation.Name, Latitude = x.Latitude, Longitude = x.Longitude });
+		}
+		static StopDataController()
+		{
+			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
+		}
+	}
+	public class StopSimplifiedDataController : ApiController
+	{
+		[Route("Data/SimplifiedStops")]
+		public IEnumerable<SimplifiedStopBasicSerializable> Get()
+		{
+			return DataFeedClient.Basic.Stops.Select(x => new SimplifiedStopBasicSerializable { ID = x.ID, Name = x.ParentStation.Name });
+		}
+		static StopSimplifiedDataController()
+		{
+			AsyncHelpers.RunSync(() => DataFeedClient.DownloadAsync(true));
 		}
 	}
 
@@ -60,10 +85,14 @@ namespace Timetables.Server.Web.Controllers
 		public string Name { get; set; }
 	}
 	[Serializable]
-	public class StopBasicSerializable
+	public class SimplifiedStopBasicSerializable
 	{
 		public int ID { get; set; }
 		public string Name { get; set; }
+	}
+	[Serializable]
+	public class StopBasicSerializable : SimplifiedStopBasicSerializable
+	{
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }
 	}
