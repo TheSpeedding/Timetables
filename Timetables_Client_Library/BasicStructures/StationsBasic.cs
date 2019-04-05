@@ -35,9 +35,15 @@ namespace Timetables.Structures.Basic
 			/// </summary>
 			public IEnumerable<RoutesInfoBasic.RouteInfoBasic> GetThroughgoingRoutes()
 			{
+				List<RoutesInfoBasic.RouteInfoBasic> yielded = new List<RoutesInfoBasic.RouteInfoBasic>();
+
 				foreach (var stop in ChildStops)
 					foreach (var routeInfo in stop.ThroughgoingRoutes)
-						yield return routeInfo;
+						if (!yielded.Contains(routeInfo))
+						{
+							yield return routeInfo;
+							yielded.Add(routeInfo);
+						}
 			}
 			/// <summary>
 			/// Station ID, Name.

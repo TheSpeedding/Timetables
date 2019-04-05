@@ -60,8 +60,8 @@ namespace Timetables.Structures.Basic
 		public void Save(string basePath = "./")
 		{
 			if (Directory.Exists(basePath + "basic"))
-				Directory.Delete(basePath + "/basic", true);
-			Directory.CreateDirectory(basePath + "/basic");
+				Directory.Delete(basePath + "basic", true);
+			Directory.CreateDirectory(basePath + "basic");
 
 			RoutesInfo.WriteBasic(new StreamWriter(basePath + "basic/routes_info.tfb"));
 			Stops.WriteBasic(new StreamWriter(basePath + "basic/stops.tfb"));

@@ -49,7 +49,7 @@ namespace Timetables.Client
 		{
 			SourceStationID = sourceStationID;
 			TargetStationID = targetStationID;
-			EarliestDepartureDateTime = (ulong)(departureDateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+			EarliestDepartureDateTime = ConvertDateTimeToUnixTimestamp(departureDateTime);
 			MaxTransfers = transfers;
 			MaximalArrivalDateTime = ConvertDateTimeToUnixTimestamp(arrivalTime);
 			TransfersDurationCoefficient = coefficient;

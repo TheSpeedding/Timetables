@@ -105,5 +105,6 @@ namespace Timetables.Structures.Basic
 		/// </summary>
 		/// <param name="index">Index of the route info.</param>
 		public RouteInfoBasic FindByIndex(int index) => this[index];
+		public IEnumerable<RouteInfoBasic> FindByPartOfLabel(string label) => from line in Items where line.Label.Contains(label) select line;
 	}
 }

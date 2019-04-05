@@ -8,6 +8,8 @@ namespace Timetables.Interop
 	/// <summary>
 	/// Offers functions that can be called from Javascript code. In this project because of cross dependencies.
 	/// </summary>
+	[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+	[System.Runtime.InteropServices.ComVisible(true)]
 	public class Scripting
 	{
 		protected readonly Localization localization;

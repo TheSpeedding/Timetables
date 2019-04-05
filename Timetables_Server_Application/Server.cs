@@ -183,11 +183,18 @@ namespace Timetables.Server
 			{
 				while (true)
 				{
-					TcpClient client = await ServerListener.AcceptTcpClientAsync();
+					try
+					{
+						TcpClient client = await ServerListener.AcceptTcpClientAsync();
 
-					Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
+						Logging.Log($"Connection request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }.");
 
-					processingAction(client);
+						processingAction(client);
+					}
+					catch (Exception e)
+					{
+						Logging.Log("Exception: " + e.Message);
+					}
 				}
 			});
 		}

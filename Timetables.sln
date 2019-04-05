@@ -60,10 +60,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetables_Default_Settings
 	ProjectSection(SolutionItems) = preProject
 		Timetables_Default_Settings\Desktop.xml = Timetables_Default_Settings\Desktop.xml
 		Timetables_Default_Settings\Mobile.xml = Timetables_Default_Settings\Mobile.xml
+		Timetables_Default_Settings\Provider.xml = Timetables_Default_Settings\Provider.xml
 		Timetables_Default_Settings\Server.xml = Timetables_Default_Settings\Server.xml
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Benchmarks", "Timetables_Benchmarks\Timetables_Benchmarks.vcxproj", "{49A4A10C-19FD-4AF3-A843-597662E32A74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Web_Api_Provider", "Timetables_Web_Api_Provider\Timetables_Web_Api_Provider.csproj", "{E26ECA70-B9E9-4853-BB75-839D1E470805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +212,18 @@ Global
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x64.Build.0 = Release|x64
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x86.ActiveCfg = Release|Win32
 		{49A4A10C-19FD-4AF3-A843-597662E32A74}.Release|x86.Build.0 = Release|Win32
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|x64.Build.0 = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Debug|x86.Build.0 = Debug|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x64.ActiveCfg = Release|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x64.Build.0 = Release|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x86.ActiveCfg = Release|Any CPU
+		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -227,6 +242,7 @@ Global
 		{0B77AAA8-EC2D-48ED-BBC0-756E457F0243} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{7F94E8CD-A1DE-4A03-8E00-80D30FEF1BA6} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 		{12E09C9D-342A-4FC8-9D03-E164BC9EBD6B} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
+		{E26ECA70-B9E9-4853-BB75-839D1E470805} = {6C73E1BF-7538-4471-A877-DE6B12D1D48D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C024807C-BA27-4F91-8B3F-8160BB2EB961}
