@@ -1,0 +1,143 @@
+body {
+	font-family: Verdana;
+	background-color: #F1F4F6;
+}
+
+.departure {
+	position: relative;
+	padding: 10px 10px 10px 10px;
+	margin-bottom: 50px;
+}
+
+	.departure .leaves-in {
+		font-weight: bold;
+		margin: 0 0 0 20px;
+	}
+
+		.departure .leaves-in .outdated {
+			color: red;
+			font-weight: bold;
+			margin-right: 5px;
+		}
+
+	.departure ul.tools {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		margin: 10px 30px 0 0;
+	}
+
+		.departure ul.tools li {
+			display: inline;
+			margin-left: 10px;
+		}
+
+		.departure ul.tools a {
+			color: grey;
+			text-decoration: none;
+		}
+
+			.departure ul.tools a:hover {
+				color: black;
+			}
+
+	.departure .box {
+		margin: 15px 0 15px 0;
+		position: relative;
+		height: auto;
+		overflow: auto;
+		background-color: white;
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		box-shadow: 3px 3px 3px 3px #ccc;
+	}
+
+	.departure .info {
+		width: 15%;
+		float: left;
+	}
+
+		.departure .info .duration, .journey .info .transfers, .journey .info .outdated {
+			margin: 10px 20px 10px 20px;
+		}
+
+	.departure .box .label {
+		position: relative;
+		margin: 20px 20px 20px 20px;
+	}
+
+		.departure .box .label span {
+			font-weight: bold;
+			text-align: center;
+			color: white;
+			padding: 10px 20px 10px 20px;
+			margin: 0 10px 0 10px;
+			background-color: black;
+			-webkit-border-radius: 15px;
+			-moz-border-radius: 15px;
+			border-radius: 15px;
+			box-shadow: 1px 1px 1px 1px #ccc;
+		}
+
+	.departure .box .headsign {
+		position: absolute;
+		left: 150px;
+		top: 10px;
+		margin: 10px;
+		font-size: 110%;
+	}
+
+	.departure .box .time {
+		position: absolute;
+		right: 0px;
+		top: 10px;
+		margin: 10px 25px 10px 10px;
+		text-align: right;
+		font-size: 110%;
+	}
+
+	.departure .detail h1 {
+		margin: 0;
+		background-color: grey;
+		color: white;
+		font-weight: 600;
+		padding: 15px 10px 15px 10px;
+		font-size: 120%;
+	}
+
+	.departure .detail ol {
+		list-style-type: none;
+	}
+
+	.departure .detail {
+		font-size: 80%;
+	}
+
+	.departure ul.tools {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		margin: 10px 30px 0 0;
+	}
+
+		.departure ul.tools li {
+			display: inline;
+			margin-left: 10px;
+		}
+
+		.departure ul.tools a {
+			color: grey;
+			text-decoration: none;
+		}
+
+			.departure ul.tools a:hover {
+				color: black;
+			}
+
+	.departure hr {
+		margin: 25px 0 25px 0;
+		border: 0;
+		height: 1px;
+		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	}

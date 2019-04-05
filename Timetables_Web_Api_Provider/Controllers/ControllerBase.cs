@@ -15,13 +15,12 @@ namespace Timetables.Server.Web.Controllers
 	public static class ControllerBase
 	{
 		/// <summary>
-		/// Processes the request and returns string representation if sucessful. Otherwise null.
+		/// Processes the request.
 		/// </summary>
 		/// <typeparam name="Req">Request type.</typeparam>
 		/// <typeparam name="Proc">Processing object type.</typeparam>
 		/// <typeparam name="Res">Response type.</typeparam>
 		/// <param name="request">Request to process.</param>
-		/// <returns>Result as string. Otherwise null.</returns>
 		public static async Task<Res> ProcessAsync<Req, Proc, Res>(Req request) where Proc : Networking<Req, Res>, new() where Res : ResponseBase where Req : RequestBase
 		{
 			try

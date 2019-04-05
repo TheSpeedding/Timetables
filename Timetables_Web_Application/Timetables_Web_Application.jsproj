@@ -68,9 +68,19 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="css\DepartureBoardDetailToHtmlHR.css" />
+    <Content Include="css\DepartureBoardDetailToHtmlLR.css" />
+    <Content Include="css\DepartureBoardInMapToHtml.css" />
+    <Content Include="css\DepartureBoardSimpleToHtmlHR.css" />
+    <Content Include="css\DepartureBoardSimpleToHtmlLR.css" />
+    <Content Include="css\JourneyDetailToHtmlHR.css" />
+    <Content Include="css\JourneyDetailToHtmlLR.css" />
+    <Content Include="css\JourneySimpleToHtmlHR.css" />
+    <Content Include="css\JourneySimpleToHtmlLR.css" />
     <Content Include="index.html" />
-    <Content Include="js\main.js" />
-    <Content Include="css\default.css" />
+    <Content Include="js\data.js" />
+    <Content Include="js\router.js" />
+    <Content Include="js\utils.js" />
     <None Include="Timetables_Web_Application_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />

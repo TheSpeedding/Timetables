@@ -53,7 +53,6 @@ namespace Timetables.Interop
 		/// Computes difference of two datetimes and returns total duration.
 		/// </summary>
 		/// <param name="iso8601">Two datetimes separated by a comma.</param>
-		/// <param name="iso8601b">Second datetime.</param>
 		/// <returns>Total duration of the journey.</returns>
 		public string TotalDurationToString(string iso8601) => TimeSpanToString(DateTime.Parse(iso8601.Split(',')[1]) - DateTime.Parse(iso8601.Split(',')[0]));
 
