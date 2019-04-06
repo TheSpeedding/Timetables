@@ -26,7 +26,7 @@ namespace Timetables.Client
 		public string FindInformationAboutLine { get; set; } = "Find information about line";
 		public string FindJourney { get; set; } = "Find journey";
 		public string DepartureBoard { get; set; } = "Departure board";
-		public string FindDeparturesFromTheStation { get; set; } = "Find departures from the station";
+		public string FindDeparturesFromTheStation { get; set; } = "Find departures from station";
 		public string Traffic { get; set; } = "Traffic";
 		public string Lockouts { get; set; } = "Lockouts";
 		public string ExtraordinaryEvents { get; set; } = "Extraordinary events";
