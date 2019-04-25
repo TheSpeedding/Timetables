@@ -188,12 +188,19 @@ namespace Timetables.Application.Mobile
 				settings.Load(DataFeedClient.BasePath + SettingsFile);
 			}
 
-			var locName = settings.GetElementsByTagName("Language")?[0].InnerText;
-			Localization = locName == "English" ?
-				Localization.GetTranslation("English") : 
-				Localization.GetTranslation(new Tuple<Stream, string>(
-					PlatformDependentSettings.GetStream(new FileInfo("loc/" + locName + ".xml")),
-					locName));
+			try
+			{
+				var locName = settings.GetElementsByTagName("Language")?[0].InnerText;
+				Localization = locName == "English" ?
+					Localization.GetTranslation("English") :
+					Localization.GetTranslation(new Tuple<Stream, string>(
+						PlatformDependentSettings.GetStream(new FileInfo("loc/" + locName + ".xml")),
+						locName));
+			}
+			catch
+			{
+				Localization = new Localization();
+			}
 			
 			void SetIpAddress()
 			{

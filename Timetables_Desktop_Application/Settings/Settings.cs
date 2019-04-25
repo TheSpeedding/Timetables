@@ -139,7 +139,14 @@ namespace Timetables.Application.Desktop
 			XmlDocument settings = new XmlDocument();
 			settings.Load(SettingsFile.FullName);
 
-			Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+			try
+			{
+				Localization = Localization.GetTranslation(settings.GetElementsByTagName("Language")?[0].InnerText);
+			}
+			catch
+			{
+				Localization = new Localization();
+			}
 
 			try
 			{
