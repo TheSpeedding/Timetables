@@ -63,7 +63,7 @@ namespace Timetables.Server
 			AutoUpdate.Update += Logging.AutoUpdateCallback;
 
 			if (IsUpdateNeeded)
-				Download(IsUpdateNeeded);
+				DownloadAndLoad(IsUpdateNeeded);
 
 			else
 			{
@@ -75,7 +75,7 @@ namespace Timetables.Server
 		/// <summary>
 		/// Loads data while starting the application.
 		/// </summary>
-		public static void Download(bool forceDownload = false)
+		public static void DownloadAndLoad(bool forceDownload = false)
 		{
 			Downloaded = false;
 

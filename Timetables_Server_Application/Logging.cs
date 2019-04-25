@@ -63,5 +63,28 @@ namespace Timetables.Server
 		/// </summary>
 		/// <param name="message">Message.</param>
 		internal static void ErrorsCallback(string message) => Log($"Preprocessor warning: { message }");
+		/// <summary>
+		/// Creates a string to log an exception.
+		/// </summary>
+		public static string LogException(Exception ex, int indent = 2)
+		{
+			if (!LogExceptionLongDescription)
+				return "Exception: " + ex.Message;
+
+			var sb = new StringBuilder();
+			var indentation = new string(Enumerable.Repeat(' ', indent).ToArray());
+
+			sb.AppendLine();
+			sb.AppendLine(indentation + "Logging an exception.");
+			sb.AppendLine(indentation + "Type: " + ex.GetType().FullName);
+			sb.AppendLine(indentation + "Message: " + ex.Message);
+			sb.AppendLine(indentation + "Stacktrace:" + ex.StackTrace);
+			if (ex.InnerException != null)
+				sb.AppendLine(indentation + "Inner exception: " + LogException(ex.InnerException, indent + 2));
+
+			return sb.ToString();
+		}
+
+		private static readonly bool LogExceptionLongDescription = true;
 	}
 }

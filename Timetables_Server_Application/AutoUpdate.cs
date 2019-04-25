@@ -41,7 +41,7 @@ namespace Timetables.Server
 
 					Thread.Sleep(autoUpdateDateTime - DateTime.Now);
 
-					DataFeed.Download(true);
+					DataFeed.DownloadAndLoad(true);
 
 					DataFeed.Load();
 				}
@@ -49,10 +49,10 @@ namespace Timetables.Server
 				catch (Exception ex)
 				{
 					if (ex is System.IO.FileNotFoundException)
-						Update?.Invoke("Failed when trying to get an information about expiration. There will be another try in 12 hours.");
+						Update?.Invoke("Error occured while trying to get an information about expiration. There will be another try in 12 hours.");
 
 					else
-						Update?.Invoke("Failed when parsing downloaded data. There will be another try in 6 hours.");
+						Update?.Invoke("Error occured while parsing downloaded data. There will be another try in 6 hours.");
 
 
 					if (!firstLoop)

@@ -83,7 +83,7 @@ namespace Timetables.Server
 			}
 			catch (Exception ex)
 			{
-				Logging.Log($"Router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
+				Logging.Log($"Router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. { Logging.LogException(ex) }");
 			}
 			Dispose();
 		}
@@ -135,7 +135,7 @@ namespace Timetables.Server
 			}
 			catch (Exception ex)
 			{
-				Logging.Log($"Data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
+				Logging.Log($"Data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. { Logging.LogException(ex) }");
 			}
 			Dispose();
 
@@ -192,7 +192,7 @@ namespace Timetables.Server
 			}
 			catch (Exception ex)
 			{
-				Logging.Log($"Departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. Exception: { ex.Message }");
+				Logging.Log($"Departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() } could not be processed. { Logging.LogException(ex) }");
 			}
 			Dispose();
 		}

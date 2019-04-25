@@ -68,6 +68,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timetables_Benchmarks", "Ti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetables_Web_Api_Provider", "Timetables_Web_Api_Provider\Timetables_Web_Api_Provider.csproj", "{E26ECA70-B9E9-4853-BB75-839D1E470805}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Timetables_Server_Installer", "Timetables_Server_Installer\Timetables_Server_Installer.vdproj", "{F8586D1C-4C5B-4113-AC61-7FB646885191}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Timetables_Desktop_Installer", "Timetables_Desktop_Installer\Timetables_Desktop_Installer.vdproj", "{BB56520D-808A-496B-AB4F-E8A4B68C9A18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -316,6 +320,26 @@ Global
 		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x64.Build.0 = Release|Any CPU
 		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x86.ActiveCfg = Release|Any CPU
 		{E26ECA70-B9E9-4853-BB75-839D1E470805}.Release|x86.Build.0 = Release|Any CPU
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Debug|Any CPU.ActiveCfg = Debug
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Debug|ARM.ActiveCfg = Debug
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Debug|ARM64.ActiveCfg = Debug
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Debug|x64.ActiveCfg = Debug
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Debug|x86.ActiveCfg = Debug
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Release|Any CPU.ActiveCfg = Release
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Release|ARM.ActiveCfg = Release
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Release|ARM64.ActiveCfg = Release
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Release|x64.ActiveCfg = Release
+		{F8586D1C-4C5B-4113-AC61-7FB646885191}.Release|x86.ActiveCfg = Release
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Debug|Any CPU.ActiveCfg = Debug
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Debug|ARM.ActiveCfg = Debug
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Debug|ARM64.ActiveCfg = Debug
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Debug|x64.ActiveCfg = Debug
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Debug|x86.ActiveCfg = Debug
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Release|Any CPU.ActiveCfg = Release
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Release|ARM.ActiveCfg = Release
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Release|ARM64.ActiveCfg = Release
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Release|x64.ActiveCfg = Release
+		{BB56520D-808A-496B-AB4F-E8A4B68C9A18}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

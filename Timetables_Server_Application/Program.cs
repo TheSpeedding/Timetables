@@ -29,7 +29,7 @@ namespace Timetables.Server
 			}
 			catch (Exception ex)
 			{
-				Logging.Log("Fatal error. Data could not be processed: " + ex.Message);
+				Logging.Log("Fatal error. Data could not be processed. " + Logging.LogException(ex));
 				return;
 			}
 

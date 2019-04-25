@@ -140,7 +140,7 @@ namespace Timetables.Server
 						break;
 					case ServerSignal.ForceUpdate:
 						Logging.Log("Request to force data update received.");
-						DataFeed.Download(true);
+						DataFeed.DownloadAndLoad(true);
 						break;
 					case ServerSignal.Restart:
 						Logging.Log("Request to restart the server received.");
@@ -191,9 +191,9 @@ namespace Timetables.Server
 
 						processingAction(client);
 					}
-					catch (Exception e)
+					catch (Exception ex)
 					{
-						Logging.Log("Exception: " + e.Message);
+						Logging.Log(Logging.LogException(ex));
 					}
 				}
 			});
