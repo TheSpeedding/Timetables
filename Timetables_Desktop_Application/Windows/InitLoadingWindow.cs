@@ -46,58 +46,66 @@ namespace Timetables.Application.Desktop
 			
 			await Task.Run(async () =>
 			{
-				var loadingThread = DataFeedDesktop.DownloadAsync(false, Settings.TimeoutDuration);
-				bool timerStarted = false;
-
 				try
 				{
-					do
+					var loadingThread = DataFeedDesktop.DownloadAsync(false, Settings.TimeoutDuration);
+					bool timerStarted = false;
+
+					try
 					{
-						if (loadingThread.IsFaulted)
-							throw loadingThread.Exception;
+						do
+						{
+							if (loadingThread.IsFaulted)
+								throw loadingThread.Exception;
 
-						if (!timerStarted && (DataFeedDesktop.Downloaded || !DataFeedDesktop.OfflineMode))
-							timerStarted = true;
+							if (!timerStarted && (DataFeedDesktop.Downloaded || !DataFeedDesktop.OfflineMode))
+								timerStarted = true;
 
-						else if (timerStarted && loadingProgressBar.Value > 95)
-							break;
+							else if (timerStarted && loadingProgressBar.Value > 95)
+								break;
 
-						else if (timerStarted && loadingProgressBar.Value < 100)
+							else if (timerStarted && loadingProgressBar.Value < 100)
+							{
+								Thread.Sleep(30);
+								LoadingProgressCallback("Loading data.", 1);
+							}
+						}
+						while (!DataFeedDesktop.Loaded);
+					}
+
+					catch (AggregateException ex)
+					{
+						foreach (var innerEx in ex.InnerExceptions)
+						{
+							if (innerEx is System.Net.WebException)
+								MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+							else
+							{
+								Environment.Exit(1);
+							}
+
+							IsFaulted = true;
+						}
+					}
+
+					finally
+					{
+						await loadingThread;
+
+						// Just for an effect :-)
+
+						while (loadingProgressBar.Value < 100)
 						{
 							Thread.Sleep(30);
 							LoadingProgressCallback("Loading data.", 1);
 						}
 					}
-					while (!DataFeedDesktop.Loaded);
 				}
-
-				catch (AggregateException ex)
+				catch (Exception ex)
 				{
-					foreach (var innerEx in ex.InnerExceptions)
-					{
-						if (innerEx is System.Net.WebException)
-							MessageBox.Show(Settings.Localization.UnreachableHost, Settings.Localization.Offline, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-						else
-						{
-							Environment.Exit(0);
-						}
-
-						IsFaulted = true;
-					}
-				}
-
-				finally
-				{
-					await loadingThread;
-					
-					// Just for an effect :-)
-
-					while (loadingProgressBar.Value < 100)
-					{
-						Thread.Sleep(30);
-						LoadingProgressCallback("Loading data.", 1);
-					}
+					MessageBox.Show(ex.Message + Environment.NewLine + "Cannot continue in initialization.");
+					Environment.Exit(1);
 				}
 			});
 			

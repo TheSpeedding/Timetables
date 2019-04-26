@@ -35,7 +35,6 @@ namespace Timetables.Application.Desktop
 
 			AppDomain.CurrentDomain.UnhandledException += ShowUnhandledExceptionCallback;
 			AppDomain.CurrentDomain.UnhandledException += LogUnhandledExceptionCallback;
-			AppDomain.CurrentDomain.UnhandledException += (sender, e) => Environment.Exit(0); // End application immediately and don't wait for exception to be arisen from .NET environment.
 			
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);

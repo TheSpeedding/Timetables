@@ -320,6 +320,24 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x64"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x64)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x64"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
+                    }
+                }
             }
         }
         "Release"
@@ -598,7 +616,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Timetables_Managed_Wrappers, Version=1.0.7054.22415, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Timetables_Managed_Wrappers, Version=1.0.7055.22618, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_3F2166A827810DDE6E8C69ACC212E7F9"
@@ -1130,7 +1148,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_DFB6B7E2276E4FB58082B2FF5BEA7A5D"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:C:\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -1212,7 +1230,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Timetables Desktop Application"
         "ProductCode" = "8:{810F3B88-A225-4276-9911-BBE1D8FDADA4}"
-        "PackageCode" = "8:{8E23A9A0-03F6-4B5F-9CAA-B3286B0A31CF}"
+        "PackageCode" = "8:{E311900E-785C-402A-A5D8-CCFD5CD04DB3}"
         "UpgradeCode" = "8:{FE2F9A18-3293-4F8B-B989-EC664C38126A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

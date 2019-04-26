@@ -100,18 +100,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F5F28879ADC321F20C89AD0CC021715A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_575A82A7F7440FBA4CF0CAFE95F7CBA7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D2141B5F84A34097AB371CA34414470B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -145,6 +133,18 @@
         "OwnerKey" = "8:_5BA2FFD54209A1E9D69C31281E7B1E43"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F5F28879ADC321F20C89AD0CC021715A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_575A82A7F7440FBA4CF0CAFE95F7CBA7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -163,6 +163,32 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x64"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x64)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x64"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -351,7 +377,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Timetables_Managed_Wrappers, Version=1.0.7054.21544, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Timetables_Managed_Wrappers, Version=1.0.7055.22572, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_AA549490FD741B8A767F067CD3BAE582"
@@ -499,7 +525,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_4528CA58E31849B9A574F6B58EB9B8A4"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:C:\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -548,7 +574,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Timetables Server Application"
         "ProductCode" = "8:{EAB9DB6E-12A1-4BE6-AF23-9D7F3C9C5EBC}"
-        "PackageCode" = "8:{3627588D-D3D9-4A30-88B5-E2C13485CD73}"
+        "PackageCode" = "8:{2E65E9AE-6D06-48C7-AEA6-AF5B113344D9}"
         "UpgradeCode" = "8:{4A6C4035-7ED3-4085-AD5A-3648EA53D315}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
