@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Timetables.Client;
+using Timetables.Structures.Basic;
 
 namespace Timetables.Server
 {
@@ -32,7 +33,16 @@ namespace Timetables.Server
 		/// </summary>
 		/// <typeparam name="T">Object to deserialize.</typeparam>
 		/// <returns>Object.</returns>
-		public T Receive<T>() => (T)new BinaryFormatter().Deserialize(stream);
+		public async Task<T> Receive<T>()
+		{
+			var request = Task.Run(() => (T)new BinaryFormatter().Deserialize(stream));
+
+			if (await Task.WhenAny(request, Task.Delay(Settings.TimeoutDuration)) == request && request.Status == TaskStatus.RanToCompletion)
+				return await request;
+
+			else
+				throw new WebException("Connection timed out.");
+		}
 		/// <summary>
 		/// Serializes the object so it can be sent via network stream.
 		/// </summary>
@@ -62,7 +72,7 @@ namespace Timetables.Server
 		{
 			try
 			{
-				RouterRequest routerReq = Receive<RouterRequest>();
+				RouterRequest routerReq = await Receive<RouterRequest>();
 
 				Logging.Log($"Received router request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { routerReq.ToString() }");
 
@@ -110,7 +120,16 @@ namespace Timetables.Server
 		{
 			try
 			{
-				var dfRequest = Receive<Structures.Basic.DataFeedBasicRequest>();
+				DataFeedBasicRequest dfRequest;
+
+				try
+				{
+					dfRequest = await Receive<Structures.Basic.DataFeedBasicRequest>();
+				}
+				catch (WebException)
+				{
+					dfRequest = new DataFeedBasicRequest("ForceDownload");
+				}
 
 				Logging.Log($"Received data feed request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dfRequest.ToString() }");
 
@@ -162,7 +181,7 @@ namespace Timetables.Server
 		{
 			try
 			{
-				var dbRequest = Receive<DepartureBoardRequest>();
+				DepartureBoardRequest dbRequest = await Receive<DepartureBoardRequest>();
 
 				Logging.Log($"Received departure board request from { ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() }. Data: { dbRequest.ToString() }");
 

@@ -39,7 +39,14 @@ namespace Timetables.Server
 
 					Update?.Invoke($"Another auto update is scheduled to be at { autoUpdateDateTime }.");
 
-					Thread.Sleep(autoUpdateDateTime - DateTime.Now);
+					try
+					{
+						Thread.Sleep(autoUpdateDateTime - DateTime.Now);
+					}
+					catch
+					{
+						Thread.Sleep(-1);
+					}
 
 					DataFeed.DownloadAndLoad(true);
 

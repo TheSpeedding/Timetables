@@ -243,7 +243,6 @@ namespace Timetables.Application.Desktop
 			if (Settings.Localization == null)
 			{
 				Settings.Localization = new Localization();
-				Settings.Localization = Localization.GetTranslation("English");
 			}
 
 			Settings.Theme = new Themes.BlueTheme();

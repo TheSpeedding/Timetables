@@ -12,6 +12,7 @@ namespace Timetables.Server
 	/// </summary>
 	static class Settings
 	{
+		public static int TimeoutDuration { get; } = 5000;
 		/// <summary>
 		/// Router port.
 		/// </summary>
