@@ -98,9 +98,9 @@ void Timetables::Algorithms::router_raptor::look_at_footpaths() {
 
 			}
 
-			if (arrival_time_A->second->trip() != nullptr && (arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrived to the stop yet. Set new arrival time.
+			if (arrival_time_A->second->trip() != nullptr && (arrival_time_B == (journeys_.cend() - 1)->cend() || // We have not arrive to the stop yet. Set new arrival time.
 				min < arrival_time_B->second->arrival_at_target()) && // We can improve the arrival to the stop.
-				(&target_ != &stop_B->parent_station() || &stop_A->parent_station() != &stop_B->parent_station())) { // The stop is the target station. No need to add footpath.
+				&target_ != &stop_B->parent_station()) { // The stop is the target station. No need to add footpath.
 
 				shared_ptr<journey_segment> previous = (journeys_.cend() - 1)->find(stop_A)->second; // The same journey, added just some footpath -> arrival time increased.
 
@@ -366,33 +366,24 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 	// Adds all the suitable journeys to the map.
 
-	unique_ptr<journey> fastest_journey = nullptr; // Fastest journey found in this round.
+	const journey* fastest_journey = nullptr; // Fastest journey found in this round.
 	
-	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++) {
-
-		unique_ptr<journey> fastest_journey_this_round;
-
+	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++)
 		for (auto&& stop : target_.child_stops()) {
 
 			auto res = journeys_[i].find(stop);
 
 			if (res != journeys_[i].cend()) {
 
-				auto found_journey = make_unique<journey>(res->second);
+				journey found_journey(res->second);
 
-				if (fastest_journey_this_round == nullptr || *found_journey < *fastest_journey_this_round)
-					fastest_journey_this_round = move(found_journey);
-				
+				auto inserted = fastest_journeys_.insert(found_journey);
+
+				if (fastest_journey == nullptr || *inserted.first < *fastest_journey) // No check if journey was added is intended. Otherwise it would broke the algorithm.
+					fastest_journey = &*inserted.first;
 			}
+
 		}
 
-		if (fastest_journey_this_round == nullptr) continue;
-		
-		if (fastest_journey == nullptr || *fastest_journey_this_round < *fastest_journey) // No check if journey was added is intended. Otherwise it would break the algorithm.
-			fastest_journey = move(fastest_journey_this_round);
-	}
-
-	auto inserted = fastest_journeys_.insert(*(fastest_journey));
-
-	return &*inserted.first;
+	return fastest_journey;
 }
