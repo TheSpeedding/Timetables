@@ -366,11 +366,11 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 	// Adds all the suitable journeys to the map.
 
-	const journey* fastest_journey = nullptr; // Fastest journey found in this round.
+	unique_ptr<journey> fastest_journey = nullptr; // Fastest journey found in this round.
 	
 	for (size_t i = 0; i < max_transfers_ && i < journeys_.size(); i++) {
 
-		set<journey> fastest_journeys_this_round;
+		unique_ptr<journey> fastest_journey_this_round;
 
 		for (auto&& stop : target_.child_stops()) {
 
@@ -378,19 +378,18 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 			if (res != journeys_[i].cend()) {
 
-				journey found_journey(res->second);
+				fastest_journey_this_round = make_unique<journey>(res->second);
 
-				fastest_journeys_this_round.insert(found_journey);				
 			}
 		}
 
-		if (fastest_journeys_this_round.size() == 0) continue;
-
-		auto inserted = fastest_journeys_.insert(*(fastest_journeys_this_round.begin()));
-
-		if (fastest_journey == nullptr || *inserted.first < *fastest_journey) // No check if journey was added is intended. Otherwise it would break the algorithm.
-			fastest_journey = &*inserted.first;
+		if (fastest_journey_this_round == nullptr) continue;
+		
+		if (fastest_journey == nullptr || *fastest_journey_this_round < *fastest_journey) // No check if journey was added is intended. Otherwise it would break the algorithm.
+			fastest_journey = move(fastest_journey_this_round);
 	}
 
-	return fastest_journey;
+	auto inserted = fastest_journeys_.insert(*(fastest_journey));
+
+	return &*inserted.first;
 }
