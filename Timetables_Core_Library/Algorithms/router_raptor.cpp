@@ -378,8 +378,11 @@ const Timetables::Structures::journey* Timetables::Algorithms::router_raptor::ob
 
 			if (res != journeys_[i].cend()) {
 
-				fastest_journey_this_round = make_unique<journey>(res->second);
+				auto found_journey = make_unique<journey>(res->second);
 
+				if (fastest_journey_this_round == nullptr || *found_journey < *fastest_journey_this_round)
+					fastest_journey_this_round = move(found_journey);
+				
 			}
 		}
 
